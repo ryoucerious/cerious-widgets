@@ -1,0 +1,2342 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  GridComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="../interfaces/IGridComponent.html" target="_self" >IGridComponent</a></code>
+                <code>DoCheck</code>
+                <code>OnInit</code>
+                <code>OnDestroy</code>
+                <code>AfterViewInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+            <tr>
+                <td class="col-md-3">encapsulation</td>
+                <td class="col-md-9"><code>ViewEncapsulation.None</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">providers</td>
+                <td class="col-md-9">
+                                <code><a href="../injectables/GridService.html" target="_self" >{ provide: GRID_SERVICE, useClass: GridService }</a></code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>cw-grid</code></td>
+            </tr>
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./grid.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#changeDetector" >changeDetector</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Public</span>
+                                <a href="#config" >config</a>
+                            </li>
+                            <li>
+                                <a href="#gridApi" >gridApi</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#gridBody" >gridBody</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#gridContainer" >gridContainer</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#gridFooter" >gridFooter</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#gridHeader" >gridHeader</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#gridMenuBar" >gridMenuBar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#gridPager" >gridPager</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#gridScroller" >gridScroller</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#iterableDiffer" >iterableDiffer</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#pluginInstances" >pluginInstances</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#resizeObserver" >resizeObserver</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#templateRefs" >templateRefs</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngDoCheck" >ngDoCheck</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onMouseMove" >onMouseMove</a>
+                            </li>
+                            <li>
+                                <a href="#onMouseUp" >onMouseUp</a>
+                            </li>
+                            <li>
+                                <a href="#registerPlugin" >registerPlugin</a>
+                            </li>
+                            <li>
+                                <a href="#registerPlugins" >registerPlugins</a>
+                            </li>
+                            <li>
+                                <a href="#resize" >resize</a>
+                            </li>
+                            <li>
+                                <a href="#shouldShowFooter" >shouldShowFooter</a>
+                            </li>
+                            <li>
+                                <a href="#shouldShowMenuBar" >shouldShowMenuBar</a>
+                            </li>
+                            <li>
+                                <a href="#shouldShowPager" >shouldShowPager</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#data" >data</a>
+                            </li>
+                            <li>
+                                <a href="#gridOptions" >gridOptions</a>
+                            </li>
+                            <li>
+                                <a href="#pluginOptions" >pluginOptions</a>
+                            </li>
+                            <li>
+                                <a href="#plugins" >plugins</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Outputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cellClick" >cellClick</a>
+                            </li>
+                            <li>
+                                <a href="#cellDoubleClick" >cellDoubleClick</a>
+                            </li>
+                            <li>
+                                <a href="#cellKeydown" >cellKeydown</a>
+                            </li>
+                            <li>
+                                <a href="#cellKeypress" >cellKeypress</a>
+                            </li>
+                            <li>
+                                <a href="#cellKeyup" >cellKeyup</a>
+                            </li>
+                            <li>
+                                <a href="#columnResize" >columnResize</a>
+                            </li>
+                            <li>
+                                <a href="#columnVisibilityChange" >columnVisibilityChange</a>
+                            </li>
+                            <li>
+                                <a href="#dataChange" >dataChange</a>
+                            </li>
+                            <li>
+                                <a href="#gridResize" >gridResize</a>
+                            </li>
+                            <li>
+                                <a href="#rowClick" >rowClick</a>
+                            </li>
+                            <li>
+                                <a href="#rowDoubleClick" >rowDoubleClick</a>
+                            </li>
+                            <li>
+                                <a href="#rowKeydown" >rowKeydown</a>
+                            </li>
+                            <li>
+                                <a href="#rowKeypress" >rowKeypress</a>
+                            </li>
+                            <li>
+                                <a href="#rowKeyup" >rowKeyup</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(changeDetector: ChangeDetectorRef, injector: Injector, iterableDiffers: IterableDiffers, gridService: <a href="../interfaces/IGridService.html" target="_self">IGridService</a>, gridColumnService: <a href="../interfaces/IGridColumnService.html" target="_self">IGridColumnService</a>, config: <a href="../interfaces/WidgetsConfig.html" target="_self">WidgetsConfig</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:65</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>changeDetector</td>
+                                                  
+                                                        <td>
+                                                                    <code>ChangeDetectorRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>injector</td>
+                                                  
+                                                        <td>
+                                                                    <code>Injector</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>iterableDiffers</td>
+                                                  
+                                                        <td>
+                                                                    <code>IterableDiffers</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>gridService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/IGridService.html" target="_self" >IGridService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>gridColumnService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/IGridColumnService.html" target="_self" >IGridColumnService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>config</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/WidgetsConfig.html" target="_self" >WidgetsConfig</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="data"></a>
+                        <b>data</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:39</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="gridOptions"></a>
+                        <b>gridOptions</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/GridOptions.html" target="_self" >GridOptions</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:37</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pluginOptions"></a>
+                        <b>pluginOptions</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/PluginOptions.html" target="_self" >PluginOptions</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:38</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="plugins"></a>
+                        <b>plugins</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/GridPlugin.html" target="_self" >GridPlugin[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:40</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+    <section data-compodoc="block-outputs">
+    <h3 id="outputs">Outputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cellClick"></a>
+                        <b>cellClick</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/CellEvent.html" target="_self" >EventEmitter&lt;CellEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:48</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cellDoubleClick"></a>
+                        <b>cellDoubleClick</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/CellEvent.html" target="_self" >EventEmitter&lt;CellEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:49</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cellKeydown"></a>
+                        <b>cellKeydown</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/CellEvent.html" target="_self" >EventEmitter&lt;CellEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:51</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cellKeypress"></a>
+                        <b>cellKeypress</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/CellEvent.html" target="_self" >EventEmitter&lt;CellEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:50</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cellKeyup"></a>
+                        <b>cellKeyup</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/CellEvent.html" target="_self" >EventEmitter&lt;CellEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:52</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="columnResize"></a>
+                        <b>columnResize</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>EventEmitter&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:53</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="columnVisibilityChange"></a>
+                        <b>columnVisibilityChange</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>EventEmitter&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:54</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dataChange"></a>
+                        <b>dataChange</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>EventEmitter&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:42</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="gridResize"></a>
+                        <b>gridResize</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>EventEmitter&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:55</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rowClick"></a>
+                        <b>rowClick</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/RowEvent.html" target="_self" >EventEmitter&lt;RowEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:43</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rowDoubleClick"></a>
+                        <b>rowDoubleClick</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/RowEvent.html" target="_self" >EventEmitter&lt;RowEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:44</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rowKeydown"></a>
+                        <b>rowKeydown</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/RowEvent.html" target="_self" >EventEmitter&lt;RowEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:46</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rowKeypress"></a>
+                        <b>rowKeypress</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/RowEvent.html" target="_self" >EventEmitter&lt;RowEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:45</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rowKeyup"></a>
+                        <b>rowKeyup</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/RowEvent.html" target="_self" >EventEmitter&lt;RowEvent&lt;any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:47</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="82"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:82</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngDoCheck"></a>
+                    <span class="name">
+                        <span ><b>ngDoCheck</b></span>
+                        <a href="#ngDoCheck"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngDoCheck()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="123"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:123</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="136"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:136</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:130</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onMouseMove"></a>
+                    <span class="name">
+                        <span ><b>onMouseMove</b></span>
+                        <a href="#onMouseMove"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onMouseMove(e: MouseEvent)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="154"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:154</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handles the mouse move event and delegates it to the grid service.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>e</td>
+                                            <td>
+                                                        <code>MouseEvent</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The mouse event triggered by the user&#39;s interaction.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onMouseUp"></a>
+                    <span class="name">
+                        <span ><b>onMouseUp</b></span>
+                        <a href="#onMouseUp"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onMouseUp(e: MouseEvent)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="163"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:163</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handles the mouse up event and delegates the event to the grid service.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>e</td>
+                                            <td>
+                                                        <code>MouseEvent</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The mouse event triggered when the mouse button is released.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="registerPlugin"></a>
+                    <span class="name">
+                        <span ><b>registerPlugin</b></span>
+                        <a href="#registerPlugin"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>registerPlugin(plugin: <a href="../interfaces/GridPlugin.html" target="_self">GridPlugin</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="197"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:197</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Registers a plugin with the grid component if it has not already been registered.
+Once registered, the plugin&#39;s <code>onInit</code> method is called with the grid API.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>plugin</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridPlugin.html" target="_self" >GridPlugin</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The plugin to be registered. Must implement the <code>GridPlugin</code> interface.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="registerPlugins"></a>
+                    <span class="name">
+                        <span ><b>registerPlugins</b></span>
+                        <a href="#registerPlugins"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>registerPlugins()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="186"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:186</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Registers and initializes all plugins associated with the grid component.
+Combines both static plugins and dynamically instantiated plugin instances,
+and invokes their <code>onInit</code> method, passing the grid API as an argument.</p>
+<p>This method ensures that all plugins are properly initialized and ready
+to interact with the grid API.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resize"></a>
+                    <span class="name">
+                        <span ><b>resize</b></span>
+                        <a href="#resize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resize()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="173"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:173</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Triggers the resize operation for the grid component.
+Delegates the resize logic to the <code>gridService</code>.
+This method is typically used to adjust the grid&#39;s layout or dimensions
+in response to external changes, such as window resizing.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="shouldShowFooter"></a>
+                    <span class="name">
+                        <span ><b>shouldShowFooter</b></span>
+                        <a href="#shouldShowFooter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>shouldShowFooter()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="209"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:209</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determines whether the footer should be displayed in the grid.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p><code>true</code> if the footer should be shown, otherwise <code>false</code>.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="shouldShowMenuBar"></a>
+                    <span class="name">
+                        <span ><b>shouldShowMenuBar</b></span>
+                        <a href="#shouldShowMenuBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>shouldShowMenuBar()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="218"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:218</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determines whether the menu bar should be displayed in the grid.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p><code>true</code> if the menu bar should be shown; otherwise, <code>false</code>.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="shouldShowPager"></a>
+                    <span class="name">
+                        <span ><b>shouldShowPager</b></span>
+                        <a href="#shouldShowPager"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>shouldShowPager()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="227"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:227</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determines whether the pager should be displayed in the grid.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p><code>true</code> if the pager should be shown; otherwise, <code>false</code>.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="changeDetector"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>changeDetector</b></span>
+                        <a href="#changeDetector"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ChangeDetectorRef</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:68</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="config"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Public</span>
+                        <span ><b>config</b></span>
+                        <a href="#config"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/WidgetsConfig.html" target="_self" >WidgetsConfig</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @Optional()<br />@Inject(WIDGETS_CONFIG)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:73</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridApi"></a>
+                    <span class="name">
+                        <span ><b>gridApi</b></span>
+                        <a href="#gridApi"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridBody"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>gridBody</b></span>
+                        <a href="#gridBody"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IGridBodyComponent.html" target="_self" >IGridBodyComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;gridBody&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:62</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridContainer"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>gridContainer</b></span>
+                        <a href="#gridContainer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ElementRef</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;gridContainer&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:59</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridFooter"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>gridFooter</b></span>
+                        <a href="#gridFooter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IGridFooterComponent.html" target="_self" >IGridFooterComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;gridFooter&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:60</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridHeader"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>gridHeader</b></span>
+                        <a href="#gridHeader"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IGridHeaderComponent.html" target="_self" >IGridHeaderComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;gridHeader&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:61</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridMenuBar"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>gridMenuBar</b></span>
+                        <a href="#gridMenuBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IGridMenuBarComponent.html" target="_self" >IGridMenuBarComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;gridMenuBar&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:63</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridPager"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>gridPager</b></span>
+                        <a href="#gridPager"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IGridPagerComponent.html" target="_self" >IGridPagerComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;gridPager&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:64</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridScroller"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>gridScroller</b></span>
+                        <a href="#gridScroller"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IGridScrollerComponent.html" target="_self" >IGridScrollerComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;gridScroller&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:65</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="iterableDiffer"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>iterableDiffer</b></span>
+                        <a href="#iterableDiffer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pluginInstances"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>pluginInstances</b></span>
+                        <a href="#pluginInstances"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/GridPlugin.html" target="_self" >GridPlugin[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resizeObserver"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>resizeObserver</b></span>
+                        <a href="#resizeObserver"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ResizeObserver | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="templateRefs"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>templateRefs</b></span>
+                        <a href="#templateRefs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>QueryList&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ContentChildren(TemplateRef)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AfterViewInit, ChangeDetectorRef, Component, ContentChildren, DoCheck, ElementRef, EventEmitter, Inject, Injector, Input, IterableDiffers, OnDestroy, OnInit, Optional, Output, QueryList, TemplateRef, ViewChild, ViewEncapsulation } from &#x27;@angular/core&#x27;;
+import { GridService } from &#x27;../services/grid.service&#x27;;
+import { IGridComponent } from &#x27;../interfaces/component-interfaces/grid.interface&#x27;;
+import { GridPlugin } from &#x27;../interfaces/grid-plugin&#x27;;
+import { GridApi } from &#x27;../interfaces/grid-api&#x27;;
+import { GridOptions } from &#x27;../interfaces/grid-options&#x27;;
+import { IGridFooterComponent } from &#x27;../interfaces/component-interfaces/grid-footer.interface&#x27;;
+import { IGridHeaderComponent } from &#x27;../interfaces/component-interfaces/grid-header.interface&#x27;;
+import { IGridBodyComponent } from &#x27;../interfaces/component-interfaces/grid-body.interface&#x27;;
+import { IGridMenuBarComponent } from &#x27;../interfaces/component-interfaces/grid-menu-bar.interface&#x27;;
+import { IGridPagerComponent } from &#x27;../interfaces/component-interfaces/grid-pager.interface&#x27;;
+import { IGridScrollerComponent } from &#x27;../interfaces/component-interfaces/grid-scroller.interface&#x27;;
+import { WIDGETS_CONFIG } from &#x27;../../shared/tokens/widgets-config.token&#x27;;
+import { WidgetsConfig } from &#x27;../../shared/interfaces/widgets-config.interface&#x27;;
+import { IGridService } from &#x27;../interfaces/service-interfaces/grid.interface&#x27;;
+import { IGridColumnService } from &#x27;../interfaces/service-interfaces/grid-column.interface&#x27;;
+import { GRID_SERVICE } from &#x27;../tokens/grid-service.token&#x27;;
+import { GRID_COLUMN_SERVICE } from &#x27;../tokens/grid-column-service.token&#x27;;
+import { PluginOptions } from &#x27;../interfaces/plugin-options&#x27;;
+import { CellEvent, RowEvent } from &#x27;../interfaces&#x27;;
+
+@Component({
+  selector: &#x27;cw-grid&#x27;,
+  templateUrl: &#x27;./grid.component.html&#x27;,
+  providers: [
+    { provide: GRID_SERVICE, useClass: GridService }
+  ],
+  encapsulation: ViewEncapsulation.None
+})
+export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy, AfterViewInit {
+  private iterableDiffer: any;
+  private pluginInstances: GridPlugin[] &#x3D; [];
+  private resizeObserver: ResizeObserver | null &#x3D; null;
+
+  gridApi!: GridApi;
+  
+  @Input() gridOptions!: GridOptions;
+  @Input() pluginOptions!: PluginOptions;
+  @Input() data: any;
+  @Input() plugins: GridPlugin[] &#x3D; [];
+
+  @Output() dataChange: EventEmitter&lt;any&gt; &#x3D; new EventEmitter&lt;any&gt;();
+  @Output() rowClick: EventEmitter&lt;RowEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;RowEvent&lt;any&gt;&gt;();
+  @Output() rowDoubleClick: EventEmitter&lt;RowEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;RowEvent&lt;any&gt;&gt;();
+  @Output() rowKeypress: EventEmitter&lt;RowEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;RowEvent&lt;any&gt;&gt;();
+  @Output() rowKeydown: EventEmitter&lt;RowEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;RowEvent&lt;any&gt;&gt;();
+  @Output() rowKeyup: EventEmitter&lt;RowEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;RowEvent&lt;any&gt;&gt;();
+  @Output() cellClick: EventEmitter&lt;CellEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;CellEvent&lt;any&gt;&gt;();
+  @Output() cellDoubleClick: EventEmitter&lt;CellEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;CellEvent&lt;any&gt;&gt;();
+  @Output() cellKeypress: EventEmitter&lt;CellEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;CellEvent&lt;any&gt;&gt;();
+  @Output() cellKeydown: EventEmitter&lt;CellEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;CellEvent&lt;any&gt;&gt;();
+  @Output() cellKeyup: EventEmitter&lt;CellEvent&lt;any&gt;&gt; &#x3D; new EventEmitter&lt;CellEvent&lt;any&gt;&gt;();
+  @Output() columnResize: EventEmitter&lt;any&gt; &#x3D; new EventEmitter&lt;any&gt;();
+  @Output() columnVisibilityChange: EventEmitter&lt;any&gt; &#x3D; new EventEmitter&lt;any&gt;();
+  @Output() gridResize: EventEmitter&lt;any&gt; &#x3D; new EventEmitter&lt;any&gt;();
+
+  @ContentChildren(TemplateRef) templateRefs!: QueryList&lt;any&gt;;
+
+  @ViewChild(&#x27;gridContainer&#x27;) gridContainer!: ElementRef;
+  @ViewChild(&#x27;gridFooter&#x27;) gridFooter!: IGridFooterComponent;
+  @ViewChild(&#x27;gridHeader&#x27;) gridHeader!: IGridHeaderComponent;
+  @ViewChild(&#x27;gridBody&#x27;) gridBody!: IGridBodyComponent;
+  @ViewChild(&#x27;gridMenuBar&#x27;) gridMenuBar!: IGridMenuBarComponent;
+  @ViewChild(&#x27;gridPager&#x27;) gridPager!: IGridPagerComponent;
+  @ViewChild(&#x27;gridScroller&#x27;) gridScroller!: IGridScrollerComponent;
+  
+  constructor(
+    public changeDetector: ChangeDetectorRef,
+    private injector: Injector,
+    private iterableDiffers: IterableDiffers,
+    @Inject(GRID_SERVICE) private gridService: IGridService,
+    @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService,
+    @Optional() @Inject(WIDGETS_CONFIG) public config: WidgetsConfig
+  ) {
+    this.iterableDiffer &#x3D; this.iterableDiffers.find([]).create();
+    this.gridApi &#x3D; this.gridService.gridApi;
+    this.pluginInstances &#x3D; (this.config?.plugins || []).map(pluginType &#x3D;&gt; 
+      this.injector.get(pluginType)
+    );
+  }
+
+  ngAfterViewInit(): void {
+    this.gridService.grid &#x3D; this;
+    this.gridService.gridContainer &#x3D; this.gridContainer;
+    this.gridService.gridFooter &#x3D; this.gridFooter;
+    this.gridService.gridHeader &#x3D; this.gridHeader;
+    this.gridService.gridBody &#x3D; this.gridBody;
+    this.gridService.gridMenuBar &#x3D; this.gridMenuBar;
+    this.gridService.gridPager &#x3D; this.gridPager;
+    this.gridService.gridScroller &#x3D; this.gridScroller;
+
+    this.gridService.setGridContainerElement();
+
+    this.gridService.setScrollbarSize();
+
+    if (this.gridService.gridOptions.container &amp;&amp; this.gridService.gridOptions.height &#x3D;&#x3D;&#x3D; &#x27;auto&#x27;) {
+      this.gridService.gridOptions.container.addEventListener(&#x27;resize&#x27;, () &#x3D;&gt; this.resize());
+    }
+
+    if (this.gridService.gridContainerElement) {
+      this.resizeObserver &#x3D; new ResizeObserver(() &#x3D;&gt; this.gridService.resize());
+      this.resizeObserver.observe(this.gridService.gridContainerElement);
+    }
+
+    setTimeout(() &#x3D;&gt; {
+      this.gridService.processTemplates(this.templateRefs);
+      this.gridColumnService.processGridDefs(this.gridService.gridOptions, this.gridService.gridDataset);
+      this.gridService.resize();
+      
+      setTimeout(() &#x3D;&gt; {
+        this.registerPlugins();
+
+        // if server-side plugin is used
+        if (this.gridApi.requestData) {
+          setTimeout(() &#x3D;&gt; {
+            this.gridService.requestData().subscribe();
+          });
+        }
+      });
+    });
+  }
+
+  ngDoCheck(): void {
+    // Check if the data changed and reload the current page data
+    if (this.iterableDiffer.diff(this.data)) {
+      this.gridService.processDataset();
+    }
+  }
+
+  ngOnInit(): void {
+    this.gridService.gridOptions &#x3D; this.gridOptions;
+    this.gridService.pluginOptions &#x3D; this.pluginOptions;
+    this.gridService.setData(this.data);   
+  }
+
+  ngOnDestroy(): void {
+    this.plugins.forEach(p &#x3D;&gt; p.onDestroy?.());
+
+    if (this.gridService.gridOptions.container) {
+      this.gridService.gridOptions.container.removeEventListener(&#x27;resize&#x27;, () &#x3D;&gt; this.resize());
+    }
+
+    if (this.resizeObserver &amp;&amp; this.gridService.gridContainerElement) {
+      this.resizeObserver.unobserve(this.gridService.gridContainerElement);
+      this.resizeObserver.disconnect();
+    }
+  }
+
+  /**
+   * Handles the mouse move event and delegates it to the grid service.
+   *
+   * @param e - The mouse event triggered by the user&#x27;s interaction.
+   */
+  onMouseMove(e: MouseEvent): void {
+    this.gridService.onMouseMove(e);
+  }
+
+  /**
+   * Handles the mouse up event and delegates the event to the grid service.
+   *
+   * @param e - The mouse event triggered when the mouse button is released.
+   */
+  onMouseUp(e: MouseEvent): void {
+    this.gridService.onMouseUp(e);
+  }
+
+  /**
+   * Triggers the resize operation for the grid component.
+   * Delegates the resize logic to the &#x60;gridService&#x60;.
+   * This method is typically used to adjust the grid&#x27;s layout or dimensions
+   * in response to external changes, such as window resizing.
+   */
+  resize(): void {
+    this.gridService.resize();
+  }
+
+  /**
+   * Registers and initializes all plugins associated with the grid component.
+   * Combines both static plugins and dynamically instantiated plugin instances,
+   * and invokes their &#x60;onInit&#x60; method, passing the grid API as an argument.
+   *
+   * @remarks
+   * This method ensures that all plugins are properly initialized and ready
+   * to interact with the grid API.
+   */
+  registerPlugins(): void {
+    const allPlugins &#x3D; [...(this.plugins || []), ...(this.pluginInstances || [])];
+    allPlugins.forEach(p &#x3D;&gt; p.onInit(this.gridApi));
+  }
+
+  /**
+   * Registers a plugin with the grid component if it has not already been registered.
+   * Once registered, the plugin&#x27;s &#x60;onInit&#x60; method is called with the grid API.
+   *
+   * @param plugin - The plugin to be registered. Must implement the &#x60;GridPlugin&#x60; interface.
+   */
+  registerPlugin(plugin: GridPlugin): void {
+    if (!this.plugins.some(p &#x3D;&gt; p &#x3D;&#x3D;&#x3D; plugin)) {
+      this.plugins.push(plugin);
+    }
+    plugin.onInit(this.gridApi);
+  }
+
+  /**
+   * Determines whether the footer should be displayed in the grid.
+   *
+   * @returns {boolean} &#x60;true&#x60; if the footer should be shown, otherwise &#x60;false&#x60;.
+   */
+  shouldShowFooter(): boolean {
+    return this.gridService.gridOptions.showFooter &#x3D;&#x3D;&#x3D; true;
+  }
+
+  /**
+   * Determines whether the menu bar should be displayed in the grid.
+   *
+   * @returns {boolean} &#x60;true&#x60; if the menu bar should be shown; otherwise, &#x60;false&#x60;.
+   */
+  shouldShowMenuBar(): boolean {
+    return this.gridService.gridOptions.showMenuBar &#x3D;&#x3D;&#x3D; true;
+  }
+
+  /**
+   * Determines whether the pager should be displayed in the grid.
+   *
+   * @returns {boolean} &#x60;true&#x60; if the pager should be shown; otherwise, &#x60;false&#x60;.
+   */
+  shouldShowPager(): boolean {
+    return this.gridService.gridOptions.showPager &#x3D;&#x3D;&#x3D; true;
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div #gridContainer
+     class&#x3D;&quot;cw-grid&quot;
+     role&#x3D;&quot;grid&quot;
+     aria-label&#x3D;&quot;Data Grid&quot;
+     (resized)&#x3D;&quot;resize()&quot;
+     (mousemove)&#x3D;&quot;onMouseMove($event)&quot;
+     (mouseup)&#x3D;&quot;onMouseUp($event)&quot;&gt;
+  &lt;cw-grid-menu-bar #gridMenuBar *ngIf&#x3D;&quot;shouldShowMenuBar()&quot;&gt;&lt;/cw-grid-menu-bar&gt;
+  &lt;cw-grid-header #gridHeader&gt;&lt;/cw-grid-header&gt;
+  &lt;cw-grid-body #gridBody&gt;&lt;/cw-grid-body&gt;
+  &lt;cw-grid-footer #gridFooter *ngIf&#x3D;&quot;shouldShowFooter()&quot;&gt;&lt;/cw-grid-footer&gt;
+  &lt;cw-grid-scroller #gridScroller&gt;&lt;/cw-grid-scroller&gt;
+  &lt;cw-grid-pager #gridPager *ngIf&#x3D;&quot;shouldShowPager()&quot;&gt;&lt;/cw-grid-pager&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div #gridContainer     class="cw-grid"     role="grid"     aria-label="Data Grid"     (resized)="resize()"     (mousemove)="onMouseMove($event)"     (mouseup)="onMouseUp($event)">  <cw-grid-menu-bar #gridMenuBar *ngIf="shouldShowMenuBar()"></cw-grid-menu-bar>  <cw-grid-header #gridHeader></cw-grid-header>  <cw-grid-body #gridBody></cw-grid-body>  <cw-grid-footer #gridFooter *ngIf="shouldShowFooter()"></cw-grid-footer>  <cw-grid-scroller #gridScroller></cw-grid-scroller>  <cw-grid-pager #gridPager *ngIf="shouldShowPager()"></cw-grid-pager></div></div>'
+    var COMPONENTS = [{'name': 'GridBodyComponent', 'selector': 'cw-grid-body'},{'name': 'GridColumnSizerComponent', 'selector': 'cw-grid-column-sizer'},{'name': 'GridComponent', 'selector': 'cw-grid'},{'name': 'GridFillerRowColumnComponent', 'selector': 'cw-grid-filler-row-column'},{'name': 'GridFillerRowComponent', 'selector': 'cw-grid-filler-row'},{'name': 'GridFillerRowFeatureColumnComponent', 'selector': 'cw-grid-filler-row-feature-column'},{'name': 'GridFooterColumnComponent', 'selector': 'cw-grid-footer-column'},{'name': 'GridFooterComponent', 'selector': 'cw-grid-footer'},{'name': 'GridFooterFeatureColumnComponent', 'selector': 'cw-grid-footer-feature-column'},{'name': 'GridFooterRowComponent', 'selector': 'cw-grid-footer-row'},{'name': 'GridHeaderColumnComponent', 'selector': 'cw-grid-header-column'},{'name': 'GridHeaderComponent', 'selector': 'cw-grid-header'},{'name': 'GridHeaderFeatureColumnComponent', 'selector': 'cw-grid-header-feature-column'},{'name': 'GridHeaderRowComponent', 'selector': 'cw-grid-header-row'},{'name': 'GridMenuBarComponent', 'selector': 'cw-grid-menu-bar'},{'name': 'GridNestedRowColumnComponent', 'selector': 'cw-nested-row-column'},{'name': 'GridNestedRowComponent', 'selector': 'cw-nested-row'},{'name': 'GridPagerComponent', 'selector': 'cw-grid-pager'},{'name': 'GridRowColumnComponent', 'selector': 'cw-grid-row-column'},{'name': 'GridRowComponent', 'selector': 'cw-grid-row'},{'name': 'GridRowFeatureColumnComponent', 'selector': 'cw-grid-row-feature-column'},{'name': 'GridScrollerComponent', 'selector': 'cw-grid-scroller'}];
+    var DIRECTIVES = [{'name': 'TemplateRegistrarDirective', 'selector': '[cwTemplate]'}];
+    var ACTUAL_COMPONENT = {'name': 'GridComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'GridComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

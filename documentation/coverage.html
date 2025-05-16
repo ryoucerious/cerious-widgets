@@ -1,0 +1,1196 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	   <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="./" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content coverage">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Documentation coverage</li>
+</ol>
+
+<div>
+    <img src="./images/coverage-badge-documentation.svg">
+</div>
+
+<table class="table table-bordered coverage" id="coverage-table">
+    <thead class="coverage-header">
+        <tr>
+            <th>File</th>
+            <th>Type</th>
+            <th>Identifier</th>
+            <th style="text-align:right" class="statements" data-sort-default>Statements</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridBodyComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-body/grid-body.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridBodyComponent</td>
+            <td align="right" data-sort="28">
+                <span class="coverage-percent">28 %</span>
+                <span class="coverage-count">(13/45)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridColumnSizerComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-column-sizer/grid-column-sizer.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridColumnSizerComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridFillerRowColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row-column/grid-filler-row-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridFillerRowColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridFillerRowFeatureColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row-feature-column/grid-filler-row-feature-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridFillerRowFeatureColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridFillerRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridFillerRowComponent</td>
+            <td align="right" data-sort="14">
+                <span class="coverage-percent">14 %</span>
+                <span class="coverage-count">(1/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridFooterColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-footer-column/grid-footer-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridFooterColumnComponent</td>
+            <td align="right" data-sort="20">
+                <span class="coverage-percent">20 %</span>
+                <span class="coverage-count">(1/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridFooterFeatureColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-footer-feature-column/grid-footer-feature-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridFooterFeatureColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridFooterRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-footer-row/grid-footer-row.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridFooterRowComponent</td>
+            <td align="right" data-sort="14">
+                <span class="coverage-percent">14 %</span>
+                <span class="coverage-count">(1/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridFooterComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-footer/grid-footer.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridFooterComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridHeaderColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridHeaderColumnComponent</td>
+            <td align="right" data-sort="22">
+                <span class="coverage-percent">22 %</span>
+                <span class="coverage-count">(2/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridHeaderFeatureColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-feature-column/grid-header-feature-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridHeaderFeatureColumnComponent</td>
+            <td align="right" data-sort="12">
+                <span class="coverage-percent">12 %</span>
+                <span class="coverage-count">(1/8)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridHeaderRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-row/grid-header-row.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridHeaderRowComponent</td>
+            <td align="right" data-sort="44">
+                <span class="coverage-percent">44 %</span>
+                <span class="coverage-count">(8/18)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridHeaderComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header/grid-header.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridHeaderComponent</td>
+            <td align="right" data-sort="25">
+                <span class="coverage-percent">25 %</span>
+                <span class="coverage-count">(2/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridMenuBarComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-menu-bar/grid-menu-bar.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridMenuBarComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridNestedRowColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-nested-row-column/grid-nested-row-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridNestedRowColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridNestedRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-nested-row/grid-nested-row.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridNestedRowComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridPagerComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-pager/grid-pager.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridPagerComponent</td>
+            <td align="right" data-sort="14">
+                <span class="coverage-percent">14 %</span>
+                <span class="coverage-count">(1/7)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridRowColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridRowColumnComponent</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(7/14)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridRowFeatureColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-feature-column/grid-row-feature-column.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridRowFeatureColumnComponent</td>
+            <td align="right" data-sort="28">
+                <span class="coverage-percent">28 %</span>
+                <span class="coverage-count">(2/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row/grid-row.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridRowComponent</td>
+            <td align="right" data-sort="20">
+                <span class="coverage-percent">20 %</span>
+                <span class="coverage-count">(2/10)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridScrollerComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridScrollerComponent</td>
+            <td align="right" data-sort="42">
+                <span class="coverage-percent">42 %</span>
+                <span class="coverage-count">(3/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./components/GridComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid.component.ts</a>
+            </td>
+            <td>component</td>
+            <td>GridComponent</td>
+            <td align="right" data-sort="17">
+                <span class="coverage-percent">17 %</span>
+                <span class="coverage-count">(8/46)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/CellEvent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/cell-event.ts</a>
+            </td>
+            <td>interface</td>
+            <td>CellEvent</td>
+            <td align="right" data-sort="16">
+                <span class="coverage-percent">16 %</span>
+                <span class="coverage-count">(1/6)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ColumnDef.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/column-def.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ColumnDef</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(28/28)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridBodyComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-body.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridBodyComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/30)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridColumnSizerComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-column-sizer.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridColumnSizerComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridFillerRowColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-filler-row-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridFillerRowColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridFillerRowFeatureColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-filler-row-feature-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridFillerRowFeatureColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridFillerRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-filler-row.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridFillerRowComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/12)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridFooterColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-footer-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridFooterColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridFooterFeatureColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-footer-feature-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridFooterFeatureColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridFooterRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-footer-row.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridFooterRowComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/11)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridFooterComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-footer.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridFooterComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridHeaderColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-header-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridHeaderColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridHeaderFeatureColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-header-feature-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridHeaderFeatureColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridHeaderRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-header-row.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridHeaderRowComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/23)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridHeaderComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-header.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridHeaderComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/13)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridMenuBarComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-menu-bar.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridMenuBarComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridNestedRowColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-nested-row-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridNestedRowColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridNestedRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-nested-row.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridNestedRowComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridPagerComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-pager.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridPagerComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridRowColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-row-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridRowColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridRowFeatureColumnComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-row-feature-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridRowFeatureColumnComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridRowComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-row.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridRowComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/13)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridScrollerComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid-scroller.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridScrollerComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/13)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridComponent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/component-interfaces/grid.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridComponent</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/37)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/FilterState.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/filter-state.ts</a>
+            </td>
+            <td>interface</td>
+            <td>FilterState</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/GridApi.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/grid-api.ts</a>
+            </td>
+            <td>interface</td>
+            <td>GridApi</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(62/62)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/GridDataRequest.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/grid-data-request.ts</a>
+            </td>
+            <td>interface</td>
+            <td>GridDataRequest</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(7/7)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/GridDataResponse.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/grid-data-response.ts</a>
+            </td>
+            <td>interface</td>
+            <td>GridDataResponse</td>
+            <td align="right" data-sort="33">
+                <span class="coverage-percent">33 %</span>
+                <span class="coverage-count">(1/3)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/GridDataSource.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/grid-data-source.ts</a>
+            </td>
+            <td>interface</td>
+            <td>GridDataSource</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(1/2)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/GridDataset.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/grid-dataset.ts</a>
+            </td>
+            <td>interface</td>
+            <td>GridDataset</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(16/16)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/GridOptions.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/grid-options.ts</a>
+            </td>
+            <td>interface</td>
+            <td>GridOptions</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(24/24)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/GridPlugin.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/grid-plugin.ts</a>
+            </td>
+            <td>interface</td>
+            <td>GridPlugin</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(13/13)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/PagerInfo.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/pager-info.ts</a>
+            </td>
+            <td>interface</td>
+            <td>PagerInfo</td>
+            <td align="right" data-sort="25">
+                <span class="coverage-percent">25 %</span>
+                <span class="coverage-count">(1/4)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/PluginOptions.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/plugin-options.ts</a>
+            </td>
+            <td>interface</td>
+            <td>PluginOptions</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/RowEvent.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/row-event.ts</a>
+            </td>
+            <td>interface</td>
+            <td>RowEvent</td>
+            <td align="right" data-sort="25">
+                <span class="coverage-percent">25 %</span>
+                <span class="coverage-count">(1/4)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ScrollDelta.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/scroll-delta.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ScrollDelta</td>
+            <td align="right" data-sort="33">
+                <span class="coverage-percent">33 %</span>
+                <span class="coverage-count">(1/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridColumnService.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/service-interfaces/grid-column.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridColumnService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridScrollService.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/service-interfaces/grid-scroll.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridScrollService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/IGridService.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/service-interfaces/grid.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>IGridService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/72)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/SortState.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/interfaces/sort-state.ts</a>
+            </td>
+            <td>interface</td>
+            <td>SortState</td>
+            <td align="right" data-sort="33">
+                <span class="coverage-percent">33 %</span>
+                <span class="coverage-count">(1/3)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/GridRow.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/models/grid-row.ts</a>
+            </td>
+            <td>class</td>
+            <td>GridRow</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(9/9)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/MenuOption.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/models/menu-option.ts</a>
+            </td>
+            <td>class</td>
+            <td>MenuOption</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(4/4)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/ColumnMenuPlugin.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-menu.plugin.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>ColumnMenuPlugin</td>
+            <td align="right" data-sort="57">
+                <span class="coverage-percent">57 %</span>
+                <span class="coverage-count">(8/14)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/ColumnVisibilityPlugin.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>ColumnVisibilityPlugin</td>
+            <td align="right" data-sort="41">
+                <span class="coverage-percent">41 %</span>
+                <span class="coverage-count">(5/12)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/ExportToExcelPlugin.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/excel-export.plugin.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>ExportToExcelPlugin</td>
+            <td align="right" data-sort="61">
+                <span class="coverage-percent">61 %</span>
+                <span class="coverage-count">(8/13)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/GlobalTextFilterPlugin.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/global-text-filter.plugin.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>GlobalTextFilterPlugin</td>
+            <td align="right" data-sort="22">
+                <span class="coverage-percent">22 %</span>
+                <span class="coverage-count">(2/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/MultiSortPlugin.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>MultiSortPlugin</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/12)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/SaveGridStatePlugin.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>SaveGridStatePlugin</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/17)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/ServerSidePlugin.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/server-side.plugin.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>ServerSidePlugin</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/GridColumnService.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>GridColumnService</td>
+            <td align="right" data-sort="90">
+                <span class="coverage-percent">90 %</span>
+                <span class="coverage-count">(9/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/GridScrollService.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-scroll.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>GridScrollService</td>
+            <td align="right" data-sort="20">
+                <span class="coverage-percent">20 %</span>
+                <span class="coverage-count">(1/5)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/GridService.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>GridService</td>
+            <td align="right" data-sort="44">
+                <span class="coverage-percent">44 %</span>
+                <span class="coverage-count">(43/97)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#GRID_COLUMN_SERVICE">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/tokens/grid-column-service.token.ts</a>
+            </td>
+            <td>variable</td>
+            <td>GRID_COLUMN_SERVICE</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#GRID_PLUGINS">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/tokens/grid-plugin.token.ts</a>
+            </td>
+            <td>variable</td>
+            <td>GRID_PLUGINS</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#GRID_SCROLL_SERVICE">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/tokens/grid-scroll-services.token.ts</a>
+            </td>
+            <td>variable</td>
+            <td>GRID_SCROLL_SERVICE</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#GRID_SERVICE">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/tokens/grid-service.token.ts</a>
+            </td>
+            <td>variable</td>
+            <td>GRID_SERVICE</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./directives/TemplateRegistrarDirective.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/directives/template-registrar.directive.ts</a>
+            </td>
+            <td>directive</td>
+            <td>TemplateRegistrarDirective</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/WidgetsConfig.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/interfaces/widgets-config.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>WidgetsConfig</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/PluginManagerService.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/services/plugin-manager.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>PluginManagerService</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(3/6)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/TemplateRegistryService.html">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/services/template-registry.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>TemplateRegistryService</td>
+            <td align="right" data-sort="60">
+                <span class="coverage-percent">60 %</span>
+                <span class="coverage-count">(3/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#WIDGETS_CONFIG">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/tokens/widgets-config.token.ts</a>
+            </td>
+            <td>variable</td>
+            <td>WIDGETS_CONFIG</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script src="js/libs/tablesort.min.js"></script>
+<script src="js/libs/tablesort.number.min.js"></script>
+<script>
+    new Tablesort(document.getElementById('coverage-table'));
+</script>
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'coverage';
+            var COMPODOC_CURRENT_PAGE_URL = 'coverage.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+
+       <script src="./js/menu-wc.js" defer></script>
+       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

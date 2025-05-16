@@ -1,0 +1,1272 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >SaveGridStatePlugin</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#closeMenuHandler" >closeMenuHandler</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#gridApi" >gridApi</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#gridStateButton" >gridStateButton</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#label" >label</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#menuElement" >menuElement</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#pluginOptions" >pluginOptions</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#renderer" >renderer</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#states" >states</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#applyState" >applyState</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#closeMenu" >closeMenu</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#deleteState" >deleteState</a>
+                            </li>
+                            <li>
+                                <a href="#onDestroy" >onDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#onInit" >onInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#openMenu" >openMenu</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#saveCurrentState" >saveCurrentState</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(templateRegistry: <a href="../injectables/TemplateRegistryService.html" target="_self">TemplateRegistryService</a>, rendererFactory: RendererFactory2)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:16</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>templateRegistry</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TemplateRegistryService.html" target="_self" >TemplateRegistryService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>rendererFactory</td>
+                                                  
+                                                        <td>
+                                                                    <code>RendererFactory2</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyState"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>applyState</b></span>
+                        <a href="#applyState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyState(state: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="213"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:213</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>state</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeMenu"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>closeMenu</b></span>
+                        <a href="#closeMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>closeMenu()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="186"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:186</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteState"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>deleteState</b></span>
+                        <a href="#deleteState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deleteState(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="281"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:281</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>index</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onDestroy"></a>
+                    <span class="name">
+                        <span ><b>onDestroy</b></span>
+                        <a href="#onDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="85"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:85</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onInit"></a>
+                    <span class="name">
+                        <span ><b>onInit</b></span>
+                        <a href="#onInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onInit(api: <a href="../interfaces/GridApi.html" target="_self">GridApi</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="25"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>api</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openMenu"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>openMenu</b></span>
+                        <a href="#openMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openMenu()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="90"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:90</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveCurrentState"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>saveCurrentState</b></span>
+                        <a href="#saveCurrentState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>saveCurrentState()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="194"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:194</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeMenuHandler"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>closeMenuHandler</b></span>
+                        <a href="#closeMenuHandler"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:15</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridApi"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>gridApi</b></span>
+                        <a href="#gridApi"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:10</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridStateButton"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>gridStateButton</b></span>
+                        <a href="#gridStateButton"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HTMLButtonElement</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:9</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="label"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>label</b></span>
+                        <a href="#label"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;State&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:14</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="menuElement"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>menuElement</b></span>
+                        <a href="#menuElement"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HTMLElement | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:13</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pluginOptions"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>pluginOptions</b></span>
+                        <a href="#pluginOptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="renderer"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>renderer</b></span>
+                        <a href="#renderer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Renderer2</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:11</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="states"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>states</b></span>
+                        <a href="#states"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Array&lt;literal type&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/save-state.plugin.ts:12</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Renderer2, RendererFactory2 } from &#x27;@angular/core&#x27;;
+import { GridPlugin } from &#x27;../interfaces/grid-plugin&#x27;;
+import { GridApi } from &#x27;../interfaces/grid-api&#x27;;
+import { TemplateRegistryService } from &#x27;../../shared/services/template-registry.service&#x27;;
+import { ColumnDef, SortState } from &#x27;../interfaces&#x27;;
+
+@Injectable()
+export class SaveGridStatePlugin implements GridPlugin {
+  private gridStateButton!: HTMLButtonElement;
+  private gridApi!: GridApi;
+  private renderer: Renderer2;
+  private states: Array&lt;{ name: string; state: any }&gt; &#x3D; [];
+  private menuElement: HTMLElement | null &#x3D; null;
+  private label: string &#x3D; &#x27;State&#x27;;
+  private closeMenuHandler!: (event: MouseEvent) &#x3D;&gt; void;
+  private pluginOptions: any;
+
+  constructor(
+    private templateRegistry: TemplateRegistryService,
+    private rendererFactory: RendererFactory2
+  ) {
+    this.renderer &#x3D; this.rendererFactory.createRenderer(null, null);
+  }
+
+  onInit(api: GridApi): void {
+    this.gridApi &#x3D; api;
+
+    this.pluginOptions &#x3D; this.gridApi.getPluginOptions();
+    if (!this.pluginOptions?.[&#x27;GridState&#x27;]?.enableSaveState) {
+      return;
+    }
+
+    // Register the setStates function to allow methods to set states
+    if (this.pluginOptions?.[&#x27;GridState&#x27;]) {
+      this.pluginOptions[&#x27;GridState&#x27;].setStates &#x3D; (states: Array&lt;{ name: string; state: any }&gt;) &#x3D;&gt; {
+        this.states &#x3D; states;
+      };
+    }
+
+    const pluginBar &#x3D; this.gridApi.getPluginBar();
+    if (!pluginBar) {
+      console.warn(&#x27;Grid plugin bar not found. Grid state button will not be added.&#x27;);
+      return;
+    }
+
+    if (this.pluginOptions?.[&#x27;GridState&#x27;]?.label) {
+      this.label &#x3D; this.pluginOptions[&#x27;GridState&#x27;].label;
+    }
+
+    const buttonTemplate &#x3D; this.templateRegistry.getTemplate(&#x27;gridStateButton&#x27;);
+    if (buttonTemplate) {
+      const container &#x3D; this.renderer.createElement(&#x27;div&#x27;);
+      const embeddedView &#x3D; buttonTemplate.createEmbeddedView({});
+      embeddedView.detectChanges();
+      embeddedView.rootNodes.forEach((node: any) &#x3D;&gt; this.renderer.appendChild(container, node));
+      this.gridStateButton &#x3D; container.firstChild as HTMLButtonElement;
+    } else {
+      this.gridStateButton &#x3D; this.renderer.createElement(&#x27;button&#x27;);
+      this.renderer.addClass(this.gridStateButton, &#x27;btn&#x27;);
+      this.renderer.addClass(this.gridStateButton, &#x27;btn-sm&#x27;);
+      this.renderer.addClass(this.gridStateButton, &#x27;btn-default&#x27;);
+      this.renderer.setProperty(this.gridStateButton, &#x27;innerText&#x27;, this.label + &#x27;s&#x27;);
+    }
+
+    this.renderer.setStyle(this.gridStateButton, &#x27;margin-right&#x27;, &#x27;8px&#x27;);
+  
+    // Add ARIA attributes for accessibility
+    this.renderer.setAttribute(this.gridStateButton, &#x27;role&#x27;, &#x27;button&#x27;);
+    this.renderer.setAttribute(this.gridStateButton, &#x27;aria-haspopup&#x27;, &#x27;menu&#x27;);
+    this.renderer.setAttribute(this.gridStateButton, &#x27;aria-expanded&#x27;, &#x27;false&#x27;);
+    this.renderer.setAttribute(this.gridStateButton, &#x27;aria-label&#x27;, &#x27;Manage &#x27; + this.label + &#x27;s&#x27;);
+
+    this.renderer.listen(this.gridStateButton, &#x27;click&#x27;, () &#x3D;&gt; {
+      const isExpanded &#x3D; this.gridStateButton.getAttribute(&#x27;aria-expanded&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27;;
+      this.gridStateButton.setAttribute(&#x27;aria-expanded&#x27;, (!isExpanded).toString());
+      this.openMenu();
+    });
+
+    setTimeout(() &#x3D;&gt; {
+      this.renderer.appendChild(pluginBar.nativeElement, this.gridStateButton);
+      this.gridApi.resize();
+    }, 0);
+  }
+
+  onDestroy(): void {
+    this.gridStateButton?.remove();
+    this.closeMenu();
+  }
+
+  private openMenu(): void {
+    if (this.menuElement) {
+      this.closeMenu();
+      return;
+    }
+
+    const menu &#x3D; this.renderer.createElement(&#x27;div&#x27;);
+    this.renderer.addClass(menu, &#x27;cw-dropdown-menu&#x27;);
+    this.renderer.setAttribute(menu, &#x27;role&#x27;, &#x27;menu&#x27;);
+    this.renderer.setAttribute(menu, &#x27;aria-label&#x27;, &#x27;Grid &#x27; + this.label + &#x27; options&#x27;);
+
+    const saveOption &#x3D; this.renderer.createElement(&#x27;button&#x27;);
+    this.renderer.setProperty(saveOption, &#x27;innerText&#x27;, &#x60;Save Current ${this.label}&#x60;);
+    this.renderer.setAttribute(saveOption, &#x27;role&#x27;, &#x27;menuitem&#x27;);
+    this.renderer.setAttribute(saveOption, &#x27;aria-label&#x27;, &#x60;Save current ${this.label}&#x60;);
+    this.renderer.setStyle(saveOption, &#x27;fontSize&#x27;, &#x27;14px&#x27;);
+    this.renderer.listen(saveOption, &#x27;click&#x27;, () &#x3D;&gt; {
+      this.saveCurrentState();
+      this.closeMenu();
+    });
+    this.renderer.appendChild(menu, saveOption);
+
+    if (this.states.length &gt; 0) {
+      // Add a divider between the save button and the list of states
+      const divider &#x3D; this.renderer.createElement(&#x27;div&#x27;);
+      this.renderer.setStyle(divider, &#x27;borderTop&#x27;, &#x27;1px solid #e0e0e0&#x27;);
+      this.renderer.setStyle(divider, &#x27;margin&#x27;, &#x27;8px 0&#x27;);
+      this.renderer.appendChild(menu, divider);
+
+      const statesList &#x3D; this.renderer.createElement(&#x27;ul&#x27;);
+      this.renderer.setAttribute(statesList, &#x27;role&#x27;, &#x27;menu&#x27;);
+      this.renderer.setStyle(statesList, &#x27;fontSize&#x27;, &#x27;14px&#x27;);
+      this.states.forEach((state, index) &#x3D;&gt; {
+        const listItem &#x3D; this.renderer.createElement(&#x27;li&#x27;);
+        this.renderer.setStyle(listItem, &#x27;display&#x27;, &#x27;flex&#x27;);
+        this.renderer.setStyle(listItem, &#x27;alignItems&#x27;, &#x27;center&#x27;);
+        this.renderer.setStyle(listItem, &#x27;justifyContent&#x27;, &#x27;space-between&#x27;);
+        this.renderer.setStyle(listItem, &#x27;padding&#x27;, &#x27;0 8px&#x27;);
+        this.renderer.setStyle(listItem, &#x27;cursor&#x27;, &#x27;pointer&#x27;);
+        this.renderer.listen(listItem, &#x27;click&#x27;, () &#x3D;&gt; {
+          this.applyState(state.state);
+          this.closeMenu();
+        });
+
+        // State name (click to apply)
+        const nameSpan &#x3D; this.renderer.createElement(&#x27;span&#x27;);
+        this.renderer.setProperty(nameSpan, &#x27;innerText&#x27;, state.name);
+        this.renderer.setAttribute(nameSpan, &#x27;role&#x27;, &#x27;menuitem&#x27;);
+        this.renderer.setAttribute(nameSpan, &#x27;aria-label&#x27;, &#x60;Apply ${this.label}: ${state.name}&#x60;);
+        this.renderer.appendChild(listItem, nameSpan);
+
+        // Delete &quot;X&quot; button
+        const deleteButton &#x3D; this.renderer.createElement(&#x27;button&#x27;);
+        this.renderer.setProperty(deleteButton, &#x27;innerText&#x27;, &#x27;✕&#x27;);
+        this.renderer.setAttribute(deleteButton, &#x27;aria-label&#x27;, &#x60;Delete ${this.label}: ${state.name}&#x60;);
+        this.renderer.setStyle(deleteButton, &#x27;background&#x27;, &#x27;none&#x27;);
+        this.renderer.setStyle(deleteButton, &#x27;border&#x27;, &#x27;none&#x27;);
+        this.renderer.setStyle(deleteButton, &#x27;fontWeight&#x27;, &#x27;bold&#x27;);
+        this.renderer.setStyle(deleteButton, &#x27;cursor&#x27;, &#x27;pointer&#x27;);
+        this.renderer.setStyle(deleteButton, &#x27;textAlign&#x27;, &#x27;right&#x27;);
+        this.renderer.setStyle(deleteButton, &#x27;width&#x27;, &#x27;30px&#x27;);
+        this.renderer.listen(deleteButton, &#x27;click&#x27;, (event: MouseEvent) &#x3D;&gt; {
+          event.stopPropagation();
+          this.deleteState(index);
+          this.closeMenu();
+        });
+        this.renderer.appendChild(listItem, deleteButton);
+
+        this.renderer.appendChild(statesList, listItem);
+      });
+      this.renderer.appendChild(menu, statesList);
+    }
+
+    this.renderer.appendChild(document.body, menu);
+
+    const buttonRect &#x3D; this.gridStateButton.getBoundingClientRect();
+    const menuWidth &#x3D; menu.offsetWidth;
+
+    this.renderer.setStyle(menu, &#x27;top&#x27;, &#x60;${buttonRect.bottom}px&#x60;);
+    this.renderer.setStyle(menu, &#x27;left&#x27;, &#x60;${buttonRect.right - menuWidth}px&#x60;);
+
+    this.menuElement &#x3D; menu;
+
+    this.closeMenuHandler &#x3D; (event: MouseEvent) &#x3D;&gt; {
+      if (
+        this.menuElement &amp;&amp;
+        !this.menuElement.contains(event.target as Node) &amp;&amp;
+        event.target !&#x3D;&#x3D; this.gridStateButton
+      ) {
+        this.gridStateButton.setAttribute(&#x27;aria-expanded&#x27;, &#x27;false&#x27;);
+        this.closeMenu();
+      }
+    };
+    setTimeout(() &#x3D;&gt; document.addEventListener(&#x27;click&#x27;, this.closeMenuHandler), 0);
+  }
+
+  private closeMenu(): void {
+    if (this.menuElement) {
+      this.renderer.removeChild(document.body, this.menuElement);
+      this.menuElement &#x3D; null;
+      document.removeEventListener(&#x27;click&#x27;, this.closeMenuHandler);
+    }
+  }
+
+  private saveCurrentState(): void {
+    const state &#x3D; {
+      // Save all properties of ColumnDef to preserve order and state
+      columnDefs: this.gridApi.getColumnDefs().map((col: ColumnDef) &#x3D;&gt; ({ ...col })),
+      // Save the full SortState objects
+      sortState: this.gridApi.getSortState().map((sort: SortState) &#x3D;&gt; ({ ...sort })),
+      // Save groupBy columns as full objects
+      groupBy: this.gridApi.getGroupByColumns().filter((col): col is ColumnDef &#x3D;&gt; !!col).map(col &#x3D;&gt; ({ ...col })),
+    };
+  
+    const stateName &#x3D; prompt(&#x27;Enter a name for this state:&#x27;);
+    if (stateName) {
+      this.states.push({ name: stateName, state });
+
+      this.pluginOptions?.[&#x27;GridState&#x27;]?.onSaveState?.(state);
+    }
+    this.closeMenu();
+  }
+
+  private applyState(state: any): void {
+    // Get the current column defs from the API
+    const currentColumnDefs &#x3D; this.gridApi.getColumnDefs();
+
+    // Helper to update columns recursively and preserve references
+    function updateColumns(savedCols: ColumnDef[], currentCols: ColumnDef[]): ColumnDef[] {
+      const updated: ColumnDef[] &#x3D; [];
+      savedCols.forEach(savedCol &#x3D;&gt; {
+        const currentCol &#x3D; currentCols.find(col &#x3D;&gt; col.field &#x3D;&#x3D;&#x3D; savedCol.field);
+        if (currentCol) {
+          Object.assign(currentCol, savedCol);
+          // If there are children, update recursively
+          if (savedCol.children &amp;&amp; currentCol.children) {
+            currentCol.children &#x3D; updateColumns(savedCol.children, currentCol.children);
+          }
+          updated.push(currentCol);
+        }
+      });
+      // Optionally, add any columns that exist in the current defs but not in the saved state (e.g., new columns)
+      currentCols.forEach(col &#x3D;&gt; {
+        if (!updated.includes(col)) {
+          updated.push(col);
+        }
+      });
+      return updated;
+    }
+
+    // Build the updated column defs, preserving references and handling nested children
+    const updatedColumnDefs &#x3D; updateColumns(state.columnDefs, currentColumnDefs);
+
+    // Set the column definitions in the new order, but with original references
+    this.gridApi.setColumnDefs(updatedColumnDefs);
+
+    // Apply sorting state (only for columns that still exist)
+    const flatten &#x3D; (cols: ColumnDef[]): ColumnDef[] &#x3D;&gt;
+      cols.reduce((arr, col) &#x3D;&gt; arr.concat(col, col.children ? flatten(col.children) : []), [] as ColumnDef[]);
+    const allUpdatedCols &#x3D; flatten(updatedColumnDefs);
+
+    const validSortState &#x3D; state.sortState.filter((sort: SortState) &#x3D;&gt;
+      allUpdatedCols.some((col: ColumnDef) &#x3D;&gt; col.field &#x3D;&#x3D;&#x3D; sort.column.field)
+    );
+    if (validSortState.length &gt; 0) {
+      this.gridApi.applySorting(validSortState);
+    }
+
+    // Apply group-by state
+    const currentGroupBy &#x3D; this.gridApi.getGroupByColumns().filter((col): col is ColumnDef &#x3D;&gt; !!col);
+
+    // Remove columns that are no longer grouped
+    currentGroupBy.forEach((groupByColumn: ColumnDef) &#x3D;&gt; {
+      if (!state.groupBy.some((col: ColumnDef) &#x3D;&gt; col.field &#x3D;&#x3D;&#x3D; groupByColumn.field)) {
+        this.gridApi.removeGroupByColumn(groupByColumn);
+      }
+    });
+
+    // Add new group-by columns
+    state.groupBy.forEach((groupByColumn: ColumnDef) &#x3D;&gt; {
+      if (
+        allUpdatedCols.some((col: ColumnDef) &#x3D;&gt; col.field &#x3D;&#x3D;&#x3D; groupByColumn.field) &amp;&amp;
+        !currentGroupBy.some((col: ColumnDef) &#x3D;&gt; col.field &#x3D;&#x3D;&#x3D; groupByColumn.field)
+      ) {
+        this.gridApi.addGroupByColumn(groupByColumn);
+      }
+    });
+
+    this.gridApi.refresh();
+  }
+
+  private deleteState(index: number): void {
+    const deleted &#x3D; this.states.splice(index, 1)[0];
+    if (this.menuElement) {
+      const statesList &#x3D; this.menuElement.querySelector(&#x27;ul&#x27;);
+      if (statesList) {
+        const listItem &#x3D; statesList.children[index];
+        if (listItem) {
+          this.renderer.removeChild(statesList, listItem);
+        }
+      }
+    }
+
+    // Call plugin option callback if provided
+    const pluginOptions &#x3D; this.gridApi.getPluginOptions();
+    if (pluginOptions?.[&#x27;GridState&#x27;]?.onDeleteState) {
+      pluginOptions[&#x27;GridState&#x27;].onDeleteState(deleted);
+    }
+  }
+}</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'SaveGridStatePlugin.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

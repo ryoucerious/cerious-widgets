@@ -1,0 +1,994 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  GridScrollerComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="../interfaces/IGridScrollerComponent.html" target="_self" >IGridScrollerComponent</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+            <tr>
+                <td class="col-md-3">encapsulation</td>
+                <td class="col-md-9"><code>ViewEncapsulation.None</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>cw-grid-scroller</code></td>
+            </tr>
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./grid-scroller.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#el" >el</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#scroller" >scroller</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getScrollHeight" >getScrollHeight</a>
+                            </li>
+                            <li>
+                                <a href="#getWidth" >getWidth</a>
+                            </li>
+                            <li>
+                                <a href="#scrollGrid" >scrollGrid</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#hasHorizontalScrollbar" >hasHorizontalScrollbar</a>
+                                </li>
+                                <li>
+                                    <a href="#hasVerticalScrollbar" >hasVerticalScrollbar</a>
+                                </li>
+                                <li>
+                                    <a href="#moddedColumnWidth" >moddedColumnWidth</a>
+                                </li>
+                                <li>
+                                    <a href="#pinnedColumnWidth" >pinnedColumnWidth</a>
+                                </li>
+                                <li>
+                                    <a href="#tableScrollHeight" >tableScrollHeight</a>
+                                </li>
+                                <li>
+                                    <a href="#tableScrollWidth" >tableScrollWidth</a>
+                                </li>
+                                <li>
+                                    <a href="#scrollDelta" >scrollDelta</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(el: ElementRef, gridService: <a href="../interfaces/IGridService.html" target="_self">IGridService</a>, gridScrollService: <a href="../interfaces/IGridScrollService.html" target="_self">IGridScrollService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:44</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>el</td>
+                                                  
+                                                        <td>
+                                                                    <code>ElementRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>gridService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/IGridService.html" target="_self" >IGridService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>gridScrollService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/IGridScrollService.html" target="_self" >IGridScrollService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getScrollHeight"></a>
+                    <span class="name">
+                        <span ><b>getScrollHeight</b></span>
+                        <a href="#getScrollHeight"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getScrollHeight()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Calculates and returns the scroll height for the grid scroller.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The height of the scrollbar if it is greater than 0; otherwise, returns 0.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getWidth"></a>
+                    <span class="name">
+                        <span ><b>getWidth</b></span>
+                        <a href="#getWidth"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getWidth()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="66"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:66</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Calculates and returns the width adjustment based on the presence of a vertical scrollbar.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The width adjustment. Returns the scrollbar size if a vertical scrollbar is present, otherwise 0.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scrollGrid"></a>
+                    <span class="name">
+                        <span ><b>scrollGrid</b></span>
+                        <a href="#scrollGrid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>scrollGrid(e: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:80</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handles the grid scrolling event and updates the scroll position accordingly.</p>
+<p>This method calculates the new scroll delta based on the horizontal scroll position
+and invokes the <code>gridScrollService.scrollGrid</code> method to update the grid&#39;s scroll state.
+It passes various grid-related parameters to ensure proper synchronization of the grid&#39;s
+components, such as the header, body, scroller, and footer.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>e</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The scroll event object containing details about the scroll action.</li>
+</ul>
+<p>This method calculates the new scroll delta based on the horizontal scroll position
+and invokes the <code>gridScrollService.scrollGrid</code> method to update the grid&#39;s scroll state.
+It passes various grid-related parameters to ensure proper synchronization of the grid&#39;s
+components, such as the header, body, scroller, and footer.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="el"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>el</b></span>
+                        <a href="#el"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ElementRef</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scroller"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>scroller</b></span>
+                        <a href="#scroller"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ElementRef</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;scroller&#x27;, {static: true})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="hasHorizontalScrollbar"></a>
+                        <span class="name"><b>hasHorizontalScrollbar</b><a href="#hasHorizontalScrollbar"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>hasHorizontalScrollbar()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:18</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="hasVerticalScrollbar"></a>
+                        <span class="name"><b>hasVerticalScrollbar</b><a href="#hasVerticalScrollbar"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>hasVerticalScrollbar()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:22</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="moddedColumnWidth"></a>
+                        <span class="name"><b>moddedColumnWidth</b><a href="#moddedColumnWidth"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>moddedColumnWidth()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:26</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pinnedColumnWidth"></a>
+                        <span class="name"><b>pinnedColumnWidth</b><a href="#pinnedColumnWidth"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>pinnedColumnWidth()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:30</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="tableScrollHeight"></a>
+                        <span class="name"><b>tableScrollHeight</b><a href="#tableScrollHeight"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>tableScrollHeight()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:34</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="tableScrollWidth"></a>
+                        <span class="name"><b>tableScrollWidth</b><a href="#tableScrollWidth"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>tableScrollWidth()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:38</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="scrollDelta"></a>
+                        <span class="name"><b>scrollDelta</b><a href="#scrollDelta"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>scrollDelta()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-scroller/grid-scroller.component.ts:42</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from &#x27;@angular/core&#x27;;
+import { IGridScrollerComponent } from &#x27;../../interfaces/component-interfaces/grid-scroller.interface&#x27;;
+import { ScrollDelta } from &#x27;../../interfaces/scroll-delta&#x27;;
+import { GRID_SERVICE } from &#x27;../../tokens/grid-service.token&#x27;;
+import { IGridService } from &#x27;../../interfaces/service-interfaces/grid.interface&#x27;;
+import { GRID_SCROLL_SERVICE } from &#x27;../../tokens/grid-scroll-services.token&#x27;;
+import { IGridScrollService } from &#x27;../../interfaces/service-interfaces/grid-scroll.interface&#x27;;
+
+@Component({
+  selector: &#x27;cw-grid-scroller&#x27;,
+  templateUrl: &#x27;./grid-scroller.component.html&#x27;,
+      encapsulation: ViewEncapsulation.None
+})
+export class GridScrollerComponent implements IGridScrollerComponent {
+
+  @ViewChild(&#x27;scroller&#x27;, { static: true }) scroller!: ElementRef;
+  
+  get hasHorizontalScrollbar() {
+    return this.gridService.hasHorizontalScrollbar;
+  }
+
+  get hasVerticalScrollbar() {
+    return this.gridService.hasVerticalScrollbar;
+  }
+  
+  get moddedColumnWidth() {
+    return this.gridService.moddedColumnWidth;
+  }
+
+  get pinnedColumnWidth() {
+    return this.gridService.pinnedColumnWidth;
+  }
+
+  get tableScrollHeight(): number {
+    return this.gridService.tableScrollHeight;
+  }
+
+  get tableScrollWidth(): number {
+    return this.gridService.tableScrollWidth;
+  }
+
+  get scrollDelta(): ScrollDelta {
+    return this.gridScrollService.scrollDelta;
+  }
+
+  constructor(
+    public el: ElementRef,
+    @Inject(GRID_SERVICE) private gridService: IGridService,
+    @Inject(GRID_SCROLL_SERVICE) private gridScrollService: IGridScrollService
+  ) { }
+  
+  /**
+   * Calculates and returns the scroll height for the grid scroller.
+   *
+   * @returns {number} The height of the scrollbar if it is greater than 0; otherwise, returns 0.
+   */
+  getScrollHeight(): number {
+    return this.gridService.scrollbarHeight &gt; 0 ? this.gridService.scrollbarSize : 0;
+  }
+
+  /**
+   * Calculates and returns the width adjustment based on the presence of a vertical scrollbar.
+   *
+   * @returns {number} The width adjustment. Returns the scrollbar size if a vertical scrollbar is present, otherwise 0.
+   */
+  getWidth(): number {
+    return this.hasVerticalScrollbar ? this.gridService.scrollbarSize : 0;
+  }
+
+  /**
+   * Handles the grid scrolling event and updates the scroll position accordingly.
+   *
+   * @param e - The scroll event object containing details about the scroll action.
+   *
+   * This method calculates the new scroll delta based on the horizontal scroll position
+   * and invokes the &#x60;gridScrollService.scrollGrid&#x60; method to update the grid&#x27;s scroll state.
+   * It passes various grid-related parameters to ensure proper synchronization of the grid&#x27;s
+   * components, such as the header, body, scroller, and footer.
+   */
+  scrollGrid(e: any): void {
+    const delta &#x3D; {
+      left: e.target.scrollLeft,
+      top: this.scrollDelta.top
+    };
+    this.gridScrollService.scrollGrid(
+      e,
+      delta,
+      this.gridService.gridOptions,
+      this.gridService.gridHeader,
+      this.gridService.gridBody,
+      this.gridService.gridScroller,
+      this.gridService.gridFooter,
+      this.hasVerticalScrollbar,
+      this.gridService.scrollbarWidth
+    );
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div #scroller
+     style&#x3D;&quot;overflow-x: scroll; overflow-y: hidden;&quot;
+     [ngStyle]&#x3D;&quot;{
+      &#x27;height&#x27;: getScrollHeight() + &#x27;px&#x27;,
+      &#x27;marginLeft&#x27;: pinnedColumnWidth + &#x27;px&#x27;
+     }&quot;
+     [scrollLeft]&#x3D;&quot;scrollDelta.left&quot;
+     (scroll)&#x3D;&quot;scrollGrid($event)&quot;
+     role&#x3D;&quot;scrollbar&quot;
+     aria-controls&#x3D;&quot;gridTable&quot;
+     aria-orientation&#x3D;&quot;horizontal&quot;
+     [attr.aria-valuenow]&#x3D;&quot;scrollDelta.left&quot;
+     [attr.aria-valuemin]&#x3D;&quot;0&quot;
+     [attr.aria-valuemax]&#x3D;&quot;tableScrollWidth - moddedColumnWidth&quot;
+     aria-label&#x3D;&quot;Horizontal grid scroller&quot;&gt;
+  &lt;div [ngStyle]&#x3D;&quot;{
+        &#x27;width&#x27;: tableScrollWidth - moddedColumnWidth + &#x27;px&#x27;
+       }&quot;&gt;
+    &amp;nbsp;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div #scroller     style="overflow-x: scroll; overflow-y: hidden;"     [ngStyle]="{      \'height\': getScrollHeight() + \'px\',      \'marginLeft\': pinnedColumnWidth + \'px\'     }"     [scrollLeft]="scrollDelta.left"     (scroll)="scrollGrid($event)"     role="scrollbar"     aria-controls="gridTable"     aria-orientation="horizontal"     [attr.aria-valuenow]="scrollDelta.left"     [attr.aria-valuemin]="0"     [attr.aria-valuemax]="tableScrollWidth - moddedColumnWidth"     aria-label="Horizontal grid scroller">  <div [ngStyle]="{        \'width\': tableScrollWidth - moddedColumnWidth + \'px\'       }">    &nbsp;  </div></div></div>'
+    var COMPONENTS = [{'name': 'GridBodyComponent', 'selector': 'cw-grid-body'},{'name': 'GridColumnSizerComponent', 'selector': 'cw-grid-column-sizer'},{'name': 'GridComponent', 'selector': 'cw-grid'},{'name': 'GridFillerRowColumnComponent', 'selector': 'cw-grid-filler-row-column'},{'name': 'GridFillerRowComponent', 'selector': 'cw-grid-filler-row'},{'name': 'GridFillerRowFeatureColumnComponent', 'selector': 'cw-grid-filler-row-feature-column'},{'name': 'GridFooterColumnComponent', 'selector': 'cw-grid-footer-column'},{'name': 'GridFooterComponent', 'selector': 'cw-grid-footer'},{'name': 'GridFooterFeatureColumnComponent', 'selector': 'cw-grid-footer-feature-column'},{'name': 'GridFooterRowComponent', 'selector': 'cw-grid-footer-row'},{'name': 'GridHeaderColumnComponent', 'selector': 'cw-grid-header-column'},{'name': 'GridHeaderComponent', 'selector': 'cw-grid-header'},{'name': 'GridHeaderFeatureColumnComponent', 'selector': 'cw-grid-header-feature-column'},{'name': 'GridHeaderRowComponent', 'selector': 'cw-grid-header-row'},{'name': 'GridMenuBarComponent', 'selector': 'cw-grid-menu-bar'},{'name': 'GridNestedRowColumnComponent', 'selector': 'cw-nested-row-column'},{'name': 'GridNestedRowComponent', 'selector': 'cw-nested-row'},{'name': 'GridPagerComponent', 'selector': 'cw-grid-pager'},{'name': 'GridRowColumnComponent', 'selector': 'cw-grid-row-column'},{'name': 'GridRowComponent', 'selector': 'cw-grid-row'},{'name': 'GridRowFeatureColumnComponent', 'selector': 'cw-grid-row-feature-column'},{'name': 'GridScrollerComponent', 'selector': 'cw-grid-scroller'}];
+    var DIRECTIVES = [{'name': 'TemplateRegistrarDirective', 'selector': '[cwTemplate]'}];
+    var ACTUAL_COMPONENT = {'name': 'GridScrollerComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'GridScrollerComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

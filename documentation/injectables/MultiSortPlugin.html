@@ -1,0 +1,972 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >MultiSortPlugin</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#applySorting" >applySorting</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#gridApi" >gridApi</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#renderer" >renderer</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#sortState" >sortState</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#updateColumnHeaders" >updateColumnHeaders</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#attachColumnHeaderListeners" >attachColumnHeaderListeners</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#handleColumnClick" >handleColumnClick</a>
+                            </li>
+                            <li>
+                                <a href="#onDestroy" >onDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#onInit" >onInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#updateSortState" >updateSortState</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(rendererFactory: RendererFactory2)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:10</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>rendererFactory</td>
+                                                  
+                                                        <td>
+                                                                    <code>RendererFactory2</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="attachColumnHeaderListeners"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>attachColumnHeaderListeners</b></span>
+                        <a href="#attachColumnHeaderListeners"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>attachColumnHeaderListeners()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="99"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:99</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleColumnClick"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>handleColumnClick</b></span>
+                        <a href="#handleColumnClick"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleColumnClick(event: MouseEvent, headerElement: HTMLElement)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>MouseEvent</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>headerElement</td>
+                                            <td>
+                                                        <code>HTMLElement</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onDestroy"></a>
+                    <span class="name">
+                        <span ><b>onDestroy</b></span>
+                        <a href="#onDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="48"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:48</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onInit"></a>
+                    <span class="name">
+                        <span ><b>onInit</b></span>
+                        <a href="#onInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onInit(api: <a href="../interfaces/GridApi.html" target="_self">GridApi</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="17"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:17</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>api</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateSortState"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>updateSortState</b></span>
+                        <a href="#updateSortState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateSortState(column: <a href="../interfaces/ColumnDef.html" target="_self">ColumnDef</a>, isCtrlPressed: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:80</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>column</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>isCtrlPressed</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applySorting"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>applySorting</b></span>
+                        <a href="#applySorting"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {...}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="164" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:164</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridApi"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>gridApi</b></span>
+                        <a href="#gridApi"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:9</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="renderer"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>renderer</b></span>
+                        <a href="#renderer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Renderer2</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:10</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sortState"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>sortState</b></span>
+                        <a href="#sortState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/SortState.html" target="_self" >SortState[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:15</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateColumnHeaders"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>updateColumnHeaders</b></span>
+                        <a href="#updateColumnHeaders"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {...}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="128" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/multi-sort.plugin.ts:128</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Renderer2, RendererFactory2 } from &#x27;@angular/core&#x27;;
+import { GridPlugin } from &#x27;../interfaces/grid-plugin&#x27;;
+import { GridApi } from &#x27;../interfaces/grid-api&#x27;;
+import { ColumnDef } from &#x27;../interfaces/column-def&#x27;;
+import { SortState } from &#x27;../interfaces/sort-state&#x27;;
+
+@Injectable()
+export class MultiSortPlugin implements GridPlugin {
+  private gridApi!: GridApi;
+  private renderer: Renderer2;
+
+  constructor(rendererFactory: RendererFactory2) {
+    this.renderer &#x3D; rendererFactory.createRenderer(null, null);
+  }
+  private sortState: SortState[] &#x3D; [];
+
+  onInit(api: GridApi): void {
+    this.gridApi &#x3D; api;
+
+    // Check if the pluginOptions include &#x60;enableMultiSort&#x60;
+    const pluginOptions &#x3D; this.gridApi.getPluginOptions();
+    if (!pluginOptions?.[&#x27;MultiSort&#x27;]?.enableMultiSort) {
+      return; // Do not add the plugin if &#x60;enableMultiSort&#x60; is not enabled
+    }
+
+    // Register the sort function with the grid API
+    this.gridApi.setSortFunction(this.applySorting);
+
+    // Attach click listeners to column headers
+    this.attachColumnHeaderListeners();
+
+    // Listen for drag-drop events
+    this.gridApi.afterColumnReorder(() &#x3D;&gt; {
+      this.attachColumnHeaderListeners(); // Reattach listeners after reordering
+      this.updateColumnHeaders(); // Reapply the sort indicators
+    });
+
+    this.gridApi.afterPinnedColumnsUpdated(() &#x3D;&gt; {
+      this.attachColumnHeaderListeners(); // Reattach listeners after reordering
+      this.updateColumnHeaders(); // Reapply the sort indicators
+    });
+
+    this.gridApi.afterApplySorting(() &#x3D;&gt; {
+      this.updateColumnHeaders(); // Reapply the sort indicators
+    });
+  }
+
+  onDestroy(): void {
+    // Clean up event listeners
+    const columnHeaders &#x3D; this.gridApi.getColumnHeaders();
+    columnHeaders.forEach(header &#x3D;&gt; {
+      var parentNode &#x3D; header.parentNode as HTMLElement;
+      parentNode.removeEventListener(&#x27;click&#x27;, (event: MouseEvent) &#x3D;&gt; this.handleColumnClick(event, header));
+    });
+  }
+
+  private handleColumnClick(event: MouseEvent, headerElement: HTMLElement): void {
+    const columnId &#x3D; headerElement.getAttribute(&#x27;data-column-id&#x27;);
+    const column &#x3D; this.gridApi.getFlattenedColumnDefs().find(col &#x3D;&gt; col.id &#x3D;&#x3D;&#x3D; columnId);
+  
+    if (!column) {
+      console.warn(&#x27;Column definition not found for Id:&#x27;, columnId);
+      return;
+    }
+  
+    // Check if the column is sortable
+    if (column.sortable &#x3D;&#x3D;&#x3D; false) {
+      return;
+    }
+  
+    const isCtrlPressed &#x3D; event.ctrlKey || event.metaKey; // MetaKey for Mac (Cmd key)
+  
+    // Update sort state
+    this.updateSortState(column, isCtrlPressed);
+  
+    // Apply sorting and update headers
+    this.gridApi.applySorting(this.sortState);
+  }
+
+  private updateSortState(column: ColumnDef, isCtrlPressed: boolean): void {
+    if (!isCtrlPressed) {
+      // Retain only the clicked column in the sort state
+      this.sortState &#x3D; this.sortState.filter(sort &#x3D;&gt; sort.column &#x3D;&#x3D;&#x3D; column);
+    }
+
+    const existingSort &#x3D; this.sortState.find(sort &#x3D;&gt; sort.column &#x3D;&#x3D;&#x3D; column);
+
+    if (existingSort) {
+      // Cycle through sorting states: asc -&gt; desc -&gt; none
+      existingSort.direction &#x3D; existingSort.direction &#x3D;&#x3D;&#x3D; &#x27;asc&#x27; ? &#x27;desc&#x27; : null;
+      if (!existingSort.direction) {
+        this.sortState &#x3D; this.sortState.filter(sort &#x3D;&gt; sort.column !&#x3D;&#x3D; column);
+      }
+    } else {
+      this.sortState.push({ column, direction: &#x27;asc&#x27; });
+    }
+  }
+
+  private attachColumnHeaderListeners(): void {
+    const columnHeaders &#x3D; this.gridApi.getColumnHeaders();
+
+    columnHeaders.forEach(header &#x3D;&gt; {
+      // Check if the listener is already attached
+      if (header.getAttribute(&#x27;data-listener-attached&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27;) {
+        return; // Skip if the listener is already attached
+      }
+
+      // Attach the click listener
+      var parentNode &#x3D; header.parentNode as HTMLElement;
+      parentNode.addEventListener(&#x27;click&#x27;, (event: MouseEvent) &#x3D;&gt; this.handleColumnClick(event, header));
+
+      // Add ARIA attributes for focus and interaction
+      header.setAttribute(&#x27;tabindex&#x27;, &#x27;0&#x27;); // Make the header focusable
+      header.setAttribute(&#x27;role&#x27;, &#x27;button&#x27;); // Indicate it is interactive
+      header.setAttribute(&#x27;aria-pressed&#x27;, &#x27;false&#x27;); // Default state
+
+      // Update &#x60;aria-pressed&#x60; dynamically on click
+      this.renderer.listen(header, &#x27;click&#x27;, () &#x3D;&gt; {
+        const isPressed &#x3D; header.getAttribute(&#x27;aria-pressed&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27;;
+        header.setAttribute(&#x27;aria-pressed&#x27;, (!isPressed).toString());
+      });
+
+      // Mark the listener as attached
+      header.setAttribute(&#x27;data-listener-attached&#x27;, &#x27;true&#x27;);
+    });
+  }
+
+  private updateColumnHeaders &#x3D; (): void &#x3D;&gt; {
+    const columnHeaders &#x3D; this.gridApi.getColumnHeaders();
+    const sortState &#x3D; this.gridApi.getSortState();
+
+    columnHeaders.forEach(header &#x3D;&gt; {
+      const columnDef &#x3D; this.gridApi.getFlattenedColumnDefs().find(col &#x3D;&gt; col.id &#x3D;&#x3D;&#x3D; header.getAttribute(&#x27;data-column-id&#x27;));
+      const sort &#x3D; sortState.find(s &#x3D;&gt; s.column.id &#x3D;&#x3D;&#x3D; columnDef?.id);
+
+      // Remove any existing sort indicator
+      const existingIndicator &#x3D; header.querySelector(&#x27;.sort-indicator&#x27;);
+      if (existingIndicator) {
+        existingIndicator.remove();
+      }
+
+      // Add ARIA attributes for accessibility
+      if (columnDef) {
+        header.setAttribute(&#x27;role&#x27;, &#x27;columnheader&#x27;);
+        header.setAttribute(&#x27;aria-label&#x27;, columnDef.label || columnDef.field || &#x27;&#x27;);
+        header.setAttribute(&#x27;aria-sort&#x27;, sort ? (sort.direction &#x3D;&#x3D;&#x3D; &#x27;asc&#x27; ? &#x27;ascending&#x27; : &#x27;descending&#x27;) : &#x27;none&#x27;);
+      }
+
+      if (sort) {
+        const showIndex &#x3D; sortState.length &gt; 1;
+        const index &#x3D; sortState.indexOf(sort) + 1; // 1-based index
+        const indicator &#x3D; document.createElement(&#x27;span&#x27;);
+        indicator.classList.add(&#x27;sort-indicator&#x27;);
+        indicator.style.position &#x3D; &#x27;absolute&#x27;;
+        indicator.style.marginLeft &#x3D; &#x27;5px&#x27;;
+        indicator.innerText &#x3D; sort.direction &#x3D;&#x3D;&#x3D; &#x27;asc&#x27;
+          ? &#x60;↑${showIndex ? index : &#x27;&#x27;}&#x60;
+          : &#x60;↓${showIndex ? index : &#x27;&#x27;}&#x60;;
+        header.appendChild(indicator);
+      }
+    });
+  }
+
+  private applySorting &#x3D; (data: any[], sortState: SortState[]): any[] &#x3D;&gt; {
+    return [...data].sort((a, b) &#x3D;&gt; {
+      for (const sort of sortState) {
+        const field &#x3D; sort.column.field;
+        const direction &#x3D; sort.direction &#x3D;&#x3D;&#x3D; &#x27;asc&#x27; ? 1 : -1;
+  
+        if (field) {
+          if (a[field] &lt; b[field]) return -1 * direction;
+          if (a[field] &gt; b[field]) return 1 * direction;
+        }
+      }
+      return 0;
+    });
+  }
+}</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'MultiSortPlugin.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

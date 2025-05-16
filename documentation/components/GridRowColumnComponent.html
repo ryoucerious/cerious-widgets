@@ -1,0 +1,1342 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  GridRowColumnComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="../interfaces/IGridRowColumnComponent.html" target="_self" >IGridRowColumnComponent</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+            <tr>
+                <td class="col-md-3">encapsulation</td>
+                <td class="col-md-9"><code>ViewEncapsulation.None</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>cw-grid-row-column</code></td>
+            </tr>
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./grid-row-column.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#ColumnFormat" >ColumnFormat</a>
+                            </li>
+                            <li>
+                                <a href="#ColumnType" >ColumnType</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#el" >el</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#dropdownTrackBy" >dropdownTrackBy</a>
+                            </li>
+                            <li>
+                                <a href="#getAlignment" >getAlignment</a>
+                            </li>
+                            <li>
+                                <a href="#getFormattedValue" >getFormattedValue</a>
+                            </li>
+                            <li>
+                                <a href="#getStars" >getStars</a>
+                            </li>
+                            <li>
+                                <a href="#getValue" >getValue</a>
+                            </li>
+                            <li>
+                                <a href="#getWidth" >getWidth</a>
+                            </li>
+                            <li>
+                                <a href="#onValueChange" >onValueChange</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#column" >column</a>
+                            </li>
+                            <li>
+                                <a href="#gridRow" >gridRow</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#templates" >templates</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(el: ElementRef, gridService: <a href="../interfaces/IGridService.html" target="_self">IGridService</a>, gridColumnService: <a href="../interfaces/IGridColumnService.html" target="_self">IGridColumnService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:27</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>el</td>
+                                                  
+                                                        <td>
+                                                                    <code>ElementRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>gridService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/IGridService.html" target="_self" >IGridService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>gridColumnService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/IGridColumnService.html" target="_self" >IGridColumnService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="column"></a>
+                        <b>column</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:18</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="gridRow"></a>
+                        <b>gridRow</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/GridRow.html" target="_self" >GridRow</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:19</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dropdownTrackBy"></a>
+                    <span class="name">
+                        <span ><b>dropdownTrackBy</b></span>
+                        <a href="#dropdownTrackBy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>dropdownTrackBy(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, item: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="44"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>TrackBy function for dropdown options to optimize rendering in Angular templates.
+This function determines the unique identifier for each item in the dropdown list.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">     or the index if the `id` is not available.</code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>index</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The index of the item in the dropdown list.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>item</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The current item in the dropdown list.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The unique identifier for the item, which is either the <code>id</code> property of the item
+or the index if the <code>id</code> is not available.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAlignment"></a>
+                    <span class="name">
+                        <span ><b>getAlignment</b></span>
+                        <a href="#getAlignment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAlignment()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:58</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determines the text alignment for a grid column based on its type and format.</p>
+<ul>
+<li>For columns of type <code>Number</code> or with a format of <code>currency</code> or <code>percentage</code>,
+the default alignment is <code>&#39;right&#39;</code> unless a specific alignment is provided.</li>
+<li>For all other columns, the default alignment is <code>&#39;left&#39;</code> unless a specific alignment is provided.</li>
+</ul>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The alignment for the column, either <code>&#39;right&#39;</code> or <code>&#39;left&#39;</code>.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFormattedValue"></a>
+                    <span class="name">
+                        <span ><b>getFormattedValue</b></span>
+                        <a href="#getFormattedValue"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFormattedValue()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="89"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:89</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Formats the value of a grid cell based on the column&#39;s specified format.</p>
+<p>Supported formats include:</p>
+<ul>
+<li><code>Currency</code>: Formats the value as a currency string in USD.</li>
+<li><code>Percentage</code>: Appends a percentage symbol (<code>%</code>) to the value.</li>
+<li><code>Stars</code>: Rounds the value to the nearest integer.</li>
+<li><code>Date</code>: Converts the value to a localized date string.</li>
+<li><code>DateTime</code>: Converts the value to a localized date and time string.</li>
+<li><code>Time</code>: Converts the value to a localized time string.</li>
+<li>Default: Returns the raw value without formatting.</li>
+</ul>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The formatted value based on the column&#39;s format.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getStars"></a>
+                    <span class="name">
+                        <span ><b>getStars</b></span>
+                        <a href="#getStars"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getStars(value: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="119"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:119</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Generates an array representing star ratings based on the given value.
+Each element in the array corresponds to a star.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">           The value is rounded to the nearest integer.</code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The numeric value used to determine the number of stars.
+The value is rounded to the nearest integer.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>number[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>An array of zeros with a length equal to the rounded value.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getValue"></a>
+                    <span class="name">
+                        <span ><b>getValue</b></span>
+                        <a href="#getValue"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getValue()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:130</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Retrieves the value of the grid row&#39;s column field.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">     otherwise, returns `null`.</code></pre></div></div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The value of the column field from the grid row if the column field is defined;
+otherwise, returns <code>null</code>.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getWidth"></a>
+                    <span class="name">
+                        <span ><b>getWidth</b></span>
+                        <a href="#getWidth"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getWidth()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="71"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:71</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Retrieves the width of the current grid column as a string.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The width of the column, typically in a CSS-compatible format (e.g., &#39;100px&#39;, &#39;20%&#39;).</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onValueChange"></a>
+                    <span class="name">
+                        <span ><b>onValueChange</b></span>
+                        <a href="#onValueChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onValueChange(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="141"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:141</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handles the value change event for a grid row column.
+Updates the corresponding field in the grid row with the new value.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">           The value is expected to be accessible via `event.target.value`.</code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The event object containing the new value.
+The value is expected to be accessible via <code>event.target.value</code>.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ColumnFormat"></a>
+                    <span class="name">
+                        <span ><b>ColumnFormat</b></span>
+                        <a href="#ColumnFormat"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>ColumnFormat</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ColumnType"></a>
+                    <span class="name">
+                        <span ><b>ColumnType</b></span>
+                        <a href="#ColumnType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>ColumnType</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="el"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>el</b></span>
+                        <a href="#el"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ElementRef</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="templates"></a>
+                        <span class="name"><b>templates</b><a href="#templates"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>templates()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-row-column/grid-row-column.component.ts:25</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ElementRef, Inject, Input, ViewEncapsulation } from &#x27;@angular/core&#x27;;
+import { IGridRowColumnComponent } from &#x27;../../interfaces/component-interfaces/grid-row-column.interface&#x27;;
+import { ColumnDef } from &#x27;../../interfaces/column-def&#x27;;
+import { GridRow } from &#x27;../../models/grid-row&#x27;;
+import { GRID_SERVICE } from &#x27;../../tokens/grid-service.token&#x27;;
+import { GRID_COLUMN_SERVICE } from &#x27;../../tokens/grid-column-service.token&#x27;;
+import { IGridService } from &#x27;../../interfaces/service-interfaces/grid.interface&#x27;;
+import { IGridColumnService } from &#x27;../../interfaces/service-interfaces/grid-column.interface&#x27;;
+import { ColumnFormat, ColumnType } from &#x27;../../enums&#x27;;
+
+@Component({
+  selector: &#x27;cw-grid-row-column&#x27;,
+  templateUrl: &#x27;./grid-row-column.component.html&#x27;,
+      encapsulation: ViewEncapsulation.None
+})
+export class GridRowColumnComponent implements IGridRowColumnComponent {
+
+  @Input() column!: ColumnDef;
+  @Input() gridRow!: GridRow;
+
+  // Expose enums to the template
+  ColumnType &#x3D; ColumnType;
+  ColumnFormat &#x3D; ColumnFormat;
+  
+  get templates() {
+    return this.gridService.templates;
+  }
+
+  constructor(
+    public el: ElementRef,
+    @Inject(GRID_SERVICE) private gridService: IGridService,
+    @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
+  ) { }
+
+  /**
+   * TrackBy function for dropdown options to optimize rendering in Angular templates.
+   * This function determines the unique identifier for each item in the dropdown list.
+   *
+   * @param index - The index of the item in the dropdown list.
+   * @param item - The current item in the dropdown list.
+   * @returns The unique identifier for the item, which is either the &#x60;id&#x60; property of the item
+   *          or the index if the &#x60;id&#x60; is not available.
+   */
+  dropdownTrackBy(index: number, item: any): any {
+    // Track by function for dropdown options
+    return item.id || index;
+  }
+
+  /**
+   * Determines the text alignment for a grid column based on its type and format.
+   *
+   * - For columns of type &#x60;Number&#x60; or with a format of &#x60;currency&#x60; or &#x60;percentage&#x60;,
+   *   the default alignment is &#x60;&#x27;right&#x27;&#x60; unless a specific alignment is provided.
+   * - For all other columns, the default alignment is &#x60;&#x27;left&#x27;&#x60; unless a specific alignment is provided.
+   *
+   * @returns {string} The alignment for the column, either &#x60;&#x27;right&#x27;&#x60; or &#x60;&#x27;left&#x27;&#x60;.
+   */
+  getAlignment(): string {
+    // Default alignment for numbers is &#x27;right&#x27;, otherwise use the column&#x27;s alignment or default to &#x27;left&#x27;
+    if (this.column.type &#x3D;&#x3D;&#x3D; ColumnType.Number || this.column.format &#x3D;&#x3D;&#x3D; &#x27;currency&#x27; || this.column.format &#x3D;&#x3D;&#x3D; &#x27;percentage&#x27;) {
+      return this.column.alignment || &#x27;right&#x27;;
+    }
+    return this.column.alignment || &#x27;left&#x27;;
+  }
+
+  /**
+   * Retrieves the width of the current grid column as a string.
+   *
+   * @returns {string} The width of the column, typically in a CSS-compatible format (e.g., &#x27;100px&#x27;, &#x27;20%&#x27;).
+   */
+  getWidth(): string {
+    return this.gridColumnService.getColumnWidth(this.column, this.gridService.gridOptions);
+  }
+
+  /**
+   * Formats the value of a grid cell based on the column&#x27;s specified format.
+   *
+   * Supported formats include:
+   * - &#x60;Currency&#x60;: Formats the value as a currency string in USD.
+   * - &#x60;Percentage&#x60;: Appends a percentage symbol (&#x60;%&#x60;) to the value.
+   * - &#x60;Stars&#x60;: Rounds the value to the nearest integer.
+   * - &#x60;Date&#x60;: Converts the value to a localized date string.
+   * - &#x60;DateTime&#x60;: Converts the value to a localized date and time string.
+   * - &#x60;Time&#x60;: Converts the value to a localized time string.
+   * - Default: Returns the raw value without formatting.
+   *
+   * @returns The formatted value based on the column&#x27;s format.
+   */
+  getFormattedValue(): any {
+    const value &#x3D; this.getValue();
+
+    // Apply formatting based on column format
+    switch (this.column.format) {
+      case ColumnFormat.Currency:
+        return new Intl.NumberFormat(&#x27;en-US&#x27;, { style: &#x27;currency&#x27;, currency: &#x27;USD&#x27; }).format(value);
+      case ColumnFormat.Percentage:
+        return &#x60;${value}%&#x60;;
+      case ColumnFormat.Stars:
+        return Math.round(value); // Return rounded value for stars
+      case ColumnFormat.Date:
+        return new Date(value).toLocaleDateString();
+      case ColumnFormat.DateTime:
+        return new Date(value).toLocaleString();
+      case ColumnFormat.Time:
+        return new Date(value).toLocaleTimeString();
+      default:
+        return value;
+    }
+  }
+
+  /**
+   * Generates an array representing star ratings based on the given value.
+   * Each element in the array corresponds to a star.
+   *
+   * @param value - The numeric value used to determine the number of stars.
+   *                The value is rounded to the nearest integer.
+   * @returns An array of zeros with a length equal to the rounded value.
+   */
+  getStars(value: number): number[] {
+    // Generate an array for star ratings
+    return Array(Math.round(value)).fill(0);
+  }
+
+  /**
+   * Retrieves the value of the grid row&#x27;s column field.
+   *
+   * @returns The value of the column field from the grid row if the column field is defined;
+   *          otherwise, returns &#x60;null&#x60;.
+   */
+  getValue(): any {
+    return this.column.field ? this.gridRow.row[this.column.field] : null;
+  }
+
+  /**
+   * Handles the value change event for a grid row column.
+   * Updates the corresponding field in the grid row with the new value.
+   *
+   * @param event - The event object containing the new value.
+   *                The value is expected to be accessible via &#x60;event.target.value&#x60;.
+   */
+  onValueChange(event: any): void {
+    if (this.column.field) {
+      this.gridRow.row[this.column.field] &#x3D; event.target.value;
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div srole&#x3D;&quot;gridcell&quot;
+     class&#x3D;&quot;cell-content-wrapper&quot;
+     [style.width]&#x3D;&quot;getWidth()&quot; 
+     [style.text-align]&#x3D;&quot;getAlignment()&quot;
+     [attr.aria-label]&#x3D;&quot;column.label || &#x27;Column&#x27;&quot;&gt;
+    
+    &lt;!-- Custom cell template --&gt;
+    &lt;ng-template *ngIf&#x3D;&quot;column.cellTemplate &amp;&amp; templates[column.cellTemplate]&quot;
+                [ngTemplateOutlet]&#x3D;&quot;templates[column.cellTemplate]&quot;
+                [ngTemplateOutletContext]&#x3D;&quot;{gridRow: gridRow, row: gridRow.row, column: column, value: getValue()}&quot;&gt;
+    &lt;/ng-template&gt;
+
+    &lt;!-- Editable fields based on column type --&gt;
+    &lt;ng-container *ngIf&#x3D;&quot;column.editable&quot;&gt;
+        &lt;ng-container [ngSwitch]&#x3D;&quot;column.type || ColumnType.String&quot;&gt;
+            &lt;!-- Text Input --&gt;
+            &lt;input *ngSwitchCase&#x3D;&quot;ColumnType.String&quot; 
+                   type&#x3D;&quot;text&quot;
+                   [value]&#x3D;&quot;getFormattedValue()&quot; 
+                   (input)&#x3D;&quot;onValueChange($event)&quot; /&gt;
+
+            &lt;!-- Number Input --&gt;
+            &lt;input *ngSwitchCase&#x3D;&quot;ColumnType.Number&quot; 
+                   type&#x3D;&quot;number&quot; 
+                   [value]&#x3D;&quot;getValue()&quot; 
+                   (input)&#x3D;&quot;onValueChange($event)&quot; /&gt;
+
+            &lt;!-- Dropdown --&gt;
+            &lt;select *ngSwitchCase&#x3D;&quot;ColumnType.Dropdown&quot; 
+                    [value]&#x3D;&quot;getValue()&quot; 
+                    (change)&#x3D;&quot;onValueChange($event)&quot;&gt;
+                &lt;option *ngFor&#x3D;&quot;let option of column.valueOptions; trackBy: dropdownTrackBy&quot; [value]&#x3D;&quot;option.id&quot;&gt;{{option.value}}&lt;/option&gt;
+            &lt;/select&gt;
+
+            &lt;!-- Date Input --&gt;
+            &lt;input *ngSwitchCase&#x3D;&quot;ColumnType.Date&quot; 
+                   type&#x3D;&quot;date&quot; 
+                   [value]&#x3D;&quot;getValue()&quot; 
+                   (input)&#x3D;&quot;onValueChange($event)&quot; /&gt;
+
+            &lt;!-- DateTime Input --&gt;
+            &lt;input *ngSwitchCase&#x3D;&quot;ColumnType.DateTime&quot; 
+                   type&#x3D;&quot;datetime-local&quot; 
+                   [value]&#x3D;&quot;getValue()&quot; 
+                   (input)&#x3D;&quot;onValueChange($event)&quot; /&gt;
+
+            &lt;!-- Time Input --&gt;
+            &lt;input *ngSwitchCase&#x3D;&quot;ColumnType.Time&quot; 
+                   type&#x3D;&quot;time&quot; 
+                   [value]&#x3D;&quot;getValue()&quot; 
+                   (input)&#x3D;&quot;onValueChange($event)&quot; /&gt;
+
+            &lt;!-- Boolean (Checkbox) --&gt;
+            &lt;input *ngSwitchCase&#x3D;&quot;ColumnType.Boolean&quot; 
+                   type&#x3D;&quot;checkbox&quot; 
+                   [checked]&#x3D;&quot;getValue()&quot; 
+                   (change)&#x3D;&quot;onValueChange($event)&quot; /&gt;
+
+            &lt;!-- Default Display --&gt;
+            &lt;div *ngSwitchDefault&gt;
+                {{ getFormattedValue() }}
+            &lt;/div&gt;
+        &lt;/ng-container&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Display based on format for non-editable columns --&gt;
+    &lt;ng-container *ngIf&#x3D;&quot;!column.editable &amp;&amp; column.format&quot;&gt;
+        &lt;ng-container [ngSwitch]&#x3D;&quot;column.format&quot;&gt;
+            &lt;!-- Currency Format --&gt;
+            &lt;div *ngSwitchCase&#x3D;&quot;ColumnFormat.Currency&quot;&gt;
+                {{ getValue() | currency }}
+            &lt;/div&gt;
+
+            &lt;!-- Percentage Format --&gt;
+            &lt;div *ngSwitchCase&#x3D;&quot;ColumnFormat.Percentage&quot;&gt;
+                {{ getValue() | percent }}
+            &lt;/div&gt;
+
+            &lt;!-- Stars Format --&gt;
+            &lt;div *ngSwitchCase&#x3D;&quot;ColumnFormat.Stars&quot;&gt;
+                &lt;span *ngFor&#x3D;&quot;let star of getStars(getValue())&quot;&gt;&amp;#9733;&lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Date Format --&gt;
+            &lt;div *ngSwitchCase&#x3D;&quot;ColumnFormat.Date&quot;&gt;
+                {{ getValue() | date:&#x27;shortDate&#x27; }}
+            &lt;/div&gt;
+
+            &lt;!-- DateTime Format --&gt;
+            &lt;div *ngSwitchCase&#x3D;&quot;ColumnFormat.DateTime&quot;&gt;
+                {{ getValue() | date:&#x27;short&#x27; }}
+            &lt;/div&gt;
+
+            &lt;!-- Time Format --&gt;
+            &lt;div *ngSwitchCase&#x3D;&quot;ColumnFormat.Time&quot;&gt;
+                {{ getValue() | date:&#x27;shortTime&#x27; }}
+            &lt;/div&gt;
+
+            &lt;!-- Default Format --&gt;
+            &lt;div *ngSwitchDefault&gt;
+                {{ getValue() }}
+            &lt;/div&gt;
+        &lt;/ng-container&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Default display for non-editable columns without format --&gt;
+    &lt;div *ngIf&#x3D;&quot;!column.cellTemplate &amp;&amp; !column.editable &amp;&amp; !column.format&quot;&gt;
+        {{ getValue() }}
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div srole="gridcell"     class="cell-content-wrapper"     [style.width]="getWidth()"      [style.text-align]="getAlignment()"     [attr.aria-label]="column.label || \'Column\'">        <!-- Custom cell template -->    <ng-template *ngIf="column.cellTemplate && templates[column.cellTemplate]"                [ngTemplateOutlet]="templates[column.cellTemplate]"                [ngTemplateOutletContext]="{gridRow: gridRow, row: gridRow.row, column: column, value: getValue()}">    </ng-template>    <!-- Editable fields based on column type -->    <ng-container *ngIf="column.editable">        <ng-container [ngSwitch]="column.type || ColumnType.String">            <!-- Text Input -->            <input *ngSwitchCase="ColumnType.String"                    type="text"                   [value]="getFormattedValue()"                    (input)="onValueChange($event)" />            <!-- Number Input -->            <input *ngSwitchCase="ColumnType.Number"                    type="number"                    [value]="getValue()"                    (input)="onValueChange($event)" />            <!-- Dropdown -->            <select *ngSwitchCase="ColumnType.Dropdown"                     [value]="getValue()"                     (change)="onValueChange($event)">                <option *ngFor="let option of column.valueOptions; trackBy: dropdownTrackBy" [value]="option.id">{{option.value}}</option>            </select>            <!-- Date Input -->            <input *ngSwitchCase="ColumnType.Date"                    type="date"                    [value]="getValue()"                    (input)="onValueChange($event)" />            <!-- DateTime Input -->            <input *ngSwitchCase="ColumnType.DateTime"                    type="datetime-local"                    [value]="getValue()"                    (input)="onValueChange($event)" />            <!-- Time Input -->            <input *ngSwitchCase="ColumnType.Time"                    type="time"                    [value]="getValue()"                    (input)="onValueChange($event)" />            <!-- Boolean (Checkbox) -->            <input *ngSwitchCase="ColumnType.Boolean"                    type="checkbox"                    [checked]="getValue()"                    (change)="onValueChange($event)" />            <!-- Default Display -->            <div *ngSwitchDefault>                {{ getFormattedValue() }}            </div>        </ng-container>    </ng-container>    <!-- Display based on format for non-editable columns -->    <ng-container *ngIf="!column.editable && column.format">        <ng-container [ngSwitch]="column.format">            <!-- Currency Format -->            <div *ngSwitchCase="ColumnFormat.Currency">                {{ getValue() | currency }}            </div>            <!-- Percentage Format -->            <div *ngSwitchCase="ColumnFormat.Percentage">                {{ getValue() | percent }}            </div>            <!-- Stars Format -->            <div *ngSwitchCase="ColumnFormat.Stars">                <span *ngFor="let star of getStars(getValue())">&#9733;</span>            </div>            <!-- Date Format -->            <div *ngSwitchCase="ColumnFormat.Date">                {{ getValue() | date:\'shortDate\' }}            </div>            <!-- DateTime Format -->            <div *ngSwitchCase="ColumnFormat.DateTime">                {{ getValue() | date:\'short\' }}            </div>            <!-- Time Format -->            <div *ngSwitchCase="ColumnFormat.Time">                {{ getValue() | date:\'shortTime\' }}            </div>            <!-- Default Format -->            <div *ngSwitchDefault>                {{ getValue() }}            </div>        </ng-container>    </ng-container>    <!-- Default display for non-editable columns without format -->    <div *ngIf="!column.cellTemplate && !column.editable && !column.format">        {{ getValue() }}    </div></div></div>'
+    var COMPONENTS = [{'name': 'GridBodyComponent', 'selector': 'cw-grid-body'},{'name': 'GridColumnSizerComponent', 'selector': 'cw-grid-column-sizer'},{'name': 'GridComponent', 'selector': 'cw-grid'},{'name': 'GridFillerRowColumnComponent', 'selector': 'cw-grid-filler-row-column'},{'name': 'GridFillerRowComponent', 'selector': 'cw-grid-filler-row'},{'name': 'GridFillerRowFeatureColumnComponent', 'selector': 'cw-grid-filler-row-feature-column'},{'name': 'GridFooterColumnComponent', 'selector': 'cw-grid-footer-column'},{'name': 'GridFooterComponent', 'selector': 'cw-grid-footer'},{'name': 'GridFooterFeatureColumnComponent', 'selector': 'cw-grid-footer-feature-column'},{'name': 'GridFooterRowComponent', 'selector': 'cw-grid-footer-row'},{'name': 'GridHeaderColumnComponent', 'selector': 'cw-grid-header-column'},{'name': 'GridHeaderComponent', 'selector': 'cw-grid-header'},{'name': 'GridHeaderFeatureColumnComponent', 'selector': 'cw-grid-header-feature-column'},{'name': 'GridHeaderRowComponent', 'selector': 'cw-grid-header-row'},{'name': 'GridMenuBarComponent', 'selector': 'cw-grid-menu-bar'},{'name': 'GridNestedRowColumnComponent', 'selector': 'cw-nested-row-column'},{'name': 'GridNestedRowComponent', 'selector': 'cw-nested-row'},{'name': 'GridPagerComponent', 'selector': 'cw-grid-pager'},{'name': 'GridRowColumnComponent', 'selector': 'cw-grid-row-column'},{'name': 'GridRowComponent', 'selector': 'cw-grid-row'},{'name': 'GridRowFeatureColumnComponent', 'selector': 'cw-grid-row-feature-column'},{'name': 'GridScrollerComponent', 'selector': 'cw-grid-scroller'}];
+    var DIRECTIVES = [{'name': 'TemplateRegistrarDirective', 'selector': '[cwTemplate]'}];
+    var ACTUAL_COMPONENT = {'name': 'GridRowColumnComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'GridRowColumnComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

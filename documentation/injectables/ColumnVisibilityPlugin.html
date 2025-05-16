@@ -1,0 +1,1090 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ColumnVisibilityPlugin</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#closeMenuHandler" >closeMenuHandler</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#gridApi" >gridApi</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#menuElement" >menuElement</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#renderer" >renderer</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#visibilityButton" >visibilityButton</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#closeMenu" >closeMenu</a>
+                            </li>
+                            <li>
+                                <a href="#onDestroy" >onDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#onInit" >onInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#openMenu" >openMenu</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#toggleColumnVisibility" >toggleColumnVisibility</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(templateRegistry: <a href="../injectables/TemplateRegistryService.html" target="_self">TemplateRegistryService</a>, rendererFactory: RendererFactory2)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:12</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>templateRegistry</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TemplateRegistryService.html" target="_self" >TemplateRegistryService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>rendererFactory</td>
+                                                  
+                                                        <td>
+                                                                    <code>RendererFactory2</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeMenu"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>closeMenu</b></span>
+                        <a href="#closeMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>closeMenu()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="112"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:112</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Closes the menu by removing it from the DOM and clearing its reference.
+Also removes the event listener for menu closure to prevent memory leaks.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onDestroy"></a>
+                    <span class="name">
+                        <span ><b>onDestroy</b></span>
+                        <a href="#onDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="101"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:101</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onInit"></a>
+                    <span class="name">
+                        <span ><b>onInit</b></span>
+                        <a href="#onInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onInit(api: <a href="../interfaces/GridApi.html" target="_self">GridApi</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="36"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Initializes the Column Visibility plugin by setting up the visibility button
+and appending it to the grid menu bar if the plugin options allow it.</p>
+<p>The method performs the following steps:</p>
+<ol>
+<li>Checks if the <code>enableColumnVisibility</code> option is enabled in the plugin options.
+If not, the method exits early.</li>
+<li>Attempts to retrieve a registered template for the column visibility button.<ul>
+<li>If a template is found, it uses the template to create the button.</li>
+<li>If no template is found, it falls back to creating a default button.</li>
+</ul>
+</li>
+<li>Styles the button and adds a click event listener to open the column visibility menu.</li>
+<li>Appends the button to the grid menu bar and triggers a grid resize.</li>
+</ol>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>api</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The GridApi instance used to interact with the grid.</li>
+</ul>
+<p>The method performs the following steps:</p>
+<ol>
+<li>Checks if the <code>enableColumnVisibility</code> option is enabled in the plugin options.
+If not, the method exits early.</li>
+<li>Attempts to retrieve a registered template for the column visibility button.</li>
+</ol>
+<ul>
+<li>If a template is found, it uses the template to create the button.</li>
+<li>If no template is found, it falls back to creating a default button.</li>
+</ul>
+<ol start="3">
+<li>Styles the button and adds a click event listener to open the column visibility menu.</li>
+<li>Appends the button to the grid menu bar and triggers a grid resize.</li>
+</ol>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openMenu"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>openMenu</b></span>
+                        <a href="#openMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openMenu()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="156"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:156</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Opens a dropdown menu for managing column visibility in the grid.</p>
+<ul>
+<li>If a menu is already open, it will close the existing menu and return.</li>
+<li>Creates a dropdown menu containing a list of column definitions with checkboxes.</li>
+<li>Each checkbox allows toggling the visibility of a corresponding column.</li>
+<li>The menu is dynamically positioned relative to the visibility button.</li>
+<li>Adds a global click listener to close the menu when clicking outside of it.</li>
+</ul>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleColumnVisibility"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>toggleColumnVisibility</b></span>
+                        <a href="#toggleColumnVisibility"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>toggleColumnVisibility(column: <a href="../interfaces/ColumnDef.html" target="_self">ColumnDef</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="232"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:232</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Toggles the visibility of a specified column in the grid.</p>
+<p>If the column is currently hidden (<code>visible</code> is <code>false</code>), this method will make it visible.
+If the column is currently visible, this method will hide it.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>column</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The column definition object containing the column&#39;s visibility state and identifier.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeMenuHandler"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>closeMenuHandler</b></span>
+                        <a href="#closeMenuHandler"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {...}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="127" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:127</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Handles the closing of the menu when a click event occurs outside the menu element
+and the visibility button. This ensures that the menu is closed when the user
+interacts with other parts of the UI.</p>
+</div>
+                </td>
+            </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description">
+                                <b>Parameters :</b>
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr>
+                                                    <td>event</td>
+                                                    <td>
+                                                            <code><ul>
+<li>The mouse event triggered by the user&#39;s interaction.</li>
+</ul>
+</code>
+                                                    </td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                        </div>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gridApi"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>gridApi</b></span>
+                        <a href="#gridApi"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:10</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="menuElement"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>menuElement</b></span>
+                        <a href="#menuElement"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HTMLElement | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:12</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="renderer"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>renderer</b></span>
+                        <a href="#renderer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Renderer2</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:11</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="visibilityButton"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>visibilityButton</b></span>
+                        <a href="#visibilityButton"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HTMLButtonElement</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/plugins/column-visibility.plugin.ts:9</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Renderer2, RendererFactory2 } from &#x27;@angular/core&#x27;;
+import { GridPlugin } from &#x27;../interfaces/grid-plugin&#x27;;
+import { GridApi } from &#x27;../interfaces/grid-api&#x27;;
+import { ColumnDef } from &#x27;../interfaces/column-def&#x27;;
+import { TemplateRegistryService } from &#x27;../../shared/services/template-registry.service&#x27;;
+
+@Injectable()
+export class ColumnVisibilityPlugin implements GridPlugin {
+  private visibilityButton!: HTMLButtonElement;
+  private gridApi!: GridApi;
+  private renderer: Renderer2;
+  private menuElement: HTMLElement | null &#x3D; null;
+
+  constructor(
+    private templateRegistry: TemplateRegistryService,
+    private rendererFactory: RendererFactory2
+  ) {
+    this.renderer &#x3D; this.rendererFactory.createRenderer(null, null);
+  }
+
+  /**
+   * Initializes the Column Visibility plugin by setting up the visibility button
+   * and appending it to the grid menu bar if the plugin options allow it.
+   *
+   * @param api - The GridApi instance used to interact with the grid.
+   *
+   * The method performs the following steps:
+   * 1. Checks if the &#x60;enableColumnVisibility&#x60; option is enabled in the plugin options.
+   *    If not, the method exits early.
+   * 2. Attempts to retrieve a registered template for the column visibility button.
+   *    - If a template is found, it uses the template to create the button.
+   *    - If no template is found, it falls back to creating a default button.
+   * 3. Styles the button and adds a click event listener to open the column visibility menu.
+   * 4. Appends the button to the grid menu bar and triggers a grid resize.
+   */
+  onInit(api: GridApi): void {
+    this.gridApi &#x3D; api;
+
+    // Check if the pluginOptions include &#x60;enableColumnVisibility&#x60;
+    const pluginOptions &#x3D; this.gridApi.getPluginOptions();
+    if (!pluginOptions?.[&#x27;ColumnVisibility&#x27;]?.enableColumnVisibility) {
+      return; // Do not add the button if &#x60;enableColumnVisibility&#x60; is not enabled
+    }
+
+    const pluginBar &#x3D; this.gridApi.getPluginBar();
+    if (!pluginBar) {
+      console.warn(&#x27;Grid plugin bar not found. Column visibility button will not be added.&#x27;);
+      return; // Exit if the plugin bar is not found
+    }
+
+    // Check if a template is registered
+    const buttonTemplate &#x3D; this.templateRegistry.getTemplate(&#x27;columnVisibilityButton&#x27;);
+
+    if (buttonTemplate) {
+      // Use the template to create the button
+      const container &#x3D; this.renderer.createElement(&#x27;div&#x27;);
+      const line &#x3D; this.renderer.createElement(&#x27;div&#x27;);
+      const embeddedView &#x3D; buttonTemplate.createEmbeddedView({});
+      embeddedView.detectChanges(); // Ensure bindings are applied
+      embeddedView.rootNodes.forEach((node: any) &#x3D;&gt; this.renderer.appendChild(container, node));
+      this.visibilityButton &#x3D; container.firstChild as HTMLButtonElement;
+    } else {
+      // Fall back to a default button
+      this.visibilityButton &#x3D; this.renderer.createElement(&#x27;div&#x27;);
+      const innerTag &#x3D; this.renderer.createElement(&#x27;div&#x27;);
+      this.renderer.appendChild(this.visibilityButton, innerTag);
+      this.renderer.addClass(innerTag, &#x27;line&#x27;); // Add a class for styling
+      this.renderer.setProperty(this.visibilityButton, &#x27;title&#x27;, &#x27;Column Visibility&#x27;);
+      this.renderer.addClass(this.visibilityButton, &#x27;vertical-hamburger-button&#x27;); // Add a class for styling
+    }
+
+    // Set styles for the button
+    this.renderer.setStyle(this.visibilityButton, &#x27;margin-right&#x27;, &#x27;8px&#x27;);
+    this.renderer.setStyle(this.visibilityButton, &#x27;padding&#x27;, &#x27;0px&#x27;);
+
+    // Add click event listener to open the menu
+    this.renderer.listen(this.visibilityButton, &#x27;click&#x27;, () &#x3D;&gt; this.openMenu());
+
+    // Append the button to the grid menu bar
+    setTimeout(() &#x3D;&gt; {
+      this.renderer.appendChild(pluginBar.nativeElement, this.visibilityButton);
+      this.gridApi.resize();
+    });
+
+    // Add event listeners for resize and scroll
+
+    this.gridApi.afterResize(() &#x3D;&gt; {
+      if (this.menuElement) {
+        const buttonRect &#x3D; this.visibilityButton.getBoundingClientRect();
+        const menuWidth &#x3D; this.menuElement.offsetWidth;
+        this.renderer.setStyle(this.menuElement, &#x27;top&#x27;, &#x60;${buttonRect.bottom + 4}px&#x60;);
+        this.renderer.setStyle(this.menuElement, &#x27;left&#x27;, &#x60;${buttonRect.right - menuWidth}px&#x60;);
+      }
+    });
+
+    this.gridApi.afterScroll(() &#x3D;&gt; {
+      this.closeMenuHandler();
+    }); 
+  }
+
+  onDestroy(): void {
+    this.visibilityButton?.remove();
+    this.closeMenu();
+  }
+
+  /**
+   * Closes the menu by removing it from the DOM and clearing its reference.
+   * Also removes the event listener for menu closure to prevent memory leaks.
+   *
+   * @private
+   */
+   private closeMenu(): void {
+    if (this.menuElement) {
+      this.renderer.removeChild(document.body, this.menuElement);
+      this.menuElement &#x3D; null; // Clear the reference
+      document.removeEventListener(&#x27;click&#x27;, this.closeMenuHandler);
+    }
+  }
+
+  /**
+   * Handles the closing of the menu when a click event occurs outside the menu element
+   * and the visibility button. This ensures that the menu is closed when the user
+   * interacts with other parts of the UI.
+   *
+   * @param event - The mouse event triggered by the user&#x27;s interaction.
+   */
+  private closeMenuHandler &#x3D; (event?: Event): void &#x3D;&gt; {
+    if (!event) {
+      this.closeMenu(); // Close the menu if no event is provided
+      return;
+    }
+    
+    if (
+      this.menuElement &amp;&amp;
+      !this.menuElement.contains(event.target as Node) &amp;&amp;
+      event.target !&#x3D;&#x3D; this.visibilityButton
+    ) {
+      this.closeMenu();
+    }
+  };
+
+  /**
+   * Opens the menu for managing column visibility.
+   */
+  /**
+   * Opens a dropdown menu for managing column visibility in the grid.
+   * 
+   * - If a menu is already open, it will close the existing menu and return.
+   * - Creates a dropdown menu containing a list of column definitions with checkboxes.
+   * - Each checkbox allows toggling the visibility of a corresponding column.
+   * - The menu is dynamically positioned relative to the visibility button.
+   * - Adds a global click listener to close the menu when clicking outside of it.
+   * 
+   * @private
+   */
+  private openMenu(): void {
+    // Check if the menu already exists
+    if (this.menuElement) {
+      this.closeMenu(); // Close the existing menu
+      return;
+    }
+  
+    // Create the dropdown menu
+    const menu &#x3D; this.renderer.createElement(&#x27;div&#x27;);
+    this.renderer.addClass(menu, &#x27;cw-dropdown-menu&#x27;);
+    this.renderer.setAttribute(menu, &#x27;role&#x27;, &#x27;menu&#x27;);
+    this.renderer.setAttribute(menu, &#x27;aria-label&#x27;, &#x27;Column Visibility Options&#x27;);
+  
+    // Add a list of column definitions with checkboxes
+    const columnList &#x3D; this.renderer.createElement(&#x27;ul&#x27;);
+    this.renderer.setAttribute(columnList, &#x27;role&#x27;, &#x27;menu&#x27;);
+    const columnDefs &#x3D; this.gridApi.getFlattenedColumnDefs();
+    columnDefs.forEach((column: ColumnDef) &#x3D;&gt; {
+      const listItem &#x3D; this.renderer.createElement(&#x27;li&#x27;);
+      this.renderer.setAttribute(listItem, &#x27;role&#x27;, &#x27;menuitemcheckbox&#x27;);
+      this.renderer.setAttribute(listItem, &#x27;aria-checked&#x27;, column.visible !&#x3D;&#x3D; false ? &#x27;true&#x27; : &#x27;false&#x27;);
+  
+      // Create a label to wrap the checkbox and text
+      const label &#x3D; this.renderer.createElement(&#x27;label&#x27;);
+      this.renderer.setStyle(label, &#x27;display&#x27;, &#x27;flex&#x27;);
+      this.renderer.setStyle(label, &#x27;align-items&#x27;, &#x27;center&#x27;);
+      this.renderer.setStyle(label, &#x27;cursor&#x27;, &#x27;pointer&#x27;);
+      this.renderer.setStyle(label, &#x27;width&#x27;, &#x27;100%&#x27;);
+  
+      // Create a checkbox for the column
+      const checkbox &#x3D; this.renderer.createElement(&#x27;input&#x27;);
+      this.renderer.setAttribute(checkbox, &#x27;type&#x27;, &#x27;checkbox&#x27;);
+      this.renderer.setProperty(checkbox, &#x27;checked&#x27;, column.visible !&#x3D;&#x3D; false);
+      this.renderer.setStyle(checkbox, &#x27;margin-right&#x27;, &#x27;6px&#x27;);
+      this.renderer.listen(checkbox, &#x27;change&#x27;, () &#x3D;&gt; {
+        this.toggleColumnVisibility(column);
+        this.renderer.setAttribute(listItem, &#x27;aria-checked&#x27;, column.visible !&#x3D;&#x3D; false ? &#x27;true&#x27; : &#x27;false&#x27;);
+      });
+  
+      // Add the checkbox and label text to the label
+      const labelText &#x3D; this.renderer.createText(&#x60; ${column.label}&#x60;);
+      this.renderer.appendChild(label, checkbox);
+      this.renderer.appendChild(label, labelText);
+  
+      // Append the label to the list item
+      this.renderer.appendChild(listItem, label);
+  
+      // Append the list item to the column list
+      this.renderer.appendChild(columnList, listItem);
+    });
+    this.renderer.appendChild(menu, columnList);
+  
+    // Append the menu to the body
+    this.renderer.appendChild(document.body, menu);
+  
+    // Position the menu
+    const buttonRect &#x3D; this.visibilityButton.getBoundingClientRect();
+    const menuWidth &#x3D; menu.offsetWidth;
+    this.renderer.setStyle(menu, &#x27;top&#x27;, &#x60;${buttonRect.bottom + 4}px&#x60;);
+    this.renderer.setStyle(menu, &#x27;left&#x27;, &#x60;${buttonRect.right - menuWidth}px&#x60;);
+  
+    // Store the menu reference
+    this.menuElement &#x3D; menu;
+  
+    // Add a global click listener to close the menu
+    document.addEventListener(&#x27;click&#x27;, this.closeMenuHandler);
+  }
+
+  /**
+   * Toggles the visibility of a specified column in the grid.
+   * 
+   * If the column is currently hidden (&#x60;visible&#x60; is &#x60;false&#x60;), this method will make it visible.
+   * If the column is currently visible, this method will hide it.
+   * 
+   * @param column - The column definition object containing the column&#x27;s visibility state and identifier.
+   */
+  private toggleColumnVisibility(column: ColumnDef): void {
+    if (column.visible &#x3D;&#x3D;&#x3D; false) {
+      this.gridApi.showColumn(column.id);
+    } else {
+      this.gridApi.hideColumn(column.id);
+    }
+    this.gridApi.resize(); // Resize the grid after toggling visibility
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'ColumnVisibilityPlugin.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,818 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >PluginManagerService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/services/plugin-manager.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#lazyPlugins" >lazyPlugins</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#loadPlugin" >loadPlugin</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#loadPluginWithArgs" >loadPluginWithArgs</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#registerPlugins" >registerPlugins</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(injector: Injector)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/services/plugin-manager.service.ts:14</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>injector</td>
+                                                  
+                                                        <td>
+                                                                    <code>Injector</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadPlugin"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>loadPlugin</b></span>
+                        <a href="#loadPlugin"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadPlugin(pluginKey: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, gridApi: <a href="../interfaces/GridApi.html" target="_self">GridApi</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="34"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/services/plugin-manager.service.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Dynamically loads and initializes a plugin for the grid.</p>
+<ul>
+<li>The method uses a lazy-loading mechanism to load plugins dynamically.</li>
+<li>If the plugin is found in the <code>lazyPlugins</code> map, it is loaded and an instance is created
+using a dynamically created injector.</li>
+<li>The plugin instance&#39;s <code>onInit</code> method is called with the provided <code>gridApi</code>.</li>
+<li>If the plugin key is not found, an error is logged to the console.</li>
+</ul>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>pluginKey</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The unique key identifying the plugin to load.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridApi</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The Grid API instance to be passed to the plugin for initialization.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>A promise that resolves when the plugin is successfully loaded and initialized.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadPluginWithArgs"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>loadPluginWithArgs</b></span>
+                        <a href="#loadPluginWithArgs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadPluginWithArgs(pluginKey: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, gridApi: <a href="../interfaces/GridApi.html" target="_self">GridApi</a>, args: any[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="71"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/services/plugin-manager.service.ts:71</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Loads a plugin dynamically and initializes it with the provided arguments.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">               retrieve the plugin from the `lazyPlugins` map.
+          Defaults to an empty array.</code></pre></div><ul>
+<li>If the plugin export is a class, it will be instantiated with the provided arguments.</li>
+<li>If the plugin export is already an instance, it will be used as-is.</li>
+<li>If the plugin has an <code>onInit</code> method, it will be called with the <code>gridApi</code> as an argument.</li>
+<li>The method uses a <code>setTimeout</code> to ensure the grid API is ready before initializing the plugin.</li>
+</ul>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>pluginKey</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <ul>
+<li>The key identifying the plugin to load. This key is used to
+retrieve the plugin from the <code>lazyPlugins</code> map.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridApi</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <ul>
+<li>The Grid API instance that will be passed to the plugin&#39;s <code>onInit</code> method.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                        <code>any[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>[]</code>
+                                            </td>
+
+                                            <td>
+                                                    <ul>
+<li>Optional arguments to pass to the plugin&#39;s constructor if it is a class.
+Defaults to an empty array.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>A promise that resolves once the plugin is loaded and initialized.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="registerPlugins"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>registerPlugins</b></span>
+                        <a href="#registerPlugins"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>registerPlugins(plugins: literal type, gridApi: <a href="../interfaces/GridApi.html" target="_self">GridApi</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="100"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/services/plugin-manager.service.ts:100</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Registers and initializes plugins for the application.</p>
+<p>This method accepts a collection of plugins and a <code>GridApi</code> instance,
+then merges the provided plugins with the existing ones. Each plugin
+is subsequently loaded and initialized with the provided <code>GridApi</code>.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">              are either functions returning a promise resolving to the
+              plugin or the plugin itself.</code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>plugins</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>An object where the keys are plugin names and the values 
+ are either functions returning a promise resolving to the 
+ plugin or the plugin itself.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridApi</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridApi.html" target="_self" >GridApi</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The <code>GridApi</code> instance used to initialize the plugins.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>A promise that resolves when all plugins have been registered and initialized.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="lazyPlugins"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>lazyPlugins</b></span>
+                        <a href="#lazyPlugins"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>literal type</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+    &#x27;column-menu&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/column-menu.plugin&#x27;).then(m &#x3D;&gt; m.ColumnMenuPlugin),
+    &#x27;column-visibility&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/column-visibility.plugin&#x27;).then(m &#x3D;&gt; m.ColumnVisibilityPlugin),
+    &#x27;export-to-excel&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/excel-export.plugin&#x27;).then(m &#x3D;&gt; m.ExportToExcelPlugin),
+    &#x27;global-text-filter&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/global-text-filter.plugin&#x27;).then(m &#x3D;&gt; m.GlobalTextFilterPlugin),
+    &#x27;multi-sort&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/multi-sort.plugin&#x27;).then(m &#x3D;&gt; m.MultiSortPlugin),
+    &#x27;save-state&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/save-state.plugin&#x27;).then(m &#x3D;&gt; m.SaveGridStatePlugin),
+    &#x27;server-side&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/server-side.plugin&#x27;).then(m &#x3D;&gt; m.ServerSidePlugin)
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/shared/services/plugin-manager.service.ts:6</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Injector } from &#x27;@angular/core&#x27;;
+import { GridApi } from &#x27;../../grid/interfaces/grid-api&#x27;;
+
+@Injectable({ providedIn: &#x27;root&#x27; })
+export class PluginManagerService {
+  private lazyPlugins: { [key: string]: () &#x3D;&gt; Promise&lt;any&gt; } &#x3D; {
+    &#x27;column-menu&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/column-menu.plugin&#x27;).then(m &#x3D;&gt; m.ColumnMenuPlugin),
+    &#x27;column-visibility&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/column-visibility.plugin&#x27;).then(m &#x3D;&gt; m.ColumnVisibilityPlugin),
+    &#x27;export-to-excel&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/excel-export.plugin&#x27;).then(m &#x3D;&gt; m.ExportToExcelPlugin),
+    &#x27;global-text-filter&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/global-text-filter.plugin&#x27;).then(m &#x3D;&gt; m.GlobalTextFilterPlugin),
+    &#x27;multi-sort&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/multi-sort.plugin&#x27;).then(m &#x3D;&gt; m.MultiSortPlugin),
+    &#x27;save-state&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/save-state.plugin&#x27;).then(m &#x3D;&gt; m.SaveGridStatePlugin),
+    &#x27;server-side&#x27;: () &#x3D;&gt; import(&#x27;../../grid/plugins/server-side.plugin&#x27;).then(m &#x3D;&gt; m.ServerSidePlugin)
+  };
+
+  constructor(private injector: Injector) {}
+
+  /**
+   * Dynamically loads and initializes a plugin for the grid.
+   *
+   * @param pluginKey - The unique key identifying the plugin to load.
+   * @param gridApi - The Grid API instance to be passed to the plugin for initialization.
+   * @returns A promise that resolves when the plugin is successfully loaded and initialized.
+   *
+   * @remarks
+   * - The method uses a lazy-loading mechanism to load plugins dynamically.
+   * - If the plugin is found in the &#x60;lazyPlugins&#x60; map, it is loaded and an instance is created
+   *   using a dynamically created injector.
+   * - The plugin instance&#x27;s &#x60;onInit&#x60; method is called with the provided &#x60;gridApi&#x60;.
+   * - If the plugin key is not found, an error is logged to the console.
+   *
+   * @throws Will log an error to the console if the plugin with the specified key is not found.
+   */
+  async loadPlugin(pluginKey: string, gridApi: GridApi): Promise&lt;void&gt; {
+    // Wait for the grid API to be ready
+    setTimeout(async () &#x3D;&gt; {
+      if (this.lazyPlugins[pluginKey]) {
+        const PluginClass &#x3D; await this.lazyPlugins[pluginKey]();
+
+        // Dynamically create an injector for the plugin
+        const pluginInjector &#x3D; Injector.create({
+          providers: [{ provide: PluginClass, useClass: PluginClass }],
+          parent: this.injector, // Use the parent injector
+        });
+
+        const pluginInstance &#x3D; pluginInjector.get(PluginClass);
+        pluginInstance.onInit(gridApi); // Initialize the plugin with the grid API
+      } else {
+        console.error(&#x60;Plugin with key &quot;${pluginKey}&quot; not found.&#x60;);
+      }
+    });
+  }
+
+  /**
+   * Loads a plugin dynamically and initializes it with the provided arguments.
+   *
+   * @param pluginKey - The key identifying the plugin to load. This key is used to
+   *                    retrieve the plugin from the &#x60;lazyPlugins&#x60; map.
+   * @param gridApi - The Grid API instance that will be passed to the plugin&#x27;s &#x60;onInit&#x60; method.
+   * @param args - Optional arguments to pass to the plugin&#x27;s constructor if it is a class.
+   *               Defaults to an empty array.
+   * 
+   * @returns A promise that resolves once the plugin is loaded and initialized.
+   * 
+   * @remarks
+   * - If the plugin export is a class, it will be instantiated with the provided arguments.
+   * - If the plugin export is already an instance, it will be used as-is.
+   * - If the plugin has an &#x60;onInit&#x60; method, it will be called with the &#x60;gridApi&#x60; as an argument.
+   * - The method uses a &#x60;setTimeout&#x60; to ensure the grid API is ready before initializing the plugin.
+   */
+  async loadPluginWithArgs(pluginKey: string, gridApi: GridApi, args: any[] &#x3D; []): Promise&lt;void&gt; {
+    // Wait for the grid API to be ready
+    setTimeout(async () &#x3D;&gt; {
+      const pluginExport &#x3D; await this.lazyPlugins[pluginKey]();
+  
+      // If it&#x27;s a class (has a prototype and constructor), instantiate
+      const isClass &#x3D; typeof pluginExport &#x3D;&#x3D;&#x3D; &#x27;function&#x27;;
+  
+      const pluginInstance &#x3D; isClass
+        ? new pluginExport(...args)
+        : pluginExport; // Already an instance
+  
+      pluginInstance.onInit?.(gridApi);
+    });
+  }
+
+  /**
+   * Registers and initializes plugins for the application.
+   *
+   * This method accepts a collection of plugins and a &#x60;GridApi&#x60; instance, 
+   * then merges the provided plugins with the existing ones. Each plugin 
+   * is subsequently loaded and initialized with the provided &#x60;GridApi&#x60;.
+   *
+   * @param plugins - An object where the keys are plugin names and the values 
+   *                   are either functions returning a promise resolving to the 
+   *                   plugin or the plugin itself.
+   * @param gridApi - The &#x60;GridApi&#x60; instance used to initialize the plugins.
+   * @returns A promise that resolves when all plugins have been registered and initialized.
+   */
+  async registerPlugins(plugins: { [key: string]: () &#x3D;&gt; Promise&lt;any&gt; | any }, gridApi: GridApi): Promise&lt;void&gt; {
+    this.lazyPlugins &#x3D; { ...this.lazyPlugins, ...plugins };
+
+    for (const key in plugins) {
+      if (plugins.hasOwnProperty(key)) {
+        await this.loadPluginWithArgs(key, gridApi);
+      }
+    }
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'PluginManagerService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

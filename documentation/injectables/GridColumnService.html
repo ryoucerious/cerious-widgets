@@ -1,0 +1,1467 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ngx-cerious-widgets documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ngx-cerious-widgets documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >GridColumnService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#flattenColumns" >flattenColumns</a>
+                            </li>
+                            <li>
+                                <a href="#getColumnById" >getColumnById</a>
+                            </li>
+                            <li>
+                                <a href="#getColumnWidth" >getColumnWidth</a>
+                            </li>
+                            <li>
+                                <a href="#getFeatureColumnWidth" >getFeatureColumnWidth</a>
+                            </li>
+                            <li>
+                                <a href="#getFeatureWidth" >getFeatureWidth</a>
+                            </li>
+                            <li>
+                                <a href="#getHeaderPinnedColumns" >getHeaderPinnedColumns</a>
+                            </li>
+                            <li>
+                                <a href="#getPinnedColumns" >getPinnedColumns</a>
+                            </li>
+                            <li>
+                                <a href="#processGridDefs" >processGridDefs</a>
+                            </li>
+                            <li>
+                                <a href="#updatePinnedColumnPos" >updatePinnedColumnPos</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="flattenColumns"></a>
+                    <span class="name">
+                        <span ><b>flattenColumns</b></span>
+                        <a href="#flattenColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>flattenColumns(columns: <a href="../interfaces/ColumnDef.html" target="_self">ColumnDef[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="24"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Recursively flattens a hierarchical array of column definitions into a single-level array.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>columns</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>An array of <code>ColumnDef</code> objects, which may include nested child columns.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>A flattened array of <code>ColumnDef</code> objects containing only the leaf nodes.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getColumnById"></a>
+                    <span class="name">
+                        <span ><b>getColumnById</b></span>
+                        <a href="#getColumnById"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getColumnById(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, columnDefs: <a href="../interfaces/ColumnDef.html" target="_self">ColumnDef[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="53"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:53</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Retrieves a column definition by its unique identifier from a list of column definitions.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The unique identifier of the column to retrieve.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>columnDefs</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>An array of column definitions to search through.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef | null</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The column definition matching the provided ID, or <code>null</code> if not found or if the ID is invalid.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getColumnWidth"></a>
+                    <span class="name">
+                        <span ><b>getColumnWidth</b></span>
+                        <a href="#getColumnWidth"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getColumnWidth(column: <a href="../interfaces/ColumnDef.html" target="_self">ColumnDef</a>, gridOptions: <a href="../interfaces/GridOptions.html" target="_self">GridOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="84"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:84</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determines the width of a grid column based on the provided column definition
+and grid options. The method prioritizes the width in the following order:</p>
+<ol>
+<li><code>column.dynamicWidth</code> if defined.</li>
+<li><code>column.width</code> if defined.</li>
+<li><code>gridOptions.columnWidth</code> if defined.</li>
+<li>Defaults to <code>&#39;150px&#39;</code> if none of the above are specified.</li>
+</ol>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>column</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The column definition object containing width properties.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridOptions</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridOptions.html" target="_self" >GridOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The grid options object containing default column width.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The width of the column as a string (e.g., <code>&#39;150px&#39;</code>).</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFeatureColumnWidth"></a>
+                    <span class="name">
+                        <span ><b>getFeatureColumnWidth</b></span>
+                        <a href="#getFeatureColumnWidth"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFeatureColumnWidth(featureCount: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, gridOptions: <a href="../interfaces/GridOptions.html" target="_self">GridOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="118"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:118</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Calculates the total width of a feature column based on the number of features
+and the grid options provided.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>featureCount</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The number of features in the column.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridOptions</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridOptions.html" target="_self" >GridOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The grid options used to determine the width of each feature.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The total width of the feature column as a string with a &#39;px&#39; suffix.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFeatureWidth"></a>
+                    <span class="name">
+                        <span ><b>getFeatureWidth</b></span>
+                        <a href="#getFeatureWidth"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFeatureWidth(gridOptions: <a href="../interfaces/GridOptions.html" target="_self">GridOptions</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="129"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:129</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Retrieves the width of the feature column from the provided grid options.
+If the <code>featureColumnWidth</code> property is not defined, a default value of 26 is used.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>gridOptions</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridOptions.html" target="_self" >GridOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The grid options containing configuration for the grid.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The width of the feature column as a number.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getHeaderPinnedColumns"></a>
+                    <span class="name">
+                        <span ><b>getHeaderPinnedColumns</b></span>
+                        <a href="#getHeaderPinnedColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getHeaderPinnedColumns(rowComponents?: Array<any>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="185"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:185</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Retrieves the header and leaf pinned columns from the provided row components.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">                   to have an `el.nativeElement` property for DOM querying and an optional
+                   `columnComponents` property for accessing column metadata.
+     group headers and leaf columns.</code></pre></div><ul>
+<li>If no <code>rowComponents</code> are provided, the method logs a warning and returns an empty array.</li>
+<li>Group headers are identified by the CSS class <code>.group-header.table-col-pinned</code>.</li>
+<li>Leaf columns are filtered to exclude those whose IDs are part of the ignored group headers.</li>
+<li>Logs warnings for invalid row components and catches any errors during processing, returning
+an empty array in case of failure.</li>
+</ul>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-html">```typescript
+const pinnedColumns = gridColumnService.getHeaderPinnedColumns(rowComponents);
+console.log(pinnedColumns); // Logs an array of pinned column HTMLElements</code></pre></div><b>Example :</b><div><pre class="line-numbers"><code class="language-none"></code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>rowComponents</td>
+                                            <td>
+                                                        <code>Array&lt;any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>An optional array of row components. Each row component is expected
+to have an <code>el.nativeElement</code> property for DOM querying and an optional
+<code>columnComponents</code> property for accessing column metadata.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>HTMLElement[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>An array of <code>HTMLElement</code> objects representing the pinned columns, including both
+group headers and leaf columns.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPinnedColumns"></a>
+                    <span class="name">
+                        <span ><b>getPinnedColumns</b></span>
+                        <a href="#getPinnedColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPinnedColumns(rowComponents?: Array<any>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="142"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:142</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Retrieves the pinned columns from the provided row components.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">                   is expected to have a `columnComponents` property that
+                   can be converted to an array.
+     If no row components are provided, an empty array is returned.</code></pre></div></div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>rowComponents</td>
+                                            <td>
+                                                        <code>Array&lt;any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>An optional array of row components. Each row component
+is expected to have a <code>columnComponents</code> property that
+can be converted to an array.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>An array of native HTML elements corresponding to the pinned columns.
+If no row components are provided, an empty array is returned.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="processGridDefs"></a>
+                    <span class="name">
+                        <span ><b>processGridDefs</b></span>
+                        <a href="#processGridDefs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>processGridDefs(gridOptions: <a href="../interfaces/GridOptions.html" target="_self">GridOptions</a>, gridDataset: <a href="../interfaces/GridDataset.html" target="_self">GridDataset</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="233"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:233</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Processes the grid definitions by ensuring each column definition has a width,
+and updates the <code>gridDataset</code> with header, footer, and filler rows based on the
+provided column definitions.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>gridOptions</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridOptions.html" target="_self" >GridOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The grid options containing column definitions and optional default column width.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridDataset</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridDataset.html" target="_self" >GridDataset</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The dataset to be updated with header, footer, and filler rows.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updatePinnedColumnPos"></a>
+                    <span class="name">
+                        <span ><b>updatePinnedColumnPos</b></span>
+                        <a href="#updatePinnedColumnPos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updatePinnedColumnPos(gridHeader: <a href="../interfaces/IGridHeaderComponent.html" target="_self">IGridHeaderComponent</a>, gridBody: <a href="../interfaces/IGridBodyComponent.html" target="_self">IGridBodyComponent</a>, gridFooter: <a href="../interfaces/IGridFooterComponent.html" target="_self">IGridFooterComponent</a>, gridOptions: <a href="../interfaces/GridOptions.html" target="_self">GridOptions</a>, scrollDelta: <a href="../interfaces/ScrollDelta.html" target="_self">ScrollDelta</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="269"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/services/grid-column.service.ts:269</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Updates the position of pinned columns in the grid by adjusting their <code>left</code> style property
+based on the provided scroll delta. This method handles pinned columns across various grid
+sections, including the header, body, footer, filler rows, and nested rows.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>gridHeader</td>
+                                            <td>
+                                                            <code><a href="../interfaces/IGridHeaderComponent.html" target="_self" >IGridHeaderComponent</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The grid header component containing row components.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridBody</td>
+                                            <td>
+                                                            <code><a href="../interfaces/IGridBodyComponent.html" target="_self" >IGridBodyComponent</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The grid body component containing row components, filler rows, and nested rows.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridFooter</td>
+                                            <td>
+                                                            <code><a href="../interfaces/IGridFooterComponent.html" target="_self" >IGridFooterComponent</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The grid footer component containing row components.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>gridOptions</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GridOptions.html" target="_self" >GridOptions</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The grid options configuration, which may include the <code>pinNestedRowTemplate</code> flag.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>scrollDelta</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ScrollDelta.html" target="_self" >ScrollDelta</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The scroll delta object containing the <code>left</code> value to adjust column positions.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &quot;@angular/core&quot;;
+import { GridRow } from &quot;../models/grid-row&quot;;
+import { 
+  ColumnDef,
+  GridDataset,
+  GridOptions,
+  IGridBodyComponent,
+  IGridColumnService,
+  IGridFooterComponent,
+  IGridHeaderComponent,
+  ScrollDelta } from &quot;../interfaces&quot;;
+
+@Injectable({
+  providedIn: &quot;root&quot;,
+})
+export class GridColumnService implements IGridColumnService {
+
+  /**
+   * Recursively flattens a hierarchical array of column definitions into a single-level array.
+   *
+   * @param columns - An array of &#x60;ColumnDef&#x60; objects, which may include nested child columns.
+   * @returns A flattened array of &#x60;ColumnDef&#x60; objects containing only the leaf nodes.
+   */
+  flattenColumns(columns: ColumnDef[]): ColumnDef[] {
+    if (!Array.isArray(columns)) {
+      console.error(&quot;Invalid input: &#x27;columns&#x27; must be an array.&quot;);
+      return [];
+    }
+
+    const result: ColumnDef[] &#x3D; [];
+    for (const column of columns) {
+      if (column.children &amp;&amp; Array.isArray(column.children)) {
+        result.push(...this.flattenColumns(column.children));
+      } else if (column) {
+        result.push(column);
+      } else {
+        console.warn(&quot;Encountered an invalid column definition:&quot;, column);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Retrieves a column definition by its unique identifier from a list of column definitions.
+   *
+   * @param id - The unique identifier of the column to retrieve.
+   * @param columnDefs - An array of column definitions to search through.
+   * @returns The column definition matching the provided ID, or &#x60;null&#x60; if not found or if the ID is invalid.
+   *
+   * @throws Will log an error if the ID is not provided or if an unexpected error occurs during the search.
+   * @throws Will log a warning if no column with the specified ID is found.
+   */
+  getColumnById(id: string, columnDefs: ColumnDef[],): ColumnDef | null {
+    if (!id) {
+      console.error(&quot;Invalid input: &#x27;id&#x27; is required.&quot;);
+      return null;
+    }
+
+    try {
+      const column &#x3D; this.flattenColumns(columnDefs).find(col &#x3D;&gt; col.id &#x3D;&#x3D;&#x3D; id);
+      if (!column) {
+        console.warn(&#x60;Column with id &#x27;${id}&#x27; not found.&#x60;);
+        return null;
+      }
+      return column;
+    } catch (error) {
+      console.error(&quot;Error retrieving column by ID:&quot;, error);
+      return null;
+    }
+  }
+
+  /**
+   * Determines the width of a grid column based on the provided column definition
+   * and grid options. The method prioritizes the width in the following order:
+   * 1. &#x60;column.dynamicWidth&#x60; if defined.
+   * 2. &#x60;column.width&#x60; if defined.
+   * 3. &#x60;gridOptions.columnWidth&#x60; if defined.
+   * 4. Defaults to &#x60;&#x27;150px&#x27;&#x60; if none of the above are specified.
+   *
+   * @param column - The column definition object containing width properties.
+   * @param gridOptions - The grid options object containing default column width.
+   * @returns The width of the column as a string (e.g., &#x60;&#x27;150px&#x27;&#x60;).
+   */
+  getColumnWidth(column: ColumnDef, gridOptions: GridOptions): string {
+    if (!column) {
+      console.error(&quot;Invalid input: &#x27;column&#x27; is required.&quot;);
+      return &#x27;150px&#x27;;
+    }
+    if (!gridOptions) {
+      console.error(&quot;Invalid input: &#x27;gridOptions&#x27; is required.&quot;);
+      return &#x27;150px&#x27;;
+    }
+
+    try {
+      if (column.dynamicWidth) {
+        return column.dynamicWidth;
+      } else if (column.width) {
+        return column.width;
+      } else if (gridOptions.columnWidth) {
+        return gridOptions.columnWidth;
+      } else {
+        return &#x27;150px&#x27;;
+      }
+    } catch (error) {
+      console.error(&quot;Error determining column width:&quot;, error);
+      return &#x27;150px&#x27;;
+    }
+  }
+
+  /**
+   * Calculates the total width of a feature column based on the number of features
+   * and the grid options provided.
+   *
+   * @param featureCount - The number of features in the column.
+   * @param gridOptions - The grid options used to determine the width of each feature.
+   * @returns The total width of the feature column as a string with a &#x27;px&#x27; suffix.
+   */
+  getFeatureColumnWidth(featureCount: number, gridOptions: GridOptions): string {
+    return (featureCount * this.getFeatureWidth(gridOptions)) + featureCount + &#x27;px&#x27;;
+  }
+
+  /**
+   * Retrieves the width of the feature column from the provided grid options.
+   * If the &#x60;featureColumnWidth&#x60; property is not defined, a default value of 26 is used.
+   *
+   * @param gridOptions - The grid options containing configuration for the grid.
+   * @returns The width of the feature column as a number.
+   */
+  getFeatureWidth(gridOptions: GridOptions): number {
+    return parseInt(gridOptions.featureColumnWidth || &#x27;26&#x27;);
+  }
+
+  /**
+   * Retrieves the pinned columns from the provided row components.
+   *
+   * @param rowComponents - An optional array of row components. Each row component
+   *                        is expected to have a &#x60;columnComponents&#x60; property that
+   *                        can be converted to an array.
+   * @returns An array of native HTML elements corresponding to the pinned columns.
+   *          If no row components are provided, an empty array is returned.
+   */
+  getPinnedColumns(rowComponents?: Array&lt;any&gt;) {
+    if (!rowComponents) {
+      return [];
+    }
+
+    try {
+      return rowComponents.flatMap(row &#x3D;&gt; {
+        if (!row || !row.columnComponents) {
+          console.warn(&quot;Invalid row component encountered:&quot;, row);
+          return [];
+        }
+        return row.columnComponents.toArray();
+      })
+      .filter(col &#x3D;&gt; col &amp;&amp; col.column?.pinned)
+      .map(col &#x3D;&gt; col.el.nativeElement);
+    } catch (error) {
+      console.error(&quot;Error retrieving pinned columns:&quot;, error);
+      return [];
+    }
+  }
+
+  /**
+   * Retrieves the header and leaf pinned columns from the provided row components.
+   *
+   * @param rowComponents - An optional array of row components. Each row component is expected
+   *                        to have an &#x60;el.nativeElement&#x60; property for DOM querying and an optional
+   *                        &#x60;columnComponents&#x60; property for accessing column metadata.
+   * @returns An array of &#x60;HTMLElement&#x60; objects representing the pinned columns, including both
+   *          group headers and leaf columns.
+   *
+   * @remarks
+   * - If no &#x60;rowComponents&#x60; are provided, the method logs a warning and returns an empty array.
+   * - Group headers are identified by the CSS class &#x60;.group-header.table-col-pinned&#x60;.
+   * - Leaf columns are filtered to exclude those whose IDs are part of the ignored group headers.
+   * - Logs warnings for invalid row components and catches any errors during processing, returning
+   *   an empty array in case of failure.
+   *
+   * @example
+   * &#x60;&#x60;&#x60;typescript
+   * const pinnedColumns &#x3D; gridColumnService.getHeaderPinnedColumns(rowComponents);
+   * console.log(pinnedColumns); // Logs an array of pinned column HTMLElements
+   * &#x60;&#x60;&#x60;
+   */
+  getHeaderPinnedColumns(rowComponents?: Array&lt;any&gt;): HTMLElement[] {
+    if (!rowComponents) {
+      console.warn(&quot;No row components provided. Returning an empty array.&quot;);
+      return [];
+    }
+
+    try {
+      const groupHeaders &#x3D; rowComponents.flatMap(row &#x3D;&gt; {
+        const headers &#x3D; row.el.nativeElement.querySelectorAll(&#x27;.group-header.table-col-pinned&#x27;);
+        return Array.from(headers) as HTMLElement[];
+      });
+
+      const ignoredLeafColumnIds &#x3D; Array.from(new Set(groupHeaders.flatMap(header &#x3D;&gt; {
+        const collectColumnIds &#x3D; (element: HTMLElement): string[] &#x3D;&gt; {
+          const columnId &#x3D; element.getAttribute(&#x27;data-column-id&#x27;);
+          const childColumnIds &#x3D; Array.from(element.querySelectorAll(&#x27;[data-column-id]&#x27;))
+        .flatMap(child &#x3D;&gt; collectColumnIds(child as HTMLElement));
+          return columnId ? [columnId, ...childColumnIds] : childColumnIds;
+        };
+        return collectColumnIds(header);
+      })));
+
+      const leafColumns &#x3D; rowComponents.flatMap(row &#x3D;&gt; {
+        if (!row || !row.columnComponents) {
+          console.warn(&quot;Invalid row component encountered:&quot;, row);
+          return [];
+        }
+        return row.columnComponents.toArray();
+      })
+      .filter(col &#x3D;&gt; col &amp;&amp; col.column?.pinned &amp;&amp; !ignoredLeafColumnIds.includes(col.column.id))
+      .map(col &#x3D;&gt; col.el.nativeElement);
+
+      return [groupHeaders[0]].concat(leafColumns);
+
+    } catch (error) {
+      console.error(&quot;Error retrieving pinned columns:&quot;, error);
+      return [];
+    }
+  }
+
+  /**
+   * Processes the grid definitions by ensuring each column definition has a width,
+   * and updates the &#x60;gridDataset&#x60; with header, footer, and filler rows based on the
+   * provided column definitions.
+   *
+   * @param gridOptions - The grid options containing column definitions and optional default column width.
+   * @param gridDataset - The dataset to be updated with header, footer, and filler rows.
+   */
+  processGridDefs(gridOptions: GridOptions, gridDataset: GridDataset): void {
+    if (!gridOptions || !gridOptions.columnDefs) {
+      console.error(&quot;Invalid input: &#x27;gridOptions&#x27; and &#x27;gridOptions.columnDefs&#x27; are required.&quot;);
+      return;
+    }
+    if (!gridDataset) {
+      console.error(&quot;Invalid input: &#x27;gridDataset&#x27; is required.&quot;);
+      return;
+    }
+
+    try {
+      gridOptions.columnDefs.forEach(def &#x3D;&gt; {
+        if (!def.width) {
+          def.width &#x3D; gridOptions.columnWidth || &#x27;150px&#x27;;
+        }
+      });
+
+      gridDataset.headerRows &#x3D; [new GridRow({ columnDefs: gridOptions.columnDefs })];
+      gridDataset.footerRows &#x3D; [new GridRow({ columnDefs: gridOptions.columnDefs })];
+      gridDataset.fillerRows &#x3D; [new GridRow({ columnDefs: gridOptions.columnDefs })];
+    } catch (error) {
+      console.error(&quot;Error processing grid definitions:&quot;, error);
+    }
+  }
+
+  /**
+   * Updates the position of pinned columns in the grid by adjusting their &#x60;left&#x60; style property
+   * based on the provided scroll delta. This method handles pinned columns across various grid
+   * sections, including the header, body, footer, filler rows, and nested rows.
+   *
+   * @param gridHeader - The grid header component containing row components.
+   * @param gridBody - The grid body component containing row components, filler rows, and nested rows.
+   * @param gridFooter - The grid footer component containing row components.
+   * @param gridOptions - The grid options configuration, which may include the &#x60;pinNestedRowTemplate&#x60; flag.
+   * @param scrollDelta - The scroll delta object containing the &#x60;left&#x60; value to adjust column positions.
+   */
+  updatePinnedColumnPos(
+    gridHeader: IGridHeaderComponent,
+    gridBody: IGridBodyComponent,
+    gridFooter: IGridFooterComponent,
+    gridOptions: GridOptions,
+    scrollDelta: ScrollDelta,
+  ): void {
+    if (!gridHeader || !gridBody || !gridOptions || !scrollDelta) {
+      console.error(&quot;Invalid input: All parameters are required for updating pinned column positions.&quot;);
+      return;
+    }
+
+    try {
+      const headerRows &#x3D; gridHeader.rowComponents.toArray();
+      const bodyRows &#x3D; gridBody.rowComponents.toArray();
+      const fillerRows &#x3D; gridBody.fillerRowComponents.toArray();
+      const footerRows &#x3D; gridFooter?.rowComponents.toArray();
+      const nestedRows &#x3D; gridBody.nestedRowComponents.toArray();
+
+      const groupByBreadcrumb &#x3D; gridHeader.breadcrumb?.nativeElement;
+      const groupByHeaders &#x3D; gridBody.groupHeaders.toArray().map(header &#x3D;&gt; header.nativeElement);
+
+      const pinnedHeaderCols &#x3D; this.getHeaderPinnedColumns(headerRows);
+      const pinnedBodyCols &#x3D; this.getPinnedColumns(bodyRows);
+      const pinnedFooterCols &#x3D; this.getPinnedColumns(footerRows);
+      const pinnedFillerCols &#x3D; this.getPinnedColumns(fillerRows);
+      const pinnedNestedCols &#x3D; this.getPinnedColumns(nestedRows);
+
+      const pinnedHeaderFeatureCols &#x3D; headerRows.flatMap(rows &#x3D;&gt; rows.featureColumnComponent?.el.nativeElement);
+      const pinnedBodyFeatureCols &#x3D; bodyRows.flatMap(rows &#x3D;&gt; rows.featureColumnComponent?.el.nativeElement);
+      const pinnedFooterFeatureCols &#x3D; footerRows?.flatMap(rows &#x3D;&gt; rows.featureColumnComponent?.el.nativeElement);
+      const pinnedFillerRowFeatureCols &#x3D; fillerRows?.flatMap(rows &#x3D;&gt; rows.featureColumnComponent?.el.nativeElement);
+      
+      let columns &#x3D; pinnedHeaderCols
+        .concat(pinnedBodyCols)
+        .concat(pinnedFooterCols)
+        .concat(pinnedHeaderFeatureCols)
+        .concat(pinnedFillerCols)
+        .concat(pinnedBodyFeatureCols)
+        .concat(pinnedFooterFeatureCols)
+        .concat(pinnedFillerRowFeatureCols)
+        .concat(groupByBreadcrumb)
+        .concat(groupByHeaders);
+
+      if (gridOptions.pinNestedRowTemplate) {
+        columns &#x3D; columns.concat(pinnedNestedCols);
+      }
+
+      columns.filter(col &#x3D;&gt; col).forEach(col &#x3D;&gt; {
+        col.style.left &#x3D; scrollDelta.left + &#x27;px&#x27;;
+      });
+    } catch (error) {
+      console.error(&quot;Error updating pinned column positions:&quot;, error);
+    }
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'GridColumnService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
