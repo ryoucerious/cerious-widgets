@@ -1,0 +1,6 @@
+<cw-nested-row-column *ngIf="gridOptions.nestedRowTemplate
+                      && templates[gridOptions.nestedRowTemplate]
+                      && gridRow.nestedExpanded"
+                      class="nested-col table-col-pinned"
+                      [gridRow]="gridRow">
+</cw-nested-row-column>

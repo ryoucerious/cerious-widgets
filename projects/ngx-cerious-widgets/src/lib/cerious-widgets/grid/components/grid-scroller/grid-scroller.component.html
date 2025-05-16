@@ -1,0 +1,21 @@
+<div #scroller
+     style="overflow-x: scroll; overflow-y: hidden;"
+     [ngStyle]="{
+      'height': getScrollHeight() + 'px',
+      'marginLeft': pinnedColumnWidth + 'px'
+     }"
+     [scrollLeft]="scrollDelta.left"
+     (scroll)="scrollGrid($event)"
+     role="scrollbar"
+     aria-controls="gridTable"
+     aria-orientation="horizontal"
+     [attr.aria-valuenow]="scrollDelta.left"
+     [attr.aria-valuemin]="0"
+     [attr.aria-valuemax]="tableScrollWidth - moddedColumnWidth"
+     aria-label="Horizontal grid scroller">
+  <div [ngStyle]="{
+        'width': tableScrollWidth - moddedColumnWidth + 'px'
+       }">
+    &nbsp;
+  </div>
+</div>

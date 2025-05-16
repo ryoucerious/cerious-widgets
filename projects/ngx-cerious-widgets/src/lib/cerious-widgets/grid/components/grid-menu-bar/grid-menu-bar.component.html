@@ -1,0 +1,13 @@
+<div #menuBar class="cw-table-menu-bar" role="menubar" aria-label="Grid Menu Bar">
+  <div class="table-menu-bar-left">
+    <div class="table-menu-bar-title" role="menuitem" aria-label="Menu Bar Title">
+    </div>
+    <ng-container *ngIf="gridOptions.headerTemplate"
+                  [ngTemplateOutlet]="templates[gridOptions.headerTemplate]"
+                  [ngTemplateOutletContext]="{}">
+    </ng-container>
+  </div>
+  <div>
+    <div #pluginBar class="plugin-bar" role="menuitem" aria-label="Plugin Bar"></div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+// ============================
+// Pager
+// ============================
+.cw-table-pager {
+    background: $grid-pager-background;
+    border: none;
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+
+    .table-pager-btn {
+        box-shadow: none;
+        &:not(:disabled):not(.disabled):active,
+        &:not(:disabled):not(.disabled):active:focus,
+        &:not(:disabled):not(.disabled).active {
+            box-shadow: none;
+            background-color: $dark-450;
+        }
+    }
+}

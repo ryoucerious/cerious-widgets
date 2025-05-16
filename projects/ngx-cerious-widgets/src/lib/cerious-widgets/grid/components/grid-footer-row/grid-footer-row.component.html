@@ -1,0 +1,25 @@
+<ng-container *ngIf="hasRowFeatures">
+    <cw-grid-footer-feature-column class="table-col table-col-pinned table-col-feature"
+                                   [class]="{'last-pinned': pinnedColumns.length === 0}"
+                                   [style.width]="featureColumnWidth"
+                                   role="gridcell"
+                                   aria-hidden="true">
+    </cw-grid-footer-feature-column>
+</ng-container>
+<ng-container *ngFor="let column of gridRow.columnDefs">
+    <ng-container *ngIf="column.visible !== false">
+        <cw-grid-footer-column class="table-col"
+                               [class]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned}"
+                               [column]="column"
+                               [style]="{'width': getColumnWidth(column), 'overflow': 'hidden'}"
+                               role="gridcell">
+        </cw-grid-footer-column>
+    </ng-container>
+</ng-container>
+<div *ngIf="!hasHorizontalScrollbar || hasVerticalScrollbar" 
+     class="table-col padding-col" 
+     style="margin:0; padding:0;" 
+     role="presentation" 
+     aria-hidden="true">
+    &nbsp;
+</div>

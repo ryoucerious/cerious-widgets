@@ -1,0 +1,80 @@
+// ============================
+// Drag and Drop
+// ============================
+.cdk-drag-preview {
+    box-sizing: border-box;
+    background-color: $grid-header-background; /* Match the column header background */
+    border: 1px solid $grid-header-border; /* Match the column header border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    font-family: inherit; /* Ensure the font family matches the grid */
+    font-size: 14px; /* Explicitly set the font size to match the grid */
+    font-weight: 400; /* Match the font weight of the grid */
+    line-height: 1.5; /* Match the line height of the grid */
+    color: $grid-text-header-footer; /* Match the column header text color */
+    z-index: 1000; /* Ensure it appears above other elements */
+    opacity: 0.95; /* Slightly transparent for a polished look */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    .column-menu {
+        display: none; /* Hide the column menu in the drag preview */
+    }
+    .column-menu-button {
+        display: none !important; /* Hide the column menu in the drag preview */
+    }
+}
+
+.drag-preview {
+    background-color: $grid-header-background;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    font-size: 14px;;
+
+    .drag-preview-children {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: horizontal;
+
+        .drag-preview-child {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: horizontal;
+            align-items: center;
+            justify-content: center;
+            border-top: $grid-header-border;
+
+            &.group {
+                border-top: $grid-header-border;
+            }
+
+            .drag-preview-child {
+                border-top: $grid-header-border;
+            }
+        }
+    }
+}
+
+/* Style for the placeholder (the space left behind while dragging) */
+.cdk-drag-placeholder {
+    opacity: 0.6; /* Make it semi-transparent */
+    background-color: lighten($grid-header-background, 10%); /* Slightly lighter than the header background */
+    border: 1px dashed $grid-header-border; /* Match the column header border */
+    transition: opacity 0.2s ease-in-out; /* Smooth transition for appearance */
+}
+
+/* Style for the animating element (when the drag ends and elements rearrange) */
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0.4, 0.0, 0.2, 1); /* Smooth animation */
+    border: 1px solid $grid-header-border; /* Match the column header border */
+}
+
+/* Style for the column being dragged */
+.cdk-drag {
+    cursor: grab; /* Change cursor to indicate draggable */
+    border: 1px solid $grid-header-border; /* Match the column header border */
+}
+
+.cdk-drag:active {
+    cursor: grabbing; /* Change cursor when actively dragging */
+}

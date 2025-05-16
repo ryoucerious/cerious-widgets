@@ -1,0 +1,22 @@
+<ng-container *ngIf="hasRowFeatures">
+    <cw-grid-filler-row-feature-column class="table-col table-col-pinned"
+                                [class]="{'last-pinned': (pinnedColumns?.length || 0) === 0}"
+                                style="padding-top:0; padding-bottom:0; overflow: hidden"
+                                [style.width]="featureColumnWidth">
+    </cw-grid-filler-row-feature-column>
+</ng-container>
+<ng-container *ngFor="let column of gridRow.columnDefs">
+    <ng-container *ngIf="column.visible !== false">
+        <cw-grid-filler-row-column class="table-col"
+                                   [class]="{'table-col-pinned': column?.pinned, 'last-pinned': column?.lastPinned}"
+                                   [gridRow]="gridRow"
+                                   [column]="column"
+                                   style="padding-top:0; padding-bottom:0; overflow: hidden;"
+                                   [style]="{'width': getColumnWidth(column)}">
+        </cw-grid-filler-row-column>
+    </ng-container>
+</ng-container>
+<div *ngIf="!(gridDataset.dataset?.length)" class="table-col" style="position: absolute; z-index: 1">
+    {{gridOptions.noDataMessage}}
+</div>
+<div *ngIf="!hasHorizontalScrollbar || hasVerticalScrollbar" class="table-col  padding-col" style="margin:0; padding:0;">&nbsp;</div>

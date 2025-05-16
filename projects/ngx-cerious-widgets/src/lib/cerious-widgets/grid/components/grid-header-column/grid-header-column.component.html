@@ -1,0 +1,19 @@
+<div class="text-nowrap column-container" 
+     role="columnheader" 
+     [style.width]="getWidth()" 
+     [attr.data-column-id]="column.id"
+     (mouseover)="$event.stopPropagation()">
+    <div class="column-content">
+        <ng-container *ngIf="column.headerCellTemplate && templates[column.headerCellTemplate]"
+                    [ngTemplateOutlet]="templates[column.headerCellTemplate]"
+                    [ngTemplateOutletContext]="{column: column}">
+        </ng-container>
+        <div *ngIf="!column.headerCellTemplate || !templates[column.headerCellTemplate]">
+            {{column.label}}
+        </div>
+    </div>
+    <ng-container *ngIf="cellTemplates" 
+                  [ngTemplateOutlet]="cellTemplate"
+                  [ngTemplateOutletContext]="{column: column, row: gridRow}">
+    </ng-container>
+<cw-grid-column-sizer [column]="column"></cw-grid-column-sizer>

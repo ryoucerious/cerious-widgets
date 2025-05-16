@@ -1,0 +1,28 @@
+<div *ngIf="gridOptions.nestedRowTemplate && templates[gridOptions.nestedRowTemplate]"
+        class="feature-item"
+        [style.width]="featureWidth">
+    <a href="#" 
+       [class.plus]="!gridRow.nestedExpanded"
+       [class.minus]="gridRow.nestedExpanded"
+       (click)="$event.preventDefault(); toggleNestedRowValue(gridRow);"
+       role="button"
+       [attr.aria-expanded]="gridRow.nestedExpanded"
+       aria-label="Toggle nested row">
+    </a>
+</div>
+<div *ngIf="gridOptions.enableMultiselect"
+        class="feature-item"
+        [style.width]="featureWidth">
+    <input type="checkbox" 
+           (click)="selectRow()" 
+           [checked]="gridRow.selected" 
+           [attr.aria-label]="'Select row ' + gridRow.id" />
+</div>
+<div *ngIf="gridOptions.enableSingleselect && !gridOptions.enableMultiselect"
+        class="feature-item"
+        [style.width]="featureWidth">
+    <input type="radio" 
+           (click)="selectRow()" 
+           [checked]="gridRow.selected" 
+           [attr.aria-label]="'Select row ' + gridRow.id" />
+</div>

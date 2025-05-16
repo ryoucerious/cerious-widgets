@@ -1,0 +1,34 @@
+<div #tableHead
+     class="cw-table-head"
+     role="rowgroup"
+     [style.overflowX]="os === 'iOS' || os === 'Mac OS' ? 'auto' : 'hidden'"
+     [style.overflowX]="'hidden'"
+     (keydown)="onKeyDown($event)">
+    <ng-container *ngFor="let row of rows; let rowIndex = index">
+        <cw-grid-header-row class="cw-table-row column-headers-standard"
+                            role="row"
+                            [attr.aria-rowindex]="rowIndex + 1"
+                            [gridRow]="row"
+                            [style.minWidth]="rowMinWidth">
+        </cw-grid-header-row>
+    </ng-container>
+
+    <!-- Group By Breadcrumbs -->
+    <div *ngIf="groupByColumns?.length"
+        #breadcrumb
+        class="cw-breadcrumb-container"
+        role="navigation"
+        aria-label="Group By Breadcrumb">
+        <span class="title">Group By:</span>
+        <span *ngFor="let column of groupByColumns; let last = last" class="breadcrumb" role="listitem">
+            {{ column.label || column.field }}
+            <button class="remove-button" 
+                    (click)="removeGroupByColumn(column)" 
+                    title="Remove {{ column.label || column.field }} from Group By" 
+                    [attr.aria-label]="'Remove ' + (column.label || column.field) + ' from Group By'">
+                ✕
+            </button>
+            <span *ngIf="!last" aria-hidden="true" class="separator"> > </span>
+        </span>
+    </div>
+</div>

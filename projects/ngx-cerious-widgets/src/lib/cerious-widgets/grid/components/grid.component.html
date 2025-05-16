@@ -1,0 +1,14 @@
+<div #gridContainer
+     class="cw-grid"
+     role="grid"
+     aria-label="Data Grid"
+     (resized)="resize()"
+     (mousemove)="onMouseMove($event)"
+     (mouseup)="onMouseUp($event)">
+  <cw-grid-menu-bar #gridMenuBar *ngIf="shouldShowMenuBar()"></cw-grid-menu-bar>
+  <cw-grid-header #gridHeader></cw-grid-header>
+  <cw-grid-body #gridBody></cw-grid-body>
+  <cw-grid-footer #gridFooter *ngIf="shouldShowFooter()"></cw-grid-footer>
+  <cw-grid-scroller #gridScroller></cw-grid-scroller>
+  <cw-grid-pager #gridPager *ngIf="shouldShowPager()"></cw-grid-pager>
+</div>

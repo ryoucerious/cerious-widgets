@@ -1,0 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.m-0 { margin: 0 !important; }
+
+.text-nowrap { white-space: nowrap !important; }

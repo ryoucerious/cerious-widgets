@@ -1,0 +1,40 @@
+// ============================
+// Footer
+// ============================
+.cw-table-foot {
+    width: 100%;
+    display: block;
+    font-weight: bold;
+    overflow: hidden;
+    border-right: none;
+
+    > .cw-table-row {
+        width: 100%;
+        display: table;
+        border-collapse: separate;
+        table-layout: fixed;
+        border: none;
+        font-weight: 500;
+        color: $grid-text-header-footer;
+
+        > .table-col {
+            display: table-cell;
+            overflow-x: hidden;
+            position: relative;
+            padding: 0 8px;
+            background-color: $grid-footer-background;
+
+            &.padding-col {
+                padding: 0;
+            }
+        }
+
+        &.table-col-pinned.last-pinned {
+            border-right: $grid-pinned-body-divider;
+        }
+
+        :last-child {
+            border-right: none;
+        }
+    }
+}

@@ -1,0 +1,30 @@
+<ng-container *ngIf="hasRowFeatures">
+    <cw-grid-row-feature-column class="table-col table-col-pinned table-col-feature"
+                                [class]="{'last-pinned': pinnedColumns.length === 0}"
+                                [gridRow]="gridRow"
+                                [style.width]="featureColumnWidth"
+                                (toggleNestedRow)="toggleNestedRowValue($event)"
+                                role="gridcell"
+                                aria-hidden="true">
+    </cw-grid-row-feature-column>
+</ng-container>
+<ng-container *ngFor="let column of gridRow.columnDefs; let colIndex = index">
+    <ng-container *ngIf="column.visible !== false">
+        <cw-grid-row-column class="table-col"
+                            [class]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned}"
+                            [gridRow]="gridRow"
+                            [column]="column"
+                            [style]="{'width': getColumnWidth(column), 'overflow': 'hidden'}"
+                            [attr.data-cell-id]="column.id"
+                            role="gridcell"
+                            [attr.aria-colindex]="colIndex + 1">
+        </cw-grid-row-column>
+    </ng-container>
+</ng-container>
+<div *ngIf="!hasHorizontalScrollbar || hasVerticalScrollbar" 
+     class="table-col padding-col" 
+     style="margin:0; padding:0" 
+     role="presentation" 
+     aria-hidden="true">
+    &nbsp;
+</div>

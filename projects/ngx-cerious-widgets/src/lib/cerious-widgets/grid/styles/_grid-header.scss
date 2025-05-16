@@ -1,0 +1,174 @@
+// ============================
+// Header Row
+// ============================
+.cw-table-head {
+
+    .column-headers-standard {
+        min-height: 24px;
+    }
+
+    .group-by-title {
+        border-top: solid 1px rgb(221,221,221);
+        border-bottom: solid 1px rgb(221,221,221);
+        padding: 4px 4px 4px 10px;
+        position: relative;
+    }
+
+    .cw-table-row {
+        width: 100%;
+        display: table;
+        border-collapse: separate;
+        table-layout: fixed;
+
+        > .table-col, > .group-header {
+            display: table-cell;
+            vertical-align: middle;
+            overflow-x: hidden;
+            position: relative;
+            background: $grid-header-background;
+            border-right: $grid-header-border;
+            color: $grid-text-header-footer;
+            font-weight: 400;
+            z-index: 10;
+            justify-content: space-between;
+            align-items: center;
+
+            .column-content {
+                display: inline-block;
+            }
+
+            &.table-col-pinned {
+                z-index: 100;
+            } 
+
+            .table-col {
+                position: relative;
+
+                &.group-column {
+                    &.table-col-pinned {
+                        z-index: 101 !important;
+                    }
+                }        
+            }
+
+            .column-menu-button {
+                position: absolute;
+                top: 6px;
+                right: -26px;
+                
+                -webkit-transition: right .2s; /* Safari */ //<<< the compiler should be prefixing automatically
+                transition: right .2s;
+
+                &.active {
+                    right: 0px;
+                }
+            }
+            
+            .sort-indicator {
+                font-size: 0.9em; /* Adjust the size if needed */
+            }
+
+            text-align: center;
+
+            &.padding-col {
+                padding: 0;
+            }
+
+            &.group-header {
+                text-align: center;
+                vertical-align: middle;
+
+                .cw-table-row {
+                    border-top: $grid-header-border;
+                }  
+            }
+                
+            &.nested-group {
+                display: flex;
+                flex-direction: column;
+                border-top: solid 1px grey !important;
+            }
+
+        }
+
+        > .table-col:hover .column-menu-button,
+        .column-content:hover ~ .column-menu-button,
+        .column-menu-button:hover {
+            right: 0px;
+        }
+
+        .table-col:last-child {
+            border-right: none;
+        }
+
+        .col-span {
+            border-bottom: solid 1px rgb(221,221,221);
+        }
+
+        .sub-header-col {
+            border-top: solid 1px rgb(221,221,221);
+        }
+
+        .group-header {
+            padding-left: 0; // remove padding for group header
+        }
+    }
+
+    .group-by-row {
+        font-weight: bold;
+        width: 100%;
+
+        .table-col {
+            border-top: solid 1px rgb(221,221,221);
+
+            div {
+                display: inline-block;
+                position: relative;
+            }
+
+            .group-closer {
+                opacity: 0.3;
+                left: 5px;
+
+                .close {
+                    width: 16px;
+                    height: 16px;
+                    cursor: pointer;
+                }
+                .close:before, .close:after {
+                    position: absolute;
+                    left: 7px;
+                    top: 3px;
+                    content: ' ';
+                    height: 16px;
+                    width: 2px;
+                    background-color: #333;
+                }
+                .close:before {
+                    transform: rotate(45deg);
+                }
+                .close:after {
+                    transform: rotate(-45deg);
+                }
+            }
+
+            :hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    .column-resizer {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        cursor: ew-resize;
+        width: 2px;
+        height: 100%;
+    }
+}
+
+// this is grabbing a group column header and making it block so the hover for the hamburger works properly
+.group-header.has-children > .group-column > .column-container > .column-content {
+    display: block;
+}

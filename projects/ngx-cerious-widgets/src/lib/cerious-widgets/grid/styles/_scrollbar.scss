@@ -1,0 +1,28 @@
+// ============================
+// Scrollbar
+// ============================
+.cw-grid {
+    /* Width */
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 10px $light-600;
+        background-color: $light-200;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: $dark-100;
+    }
+
+    .navbar-button-container::-webkit-scrollbar-thumb {
+        background: $dark-100;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: $dark-200;
+    }
+}

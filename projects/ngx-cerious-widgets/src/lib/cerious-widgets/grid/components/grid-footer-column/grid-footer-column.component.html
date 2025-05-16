@@ -1,0 +1,6 @@
+<div class="text-nowrap" [style.width]="getWidth()">
+    <ng-template *ngIf="column.footerCellTemplate && templates[column.footerCellTemplate]"
+            [ngTemplateOutlet]="templates[column.footerCellTemplate]"
+            [ngTemplateOutletContext]="{column: column}">
+    </ng-template>
+</div>

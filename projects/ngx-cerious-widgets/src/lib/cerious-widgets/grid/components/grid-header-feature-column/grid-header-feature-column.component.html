@@ -1,0 +1,21 @@
+<div *ngIf="gridOptions.nestedRowTemplate && templates[gridOptions.nestedRowTemplate]"
+     class="feature-item"
+     [style.width]="featureWidth"
+     role="presentation"
+     aria-hidden="true">
+</div>
+<div *ngIf="gridOptions.enableMultiselect"
+     class="feature-item"
+     [style.width]="featureWidth">
+    <input type="checkbox" 
+           (click)="selectAll()" 
+           [checked]="selected" 
+           aria-label="Select all rows" />
+</div>
+<div *ngIf="gridOptions.enableSingleselect && !gridOptions.enableMultiselect"
+     class="feature-item"
+     [style.width]="featureWidth">
+    <input type="radio" 
+           style="visibility: hidden;" 
+           aria-hidden="true" />
+</div>

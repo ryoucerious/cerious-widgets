@@ -1,0 +1,112 @@
+ .btn {
+  font-family: $default-font;
+  font-size: .875rem;
+  min-width: 88px;
+  border-radius: $radius-primary;
+  margin: 8px 8px 8px 0;
+}
+
+.btn-group {
+  display: inline-flex;
+  position: relative;
+  vertical-align: middle;
+}
+
+.btn-group > .btn {
+  margin-right: -1px;
+  border-radius: 0;
+}
+.btn-group > .btn:first-child {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+.btn-group > .btn:last-child {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.btn-sm {
+  height: 24px !important;
+}
+ 
+ @mixin button-variant($color, $background, $border, $hoverbackground, $hoverborder, $hovercolor, $focusborder, $activecolor, $activeglow) {
+    color: $color;
+    height: 28px;
+    background-color: $background;
+    border: 1px solid $border;
+    line-height: 12px;
+    &:focus,
+    &.focus {
+      color: $hovercolor;
+      background-color: $hoverbackground;
+      border-color: $focusborder;
+      border-width: 2px;
+      box-shadow: none;
+    }
+    &:hover {
+      color: $hovercolor;
+      text-decoration: none;
+      background-color: $hoverbackground;
+      border-color: $hoverborder;
+    }
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+      color: $hovercolor;
+      background-color: $hoverbackground;
+      border: 1px solid $hoverborder;
+  
+      &:hover {
+        color: $hovercolor;
+        background-color: $hoverbackground;
+        border-color: $hoverborder;
+      }
+      &:focus,
+      &.focus {
+        color: $hovercolor;
+        background-color: $hoverbackground;
+        border-color: $focusborder;
+        border-width: 2px;
+      }
+    }
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+      background-image: none;
+    }
+    &:disabled {
+      color: transparentize($color, .5);
+      background-color: $background;
+      border-color: $border;
+      cursor: not-allowed;
+    }
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      &:hover,
+      &:focus,
+      &.focus {
+        color: transparentize($color, .5);
+        background-color: $background;
+        border-color: transparentize($focusborder, .5);
+        cursor: not-allowed;
+      }
+    }
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled):active:focus,
+    &:not(:disabled):not(.disabled).active {
+      color: $activecolor;
+      background-color: $background;
+      border: 1px solid $border;
+      box-shadow: $activeglow;
+    }
+    // .badge {
+    //   color: $background;
+    //   background-color: $color;
+    // }
+  }
+
+  // LEGEND: button-variant($color, $background, $border, $hoverbackground, $hoverborder, $hovercolor, $focusborder, $activecolor, $activeglow)
+  .btn-default {
+    @include button-variant($button-label-color, lighten($dark-450, 25%), lighten($dark-450, 25%), lighten($dark-300, 10%), transparent, $button-label-color, $match-browser-focus, $button-label-color, $active-glow)
+  }

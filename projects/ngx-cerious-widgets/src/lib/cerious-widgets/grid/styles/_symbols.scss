@@ -1,0 +1,98 @@
+// ============================
+// hamburger symbols
+// horizontal and vertical
+// ============================
+@mixin three-bars($footprint, $width, $height, $direction) {
+  position: relative;
+  display: inline-block;
+  width: $footprint;
+  height: $footprint;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &::before,
+  &::after,
+  .line {
+      content: '';
+      display: block;
+      width: $width;
+      height: $height;
+      background-color: $symbols-color;
+      border-radius: calc($hamburger-line-thickness / 2);
+      position: absolute;
+      top: 1px;
+  }
+  &::before {
+      #{ $direction }: 0px; /* Position the first line */
+  }
+  .line {
+      #{ $direction }: 4px; /* Position the middle line */
+  }
+  &::after {
+      #{ $direction }: 8px; /* Position the last line */
+  }
+}
+
+.hamburger-button {
+  @include three-bars($hamburger-footprint, $hamburger-line-length, $hamburger-line-thickness, top)
+}
+
+.vertical-hamburger-button {
+  @include three-bars($hamburger-footprint, $hamburger-line-thickness, $hamburger-line-length, left)
+}
+
+
+// ============================
+// + and - symbols
+// ============================
+.feature-item a {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 20px;
+  text-decoration: none;
+  color: $symbols-color;
+  cursor: pointer;
+
+  &.plus::before {
+    content: '+';
+  }
+  &.minus::before {
+    content: '-';
+  }
+}
+
+
+// ============================
+// chevron symbols
+// ============================
+@mixin chevron($direction: right, $size: 8px, $thickness: 2px, $color: $light-100) {
+  display: inline-block;
+  width: $size;
+  height: $size;
+  border: solid $color;
+  content: '';
+  border-width: 0;
+
+  @if $direction == right {
+    border-right-width: $thickness;
+    border-bottom-width: $thickness;
+    transform: rotate(-45deg);
+  } @else if $direction == left {
+    border-left-width: $thickness;
+    border-bottom-width: $thickness;
+    transform: rotate(45deg);
+  }
+}
+
+.chevron-right {
+  @include chevron(right);
+}
+
+.chevron-left {
+  @include chevron(left);
+}

@@ -1,0 +1,110 @@
+<div srole="gridcell"
+     class="cell-content-wrapper"
+     [style.width]="getWidth()" 
+     [style.text-align]="getAlignment()"
+     [attr.aria-label]="column.label || 'Column'">
+    
+    <!-- Custom cell template -->
+    <ng-template *ngIf="column.cellTemplate && templates[column.cellTemplate]"
+                [ngTemplateOutlet]="templates[column.cellTemplate]"
+                [ngTemplateOutletContext]="{gridRow: gridRow, row: gridRow.row, column: column, value: getValue()}">
+    </ng-template>
+
+    <!-- Editable fields based on column type -->
+    <ng-container *ngIf="column.editable">
+        <ng-container [ngSwitch]="column.type || ColumnType.String">
+            <!-- Text Input -->
+            <input *ngSwitchCase="ColumnType.String" 
+                   type="text"
+                   [value]="getFormattedValue()" 
+                   (input)="onValueChange($event)" />
+
+            <!-- Number Input -->
+            <input *ngSwitchCase="ColumnType.Number" 
+                   type="number" 
+                   [value]="getValue()" 
+                   (input)="onValueChange($event)" />
+
+            <!-- Dropdown -->
+            <select *ngSwitchCase="ColumnType.Dropdown" 
+                    [value]="getValue()" 
+                    (change)="onValueChange($event)">
+                <option *ngFor="let option of column.valueOptions; trackBy: dropdownTrackBy" [value]="option.id">{{option.value}}</option>
+            </select>
+
+            <!-- Date Input -->
+            <input *ngSwitchCase="ColumnType.Date" 
+                   type="date" 
+                   [value]="getValue()" 
+                   (input)="onValueChange($event)" />
+
+            <!-- DateTime Input -->
+            <input *ngSwitchCase="ColumnType.DateTime" 
+                   type="datetime-local" 
+                   [value]="getValue()" 
+                   (input)="onValueChange($event)" />
+
+            <!-- Time Input -->
+            <input *ngSwitchCase="ColumnType.Time" 
+                   type="time" 
+                   [value]="getValue()" 
+                   (input)="onValueChange($event)" />
+
+            <!-- Boolean (Checkbox) -->
+            <input *ngSwitchCase="ColumnType.Boolean" 
+                   type="checkbox" 
+                   [checked]="getValue()" 
+                   (change)="onValueChange($event)" />
+
+            <!-- Default Display -->
+            <div *ngSwitchDefault>
+                {{ getFormattedValue() }}
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <!-- Display based on format for non-editable columns -->
+    <ng-container *ngIf="!column.editable && column.format">
+        <ng-container [ngSwitch]="column.format">
+            <!-- Currency Format -->
+            <div *ngSwitchCase="ColumnFormat.Currency">
+                {{ getValue() | currency }}
+            </div>
+
+            <!-- Percentage Format -->
+            <div *ngSwitchCase="ColumnFormat.Percentage">
+                {{ getValue() | percent }}
+            </div>
+
+            <!-- Stars Format -->
+            <div *ngSwitchCase="ColumnFormat.Stars">
+                <span *ngFor="let star of getStars(getValue())">&#9733;</span>
+            </div>
+
+            <!-- Date Format -->
+            <div *ngSwitchCase="ColumnFormat.Date">
+                {{ getValue() | date:'shortDate' }}
+            </div>
+
+            <!-- DateTime Format -->
+            <div *ngSwitchCase="ColumnFormat.DateTime">
+                {{ getValue() | date:'short' }}
+            </div>
+
+            <!-- Time Format -->
+            <div *ngSwitchCase="ColumnFormat.Time">
+                {{ getValue() | date:'shortTime' }}
+            </div>
+
+            <!-- Default Format -->
+            <div *ngSwitchDefault>
+                {{ getValue() }}
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <!-- Default display for non-editable columns without format -->
+    <div *ngIf="!column.cellTemplate && !column.editable && !column.format">
+        {{ getValue() }}
+    </div>
+</div>

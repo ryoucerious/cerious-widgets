@@ -1,0 +1,63 @@
+// ============================
+// Base Colors
+// ============================
+$light-100: #ffffff;
+$light-200: #fafbfb;
+$light-300: #f1f3f5;
+$light-400: #e5e9ec;
+$light-500: #d5dbe0;
+$light-600: #c0c8cf;
+
+$dark-100: #a6b0b9;
+$dark-200: #87939e;
+$dark-300: #65727d;
+$dark-450: #2F353F;
+
+
+// ============================
+// Utility
+// ============================
+$default-font: 'Roboto', sans-serif;
+$radius-primary: .25rem;
+
+$button-label-color: $light-100;
+
+$grid-text-header-footer: $dark-450;
+$grid-text-dark: $dark-450;
+
+
+// ============================
+// Icons/Symbols
+// ( hamburger, +, - )
+// ============================
+$hamburger-line-length: 16px;
+$hamburger-line-thickness: 2px;
+$hamburger-footprint: 16px;
+$symbols-color: $dark-450;
+
+
+// ============================
+// Buttons
+// for :focus and :active
+// ============================
+$match-browser-focus: #005fcc; // matching chromes focus blue ring
+$active-glow: 0 0 0 0.2rem transparentize( #4ec3e0, .75);
+
+
+// ============================
+// Backgrounds
+// ============================
+$grid-menubar-background: $light-400;
+$grid-header-background: $light-500;
+$grid-footer-background: $light-400;
+$grid-pager-background: $light-300;
+$grid-body-background: $light-200;
+
+// ============================
+// Lines and Borders
+// ============================
+$grid-wrapper-border: $light-400;
+
+$grid-header-border: 1px solid $light-600;
+
+$grid-pinned-body-divider: 1px solid $dark-100;

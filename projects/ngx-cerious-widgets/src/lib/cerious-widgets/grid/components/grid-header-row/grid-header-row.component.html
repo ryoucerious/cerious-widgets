@@ -1,0 +1,99 @@
+<!-- Render the feature column only at the top level -->
+<ng-container *ngIf="hasRowFeatures && !isChildRow">
+    <cw-grid-header-feature-column class="table-col table-col-pinned table-col-feature"
+                                   [class]="{'last-pinned': pinnedColumns.length === 0}"
+                                   [style.width]="featureColumnWidth"
+                                   role="presentation"
+                                   aria-hidden="true">
+    </cw-grid-header-feature-column>
+</ng-container>
+
+<div class="cw-table-row column-headers-standard"
+     cdkDropList
+     [id]="dropId"
+     [cdkDropListData]="gridRow.columnDefs"
+     [cdkDropListConnectedTo]="dropId"
+     cdkDropListOrientation="horizontal"
+     (cdkDropListDropped)="drop($event)"
+     role="row">
+    <ng-container *ngFor="let column of gridRow.columnDefs">
+        <ng-container *ngIf="shouldShowColumn(column)">
+            <!-- Render group header if column has children -->
+            <div *ngIf="column.children && column.children.length > 0"
+                 cdkDrag
+                 [cdkDragDisabled]="column.draggable === false"
+                 class="group-header"
+                 [ngClass]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned, 'has-children': column.children && column.children.length > 0}"
+                 [attr.data-column-id]="column.id"
+                 [attr.colspan]="getColspan(column)"
+                 [attr.rowspan]="getRowspan(column)"
+                 [style.width]="getParentWidth(column)"
+                 role="columnheader"
+                 aria-expanded="true">
+                <!-- Drag Preview -->
+                <ng-template cdkDragPreview>
+                    <div class="drag-preview group-header-preview">
+                        <div [style.width]="getParentWidth(column)">{{ column.label }}</div>
+                        <div class="drag-preview-children">
+                            <ng-container *ngFor="let child of column.children">
+                                <ng-container *ngIf="child.children && child.children.length > 0">
+                                    <!-- Render nested group -->
+                                    <div class="drag-preview-child group" [style.width]="getParentWidth(child)">
+                                        <div>{{ child.label }}</div>
+                                        <div class="drag-preview-children">
+                                            <ng-container *ngFor="let nestedChild of child.children">
+                                                <div class="drag-preview-child" [style.width]="getColumnWidth(nestedChild)">
+                                                    {{ nestedChild.label }}
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="!child.children || child.children.length === 0">
+                                    <!-- Render leaf column -->
+                                    <div class="drag-preview-child" [style.width]="getColumnWidth(child)">
+                                        {{ child.label }}
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <cw-grid-header-column *ngIf="column.children.length > 0"
+                                       class="table-col group-column"
+                                       [ngClass]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned}"
+                                       [column]="column"
+                                       [style]="{'width': getParentWidth(column), 'overflow': 'hidden'}"
+                                       role="columnheader">
+                    <ng-template #cellTemplate let-column="column" let-row=row let-gridService="gridService">   
+                        <!-- Recursively render child columns -->
+                        <div class="nested-group">
+                            <cw-grid-header-row [gridRow]="getNewRow(column)"
+                                                [isChildRow]="true">
+                            </cw-grid-header-row>
+                        </div>
+                    </ng-template>
+                </cw-grid-header-column>
+            </div>
+
+            <!-- Render leaf column -->
+            <cw-grid-header-column *ngIf="(!column.children || column.children.length === 0)"
+                                cdkDrag
+                                [cdkDragDisabled]="column.draggable === false"
+                                class="table-col leaf-column"
+                                [class]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned}"
+                                [column]="column"
+                                [style]="{'width': getColumnWidth(column), 'overflow': 'hidden'}"
+                                role="columnheader">
+            </cw-grid-header-column>
+        </ng-container>
+    </ng-container>
+    <div *ngIf="!hasHorizontalScrollbar || hasVerticalScrollbar" 
+         class="table-col padding-col no-drag" 
+         style="margin:0; padding:0" 
+         role="presentation" 
+         aria-hidden="true">
+        &nbsp;
+    </div>
+</div>

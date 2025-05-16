@@ -1,0 +1,14 @@
+<div #tableFooter
+     class="cw-table-foot"
+     role="rowgroup"
+     [style.overflowX]="os === 'iOS' || os === 'Mac OS' ? 'auto' : 'hidden'"
+     [style.overflowX]="'hidden'">
+  <ng-container *ngFor="let row of rows; let rowIndex = index">
+    <cw-grid-footer-row class="cw-table-row"
+                        role="row"
+                        [attr.aria-rowindex]="rowIndex + 1"
+                        [gridRow]="row"
+                        [style.minWidth]="rowMinWidth">
+    </cw-grid-footer-row>
+  </ng-container>
+</div>
