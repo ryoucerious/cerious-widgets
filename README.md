@@ -52,7 +52,7 @@ With a modern plugin system, rich templating support, and no heavy dependencies,
 ## 📦 Installation
 
 ```bash
-npm install ngx-cerious-widgets xlsx
+npm install ngx-cerious-widgets
 ```
 
 ---
