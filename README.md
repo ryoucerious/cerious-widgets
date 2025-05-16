@@ -55,17 +55,38 @@ With a modern plugin system, rich templating support, and no heavy dependencies,
 npm install ngx-cerious-widgets
 ```
 
+Import via module or import directly into into your component.
+```bash
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    CeriousWidgetsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+Add the styles to `angular.json`
+```bash
+"node_modules/ngx-cerious-widgets/styles/grid-styles-generated.scss",
+```
+
 ---
 
 
 ## 🧪 Quick Start
 
 ```html
-<cerious-grid
+<cw-grid
   [data]="data"
   [gridOptions]="gridOptions"
   (rowClick)="onRowClick($event)">
-</cerious-grid>
+</cw-grid>
 ```
 
 ---

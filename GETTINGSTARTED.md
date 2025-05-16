@@ -19,12 +19,12 @@ npm install ngx-cerious-widgets
 In your Angular app module:
 
 ```typescript
-import { NgxCeriousWidgetsModule } from 'ngx-cerious-widgets';
+import { CeriousWidgetsModule } from 'ngx-cerious-widgets';
 
 @NgModule({
   imports: [
     // ...other imports
-    NgxCeriousWidgetsModule
+    CeriousWidgetsModule
   ]
 })
 export class AppModule { }
@@ -34,10 +34,10 @@ export class AppModule { }
 
 ## Add Styles
 
-Import the grid styles in your global `styles.scss`:
+Import the grid styles in your global `styles.scss` or add to `angular.json`:
 
 ```scss
-@import '~ngx-cerious-widgets/styles/grid.scss';
+@import '~ngx-cerious-widgets/styles/grid-styles-generated.scss';
 ```
 
 Or, if you copy styles locally, ensure you import all required SCSS partials.
