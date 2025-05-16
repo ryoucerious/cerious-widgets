@@ -1,20 +1,39 @@
 {
   "name": "ngx-cerious-widgets",
-  "version": "1.0.0",
+  "version": "1.0.6",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rYOUcerious/cerious-widgets.git"
+  },
   "peerDependencies": {
-    "@angular/cdk": "^16.2.14",
-    "@angular/common": "^16.2.12",
-    "@angular/core": "^16.2.12",
-    "rxjs": "~7.5.0",
-    "xlsx":"0.18.5",
-    "zone.js": "~0.11.4"
+    "@angular/animations": ">=16.0.0",
+    "@angular/cdk": ">=16.0.0",
+    "@angular/common": ">=16.0.0",
+    "@angular/compiler": ">=16.0.0",
+    "@angular/core": ">=16.0.0",
+    "@angular/forms": ">=16.0.0",
+    "@angular/platform-browser": ">=16.0.0",
+    "@angular/platform-browser-dynamic": ">=16.0.0",
+    "@angular/router": ">=16.0.0",
+    "xlsx": ">=0.18.5",
+    "rxjs": ">=7.4.0",
+    "zone.js": ">=0.13.3"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
   "files": [
-    "dist",
-    "src",
+    "lib/",
+    "styles/",
+    "bundles/",
+    "fesm2022/",
+    "fesm2015/",
+    "esm2022/",
+    "esm2015/",
+    "*.d.ts",
+    "*.metadata.json",
+    "*.js",
+    "*.mjs",
     "*.map"
   ]
 }

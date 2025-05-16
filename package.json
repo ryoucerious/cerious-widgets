@@ -1,6 +1,6 @@
 {
   "name": "ngx-cerious-widgets",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/rYOUcerious/cerious-widgets.git"
@@ -13,7 +13,7 @@
     "test": "ng test",
     "lint": "ng lint"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "^16.2.12",
     "@angular/cdk": "^16.2.14",
