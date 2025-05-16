@@ -1,4 +1,4 @@
-# ngx-cerious-widgets '96 Getting Started
+# ngx-cerious-widgets Getting Started
 
 A flexible, extensible Angular data grid with advanced features and plugin support.
 
