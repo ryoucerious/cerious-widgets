@@ -186,3 +186,5 @@ MIT\
 ---\
 \
 **For more details, see the source code and inline documentation.**}
+
+https://ryoucerious.github.io/cerious-widgets/
