@@ -109,3 +109,5 @@ MIT — free for personal and commercial projects.
 
 Cerious Grid was built by a developer who’s spent nearly two decades in enterprise front-end development.  
 If you’ve ever been frustrated by AG Grid’s licensing or boxed in by rigid tables — **this is for you**.
+
+https://ryoucerious.github.io/cerious-widgets/
