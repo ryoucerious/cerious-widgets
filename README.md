@@ -109,7 +109,7 @@ You can also consume templates using Angular `@Directive()`s to inject content d
 
 ## 📸 Live Demos
 
-_Coming soon — StackBlitz playground and hosted demo app_
+StackBlitz playground: https://stackblitz.com/edit/stackblitz-starters-5jca2yeb?file=angular.json
 
 ---
 
