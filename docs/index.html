@@ -1,249 +1,54 @@
-<!doctype html>
-<html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>ngx-cerious-widgets documentation</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-	   <link rel="stylesheet" href="./styles/style.css">
-        <link rel="stylesheet" href="./styles/dark.css">
-    </head>
-    <body>
-          <script>
-               // Blocking script to avoid flickering dark mode
-               // Dark mode toggle button
-               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
-               var darkModeState = useDark.matches;
-               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
-               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
-               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
-
-               function checkToggle(check) {
-                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
-                         $darkModeToggleSwitchers[i].checked = check;
-                    }
-               }
-
-               function toggleDarkMode(state) {
-                    if (window.localStorage) {
-                         localStorage.setItem('compodoc_darkmode-state', state);
-                    }
-
-                    checkToggle(state);
-
-                    const hasClass = document.body.classList.contains('dark');
-
-                    if (state) {
-                         for (var i = 0; i < $darkModeToggles.length; i++) {
-                              $darkModeToggles[i].classList.add('dark');
-                         }
-                         if (!hasClass) {
-                              document.body.classList.add('dark');
-                         }
-                    } else {
-                         for (var i = 0; i < $darkModeToggles.length; i++) {
-                              $darkModeToggles[i].classList.remove('dark');
-                         }
-                         if (hasClass) {
-                              document.body.classList.remove('dark');
-                         }
-                    }
-               }
-
-               useDark.addEventListener('change', function (evt) {
-                    toggleDarkMode(evt.matches);
-               });
-               if (darkModeStateLocal) {
-                    darkModeState = darkModeStateLocal === 'true';
-               }
-               toggleDarkMode(darkModeState);
-          </script>
-
-        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
-               <div class="d-flex">
-                    <a href="./" class="navbar-brand">ngx-cerious-widgets documentation</a>
-                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
-               </div>
-        </div>
-
-        <div class="xs-menu menu" id="mobile-menu">
-                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
-        </div>
-
-        <div class="container-fluid main">
-           <div class="row main">
-               <div class="d-none d-md-block menu">
-                   <compodoc-menu mode="normal"></compodoc-menu>
-               </div>
-               <!-- START CONTENT -->
-               <div class="content getting-started">
-                   <div class="content-data">
-
-<p><img src="cerious-widgets-sm.png" alt="Cerious Widgets" class="img-responsive"></p>
-<h1>Cerious Widgets - Cerious Grid</h1>
-<p><strong>(Pronounced: Serious)</strong></p>
-<p><strong>A seriously powerful Angular grid — for developers who demand control, flexibility, and performance.</strong><br>Part of the <a href="https://github.com/rYOUcerious/cerious-widgets">Cerious Widgets</a> collection.</p>
-<hr>
-<h2>🚀 Why Cerious Grid?</h2>
-<p>Cerious Grid isn&#39;t just a table — it&#39;s a full-blown, enterprise-grade Angular grid built for speed, extensibility, and total customization.</p>
-<p>With a modern plugin system, rich templating support, and no heavy dependencies, it&#39;s everything you need to build real-world data-intensive apps.</p>
-<hr>
-<h2>✨ Features</h2>
-<h2>⚡️ Core UX &amp; Performance</h2>
-<ul>
-<li>🔁 <strong>Virtual Scrolling</strong> — Render thousands of rows without performance hits  </li>
-<li>🔄 <strong>Pagination</strong>  </li>
-<li>🌐 <strong>Server-Side Mode</strong> — Pagination, Filtering, Virtual Scroll</li>
-</ul>
-<h2>🧭 Layout &amp; Interaction</h2>
-<ul>
-<li>↕️ <strong>Column Resizing and Pinning</strong>  </li>
-<li>🔗 <strong>Drag-and-Drop Columns</strong>  </li>
-<li>🧱 <strong>Grouped Column Headers</strong>  </li>
-<li>📊 <strong>Group By</strong> — with drag-to-group UI  </li>
-<li>🧬 <strong>Nested Rows</strong> — Use any Angular template for children (tables, charts, etc.)</li>
-</ul>
-<h2>🔍 Data Interaction</h2>
-<ul>
-<li>🧠 <strong>Multi-Column Sorting</strong> — Ctrl/Meta click to multi-sort  </li>
-<li>🧹 <strong>Column Filtering</strong> — Text, number, select, date</li>
-</ul>
-<h2>🧾 Customization</h2>
-<ul>
-<li>🧾 <strong>Custom Templates</strong> — Cells, headers, rows — fully yours  </li>
-<li>💡 <strong>Directive-Based Plugin Templates</strong></li>
-</ul>
-<h2>🧩 Extensibility &amp; Persistence</h2>
-<ul>
-<li>🧩 <strong>Pluggable Architecture</strong> — Add or override behavior without touching core  </li>
-<li>💾 <strong>Save &amp; Restore Views</strong> — Favorites, state, layout</li>
-</ul>
-<h2>📤 Output &amp; Licensing</h2>
-<ul>
-<li>📦 <strong>Excel Export</strong> — One-liner export with <a href="https://www.npmjs.com/package/xlsx"><code>xlsx</code></a>  </li>
-<li>🔓 <strong>MIT Licensed and Fully Open Source</strong></li>
-</ul>
-<hr>
-<h2>📦 Installation</h2>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm install ngx-cerious-widgets xlsx</code></pre></div><hr>
-<h2>🧪 Quick Start</h2>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-html">&lt;cerious-grid
-  [data]=&quot;data&quot;
-  [gridOptions]=&quot;gridOptions&quot;
-  (rowClick)=&quot;onRowClick($event)&quot;&gt;
-&lt;/cerious-grid&gt;</code></pre></div><hr>
-<h2>🧩 Plugin Example</h2>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">export class MyPlugin implements GridPlugin {
-  onInit(api: GridApi) {
-    api.onCellClick.subscribe(cell =&gt; {
-      console.log(&#39;Cell clicked:&#39;, cell);
-    });
-  }
-}</code></pre></div><p>You can also consume templates using Angular <code>@Directive()</code>s to inject content dynamically.</p>
-<hr>
-<h2>📸 Live Demos</h2>
-<p><em>Coming soon — StackBlitz playground and hosted demo app</em></p>
-<hr>
-<h2>🤝 Contributing</h2>
-<p>We welcome your ideas, plugins, and PRs.<br>Head to the <a href="https://github.com/your-org/cerious-grid/issues">issues page</a> to suggest features or report bugs.</p>
-<hr>
-<h2>📝 License</h2>
-<p>MIT — free for personal and commercial projects.</p>
-<hr>
-<h2>🧠 Built With Purpose</h2>
-<p>Cerious Grid was built by a developer who’s spent nearly two decades in enterprise front-end development.<br>If you’ve ever been frustrated by AG Grid’s licensing or boxed in by rigid tables — <strong>this is for you</strong>.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                   </div><div class="search-results">
-    <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
-        <ul class="search-results-list"></ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cerious Grid — Angular Enterprise Grid</title>
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <header>
+    <img src="./assets/cerious-widgets-sm.png" alt="Cerious Grid Logo"  />
+    <h1>Cerious Grid</h1>
+    <p class="tagline">Enterprise-level Angular Data Grid — blazing fast, fully customizable, open source.</p>
+    <div class="cta-buttons">
+      <a href="https://www.npmjs.com/package/ngx-cerious-widgets" target="_blank">📦 npm</a>
+      <a href="https://github.com/rYOUcerious/cerious-widgets" target="_blank">⭐ GitHub</a>
+      <a href="#examples">🚀 Live Examples</a>
     </div>
-    <div class="no-results">
-        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
-    </div>
-</div>
-</div>
-               <!-- END CONTENT -->
-           </div>
-       </div>
+  </header>
 
-          <label class="dark-mode-switch">
-               <input type="checkbox">
-               <span class="slider">
-                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
-                    </svg>
-               </span>
-          </label>
+  <main>
+    <section id="features">
+      <h2>✨ Features</h2>
+      <ul>
+        <li>⚡ Virtual Scrolling</li>
+        <li>📊 Grouped Columns & Group By</li>
+        <li>↕️ Resizing, Pinning, Drag & Drop</li>
+        <li>📄 Excel Export</li>
+        <li>🔌 Plugin Architecture</li>
+        <li>🎯 Server-side Support</li>
+        <li>🧬 Nested Rows</li>
+        <li>♿ Accessibility & Keyboard Support</li>
+      </ul>
+    </section>
 
-       <script>
-            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
-            var COMPODOC_CURRENT_PAGE_URL = 'index.html';
-            var MAX_SEARCH_RESULTS = 15;
-       </script>
+    <section id="examples">
+      <h2>🔍 Live Examples</h2>
+      <ul>
+        <li><a href="./examples/basic.html">Basic Grid</a></li>
+        <li><a href="./examples/custom-templates.html">Custom Templates</a></li>
+      </ul>
+    </section>
 
-       <script>
-               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
-               checkToggle(darkModeState);
-               if ($darkModeToggleSwitchers.length > 0) {
-                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
-                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
-                              darkModeState = !darkModeState;
-                              toggleDarkMode(darkModeState);
-                         });
-                    }
-               }
-          </script>
+    <section id="docs">
+      <h2>📚 Documentation</h2>
+      <p>See <a href="./api/index.html" target="_blank">API Documentation</a> or <a href="https://www.npmjs.com/package/ngx-cerious-widgets" target="_blank">npm page</a> for install instructions.</p>
+    </section>
+  </main>
 
-       <script src="./js/libs/custom-elements.min.js"></script>
-       <script src="./js/libs/lit-html.js"></script>
-
-       <script src="./js/menu-wc.js" defer></script>
-       <script nomodule src="./js/menu-wc_es5.js" defer></script>
-
-       <script src="./js/libs/bootstrap-native.js"></script>
-
-       <script src="./js/libs/es6-shim.min.js"></script>
-       <script src="./js/libs/EventDispatcher.js"></script>
-       <script src="./js/libs/promise.min.js"></script>
-
-       <script src="./js/compodoc.js"></script>
-
-       <script src="./js/tabs.js"></script>
-       <script src="./js/menu.js"></script>
-       <script src="./js/libs/clipboard.min.js"></script>
-       <script src="./js/libs/prism.js"></script>
-       <script src="./js/sourceCode.js"></script>
-          <script src="./js/search/search.js"></script>
-          <script src="./js/search/lunr.min.js"></script>
-          <script src="./js/search/search-lunr.js"></script>
-          <script src="./js/search/search_index.js"></script>
-       <script src="./js/lazy-load-graphs.js"></script>
-
-
-    </body>
+  <footer>
+    <p>© 2025 Cerious Widgets. MIT Licensed.</p>
+  </footer>
+</body>
 </html>

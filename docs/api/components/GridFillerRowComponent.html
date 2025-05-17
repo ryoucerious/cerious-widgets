@@ -89,7 +89,7 @@
   <li class="breadcrumb-item">Components</li>
   <li class="breadcrumb-item"
   >
-  GridHeaderColumnComponent</li>
+  GridFillerRowComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -116,7 +116,7 @@
     <h3>File</h3>
 </p>
 <p class="comment">
-    <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts</code>
+    <code>projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts</code>
 </p>
 
 
@@ -126,7 +126,7 @@
         <h3>Implements</h3>
     </p>
     <p class="comment">
-                    <code><a href="../interfaces/IGridHeaderColumnComponent.html" target="_self" >IGridHeaderColumnComponent</a></code>
+                    <code><a href="../interfaces/IGridFillerRowComponent.html" target="_self" >IGridFillerRowComponent</a></code>
     </p>
 
 
@@ -152,7 +152,7 @@
 
             <tr>
                 <td class="col-md-3">selector</td>
-                <td class="col-md-9"><code>cw-grid-header-column</code></td>
+                <td class="col-md-9"><code>cw-grid-filler-row</code></td>
             </tr>
 
 
@@ -162,7 +162,7 @@
 
             <tr>
                 <td class="col-md-3">templateUrl</td>
-                <td class="col-md-9"><code>./grid-header-column.component.html</code></td>
+                <td class="col-md-9"><code>./grid-filler-row.component.html</code></td>
             </tr>
 
 
@@ -190,14 +190,15 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier"></span>
-                                <a href="#cellTemplate" >cellTemplate</a>
-                            </li>
-                            <li>
-                                <a href="#cellTemplates" >cellTemplates</a>
+                                <a href="#columnComponents" >columnComponents</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
                                 <a href="#el" >el</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#featureColumnComponent" >featureColumnComponent</a>
                             </li>
                         </ul>
                     </td>
@@ -212,10 +213,7 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#getWidth" >getWidth</a>
-                            </li>
-                            <li>
-                                <a href="#shouldShowMenu" >shouldShowMenu</a>
+                                <a href="#getColumnWidth" >getColumnWidth</a>
                             </li>
                         </ul>
                     </td>
@@ -229,9 +227,6 @@
                 <tr>
                     <td class="col-md-4">
                         <ul class="index-list">
-                            <li>
-                                <a href="#column" >column</a>
-                            </li>
                             <li>
                                 <a href="#gridRow" >gridRow</a>
                             </li>
@@ -251,7 +246,25 @@
                         <td class="col-md-4">
                             <ul class="index-list">
                                 <li>
-                                    <a href="#templates" >templates</a>
+                                    <a href="#featureColumnWidth" >featureColumnWidth</a>
+                                </li>
+                                <li>
+                                    <a href="#hasHorizontalScrollbar" >hasHorizontalScrollbar</a>
+                                </li>
+                                <li>
+                                    <a href="#hasRowFeatures" >hasRowFeatures</a>
+                                </li>
+                                <li>
+                                    <a href="#hasVerticalScrollbar" >hasVerticalScrollbar</a>
+                                </li>
+                                <li>
+                                    <a href="#gridDataset" >gridDataset</a>
+                                </li>
+                                <li>
+                                    <a href="#pinnedColumns" >pinnedColumns</a>
+                                </li>
+                                <li>
+                                    <a href="#gridOptions" >gridOptions</a>
                                 </li>
                             </ul>
                         </td>
@@ -271,7 +284,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:56</a></div>
                             </td>
                         </tr>
 
@@ -339,27 +352,6 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="column"></a>
-                        <b>column</b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef</a></code>
-
-                    </td>
-                </tr>
-                        <tr>
-                            <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:17</a></div>
-                            </td>
-                        </tr>
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
                         <a name="gridRow"></a>
                         <b>gridRow</b>
                     </td>
@@ -372,7 +364,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:18</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:22</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -390,86 +382,73 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getWidth"></a>
+                    <a name="getColumnWidth"></a>
                     <span class="name">
-                        <span ><b>getWidth</b></span>
-                        <a href="#getWidth"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>getColumnWidth</b></span>
+                        <a href="#getColumnWidth"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getWidth()</code>
+<code>getColumnWidth(column: <a href="../interfaces/ColumnDef.html" target="_self">ColumnDef</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="42"
-                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:42</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="70"
+                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:70</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Retrieves the width of the grid header column.
-If a cell template is defined, the width is set to &#39;100%&#39;.
-Otherwise, it calculates the width based on the column configuration
-and grid options provided by the grid services.</p>
+                        <div class="io-description"><p>Retrieves the width of a specified column as a string.</p>
 </div>
 
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>column</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ColumnDef.html" target="_self" >ColumnDef</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The column definition object for which the width is to be determined.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         <div class="io-description">
                             <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
 
                         </div>
                             <div class="io-description">
-                                <p>The width of the grid header column as a string.</p>
-
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="shouldShowMenu"></a>
-                    <span class="name">
-                        <span ><b>shouldShowMenu</b></span>
-                        <a href="#shouldShowMenu"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>shouldShowMenu()</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="52"
-                                    class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:52</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-description"><p>Determines whether the menu should be displayed for the current column.</p>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-none">     otherwise `false`.</code></pre></div></div>
-
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-
-                        </div>
-                            <div class="io-description">
-                                <p><code>true</code> if the column does not have a parent (indicating it is a top-level column),
-otherwise <code>false</code>.</p>
+                                <p>The width of the column as a string, typically in a CSS-compatible format (e.g., &#39;100px&#39;, &#39;20%&#39;).</p>
 
                             </div>
                 </td>
@@ -486,17 +465,17 @@ otherwise <code>false</code>.</p>
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="cellTemplate"></a>
+                    <a name="columnComponents"></a>
                     <span class="name">
                             <span class="modifier"></span>
-                        <span ><b>cellTemplate</b></span>
-                        <a href="#cellTemplate"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>columnComponents</b></span>
+                        <a href="#columnComponents"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+                        <i>Type : </i>        <code><a href="../interfaces/IGridFillerRowColumnComponent.html" target="_self" >QueryList&lt;IGridFillerRowColumnComponent&gt;</a></code>
 
                     </td>
                 </tr>
@@ -505,44 +484,13 @@ otherwise <code>false</code>.</p>
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ContentChild(&#x27;cellTemplate&#x27;)<br />
+                            @ViewChildren(GridFillerRowColumnComponent)<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:20</a></div>
-                        </td>
-                    </tr>
-
-
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="cellTemplates"></a>
-                    <span class="name">
-                        <span ><b>cellTemplates</b></span>
-                        <a href="#cellTemplates"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>{}</code>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:22</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -569,7 +517,43 @@ otherwise <code>false</code>.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:29</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:59</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="featureColumnComponent"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>featureColumnComponent</b></span>
+                        <a href="#featureColumnComponent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IGridFillerRowFeatureColumnComponent.html" target="_self" >IGridFillerRowFeatureColumnComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(GridFillerRowFeatureColumnComponent)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:25</a></div>
                         </td>
                     </tr>
 
@@ -586,19 +570,151 @@ otherwise <code>false</code>.</p>
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="templates"></a>
-                        <span class="name"><b>templates</b><a href="#templates"><span class="icon ion-ios-link"></span></a></span>
+                        <a name="featureColumnWidth"></a>
+                        <span class="name"><b>featureColumnWidth</b><a href="#featureColumnWidth"><span class="icon ion-ios-link"></span></a></span>
                     </td>
                 </tr>
 
                 <tr>
                     <td class="col-md-4">
-                        <span class="accessor"><b>get</b><code>templates()</code></span>
+                        <span class="accessor"><b>get</b><code>featureColumnWidth()</code></span>
                     </td>
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-header-column/grid-header-column.component.ts:24</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:27</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="hasHorizontalScrollbar"></a>
+                        <span class="name"><b>hasHorizontalScrollbar</b><a href="#hasHorizontalScrollbar"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>hasHorizontalScrollbar()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:34</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="hasRowFeatures"></a>
+                        <span class="name"><b>hasRowFeatures</b><a href="#hasRowFeatures"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>hasRowFeatures()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:38</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="hasVerticalScrollbar"></a>
+                        <span class="name"><b>hasVerticalScrollbar</b><a href="#hasVerticalScrollbar"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>hasVerticalScrollbar()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:42</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="gridDataset"></a>
+                        <span class="name"><b>gridDataset</b><a href="#gridDataset"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>gridDataset()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:46</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pinnedColumns"></a>
+                        <span class="name"><b>pinnedColumns</b><a href="#pinnedColumns"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>pinnedColumns()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:50</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="gridOptions"></a>
+                        <span class="name"><b>gridOptions</b><a href="#gridOptions"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>gridOptions()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">projects/ngx-cerious-widgets/src/lib/cerious-widgets/grid/components/grid-filler-row/grid-filler-row.component.ts:54</a></div>
                                 </td>
                             </tr>
 
@@ -609,84 +725,104 @@ otherwise <code>false</code>.</p>
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ContentChild, ElementRef, Inject, Input, TemplateRef, ViewEncapsulation } from &#x27;@angular/core&#x27;;
-import { IGridHeaderColumnComponent } from &#x27;../../interfaces/component-interfaces/grid-header-column.interface&#x27;;
-import { GridRow } from &#x27;../../models/grid-row&#x27;;
-import { ColumnDef } from &#x27;../../interfaces/column-def&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from &#x27;@angular/core&#x27;;
+import { GridFillerRowColumnComponent } from &#x27;../grid-filler-row-column/grid-filler-row-column.component&#x27;;
+import { GridFillerRowFeatureColumnComponent } from &#x27;../grid-filler-row-feature-column/grid-filler-row-feature-column.component&#x27;;
 import { GRID_SERVICE } from &#x27;../../tokens/grid-service.token&#x27;;
 import { GRID_COLUMN_SERVICE } from &#x27;../../tokens/grid-column-service.token&#x27;;
-import { IGridService } from &#x27;../../interfaces/service-interfaces/grid.interface&#x27;;
-import { IGridColumnService } from &#x27;../../interfaces/service-interfaces/grid-column.interface&#x27;;
+import {
+  ColumnDef,
+  IGridColumnService,
+  IGridFillerRowColumnComponent,
+  IGridFillerRowComponent,
+  IGridFillerRowFeatureColumnComponent,
+  IGridService } from &#x27;../../interfaces&#x27;;
+import { GridRow } from &#x27;../../models&#x27;;
 
 @Component({
-  selector: &#x27;cw-grid-header-column&#x27;,
-  templateUrl: &#x27;./grid-header-column.component.html&#x27;,
-    encapsulation: ViewEncapsulation.None
+  selector: &#x27;cw-grid-filler-row&#x27;,
+  templateUrl: &#x27;./grid-filler-row.component.html&#x27;,
+  encapsulation: ViewEncapsulation.None
 })
-export class GridHeaderColumnComponent implements IGridHeaderColumnComponent {
+export class GridFillerRowComponent implements IGridFillerRowComponent {
 
-  @Input() column!: ColumnDef;
   @Input() gridRow!: GridRow;
 
-  @ContentChild(&quot;cellTemplate&quot;) cellTemplate!: TemplateRef&lt;any&gt;;
+  @ViewChildren(GridFillerRowColumnComponent) columnComponents!: QueryList&lt;IGridFillerRowColumnComponent&gt;;
+  @ViewChild(GridFillerRowFeatureColumnComponent) featureColumnComponent!: IGridFillerRowFeatureColumnComponent;
 
-  cellTemplates: any &#x3D; {};
+  get featureColumnWidth() {
+    return this.gridColumnService.getFeatureColumnWidth(
+      this.gridService.getFeatureCount(),
+      this.gridService.gridOptions
+    );
+  }
 
-  get templates() {
-    return this.gridService.templates;
+  get hasHorizontalScrollbar() {
+    return this.gridService.hasHorizontalScrollbar;
+  }
+
+  get hasRowFeatures() {
+    return this.gridService.getFeatureCount() &gt; 0;
+  }
+
+  get hasVerticalScrollbar() {
+    return this.gridService.hasVerticalScrollbar;
+  }
+
+  get gridDataset() {
+    return this.gridService.gridDataset;
+  }
+
+  get pinnedColumns() {
+    return this.gridService.pinnedColumns;
+  }
+
+  get gridOptions() {
+    return this.gridService.gridOptions;
   }
 
   constructor(
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) {}
+  ) { }
 
   /**
-   * Retrieves the width of the grid header column.
-   * If a cell template is defined, the width is set to &#x27;100%&#x27;.
-   * Otherwise, it calculates the width based on the column configuration
-   * and grid options provided by the grid services.
+   * Retrieves the width of a specified column as a string.
    *
-   * @returns {string} The width of the grid header column as a string.
+   * @param column - The column definition object for which the width is to be determined.
+   * @returns The width of the column as a string, typically in a CSS-compatible format (e.g., &#x27;100px&#x27;, &#x27;20%&#x27;).
    */
-  getWidth(): string {
-    return this.cellTemplate ? &#x27;100%&#x27; : this.gridColumnService.getColumnWidth(this.column, this.gridService.gridOptions);
+  getColumnWidth(column: ColumnDef): string {
+    return this.gridColumnService.getColumnWidth(column, this.gridService.gridOptions);
   }
 
-  /**
-   * Determines whether the menu should be displayed for the current column.
-   * 
-   * @returns &#x60;true&#x60; if the column does not have a parent (indicating it is a top-level column),
-   *          otherwise &#x60;false&#x60;.
-   */
-  shouldShowMenu(): boolean {
-    return !(this.column.parent);
-  }
 }
 </code></pre>
     </div>
 
     <div class="tab-pane fade " id="templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;text-nowrap column-container&quot; 
-     role&#x3D;&quot;columnheader&quot; 
-     [style.width]&#x3D;&quot;getWidth()&quot; 
-     [attr.data-column-id]&#x3D;&quot;column.id&quot;
-     (mouseover)&#x3D;&quot;$event.stopPropagation()&quot;&gt;
-    &lt;div class&#x3D;&quot;column-content&quot;&gt;
-        &lt;ng-container *ngIf&#x3D;&quot;column.headerCellTemplate &amp;&amp; templates[column.headerCellTemplate]&quot;
-                    [ngTemplateOutlet]&#x3D;&quot;templates[column.headerCellTemplate]&quot;
-                    [ngTemplateOutletContext]&#x3D;&quot;{column: column}&quot;&gt;
-        &lt;/ng-container&gt;
-        &lt;div *ngIf&#x3D;&quot;!column.headerCellTemplate || !templates[column.headerCellTemplate]&quot;&gt;
-            {{column.label}}
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;ng-container *ngIf&#x3D;&quot;cellTemplates&quot; 
-                  [ngTemplateOutlet]&#x3D;&quot;cellTemplate&quot;
-                  [ngTemplateOutletContext]&#x3D;&quot;{column: column, row: gridRow}&quot;&gt;
+        <pre class="line-numbers"><code class="language-html">&lt;ng-container *ngIf&#x3D;&quot;hasRowFeatures&quot;&gt;
+    &lt;cw-grid-filler-row-feature-column class&#x3D;&quot;table-col table-col-pinned&quot;
+                                [class]&#x3D;&quot;{&#x27;last-pinned&#x27;: (pinnedColumns?.length || 0) &#x3D;&#x3D;&#x3D; 0}&quot;
+                                style&#x3D;&quot;padding-top:0; padding-bottom:0; overflow: hidden&quot;
+                                [style.width]&#x3D;&quot;featureColumnWidth&quot;&gt;
+    &lt;/cw-grid-filler-row-feature-column&gt;
+&lt;/ng-container&gt;
+&lt;ng-container *ngFor&#x3D;&quot;let column of gridRow.columnDefs&quot;&gt;
+    &lt;ng-container *ngIf&#x3D;&quot;column.visible !&#x3D;&#x3D; false&quot;&gt;
+        &lt;cw-grid-filler-row-column class&#x3D;&quot;table-col&quot;
+                                   [class]&#x3D;&quot;{&#x27;table-col-pinned&#x27;: column?.pinned, &#x27;last-pinned&#x27;: column?.lastPinned}&quot;
+                                   [gridRow]&#x3D;&quot;gridRow&quot;
+                                   [column]&#x3D;&quot;column&quot;
+                                   style&#x3D;&quot;padding-top:0; padding-bottom:0; overflow: hidden;&quot;
+                                   [style]&#x3D;&quot;{&#x27;width&#x27;: getColumnWidth(column)}&quot;&gt;
+        &lt;/cw-grid-filler-row-column&gt;
     &lt;/ng-container&gt;
-&lt;cw-grid-column-sizer [column]&#x3D;&quot;column&quot;&gt;&lt;/cw-grid-column-sizer&gt;</code></pre>
+&lt;/ng-container&gt;
+&lt;div *ngIf&#x3D;&quot;!(gridDataset.dataset?.length)&quot; class&#x3D;&quot;table-col&quot; style&#x3D;&quot;position: absolute; z-index: 1&quot;&gt;&lt;/div&gt;
+&lt;div *ngIf&#x3D;&quot;!hasHorizontalScrollbar || hasVerticalScrollbar&quot; class&#x3D;&quot;table-col  padding-col&quot; style&#x3D;&quot;margin:0; padding:0;&quot;&gt;&amp;nbsp;&lt;/div&gt;</code></pre>
     </div>
 
 
@@ -715,10 +851,10 @@ export class GridHeaderColumnComponent implements IGridHeaderColumnComponent {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="text-nowrap column-container"      role="columnheader"      [style.width]="getWidth()"      [attr.data-column-id]="column.id"     (mouseover)="$event.stopPropagation()">    <div class="column-content">        <ng-container *ngIf="column.headerCellTemplate && templates[column.headerCellTemplate]"                    [ngTemplateOutlet]="templates[column.headerCellTemplate]"                    [ngTemplateOutletContext]="{column: column}">        </ng-container>        <div *ngIf="!column.headerCellTemplate || !templates[column.headerCellTemplate]">            {{column.label}}        </div>    </div>    <ng-container *ngIf="cellTemplates"                   [ngTemplateOutlet]="cellTemplate"                  [ngTemplateOutletContext]="{column: column, row: gridRow}">    </ng-container><cw-grid-column-sizer [column]="column"></cw-grid-column-sizer></div>'
+        var COMPONENT_TEMPLATE = '<div><ng-container *ngIf="hasRowFeatures">    <cw-grid-filler-row-feature-column class="table-col table-col-pinned"                                [class]="{\'last-pinned\': (pinnedColumns?.length || 0) === 0}"                                style="padding-top:0; padding-bottom:0; overflow: hidden"                                [style.width]="featureColumnWidth">    </cw-grid-filler-row-feature-column></ng-container><ng-container *ngFor="let column of gridRow.columnDefs">    <ng-container *ngIf="column.visible !== false">        <cw-grid-filler-row-column class="table-col"                                   [class]="{\'table-col-pinned\': column?.pinned, \'last-pinned\': column?.lastPinned}"                                   [gridRow]="gridRow"                                   [column]="column"                                   style="padding-top:0; padding-bottom:0; overflow: hidden;"                                   [style]="{\'width\': getColumnWidth(column)}">        </cw-grid-filler-row-column>    </ng-container></ng-container><div *ngIf="!(gridDataset.dataset?.length)" class="table-col" style="position: absolute; z-index: 1"></div><div *ngIf="!hasHorizontalScrollbar || hasVerticalScrollbar" class="table-col  padding-col" style="margin:0; padding:0;">&nbsp;</div></div>'
     var COMPONENTS = [{'name': 'GridBodyComponent', 'selector': 'cw-grid-body'},{'name': 'GridColumnSizerComponent', 'selector': 'cw-grid-column-sizer'},{'name': 'GridComponent', 'selector': 'cw-grid'},{'name': 'GridFillerRowColumnComponent', 'selector': 'cw-grid-filler-row-column'},{'name': 'GridFillerRowComponent', 'selector': 'cw-grid-filler-row'},{'name': 'GridFillerRowFeatureColumnComponent', 'selector': 'cw-grid-filler-row-feature-column'},{'name': 'GridFooterColumnComponent', 'selector': 'cw-grid-footer-column'},{'name': 'GridFooterComponent', 'selector': 'cw-grid-footer'},{'name': 'GridFooterFeatureColumnComponent', 'selector': 'cw-grid-footer-feature-column'},{'name': 'GridFooterRowComponent', 'selector': 'cw-grid-footer-row'},{'name': 'GridHeaderColumnComponent', 'selector': 'cw-grid-header-column'},{'name': 'GridHeaderComponent', 'selector': 'cw-grid-header'},{'name': 'GridHeaderFeatureColumnComponent', 'selector': 'cw-grid-header-feature-column'},{'name': 'GridHeaderRowComponent', 'selector': 'cw-grid-header-row'},{'name': 'GridMenuBarComponent', 'selector': 'cw-grid-menu-bar'},{'name': 'GridNestedRowColumnComponent', 'selector': 'cw-nested-row-column'},{'name': 'GridNestedRowComponent', 'selector': 'cw-nested-row'},{'name': 'GridPagerComponent', 'selector': 'cw-grid-pager'},{'name': 'GridRowColumnComponent', 'selector': 'cw-grid-row-column'},{'name': 'GridRowComponent', 'selector': 'cw-grid-row'},{'name': 'GridRowFeatureColumnComponent', 'selector': 'cw-grid-row-feature-column'},{'name': 'GridScrollerComponent', 'selector': 'cw-grid-scroller'}];
     var DIRECTIVES = [{'name': 'TemplateRegistrarDirective', 'selector': '[cwTemplate]'}];
-    var ACTUAL_COMPONENT = {'name': 'GridHeaderColumnComponent'};
+    var ACTUAL_COMPONENT = {'name': 'GridFillerRowComponent'};
 </script>
 <script src="../js/tree.js"></script>
 
@@ -764,7 +900,7 @@ export class GridHeaderColumnComponent implements IGridHeaderColumnComponent {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
-            var COMPODOC_CURRENT_PAGE_URL = 'GridHeaderColumnComponent.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'GridFillerRowComponent.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
