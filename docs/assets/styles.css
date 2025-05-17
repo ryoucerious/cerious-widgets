@@ -44,3 +44,97 @@ footer {
   padding: 1rem;
   background: #f1f1f1;
 }
+
+/* Make code blocks look like bash scripts with a modern style */
+pre code.language-bash {
+  display: block;
+  background: #181c23;
+  color: #e3e8ee;
+  border-radius: 8px;
+  padding: 18px 20px;
+  font-family: 'Fira Mono', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+  font-size: 1em;
+  line-height: 1.6;
+  border: 1px solid #232a36;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+  position: relative;
+  overflow-x: auto;
+}
+
+/* Optional: Add a bash prompt symbol for visual effect */
+pre code.language-bash::before {
+  content: "$ ";
+  color: #42e695;
+  font-weight: bold;
+  position: absolute;
+  left: 18px;
+  top: 16px;
+  pointer-events: none;
+}
+
+/* Remove the prompt for lines that are not the first (optional, advanced) */
+pre code.language-bash {
+  counter-reset: bashline;
+}
+pre code.language-bash span {
+  display: block;
+  padding-left: 2ch;
+}
+pre code.language-bash span::before {
+  counter-increment: bashline;
+  content: counter(bashline) == 1 ? "$ " : "  ";
+  color: #42e695;
+  font-weight: bold;
+  position: absolute;
+  left: 18px;
+}
+
+/* Scrollbar styling for code blocks */
+pre code.language-bash::-webkit-scrollbar {
+  height: 8px;
+  background: #232a36;
+  border-radius: 4px;
+}
+pre code.language-bash::-webkit-scrollbar-thumb {
+  background: #6366f1;
+  border-radius: 4px;
+}
+
+/* Make code blocks look like CSS with a modern style */
+pre code.language-css {
+  display: block;
+  background: #181c23;
+  color: #fcd34d;
+  border-radius: 8px;
+  padding: 18px 20px;
+  font-family: 'Fira Mono', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+  font-size: 1em;
+  line-height: 1.6;
+  border: 1px solid #232a36;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+  position: relative;
+  overflow-x: auto;
+}
+
+/* Optional: Add a CSS curly brace symbol for visual effect */
+pre code.language-css::before {
+  content: "/* css */";
+  color: #f59e1b;
+  font-weight: bold;
+  position: absolute;
+  left: 18px;
+  top: 10px;
+  font-size: 0.95em;
+  pointer-events: none;
+}
+
+/* Scrollbar styling for code blocks */
+pre code.language-css::-webkit-scrollbar {
+  height: 8px;
+  background: #232a36;
+  border-radius: 4px;
+}
+pre code.language-css::-webkit-scrollbar-thumb {
+  background: #f59e1b;
+  border-radius: 4px;
+}
