@@ -27,7 +27,7 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
 
   private subscriptions: Array<Subscription> = [];
   private rowHeight = 30;
-  private buffer = 5;
+  private buffer = 10;
   private resizeObservers: ResizeObserver[] = [];
   private flattenedRows: any[] = [];
 
@@ -120,7 +120,6 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
         this.flattenData();
         this.calculateTotalHeight();
         this.updateVisibleRows();
-        this.updateOffsets();
       });
     } catch (error) {
       console.error('Error in ngAfterViewInit in GridBodyComponent:', error);
@@ -426,103 +425,23 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
    * @param e <WheelEvent> - the event triggered by scrolling with a mouse wheel or trackpad
    */
   wheelGrid = (e: WheelEvent) => {
-    e.preventDefault();
-  
-    const bodyElement = this.tableBody.nativeElement;
-    const rect = bodyElement.getBoundingClientRect();
-    const maxTop = Math.max(bodyElement.scrollHeight - rect.height, 0);
-    const maxLeft = Math.max(bodyElement.scrollWidth - rect.width, 0);
-  
-    let scrollDelta = this.scrollDelta;
-  
-    // Update top position
-    scrollDelta.top = Math.min(Math.max((scrollDelta.top || 0) + e.deltaY, 0), maxTop);
-  
-    // Update left position
-    if (bodyElement.scrollHeight > rect.height) {
-      scrollDelta.left = Math.min(Math.max((scrollDelta.left || 0) + e.deltaX, 0), maxLeft + this.gridService.scrollbarWidth);
-    } else {
-      scrollDelta.left = Math.min(Math.max((scrollDelta.left || 0) + e.deltaX, 0), maxLeft);
+    // Only handle horizontal scroll (deltaX)
+    if (Math.abs(e.deltaX) > 0 && Math.abs(e.deltaY) > 0) {
+      const el = this.tableBody.nativeElement;
+      el.scrollLeft += e.deltaX;
+      el.scrollTop += e.deltaY;
+      // Optionally prevent default to avoid browser bounce
+      e.preventDefault();
     }
-  
-    this.gridScrollService.scrollGrid(
-      e,
-      scrollDelta,
-      this.gridService.gridOptions,
-      this.gridService.gridHeader,
-      this.gridService.gridBody,
-      this.gridService.gridScroller,
-      this.gridService.gridFooter,
-      this.gridService.hasVerticalScrollbar,
-      this.gridService.scrollbarWidth
-    );
   }
   
   private calculateTotalHeight(): void {
-    try {
-      const bodyElement = this.tableBody.nativeElement;
-      const previousTotalHeight = this.totalHeight;
-
-      this.totalHeight = 0;
-
-      const traverseGroups = (groups: any[], depth: number): void => {
-        for (const group of groups) {
-          // Add group header height
-          const groupHeaderHeight = this.rowHeights.get(`group-${group.key}`) || 30; // Use dynamic height or fallback
-          this.totalHeight += groupHeaderHeight;
-
-          // If the group is expanded, process its rows or subgroups
-          if (this.expandedGroups[group.key]) {
-            if (group.rows[0]?.key) {
-              // Subgroups exist, traverse them
-              traverseGroups(group.rows, depth + 1);
-            } else {
-              // Add heights of rows in the group
-              for (const row of group.rows) {
-                const rowHeight = this.rowHeights.get(row.id) || 30; // Use dynamic height or fallback
-                this.totalHeight += rowHeight;
-
-                // Add nested row height if expanded
-                if (row.nestedExpanded) {
-                  this.totalHeight += this.rowHeights.get(`nested-${row.id}`) || 30; // Use dynamic height or fallback
-                }
-              }
-            }
-          }
-        }
-      };
-
-      // Start traversing the group hierarchy
-      if (this.gridDataset.groupByData?.length) {
-        traverseGroups(this.gridDataset.groupByData, 1);
-      } else {
-        if (!this.rows) {
-          return;
-        }
-
-        // If no groups, process flat rows
-        for (const row of this.rows) {
-          const rowHeight = this.rowHeights.get(row.id) || 30; // Use dynamic height or fallback
-          this.totalHeight += rowHeight;
-
-          // Add nested row height if expanded
-          if (row.nestedExpanded) {
-            this.totalHeight += this.rowHeights.get(`nested-${row.id}`) || 30; // Use dynamic height or fallback
-          }
-        }
-      }
-
-      // Adjust scrollTop proportionally if totalHeight changes
-      if (previousTotalHeight > 0 && this.totalHeight !== previousTotalHeight) {
-        const scrollTop = bodyElement.scrollTop;
-        const scrollRatio = scrollTop / previousTotalHeight;
-        bodyElement.scrollTop = scrollRatio * this.totalHeight;
-      }
-
-      // Update the top and bottom offsets
-      this.updateOffsets();
-    } catch (error) {
-      console.error('Error calculating total height:', error);
+    this.totalHeight = 0;
+    for (const row of this.flattenedRows) {
+      const rowHeight = row.isGroup
+        ? this.rowHeights.get(`group-${row.key}`) || 30
+        : this.rowHeights.get(row.id) || 30;
+      this.totalHeight += rowHeight;
     }
   }
 
@@ -604,98 +523,67 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
     this.flattenColumnsForRows();
   }
 
-  private updateOffsets(): void {
-    try {
-      let topOffsetValue = 0;
-      let bottomOffsetValue = 0;
+  private updateVisibleRows(): void {
+    this.zone.runOutsideAngular(() => {
+      const bodyElement = this.tableBody.nativeElement;
+      const scrollTop = bodyElement.scrollTop;
+      const viewportHeight = bodyElement.clientHeight;
 
-      // Calculate top offset
-      for (let i = 0; i < this.startIndex; i++) {
+      // Find first visible row
+      let top = 0;
+      let first = 0;
+      for (; first < this.flattenedRows.length; first++) {
+        const row = this.flattenedRows[first];
+        const rowHeight = row.isGroup
+          ? this.rowHeights.get(`group-${row.key}`) || 30
+          : this.rowHeights.get(row.id) || 30;
+        if (top + rowHeight > scrollTop) break;
+        top += rowHeight;
+      }
+
+      // Find last visible row
+      let bottom = top;
+      let last = first;
+      for (; last < this.flattenedRows.length; last++) {
+        const row = this.flattenedRows[last];
+        const rowHeight = row.isGroup
+          ? this.rowHeights.get(`group-${row.key}`) || 30
+          : this.rowHeights.get(row.id) || 30;
+        bottom += rowHeight;
+        if (bottom >= scrollTop + viewportHeight) break;
+      }
+
+      // Add buffer
+      let start = Math.max(0, first - this.buffer);
+      let end = last + this.buffer + 1;
+      if (end >= this.flattenedRows.length) {
+        end = this.flattenedRows.length;
+        start = Math.max(0, end - (last - first + 1) - this.buffer * 2);
+      }
+      this.startIndex = start;
+      this.endIndex = end;
+      this.visibleRows = this.flattenedRows.slice(start, end);
+
+      // Calculate offsets
+      let topOffsetValue = 0;
+      for (let i = 0; i < start; i++) {
         const row = this.flattenedRows[i];
         const rowHeight = row.isGroup
-          ? this.rowHeights.get(`group-${row.key}`) || 30 // Group header height
-          : this.rowHeights.get(row.id) || 30; // Row height
-
+          ? this.rowHeights.get(`group-${row.key}`) || 30
+          : this.rowHeights.get(row.id) || 30;
         topOffsetValue += rowHeight;
       }
+      this.topOffset = `${topOffsetValue}px`;
 
-      // Calculate bottom offset
-      for (let i = this.endIndex; i < this.flattenedRows.length; i++) {
+      let bottomOffsetValue = 0;
+      for (let i = end; i < this.flattenedRows.length; i++) {
         const row = this.flattenedRows[i];
         const rowHeight = row.isGroup
-          ? this.rowHeights.get(`group-${row.key}`) || 30 // Group header height
-          : this.rowHeights.get(row.id) || 30; // Row height
-
+          ? this.rowHeights.get(`group-${row.key}`) || 30
+          : this.rowHeights.get(row.id) || 30;
         bottomOffsetValue += rowHeight;
       }
-
-      // Update the class properties
-      this.topOffset = `${topOffsetValue}px`;
       this.bottomOffset = `${bottomOffsetValue}px`;
-    } catch (error) {
-      console.error('Error updating offsets:', error);
-      this.topOffset = '0px';
-      this.bottomOffset = '0px';
-    }
-  }
-
-  private updateVisibleRows(): void {
-    try {
-      this.zone.runOutsideAngular(() => {
-        const bodyElement = this.tableBody.nativeElement;
-        const scrollTop = bodyElement.scrollTop;
-        const viewportHeight = bodyElement.clientHeight;
-
-        let accumulatedHeight = 0;
-        let firstVisibleRowIndex = -1;
-
-        // Find the first visible row index
-        for (let i = 0; i < this.flattenedRows.length; i++) {
-          const row = this.flattenedRows[i];
-          const rowHeight = row.isGroup
-            ? this.rowHeights.get(`group-${row.key}`) || 30 // Group header height
-            : this.rowHeights.get(row.id) || 30; // Row height
-
-          if (accumulatedHeight + rowHeight >= scrollTop && firstVisibleRowIndex === -1) {
-            firstVisibleRowIndex = i; // Set the first visible row index
-          }
-
-          if (accumulatedHeight >= scrollTop + viewportHeight) {
-            break; // Stop processing once the viewport is filled
-          }
-
-          accumulatedHeight += rowHeight;
-        }
-
-        // Calculate startIndex and endIndex with buffer
-        this.startIndex = Math.max(0, firstVisibleRowIndex - this.buffer);
-
-        let dynamicHeight = 0;
-        this.endIndex = this.startIndex;
-        while (
-          this.endIndex < this.flattenedRows.length &&
-          dynamicHeight < viewportHeight + this.buffer * this.rowHeight
-        ) {
-          const row = this.flattenedRows[this.endIndex];
-          const rowHeight = row.isGroup
-            ? this.rowHeights.get(`group-${row.key}`) || this.rowHeight // Group header height
-            : this.rowHeights.get(row.id) || this.rowHeight; // Row height
-
-          dynamicHeight += rowHeight;
-          this.endIndex++;
-        }
-
-        // Ensure the endIndex does not exceed the length of flattenedRows
-        this.endIndex = Math.min(this.endIndex + this.buffer, this.flattenedRows.length);
-
-        // Slice the visible rows with the buffer
-        this.visibleRows = this.flattenedRows.slice(this.startIndex, this.endIndex);
-
-        // Update the top and bottom offsets
-        this.updateOffsets();
-      });
-    } catch (error) {
-      console.error('Error updating visible rows:', error);
-    }
+    });
   }
 }

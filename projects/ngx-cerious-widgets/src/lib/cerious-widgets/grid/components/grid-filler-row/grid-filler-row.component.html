@@ -16,7 +16,5 @@
         </cw-grid-filler-row-column>
     </ng-container>
 </ng-container>
-<div *ngIf="!(gridDataset.dataset?.length)" class="table-col" style="position: absolute; z-index: 1">
-    {{gridOptions.noDataMessage}}
-</div>
+<div *ngIf="!(gridDataset.dataset?.length)" class="table-col" style="position: absolute; z-index: 1"></div>
 <div *ngIf="!hasHorizontalScrollbar || hasVerticalScrollbar" class="table-col  padding-col" style="margin:0; padding:0;">&nbsp;</div>
