@@ -56,20 +56,6 @@ describe('GridHeaderColumnComponent', () => {
     });
   });
 
-  describe('shouldShowMenu', () => {
-    it('should return true if column has no parent', () => {
-      component.column = { id: 'test-column', parent: null } as any;
-      const result = component.shouldShowMenu();
-      expect(result).toBeTrue();
-    });
-
-    it('should return false if column has a parent', () => {
-      component.column = { id: 'test-column', parent: {} } as ColumnDef;
-      const result = component.shouldShowMenu();
-      expect(result).toBeFalse();
-    });
-  });
-
   describe('templates getter', () => {
     it('should return templates from gridService', () => {
       mockGridService.templates = { testTemplate: {} } as any;

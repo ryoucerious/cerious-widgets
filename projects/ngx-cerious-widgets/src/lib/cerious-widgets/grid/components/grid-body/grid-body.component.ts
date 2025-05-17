@@ -473,6 +473,9 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
   }
 
   private flattenData(): void {
+    // Preserve left scroll position
+    const scrollLeft = this.tableBody.nativeElement.scrollLeft;
+
     this.flattenedRows = [];
 
     const traverseGroups = (groups: any[], depth: number): void => {
@@ -521,6 +524,13 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
 
     // Flatten columns for all rows
     this.flattenColumnsForRows();
+
+    // Reset left scroll position
+    setTimeout(() => {
+      setTimeout(() => {
+        this.tableBody.nativeElement.scrollLeft = scrollLeft;
+      });
+    });
   }
 
   private updateVisibleRows(): void {

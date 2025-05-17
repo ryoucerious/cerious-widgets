@@ -196,7 +196,6 @@ export class GridService implements IGridService {
     // Update the grid with the filtered dataset
     this.dataset = this.filteredDataset;
     this.processDataset();
-    this.render();
 
     // Scroll to the top of the grid
     const scrollDelta = this.gridScrollService.scrollDelta;
@@ -466,38 +465,11 @@ export class GridService implements IGridService {
         this.processPageData();
         this.resize();
         this.afterRender.next(true);
-
-        // let delta = this.gridScrollService.scrollDelta;
-
-        // delta.top += 1;
-
-        // this.gridColumnService.updatePinnedColumnPos(
-        //   this.gridHeader,
-        //   this.gridBody,
-        //   this.gridFooter,
-        //   this.gridOptions,
-        //   delta
-        // );
-
-        // setTimeout(() => {
-        //   delta = this.gridScrollService.scrollDelta;
-
-        //   delta.top -= 1;
-
-        //   this.gridColumnService.updatePinnedColumnPos(
-        //     this.gridHeader,
-        //     this.gridBody,
-        //     this.gridFooter,
-        //     this.gridOptions,
-        //     delta
-        //   );
-        // });
       }
     } catch (error) {
       console.error('Error rendering grid:', error);
     }
   }
-
   
   /**
    * Resizes the grid by updating its dimensions and scrollbars.
@@ -940,7 +912,6 @@ export class GridService implements IGridService {
    */
   updateToggledPinnedCols() {
     this.processDataset();
-    this.render();
   }
 
   /**
@@ -990,7 +961,6 @@ export class GridService implements IGridService {
         this.gridOptions.columnDefs = columnDefs;
         this.gridColumnService.processGridDefs(this.gridOptions, this.gridDataset);
         this.processDataset();
-        this.render();
 
         this.grid.changeDetector.detectChanges();
         this.afterSetColumnDefs.next(this.gridOptions.columnDefs);
@@ -1414,7 +1384,6 @@ export class GridService implements IGridService {
     this.filteredDataset = [...this.originalDataset];
     this.sortedDataset = [...this.originalDataset];
     this.processDataset();
-    this.render();
     this.resetGridScroll();
   }
 
@@ -1435,7 +1404,6 @@ export class GridService implements IGridService {
     this.filteredDataset = this.applyFilter(filterState, this.sortedDataset);
     this.dataset = this.filteredDataset;
     this.processDataset();
-    this.render();
     this.resetGridScroll();
   }
 

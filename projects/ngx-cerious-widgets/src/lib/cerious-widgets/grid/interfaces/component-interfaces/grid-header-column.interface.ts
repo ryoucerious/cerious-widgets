@@ -10,5 +10,4 @@ export interface IGridHeaderColumnComponent {
   cellTemplate: TemplateRef<any>;
   cellTemplates: any;
   getWidth(): string;
-  shouldShowMenu(): boolean;
 }

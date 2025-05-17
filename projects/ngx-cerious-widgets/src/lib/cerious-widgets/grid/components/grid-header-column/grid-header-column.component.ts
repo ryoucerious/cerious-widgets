@@ -42,14 +42,4 @@ export class GridHeaderColumnComponent implements IGridHeaderColumnComponent {
   getWidth(): string {
     return this.cellTemplate ? '100%' : this.gridColumnService.getColumnWidth(this.column, this.gridService.gridOptions);
   }
-
-  /**
-   * Determines whether the menu should be displayed for the current column.
-   * 
-   * @returns `true` if the column does not have a parent (indicating it is a top-level column),
-   *          otherwise `false`.
-   */
-  shouldShowMenu(): boolean {
-    return !(this.column.parent);
-  }
 }

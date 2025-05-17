@@ -10,7 +10,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test ngx-cerious-widgets",
     "lint": "ng lint"
   },
   "private": false,
