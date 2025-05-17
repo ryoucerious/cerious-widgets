@@ -92,21 +92,24 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
       this.subscriptions.push(this.gridScrollService.afterScroll.subscribe(() => {
         this.calculateTotalHeight();
         this.updateVisibleRows();
+        setTimeout(() => this.measureRowHeightsAndCorrect());
       }));
       this.subscriptions.push(this.gridService.afterResize.subscribe(() => {
         this.calculateTotalHeight();
         this.updateVisibleRows();
-        
+        setTimeout(() => this.measureRowHeightsAndCorrect());
       }));
       this.subscriptions.push(this.gridService.afterGroupBy.subscribe(() => {
         setTimeout(() => {
           this.flattenData();
           this.calculateTotalHeight();
           this.updateVisibleRows();
+          setTimeout(() => this.measureRowHeightsAndCorrect());
         });
       }));
       this.subscriptions.push(this.gridService.afterRender.subscribe(() => {
         this.flattenData();
+        setTimeout(() => this.measureRowHeightsAndCorrect());
       }));
     } catch (error) {
       console.error('Error during initialization in GridBodyComponent:', error);
@@ -120,6 +123,7 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
         this.flattenData();
         this.calculateTotalHeight();
         this.updateVisibleRows();
+        this.measureRowHeightsAndCorrect();
       });
     } catch (error) {
       console.error('Error in ngAfterViewInit in GridBodyComponent:', error);
@@ -531,6 +535,28 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
         this.tableBody.nativeElement.scrollLeft = scrollLeft;
       });
     });
+  }
+
+  private measureRowHeightsAndCorrect(): void {
+    let changed = false;
+    this.rowComponents.forEach((rowComp, idx) => {
+      const el = rowComp.el?.nativeElement;
+      if (el) {
+        const height = el.getBoundingClientRect().height;
+        const key = this.visibleRows[idx]?.id ?? (this.startIndex + idx);
+        if (this.rowHeights.get(key) !== height) {
+          this.rowHeights.set(key, height);
+          changed = true;
+        }
+      }
+    });
+
+    if (changed) {
+      // If any height changed, recalculate and re-measure after next render
+      this.calculateTotalHeight();
+      this.updateVisibleRows();
+      setTimeout(() => this.measureRowHeightsAndCorrect());
+    }
   }
 
   private updateVisibleRows(): void {
