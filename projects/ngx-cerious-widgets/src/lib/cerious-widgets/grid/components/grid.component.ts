@@ -77,6 +77,10 @@ export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy
     this.pluginInstances = (this.config?.plugins || []).map(pluginType => 
       this.injector.get(pluginType)
     );
+
+    if (this.config && !this.pluginOptions) {
+      this.pluginOptions = this.config.pluginOptions || {};
+    }
   }
 
   ngAfterViewInit(): void {

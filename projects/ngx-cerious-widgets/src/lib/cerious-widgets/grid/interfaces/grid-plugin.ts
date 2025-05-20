@@ -1,3 +1,4 @@
+import { PluginConfig } from "../../shared/interfaces/plugin-config.interface";
 import { GridApi } from "./grid-api";
 
 /**
@@ -8,9 +9,9 @@ export interface GridPlugin {
     /**
      * Called when the grid is initialized.
      * @param grid - The GridApi instance for interacting with the grid.
-     * @param context - Optional context data for the plugin.
+     * @param config - Optional config data for the plugin.
      */
-    onInit(grid: GridApi, context?: any): void;
+    onInit(grid: GridApi, config?: PluginConfig): void;
 
     /**
      * Optional hook called after the grid has been initialized.

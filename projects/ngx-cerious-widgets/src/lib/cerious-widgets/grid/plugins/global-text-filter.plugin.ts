@@ -2,6 +2,8 @@ import { ElementRef, Injectable, Renderer2, RendererFactory2 } from "@angular/co
 import { GridApi } from "../interfaces/grid-api";
 import { GridPlugin } from "../interfaces/grid-plugin";
 import { FilterState } from "../interfaces/filter-state";
+import { PluginOptions } from "../interfaces";
+import { PluginConfig } from "../../shared/interfaces/plugin-config.interface";
 
 @Injectable()
 export class GlobalTextFilterPlugin implements GridPlugin {
@@ -9,6 +11,7 @@ export class GlobalTextFilterPlugin implements GridPlugin {
     private gridApi!: GridApi;
     private renderer: Renderer2;
     private pluginBar: ElementRef | null = null;
+    private pluginOptions: PluginOptions | PluginConfig = {};
 
     constructor(rendererFactory: RendererFactory2) {
         this.renderer = rendererFactory.createRenderer(null, null);
@@ -31,12 +34,14 @@ export class GlobalTextFilterPlugin implements GridPlugin {
      * - Applies the filter to the grid using the `applyFilter` method of the GridApi.
      * - Appends the input element to the plugin bar for user interaction.
      */
-    onInit(api: GridApi): void {
+    onInit(api: GridApi, config?: PluginOptions): void {
         this.gridApi = api;
 
-        // Check if the pluginOptions include `enableGlobalTextFilter`
         const pluginOptions = this.gridApi.getPluginOptions();
-        if (!pluginOptions?.['GlobalTextFilter']?.enableGlobalTextFilter) {
+        this.pluginOptions = config ?? pluginOptions['GlobalTextFilter'] ?? {};
+
+        // Check if the pluginOptions include `enableGlobalTextFilter`
+        if (!this.pluginOptions['enableGlobalTextFilter']) {
             return; // Do not add the input if `enableGlobalTextFilter` is not enabled
         }
 

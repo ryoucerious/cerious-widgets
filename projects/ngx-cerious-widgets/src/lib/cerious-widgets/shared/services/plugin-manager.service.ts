@@ -1,5 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { GridApi } from '../../grid/interfaces/grid-api';
+import { PluginConfig } from '../interfaces/plugin-config.interface';
 
 @Injectable({ providedIn: 'root' })
 export class PluginManagerService {
@@ -20,6 +21,7 @@ export class PluginManagerService {
    *
    * @param pluginKey - The unique key identifying the plugin to load.
    * @param gridApi - The Grid API instance to be passed to the plugin for initialization.
+   * @param config - Optional configuration object for the plugin.
    * @returns A promise that resolves when the plugin is successfully loaded and initialized.
    *
    * @remarks
@@ -31,7 +33,7 @@ export class PluginManagerService {
    *
    * @throws Will log an error to the console if the plugin with the specified key is not found.
    */
-  async loadPlugin(pluginKey: string, gridApi: GridApi): Promise<void> {
+  async loadPlugin(pluginKey: string, gridApi: GridApi, config?: PluginConfig): Promise<void> {
     // Wait for the grid API to be ready
     setTimeout(async () => {
       if (this.lazyPlugins[pluginKey]) {
@@ -44,7 +46,7 @@ export class PluginManagerService {
         });
 
         const pluginInstance = pluginInjector.get(PluginClass);
-        pluginInstance.onInit(gridApi); // Initialize the plugin with the grid API
+        pluginInstance.onInit(gridApi, config); // Initialize the plugin with the grid API
       } else {
         console.error(`Plugin with key "${pluginKey}" not found.`);
       }
@@ -59,6 +61,7 @@ export class PluginManagerService {
    * @param gridApi - The Grid API instance that will be passed to the plugin's `onInit` method.
    * @param args - Optional arguments to pass to the plugin's constructor if it is a class.
    *               Defaults to an empty array.
+   * @param config - Optional configuration object for the plugin.
    * 
    * @returns A promise that resolves once the plugin is loaded and initialized.
    * 
@@ -68,7 +71,7 @@ export class PluginManagerService {
    * - If the plugin has an `onInit` method, it will be called with the `gridApi` as an argument.
    * - The method uses a `setTimeout` to ensure the grid API is ready before initializing the plugin.
    */
-  async loadPluginWithArgs(pluginKey: string, gridApi: GridApi, args: any[] = []): Promise<void> {
+  async loadPluginWithArgs(pluginKey: string, gridApi: GridApi, args: any[] = [], config?: PluginConfig): Promise<void> {
     // Wait for the grid API to be ready
     setTimeout(async () => {
       const pluginExport = await this.lazyPlugins[pluginKey]();
@@ -80,7 +83,7 @@ export class PluginManagerService {
         ? new pluginExport(...args)
         : pluginExport; // Already an instance
   
-      pluginInstance.onInit?.(gridApi);
+      pluginInstance.onInit?.(gridApi, config);
     });
   }
 
@@ -95,14 +98,15 @@ export class PluginManagerService {
    *                   are either functions returning a promise resolving to the 
    *                   plugin or the plugin itself.
    * @param gridApi - The `GridApi` instance used to initialize the plugins.
+   * @param config - Optional configuration object for the plugins.
    * @returns A promise that resolves when all plugins have been registered and initialized.
    */
-  async registerPlugins(plugins: { [key: string]: () => Promise<any> | any }, gridApi: GridApi): Promise<void> {
+  async registerPlugins(plugins: { [key: string]: () => Promise<any> | any }, gridApi: GridApi, config?: PluginConfig): Promise<void> {
     this.lazyPlugins = { ...this.lazyPlugins, ...plugins };
 
     for (const key in plugins) {
       if (plugins.hasOwnProperty(key)) {
-        await this.loadPluginWithArgs(key, gridApi);
+        await this.loadPluginWithArgs(key, gridApi, [], config);
       }
     }
   }
