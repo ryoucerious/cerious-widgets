@@ -3,6 +3,8 @@ import { GridPlugin } from '../interfaces/grid-plugin';
 import { GridApi } from '../interfaces/grid-api';
 import { ColumnDef } from '../interfaces/column-def';
 import { TemplateRegistryService } from '../../shared/services/template-registry.service';
+import { PluginOptions } from '../interfaces';
+import { PluginConfig } from '../../shared/interfaces/plugin-config.interface';
 
 @Injectable()
 export class ColumnVisibilityPlugin implements GridPlugin {
@@ -10,6 +12,7 @@ export class ColumnVisibilityPlugin implements GridPlugin {
   private gridApi!: GridApi;
   private renderer: Renderer2;
   private menuElement: HTMLElement | null = null;
+  private pluginOptions: PluginOptions | PluginConfig = {};
 
   constructor(
     private templateRegistry: TemplateRegistryService,
@@ -23,6 +26,7 @@ export class ColumnVisibilityPlugin implements GridPlugin {
    * and appending it to the grid menu bar if the plugin options allow it.
    *
    * @param api - The GridApi instance used to interact with the grid.
+   * @param config - Optional configuration object for the plugin.
    *
    * The method performs the following steps:
    * 1. Checks if the `enableColumnVisibility` option is enabled in the plugin options.
@@ -33,14 +37,19 @@ export class ColumnVisibilityPlugin implements GridPlugin {
    * 3. Styles the button and adds a click event listener to open the column visibility menu.
    * 4. Appends the button to the grid menu bar and triggers a grid resize.
    */
-  onInit(api: GridApi): void {
+  onInit(api: GridApi, config?: PluginOptions): void {
     this.gridApi = api;
 
-    // Check if the pluginOptions include `enableColumnVisibility`
     const pluginOptions = this.gridApi.getPluginOptions();
-    if (!pluginOptions?.['ColumnVisibility']?.enableColumnVisibility) {
+    this.pluginOptions = config ?? pluginOptions['ColumnVisibility'] ?? {};
+
+    // Check if the pluginOptions include `enableColumnVisibility`
+    if (!this.pluginOptions['enableColumnVisibility']) {
       return; // Do not add the button if `enableColumnVisibility` is not enabled
     }
+
+    const gridOptions = this.gridApi.getGridOptions();
+    gridOptions.enableColumnVisibility = true; // Enable column visibility in grid options
 
     const pluginBar = this.gridApi.getPluginBar();
     if (!pluginBar) {

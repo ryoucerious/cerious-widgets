@@ -2,7 +2,8 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { GridPlugin } from '../interfaces/grid-plugin';
 import { GridApi } from '../interfaces/grid-api';
 import { TemplateRegistryService } from '../../shared/services/template-registry.service';
-import { ColumnDef, SortState } from '../interfaces';
+import { ColumnDef, PluginOptions, SortState } from '../interfaces';
+import { PluginConfig } from '../../shared/interfaces/plugin-config.interface';
 
 @Injectable()
 export class SaveGridStatePlugin implements GridPlugin {
@@ -13,7 +14,7 @@ export class SaveGridStatePlugin implements GridPlugin {
   private menuElement: HTMLElement | null = null;
   private label: string = 'State';
   private closeMenuHandler!: (event: MouseEvent) => void;
-  private pluginOptions: any;
+  private pluginOptions: PluginOptions | PluginConfig = {};
 
   constructor(
     private templateRegistry: TemplateRegistryService,
@@ -22,17 +23,19 @@ export class SaveGridStatePlugin implements GridPlugin {
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
-  onInit(api: GridApi): void {
+  onInit(api: GridApi, config?: PluginOptions): void {
     this.gridApi = api;
 
-    this.pluginOptions = this.gridApi.getPluginOptions();
-    if (!this.pluginOptions?.['GridState']?.enableSaveState) {
+    const pluginOptions = this.gridApi.getPluginOptions();
+    this.pluginOptions = config ?? pluginOptions['GridState'] ?? {};
+
+    if (!this.pluginOptions['enableSaveState']) {
       return;
     }
 
     // Register the setStates function to allow methods to set states
-    if (this.pluginOptions?.['GridState']) {
-      this.pluginOptions['GridState'].setStates = (states: Array<{ name: string; state: any }>) => {
+    if (this.pluginOptions) {
+      this.pluginOptions['setStates'] = (states: Array<{ name: string; state: any }>) => {
         this.states = states;
       };
     }
@@ -43,8 +46,8 @@ export class SaveGridStatePlugin implements GridPlugin {
       return;
     }
 
-    if (this.pluginOptions?.['GridState']?.label) {
-      this.label = this.pluginOptions['GridState'].label;
+    if (this.pluginOptions['label']) {
+      this.label = this.pluginOptions['label'];
     }
 
     const buttonTemplate = this.templateRegistry.getTemplate('gridStateButton');
@@ -205,7 +208,9 @@ export class SaveGridStatePlugin implements GridPlugin {
     if (stateName) {
       this.states.push({ name: stateName, state });
 
-      this.pluginOptions?.['GridState']?.onSaveState?.(state);
+      if (this.pluginOptions['onSaveState']) {
+        this.pluginOptions['onSaveState'](state);
+      }
     }
     this.closeMenu();
   }
@@ -291,9 +296,8 @@ export class SaveGridStatePlugin implements GridPlugin {
     }
 
     // Call plugin option callback if provided
-    const pluginOptions = this.gridApi.getPluginOptions();
-    if (pluginOptions?.['GridState']?.onDeleteState) {
-      pluginOptions['GridState'].onDeleteState(deleted);
+    if (this.pluginOptions['onDeleteState']) {
+      this.pluginOptions['onDeleteState'](deleted);
     }
   }
 }

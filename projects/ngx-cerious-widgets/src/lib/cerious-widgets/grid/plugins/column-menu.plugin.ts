@@ -3,6 +3,8 @@ import { GridPlugin } from '../interfaces/grid-plugin';
 import { GridApi } from '../interfaces/grid-api';
 import { ColumnDef } from '../interfaces/column-def';
 import { MenuOption } from '../models/menu-option';
+import { PluginOptions } from '../interfaces';
+import { PluginConfig } from '../../shared/interfaces/plugin-config.interface';
 
 @Injectable()
 export class ColumnMenuPlugin implements GridPlugin {
@@ -10,6 +12,7 @@ export class ColumnMenuPlugin implements GridPlugin {
   private gridApi!: GridApi;
   private renderer: Renderer2;
   private menuElement: HTMLElement | null = null;
+  private pluginOptions: PluginOptions | PluginConfig = {};
 
   constructor(private rendererFactory: RendererFactory2) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
@@ -24,14 +27,25 @@ export class ColumnMenuPlugin implements GridPlugin {
    * to ensure the menus are updated accordingly.
    * 
    * @param api - The Grid API instance used to interact with the grid.
+   * @param config - Optional configuration object for the plugin.
    */
-  onInit(api: GridApi): void {
+  onInit(api: GridApi, config?: PluginOptions): void {
     this.gridApi = api;
-  
-    // Check if the pluginOptions include `enableColumnMenu`
+    
     const pluginOptions = this.gridApi.getPluginOptions();
-    if (!pluginOptions?.['ColumnMenu']?.enableColumnMenu) {
+    this.pluginOptions = config ?? pluginOptions['ColumnMenu'] ?? {};
+
+    // Check if the pluginOptions include `enableColumnMenu`
+    if (!this.pluginOptions['enableColumnMenu']) {
       return; // Do not add the buttons if `enableColumnMenu` is not enabled
+    }
+
+    const gridOptions = this.gridApi.getGridOptions();
+    if (this.pluginOptions['enableGroupBy']) {
+     gridOptions.enableGroupBy = true; // Ensure column group by is enabled in grid options
+    }
+    if (this.pluginOptions['enablePinning']) {
+      gridOptions.enablePinning = true; // Ensure column pinning is enabled in grid options
     }
   
     // Initialize the column menus

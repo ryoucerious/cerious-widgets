@@ -3,23 +3,30 @@ import { GridPlugin } from '../interfaces/grid-plugin';
 import { GridApi } from '../interfaces/grid-api';
 import { ColumnDef } from '../interfaces/column-def';
 import { SortState } from '../interfaces/sort-state';
+import { PluginOptions } from '../interfaces';
+import { PluginConfig } from '../../shared/interfaces/plugin-config.interface';
 
 @Injectable()
 export class MultiSortPlugin implements GridPlugin {
   private gridApi!: GridApi;
   private renderer: Renderer2;
+  private sortState: SortState[] = [];
+  private pluginOptions: PluginOptions | PluginConfig = {};
+  
 
   constructor(rendererFactory: RendererFactory2) {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
-  private sortState: SortState[] = [];
 
-  onInit(api: GridApi): void {
+
+  onInit(api: GridApi, config?: PluginOptions): void {
     this.gridApi = api;
 
-    // Check if the pluginOptions include `enableMultiSort`
     const pluginOptions = this.gridApi.getPluginOptions();
-    if (!pluginOptions?.['MultiSort']?.enableMultiSort) {
+    this.pluginOptions = config ?? pluginOptions['MultiSort'] ?? {};
+
+    // Check if the pluginOptions include `enableMultiSort`
+    if (!this.pluginOptions['enableMultiSort']) {
       return; // Do not add the plugin if `enableMultiSort` is not enabled
     }
 

@@ -3,12 +3,15 @@ import { GridPlugin } from '../interfaces/grid-plugin';
 import { GridApi } from '../interfaces/grid-api';
 import { ColumnDef } from '../interfaces/column-def';
 import { TemplateRegistryService } from '../../shared/services/template-registry.service';
+import { PluginOptions } from '../interfaces';
+import { PluginConfig } from '../../shared/interfaces/plugin-config.interface';
 
 @Injectable()
 export class ExportToExcelPlugin implements GridPlugin {
   private exportButton!: HTMLButtonElement;
   private gridApi!: GridApi;
   private renderer: Renderer2;
+  private pluginOptions: PluginOptions | PluginConfig = {};
 
   constructor(
     private templateRegistry: TemplateRegistryService,
@@ -21,6 +24,7 @@ export class ExportToExcelPlugin implements GridPlugin {
    * Initializes the Excel export plugin by setting up the export button and its functionality.
    * 
    * @param api - The Grid API instance used to interact with the grid and retrieve data or configurations.
+   * @param config - Optional configuration object for the plugin.
    * 
    * This method performs the following steps:
    * 1. Checks if the `enableExportToExcel` option is enabled in the plugin options.
@@ -35,12 +39,14 @@ export class ExportToExcelPlugin implements GridPlugin {
    * - Creating grouped headers and mapping data to match the column structure.
    * - Using the `XLSX` library to generate and export the Excel file.
    */
-  onInit(api: GridApi): void {
+  onInit(api: GridApi, config?: PluginOptions): void {
     this.gridApi = api;
-  
-    // Check if the pluginOptions include `enableExportToExcel`
+
     const pluginOptions = this.gridApi.getPluginOptions();
-    if (!pluginOptions?.['ExportToExcel']?.enableExportToExcel) {
+    this.pluginOptions = config ?? pluginOptions['ExportToExcel'] ?? {};
+
+    // Check if the pluginOptions include `enableExportToExcel`
+    if (!this.pluginOptions['enableExportToExcel']) {
       return; // Do not add the button if `enableExportToExcel` is not enabled
     }
 
@@ -79,7 +85,7 @@ export class ExportToExcelPlugin implements GridPlugin {
   
     // Add the click event listener
     this.renderer.listen(this.exportButton, 'click', () => {
-      this.exportGridDataToExcel(pluginOptions);
+      this.exportGridDataToExcel();
     });
   
     // Append to menu bar
@@ -174,8 +180,6 @@ export class ExportToExcelPlugin implements GridPlugin {
   /**
    * Exports the grid data to an Excel file.
    *
-   * @param pluginOptions - Options for the export plugin, including callbacks and configurations.
-   *
    * This method performs the following steps:
    * 1. Retrieves and clones the grid data to avoid mutating the original data.
    * 2. Invokes a user-supplied callback (`onBeforeExportToExcel`) to allow modifications to the data before export.
@@ -192,15 +196,15 @@ export class ExportToExcelPlugin implements GridPlugin {
    *
    * Note: This method uses the `XLSX` library for Excel file generation.
    */
-  private async exportGridDataToExcel(pluginOptions: any): Promise<void> {
+  private async exportGridDataToExcel(): Promise<void> {
     const XLSX = await import('xlsx');
 
     const data = this.gridApi.getData().map(data => ({ ...data })); // Clone the data to avoid mutating the original
     const groupedColumns = this.gridApi.getColumnDefs();
   
     // Invoke the user-supplied callback to modify the data
-    const modifiedData = (pluginOptions?.['ExportToExcel']?.onBeforeExportToExcel
-      ? pluginOptions?.['ExportToExcel']?.onBeforeExportToExcel(data, groupedColumns)
+    const modifiedData = (this.pluginOptions['onBeforeExportToExcel']
+      ? this.pluginOptions['onBeforeExportToExcel'](data, groupedColumns)
       : data) || data;
   
     // Flatten the grouped columns for export
@@ -236,7 +240,7 @@ export class ExportToExcelPlugin implements GridPlugin {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
   
     // Export the workbook
-    const fileName = pluginOptions?.['ExportToExcel']?.fileName || 'export.xlsx';
+    const fileName = this.pluginOptions['fileName'] || 'export.xlsx';
     XLSX.writeFile(workbook, fileName);
   }
 
