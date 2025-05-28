@@ -2,20 +2,26 @@
      class="feature-item"
      [style.width]="featureWidth"
      role="presentation"
-     aria-hidden="true">
+     aria-hidden="true"
+     [attr.data-feature-id]="'nested-row'">
 </div>
 <div *ngIf="gridOptions.enableMultiselect"
      class="feature-item"
-     [style.width]="featureWidth">
-    <input type="checkbox" 
-           (click)="selectAll()" 
-           [checked]="selected" 
-           aria-label="Select all rows" />
+     [style.width]="featureWidth"
+     [attr.data-feature-id]="'multiselect'">
+     <span>
+          <input type="checkbox" 
+                    (click)="selectAll()" 
+                    [checked]="selected" 
+                    aria-label="Select all rows" />
+          <span></span>
+     </span>
 </div>
 <div *ngIf="gridOptions.enableSingleselect && !gridOptions.enableMultiselect"
      class="feature-item"
-     [style.width]="featureWidth">
-    <input type="radio" 
-           style="visibility: hidden;" 
-           aria-hidden="true" />
+     [style.width]="featureWidth"
+     [attr.data-feature-id]="'singleselect'">
+     <span>
+          <span></span>
+     </span>
 </div>

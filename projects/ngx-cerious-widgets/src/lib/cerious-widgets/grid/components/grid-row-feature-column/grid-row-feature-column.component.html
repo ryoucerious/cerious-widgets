@@ -1,6 +1,7 @@
 <div *ngIf="gridOptions.nestedRowTemplate && templates[gridOptions.nestedRowTemplate]"
         class="feature-item"
-        [style.width]="featureWidth">
+        [style.width]="featureWidth"
+        [attr.data-feature-id]="'nested-row'">
     <a href="#" 
        [class.plus]="!gridRow.nestedExpanded"
        [class.minus]="gridRow.nestedExpanded"
@@ -12,17 +13,25 @@
 </div>
 <div *ngIf="gridOptions.enableMultiselect"
         class="feature-item"
-        [style.width]="featureWidth">
-    <input type="checkbox" 
-           (click)="selectRow()" 
-           [checked]="gridRow.selected" 
-           [attr.aria-label]="'Select row ' + gridRow.id" />
+        [style.width]="featureWidth"
+        [attr.data-feature-id]="'multiselect'">
+    <span>
+        <input type="checkbox" 
+            (click)="selectRow()" 
+            [checked]="gridRow.selected" 
+            [attr.aria-label]="'Select row ' + gridRow.id" />
+        <span></span>
+    </span>
 </div>
 <div *ngIf="gridOptions.enableSingleselect && !gridOptions.enableMultiselect"
         class="feature-item"
-        [style.width]="featureWidth">
-    <input type="radio" 
-           (click)="selectRow()" 
-           [checked]="gridRow.selected" 
-           [attr.aria-label]="'Select row ' + gridRow.id" />
+        [style.width]="featureWidth"
+        [attr.data-feature-id]="'singleselect'">
+    <span>
+        <input type="radio" 
+            (click)="selectRow()" 
+            [checked]="gridRow.selected" 
+            [attr.aria-label]="'Select row ' + gridRow.id" />
+        <span></span>
+    </span>
 </div>
