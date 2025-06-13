@@ -15,7 +15,7 @@ describe('GridMenuBarComponent', () => {
     mockGridService.templates = { template1: '<div></div>' } as any;
 
     await TestBed.configureTestingModule({
-      declarations: [GridMenuBarComponent],
+      imports: [GridMenuBarComponent],
       providers: [
         { provide: GRID_SERVICE, useValue: mockGridService }
       ]

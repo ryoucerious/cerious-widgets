@@ -28,7 +28,7 @@ describe('GridHeaderRowComponent', () => {
     mockGridColumnService = jasmine.createSpyObj('IGridColumnService', ['getFeatureColumnWidth', 'getColumnWidth']);
 
     TestBed.configureTestingModule({
-      declarations: [GridHeaderRowComponent],
+      imports: [GridHeaderRowComponent],
       providers: [
         { provide: GRID_SERVICE, useValue: mockGridService },
         { provide: GRID_COLUMN_SERVICE, useValue: mockGridColumnService },

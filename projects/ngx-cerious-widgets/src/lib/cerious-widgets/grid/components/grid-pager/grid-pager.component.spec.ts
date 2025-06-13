@@ -40,7 +40,7 @@ describe('GridPagerComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [GridPagerComponent],
+      imports: [GridPagerComponent],
       providers: [
         { provide: GRID_SERVICE, useValue: mockGridService },
         { provide: GRID_SCROLL_SERVICE, useValue: mockGridScrollService },

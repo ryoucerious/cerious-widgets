@@ -37,7 +37,7 @@ describe('GridHeaderFeatureColumnComponent', () => {
     mockGridColumnService.getFeatureWidth.and.returnValue(100);
 
     await TestBed.configureTestingModule({
-      declarations: [GridHeaderFeatureColumnComponent],
+      imports: [GridHeaderFeatureColumnComponent],
       providers: [
         { provide: GRID_SERVICE, useValue: mockGridService },
         { provide: GRID_COLUMN_SERVICE, useValue: mockGridColumnService },

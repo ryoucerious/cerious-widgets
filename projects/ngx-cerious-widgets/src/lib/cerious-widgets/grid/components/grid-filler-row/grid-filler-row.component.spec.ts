@@ -28,7 +28,7 @@ describe('GridFillerRowComponent', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      declarations: [
+      imports: [
         GridFillerRowComponent,
         GridFillerRowColumnComponent,
         GridFillerRowFeatureColumnComponent

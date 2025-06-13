@@ -33,7 +33,7 @@ describe('GridScrollerComponent', () => {
     mockGridScrollService = jasmine.createSpyObj('IGridScrollService', ['scrollDelta', 'scrollGrid']);
 
     TestBed.configureTestingModule({
-      declarations: [GridScrollerComponent],
+      imports: [GridScrollerComponent],
       providers: [
         { provide: GRID_SERVICE, useValue: mockGridService },
         { provide: GRID_SCROLL_SERVICE, useValue: mockGridScrollService },

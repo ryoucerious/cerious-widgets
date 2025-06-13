@@ -16,7 +16,7 @@ describe('GridNestedRowColumnComponent', () => {
     mockGridService.templates = { template1: '<div></div>' } as any;
 
     await TestBed.configureTestingModule({
-      declarations: [GridNestedRowColumnComponent],
+      imports: [GridNestedRowColumnComponent],
       providers: [
         { provide: GRID_SERVICE, useValue: mockGridService },
         { provide: ElementRef, useValue: new ElementRef(document.createElement('div')) }

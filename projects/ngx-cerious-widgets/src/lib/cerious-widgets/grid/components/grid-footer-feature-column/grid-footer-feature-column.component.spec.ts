@@ -8,7 +8,7 @@ describe('GridFooterFeatureColumnComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GridFooterFeatureColumnComponent],
+      imports: [GridFooterFeatureColumnComponent],
     }).compileComponents();
   });
 

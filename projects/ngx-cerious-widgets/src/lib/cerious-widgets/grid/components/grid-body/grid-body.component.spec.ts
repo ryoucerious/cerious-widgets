@@ -5,6 +5,9 @@ import { Subject } from 'rxjs';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+import { GridFooterComponent } from '../grid-footer/grid-footer.component';
+import { GridFillerRowColumnComponent } from '../grid-filler-row-column/grid-filler-row-column.component';
+import { GridHeaderComponent } from '../grid-header/grid-header.component';
 
 // Mocks and stubs
 const mockGridService = {
@@ -75,7 +78,9 @@ describe('GridBodyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GridBodyComponent],
+      imports: [
+        GridBodyComponent
+      ],
       providers: [
         { provide: GRID_SERVICE, useValue: mockGridService },
         { provide: GRID_COLUMN_SERVICE, useValue: mockGridColumnService },
