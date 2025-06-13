@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Inject, Input, Output, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, Output, Signal, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import { GridRow } from '../../models/grid-row';
 
@@ -10,6 +10,7 @@ import { GridOptions } from '../../interfaces/grid-options';
 import { IGridRowFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-row-feature-column.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
+import { SignalHelperService } from '../../../shared/services/signal-helper.services';
 
 @Component({
   selector: 'cw-grid-row-feature-column',
@@ -20,9 +21,14 @@ import { IGridService } from '../../interfaces/service-interfaces/grid.interface
 })
 export class GridRowFeatureColumnComponent implements IGridRowFeatureColumnComponent {
 
-  @Output() toggleNestedRow: EventEmitter<GridRow> = new EventEmitter<GridRow>();
-  
-  @Input() gridRow!: GridRow;
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
+
+  readonly toggleNestedRowSignal = signal<GridRow | undefined>(undefined);
+  @Output() toggleNestedRow = this.sh.toEventEmitter(this.toggleNestedRowSignal as Signal<GridRow>);
 
   get featureColumnWidth(): string {
     return this.gridColumnService.getFeatureColumnWidth(
@@ -45,6 +51,7 @@ export class GridRowFeatureColumnComponent implements IGridRowFeatureColumnCompo
 
   constructor(
     public el: ElementRef,
+    private sh: SignalHelperService,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
   ) {}

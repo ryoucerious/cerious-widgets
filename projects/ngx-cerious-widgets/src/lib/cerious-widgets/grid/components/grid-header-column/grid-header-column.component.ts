@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, Inject, Input, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, ElementRef, Inject, Input, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GridColumnSizerComponent } from '../grid-column-sizer/grid-column-sizer.component';
 
@@ -21,8 +21,16 @@ import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 })
 export class GridHeaderColumnComponent implements IGridHeaderColumnComponent {
 
-  @Input() column!: ColumnDef;
-  @Input() gridRow!: GridRow;
+  readonly columnSignal = signal<ColumnDef | undefined>(undefined);
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+
+  @Input()
+  set column(value: ColumnDef) { this.columnSignal.set(value); }
+  get column() { return this.columnSignal()!; }
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
 
   @ContentChild("cellTemplate") cellTemplate!: TemplateRef<any>;
 

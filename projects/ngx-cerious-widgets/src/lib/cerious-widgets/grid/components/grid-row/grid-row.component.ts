@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, Output, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, Output, QueryList, Signal, signal, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
@@ -14,6 +14,7 @@ import { ColumnDef } from '../../interfaces/column-def';
 import { GridRow } from '../../models/grid-row';
 import { GridRowColumnComponent } from '../grid-row-column/grid-row-column.component';
 import { GridRowFeatureColumnComponent } from '../grid-row-feature-column/grid-row-feature-column.component';
+import { SignalHelperService } from '../../../shared/services/signal-helper.services';
 
 @Component({
   selector: 'cw-grid-row',
@@ -24,8 +25,14 @@ import { GridRowFeatureColumnComponent } from '../grid-row-feature-column/grid-r
 })
 export class GridRowComponent implements IGridRowComponent, AfterViewInit {
   
-  @Input() gridRow!: GridRow;
-  @Output() toggleNestedRow: EventEmitter<GridRow> = new EventEmitter<GridRow>();
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
+
+  readonly toggleNestedRowSignal = signal<GridRow>(undefined as unknown as GridRow);
+  @Output() toggleNestedRow = this.sh.toEventEmitter(this.toggleNestedRowSignal as Signal<GridRow>);
 
   @ViewChildren(GridRowColumnComponent) columnComponents!: QueryList<IGridRowColumnComponent>;
   @ViewChild(GridRowFeatureColumnComponent) featureColumnComponent!: IGridRowFeatureColumnComponent;
@@ -55,6 +62,7 @@ export class GridRowComponent implements IGridRowComponent, AfterViewInit {
 
   constructor(
     public el: ElementRef,
+    private sh: SignalHelperService,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
   ) { }

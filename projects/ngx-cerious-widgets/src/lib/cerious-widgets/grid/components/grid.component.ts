@@ -1,5 +1,5 @@
 // Angular core imports
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChildren, DoCheck, ElementRef, EventEmitter, Inject, Injector, Input, IterableDiffers, OnDestroy, OnInit, Optional, Output, QueryList, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChildren, DoCheck, effect, ElementRef, EventEmitter, Inject, Injector, Input, IterableDiffers, OnDestroy, OnInit, Optional, Output, QueryList, Signal, signal, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
 // Angular common
 import { CommonModule } from '@angular/common';
@@ -30,6 +30,7 @@ import { GridPlugin } from '../interfaces/grid-plugin';
 
 // Services
 import { GridService } from '../services/grid.service';
+import { SignalHelperService } from '../../shared/services/signal-helper.services';
 
 // Components
 import { GridBodyComponent } from './grid-body/grid-body.component';
@@ -56,25 +57,68 @@ export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy
 
   gridApi!: GridApi;
   
-  @Input() gridOptions!: GridOptions;
-  @Input() pluginOptions!: PluginOptions;
-  @Input() data: any;
-  @Input() plugins: GridPlugin[] = [];
+  readonly gridOptionsSignal = signal<GridOptions | undefined>(undefined);
+  readonly pluginOptionsSignal = signal<PluginOptions | undefined>(undefined);
+  readonly dataSignal = signal<any>(null);
+  readonly pluginsSignal = signal<GridPlugin[]>([]);
 
-  @Output() dataChange: EventEmitter<any> = new EventEmitter<any>();
-  @Output() rowClick: EventEmitter<RowEvent<any>> = new EventEmitter<RowEvent<any>>();
-  @Output() rowDoubleClick: EventEmitter<RowEvent<any>> = new EventEmitter<RowEvent<any>>();
-  @Output() rowKeypress: EventEmitter<RowEvent<any>> = new EventEmitter<RowEvent<any>>();
-  @Output() rowKeydown: EventEmitter<RowEvent<any>> = new EventEmitter<RowEvent<any>>();
-  @Output() rowKeyup: EventEmitter<RowEvent<any>> = new EventEmitter<RowEvent<any>>();
-  @Output() cellClick: EventEmitter<CellEvent<any>> = new EventEmitter<CellEvent<any>>();
-  @Output() cellDoubleClick: EventEmitter<CellEvent<any>> = new EventEmitter<CellEvent<any>>();
-  @Output() cellKeypress: EventEmitter<CellEvent<any>> = new EventEmitter<CellEvent<any>>();
-  @Output() cellKeydown: EventEmitter<CellEvent<any>> = new EventEmitter<CellEvent<any>>();
-  @Output() cellKeyup: EventEmitter<CellEvent<any>> = new EventEmitter<CellEvent<any>>();
-  @Output() columnResize: EventEmitter<any> = new EventEmitter<any>();
-  @Output() columnVisibilityChange: EventEmitter<any> = new EventEmitter<any>();
-  @Output() gridResize: EventEmitter<any> = new EventEmitter<any>();
+  @Input()
+  set gridOptions(value: GridOptions) { this.gridOptionsSignal.set(value); }
+  get gridOptions() { return this.gridOptionsSignal()!; }
+
+  @Input()
+  set pluginOptions(value: PluginOptions) { this.pluginOptionsSignal.set(value); }
+  get pluginOptions() { return this.pluginOptionsSignal()!; }
+
+  @Input()
+  set data(value: any) { this.dataSignal.set(value); }
+  get data() { return this.dataSignal(); }
+
+  @Input()
+  set plugins(value: GridPlugin[]) { this.pluginsSignal.set(value); }
+  get plugins() { return this.pluginsSignal(); }
+
+  readonly dataChangeSignal = signal<any>(null);
+  @Output() dataChange = this.sh.toEventEmitter(this.dataChangeSignal);
+
+  readonly rowClickSignal = signal<RowEvent<any> | null>(null);
+  @Output() rowClick = this.sh.toEventEmitter(this.rowClickSignal);
+
+  readonly rowDoubleClickSignal = signal<RowEvent<any> | null>(null);
+  @Output() rowDoubleClick = this.sh.toEventEmitter(this.rowDoubleClickSignal);
+
+  readonly rowKeypressSignal = signal<RowEvent<any> | null>(null);
+  @Output() rowKeypress = this.sh.toEventEmitter(this.rowKeypressSignal);
+
+  readonly rowKeydownSignal = signal<RowEvent<any> | null>(null);
+  @Output() rowKeydown = this.sh.toEventEmitter(this.rowKeydownSignal);
+
+  readonly rowKeyupSignal = signal<RowEvent<any> | null>(null);
+  @Output() rowKeyup = this.sh.toEventEmitter(this.rowKeyupSignal);
+
+  readonly cellClickSignal = signal<CellEvent<any> | null>(null);
+  @Output() cellClick = this.sh.toEventEmitter(this.cellClickSignal);
+
+  readonly cellDoubleClickSignal = signal<CellEvent<any> | null>(null);
+  @Output() cellDoubleClick = this.sh.toEventEmitter(this.cellDoubleClickSignal);
+
+  readonly cellKeypressSignal = signal<CellEvent<any> | null>(null);
+  @Output() cellKeypress = this.sh.toEventEmitter(this.cellKeypressSignal);
+
+  readonly cellKeydownSignal = signal<CellEvent<any> | null>(null);
+  @Output() cellKeydown = this.sh.toEventEmitter(this.cellKeydownSignal);
+
+  readonly cellKeyupSignal = signal<CellEvent<any> | null>(null);
+  @Output() cellKeyup = this.sh.toEventEmitter(this.cellKeyupSignal);
+
+  readonly columnResizeSignal = signal<any>(null);
+  @Output() columnResize = this.sh.toEventEmitter(this.columnResizeSignal);
+
+  readonly columnVisibilityChangeSignal = signal<any>(null);
+  @Output() columnVisibilityChange = this.sh.toEventEmitter(this.columnVisibilityChangeSignal);
+
+  readonly gridResizeSignal = signal<any>(null);
+  @Output() gridResize = this.sh.toEventEmitter(this.gridResizeSignal);
 
   @ContentChildren(TemplateRef) templateRefs!: QueryList<any>;
 
@@ -90,6 +134,7 @@ export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy
     public changeDetector: ChangeDetectorRef,
     private injector: Injector,
     private iterableDiffers: IterableDiffers,
+    private sh: SignalHelperService,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService,
     @Optional() @Inject(WIDGETS_CONFIG) public config: WidgetsConfig

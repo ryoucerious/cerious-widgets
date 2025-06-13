@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Inject, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
 
 import { ColumnFormat, ColumnType } from '../../enums';
 import { ColumnDef } from '../../interfaces/column-def';
@@ -21,8 +21,16 @@ import { GRID_SERVICE } from '../../tokens/grid-service.token';
 })
 export class GridRowColumnComponent implements IGridRowColumnComponent {
 
-  @Input() column!: ColumnDef;
-  @Input() gridRow!: GridRow;
+  readonly columnSignal = signal<ColumnDef | undefined>(undefined);
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+
+  @Input()
+  set column(value: ColumnDef) { this.columnSignal.set(value); }
+  get column() { return this.columnSignal()!; }
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
 
   // Expose enums to the template
   ColumnType = ColumnType;

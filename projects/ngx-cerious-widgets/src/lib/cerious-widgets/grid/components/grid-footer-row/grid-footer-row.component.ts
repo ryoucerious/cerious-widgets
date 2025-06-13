@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, Input, QueryList, signal, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GridFooterColumnComponent } from '../grid-footer-column/grid-footer-column.component';
@@ -26,7 +26,11 @@ import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 })
 export class GridFooterRowComponent implements IGridFooterRowComponent {
   
-  @Input() gridRow!: GridRow;
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
 
   @ViewChildren(GridFooterColumnComponent) columnComponents!: QueryList<IGridFooterColumnComponent>;
   @ViewChild(GridFooterFeatureColumnComponent) featureColumnComponent!: IGridFooterFeatureColumnComponent;

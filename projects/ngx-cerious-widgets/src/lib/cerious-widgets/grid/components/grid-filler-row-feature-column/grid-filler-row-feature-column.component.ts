@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ColumnDef } from '../../interfaces/column-def';
@@ -18,7 +18,11 @@ import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 })
 export class GridFillerRowFeatureColumnComponent implements IGridFillerRowFeatureColumnComponent {
 
-  @Input() column!: ColumnDef
+  readonly columnSignal = signal<ColumnDef | undefined>(undefined);
+
+  @Input()
+  set column(value: ColumnDef) { this.columnSignal.set(value); }
+  get column() { return this.columnSignal()!; }
 
   get featureColumnWidth() {
     return this.gridColumnService.getFeatureColumnWidth(

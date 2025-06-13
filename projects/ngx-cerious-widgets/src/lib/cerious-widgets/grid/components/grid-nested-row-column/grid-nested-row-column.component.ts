@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { IGridNestedRowColumnComponent } from '../../interfaces/component-interfaces/grid-nested-row-column.interface';
@@ -15,7 +15,11 @@ import { GRID_SERVICE } from '../../tokens/grid-service.token';
 })
 export class GridNestedRowColumnComponent implements IGridNestedRowColumnComponent {
 
-  @Input() gridRow!: GridRow;
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
 
   get gridOptions() {
     return this.gridService.gridOptions;

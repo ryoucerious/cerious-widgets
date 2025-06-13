@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, Input, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -29,8 +29,16 @@ export class GridHeaderRowComponent implements IGridHeaderRowComponent {
   dropId: string = `${Math.random().toString(36).substring(2, 9)}`
   moveItemInArray = moveItemInArray;
   
-  @Input() gridRow!: GridRow;
-  @Input() isChildRow: boolean = false;
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+  readonly isChildRowSignal = signal<boolean>(false);
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
+
+  @Input()
+  set isChildRow(value: boolean) { this.isChildRowSignal.set(value); }
+  get isChildRow() { return this.isChildRowSignal(); }
 
   @ViewChildren(GridHeaderColumnComponent) columnComponents!: QueryList<IGridHeaderColumnComponent>;
   @ViewChildren(GridHeaderRowComponent) childRowComponents!: QueryList<IGridHeaderRowComponent>;

@@ -1,12 +1,24 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+// filepath: /Users/jared/Repos/cerious-widgets/projects/cerious-app/src/main.ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { importProvidersFrom } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CeriousWidgetsModule, ColumnMenuPlugin } from 'ngx-cerious-widgets';
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
-
-if (environment.production) {
-  enableProdMode();
-}
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    importProvidersFrom(
+      FormsModule,
+      CeriousWidgetsModule.forRoot({
+        plugins: [ColumnMenuPlugin],
+        pluginOptions: {
+          'ColumnMenu': {
+            enableColumnMenu: true,
+            enablePinning: true,
+            enableGroupBy: true
+          }
+        }
+      })
+    )
+  ]
+});

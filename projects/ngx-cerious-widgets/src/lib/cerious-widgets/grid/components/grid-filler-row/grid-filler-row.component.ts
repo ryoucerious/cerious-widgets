@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, Input, QueryList, signal, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GridFillerRowColumnComponent } from '../grid-filler-row-column/grid-filler-row-column.component';
 import { GridFillerRowFeatureColumnComponent } from '../grid-filler-row-feature-column/grid-filler-row-feature-column.component';
@@ -23,7 +23,11 @@ import {
 })
 export class GridFillerRowComponent implements IGridFillerRowComponent {
 
-  @Input() gridRow!: GridRow;
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
 
   @ViewChildren(GridFillerRowColumnComponent) columnComponents!: QueryList<IGridFillerRowColumnComponent>;
   @ViewChild(GridFillerRowFeatureColumnComponent) featureColumnComponent!: IGridFillerRowFeatureColumnComponent;

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ColumnDef } from '../../interfaces/column-def';
@@ -20,8 +20,16 @@ import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 })
 export class GridFillerRowColumnComponent implements IGridFillerRowColumnComponent {
   
-  @Input() column!: ColumnDef;
-  @Input() gridRow!: GridRow;
+  readonly columnSignal = signal<ColumnDef | undefined>(undefined);
+  readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+
+  @Input()
+  set column(value: ColumnDef) { this.columnSignal.set(value); }
+  get column() { return this.columnSignal()!; }
+
+  @Input()
+  set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
+  get gridRow() { return this.gridRowSignal()!; }
 
   get fillerRowHeight() {
     return this.gridService.fillerRowHeight;

@@ -1,8 +1,9 @@
-import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Output, signal, Signal, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IGridMenuBarComponent } from '../../interfaces/component-interfaces/grid-menu-bar.interface';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { CommonModule } from '@angular/common';
+import { SignalHelperService } from '../../../shared/services/signal-helper.services';
 
 @Component({
   selector: 'cw-grid-menu-bar',
@@ -13,7 +14,8 @@ import { CommonModule } from '@angular/common';
 })
 export class GridMenuBarComponent implements IGridMenuBarComponent {
 
-  @Output() afterApplyFavoritesView: EventEmitter<boolean> = new EventEmitter<boolean>();
+  readonly afterApplyFavoritesViewSignal = signal<boolean>(true);
+  @Output() afterApplyFavoritesView = this.sh.toEventEmitter(this.afterApplyFavoritesViewSignal);
 
   @ViewChild('menuBar') menuBar: ElementRef | undefined;
   @ViewChild('pluginBar') pluginBar: ElementRef | undefined;
@@ -28,6 +30,7 @@ export class GridMenuBarComponent implements IGridMenuBarComponent {
   
   constructor(
     public el: ElementRef,
+    private sh: SignalHelperService,
     @Inject(GRID_SERVICE) private gridService: IGridService
   ) { }
 
