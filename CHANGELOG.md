@@ -2,6 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.10] - 2025-06-11
 ### Added
 - Support for Angular **standalone components** — the grid can now be used without importing a shared module.
 - Integrated **Angular Signals** for improved reactive performance in change detection and data binding.
