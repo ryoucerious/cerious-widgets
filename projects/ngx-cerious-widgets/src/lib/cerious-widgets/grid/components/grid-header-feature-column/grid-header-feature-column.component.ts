@@ -1,15 +1,20 @@
 import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+
 import { IGridHeaderFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-header-feature-column.interface';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
-import { Subscription } from 'rxjs';
+
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
+import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 
 @Component({
   selector: 'cw-grid-header-feature-column',
+  standalone: true,
   templateUrl: './grid-header-feature-column.component.html',
-    encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule]
 })
 export class GridHeaderFeatureColumnComponent implements IGridHeaderFeatureColumnComponent, OnInit, OnDestroy {
 

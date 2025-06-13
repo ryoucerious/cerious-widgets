@@ -1,16 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Inject, Input, Output, TemplateRef, ViewEncapsulation } from '@angular/core';
-import { IGridRowFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-row-feature-column.interface';
+
 import { GridRow } from '../../models/grid-row';
-import { GridOptions } from '../../interfaces/grid-options';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
+
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
-import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
+
+import { GridOptions } from '../../interfaces/grid-options';
+import { IGridRowFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-row-feature-column.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
+import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 
 @Component({
   selector: 'cw-grid-row-feature-column',
+  standalone: true,
   templateUrl: './grid-row-feature-column.component.html',
-      encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule]
 })
 export class GridRowFeatureColumnComponent implements IGridRowFeatureColumnComponent {
 

@@ -2,11 +2,14 @@ import { Component, ElementRef, EventEmitter, Inject, Output, ViewChild, ViewEnc
 import { IGridMenuBarComponent } from '../../interfaces/component-interfaces/grid-menu-bar.interface';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'cw-grid-menu-bar',
+  standalone: true,
   templateUrl: './grid-menu-bar.component.html',
-    encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule]
 })
 export class GridMenuBarComponent implements IGridMenuBarComponent {
 

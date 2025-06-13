@@ -1,20 +1,28 @@
 import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { IGridFooterRowComponent } from '../../interfaces/component-interfaces/grid-footer-row.interface';
+import { CommonModule } from '@angular/common';
+
 import { GridFooterColumnComponent } from '../grid-footer-column/grid-footer-column.component';
 import { GridFooterFeatureColumnComponent } from '../grid-footer-feature-column/grid-footer-feature-column.component';
-import { IGridFooterColumnComponent } from '../../interfaces/component-interfaces/grid-footer-column.interface';
-import { IGridFooterFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-footer-feature-column.interface';
+
 import { GridRow } from '../../models/grid-row';
 import { ColumnDef } from '../../interfaces/column-def';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+
+import { IGridFooterRowComponent } from '../../interfaces/component-interfaces/grid-footer-row.interface';
+import { IGridFooterColumnComponent } from '../../interfaces/component-interfaces/grid-footer-column.interface';
+import { IGridFooterFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-footer-feature-column.interface';
+
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
+import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+
 @Component({
   selector: 'cw-grid-footer-row',
+  standalone: true,
   templateUrl: './grid-footer-row.component.html',
-    encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, GridFooterColumnComponent, GridFooterFeatureColumnComponent]
 })
 export class GridFooterRowComponent implements IGridFooterRowComponent {
   

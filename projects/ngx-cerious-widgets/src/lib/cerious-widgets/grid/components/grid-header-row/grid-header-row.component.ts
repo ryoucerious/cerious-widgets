@@ -1,20 +1,28 @@
 import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { IGridHeaderRowComponent } from '../../interfaces/component-interfaces/grid-header-row.interface';
-import { GridRow } from '../../models/grid-row';
+
 import { GridHeaderColumnComponent } from '../grid-header-column/grid-header-column.component';
 import { GridHeaderFeatureColumnComponent } from '../grid-header-feature-column/grid-header-feature-column.component';
+
+import { IGridHeaderRowComponent } from '../../interfaces/component-interfaces/grid-header-row.interface';
 import { IGridHeaderColumnComponent } from '../../interfaces/component-interfaces/grid-header-column.interface';
 import { IGridHeaderFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-header-feature-column.interface';
+
+import { GridRow } from '../../models/grid-row';
 import { ColumnDef } from '../../interfaces/column-def';
+
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 
 @Component({
   selector: 'cw-grid-header-row',
-  templateUrl: './grid-header-row.component.html'
+  standalone: true,
+  templateUrl: './grid-header-row.component.html',
+  imports: [CommonModule, CdkDrag, CdkDropList, GridHeaderColumnComponent, GridHeaderFeatureColumnComponent],
 })
 export class GridHeaderRowComponent implements IGridHeaderRowComponent {
 

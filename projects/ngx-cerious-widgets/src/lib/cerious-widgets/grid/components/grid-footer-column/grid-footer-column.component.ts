@@ -1,15 +1,20 @@
 import { Component, ElementRef, Inject, Input, ViewEncapsulation } from '@angular/core';
-import { IGridFooterColumnComponent } from '../../interfaces/component-interfaces/grid-footer-column.interface';
+import { CommonModule } from '@angular/common';
+
 import { ColumnDef } from '../../interfaces/column-def';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+import { IGridFooterColumnComponent } from '../../interfaces/component-interfaces/grid-footer-column.interface';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
+import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+
 @Component({
   selector: 'cw-grid-footer-column',
+  standalone: true,
   templateUrl: './grid-footer-column.component.html',
-    encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule]
 })
 export class GridFooterColumnComponent implements IGridFooterColumnComponent {
 

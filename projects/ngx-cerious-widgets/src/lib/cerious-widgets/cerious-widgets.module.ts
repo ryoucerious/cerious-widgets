@@ -1,29 +1,28 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { GridComponentsModule } from './grid/components/grid-components.module';
-import { GridComponent } from './grid/components/grid.component';
 import { TemplateRegistrarDirective } from './shared/directives/template-registrar.directive';
 import { WidgetsConfig } from './shared/interfaces/widgets-config.interface';
 import { WIDGETS_CONFIG } from './shared/tokens/widgets-config.token';
-import { GridService } from './grid/services/grid.service';
-import { GridColumnService } from './grid/services/grid-column.service';
-import { GridScrollService } from './grid/services/grid-scroll.service';
+import { GridComponent } from './grid/components/grid.component';
+import { GRID_SERVICE } from './grid/tokens/grid-service.token';
+import { GRID_COLUMN_SERVICE } from './grid/tokens/grid-column-service.token';
+import { GRID_SCROLL_SERVICE } from './grid/tokens/grid-scroll-services.token';
+import { GridColumnService, GridScrollService, GridService } from './grid/services';
 
 @NgModule({
   declarations: [
-    GridComponent,
     TemplateRegistrarDirective
   ],
   imports: [
     CommonModule,
     DragDropModule,
-    GridComponentsModule
+    GridComponent
   ],
   providers: [],
   exports: [
-    GridComponent,
-    TemplateRegistrarDirective
+    TemplateRegistrarDirective,
+    GridComponent
   ]
 })
 export class CeriousWidgetsModule {
@@ -41,7 +40,10 @@ export class CeriousWidgetsModule {
         ...(config.lazyPlugins ? Object.entries(config.lazyPlugins).map(([key]) => ({
           provide: key,
           useFactory: config.lazyPlugins![key]
-        })) : [])
+        })) : []),
+        { provide: GRID_SERVICE, useClass: GridService },
+        { provide: GRID_COLUMN_SERVICE, useClass: GridColumnService },
+        { provide: GRID_SCROLL_SERVICE, useClass: GridScrollService },
       ]
     };
   }

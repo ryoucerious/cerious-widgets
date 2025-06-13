@@ -1,27 +1,35 @@
 import { AfterViewInit, Component, ElementRef, Inject, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { IGridBodyComponent } from '../../interfaces/component-interfaces/grid-body.interface';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+
 import { GridFillerRowComponent } from '../grid-filler-row/grid-filler-row.component';
 import { GridRowComponent } from '../grid-row/grid-row.component';
 import { GridNestedRowComponent } from '../grid-nested-row/grid-nested-row.component';
+
+import { IGridBodyComponent } from '../../interfaces/component-interfaces/grid-body.interface';
 import { IGridFillerRowComponent } from '../../interfaces/component-interfaces/grid-filler-row.interface';
 import { IGridRowComponent } from '../../interfaces/component-interfaces/grid-row.interface';
 import { IGridNestedRowComponent } from '../../interfaces/component-interfaces/grid-nested-row.interface';
-import { GridRow } from '../../models/grid-row';
+
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 import { IGridScrollService } from '../../interfaces/service-interfaces/grid-scroll.interface';
-import { ScrollDelta } from '../../interfaces/scroll-delta';
-import { GridOptions } from '../../interfaces/grid-options';
+
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
+
+import { GridRow } from '../../models/grid-row';
 import { GridDataset } from '../../interfaces/grid-dataset';
+import { GridOptions } from '../../interfaces/grid-options';
+import { ScrollDelta } from '../../interfaces/scroll-delta';
 
 @Component({
   selector: 'cw-grid-body',
+  standalone: true,
   templateUrl: './grid-body.component.html',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, GridFillerRowComponent, GridRowComponent, GridNestedRowComponent]
 })
 export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnInit, OnDestroy {
 

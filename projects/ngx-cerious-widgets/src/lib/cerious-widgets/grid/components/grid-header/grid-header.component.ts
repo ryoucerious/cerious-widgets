@@ -1,17 +1,24 @@
 import { Component, ElementRef, Inject, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { IGridHeaderComponent } from '../../interfaces/component-interfaces/grid-header.interface';
+import { CommonModule } from '@angular/common';
+
 import { GridHeaderRowComponent } from '../grid-header-row/grid-header-row.component';
-import { IGridHeaderRowComponent } from '../../interfaces/component-interfaces/grid-header-row.interface';
+
 import { GridOptions } from '../../interfaces/grid-options';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
-import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
 import { ColumnDef, IGridScrollService } from '../../interfaces';
+
+import { IGridHeaderComponent } from '../../interfaces/component-interfaces/grid-header.interface';
+import { IGridHeaderRowComponent } from '../../interfaces/component-interfaces/grid-header-row.interface';
+import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
+
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
+import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
 
 @Component({
   selector: 'cw-grid-header',
+  standalone: true,
   templateUrl: './grid-header.component.html',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, GridHeaderRowComponent]
 })
 export class GridHeaderComponent implements IGridHeaderComponent {
   

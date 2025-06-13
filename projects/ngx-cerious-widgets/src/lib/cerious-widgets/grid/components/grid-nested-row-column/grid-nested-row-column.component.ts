@@ -1,13 +1,17 @@
 import { Component, ElementRef, Inject, Input, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import { IGridNestedRowColumnComponent } from '../../interfaces/component-interfaces/grid-nested-row-column.interface';
+import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { GridRow } from '../../models/grid-row';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 
 @Component({
   selector: 'cw-nested-row-column',
+  standalone: true,
   templateUrl: './grid-nested-row-column.component.html',
-      encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule]
 })
 export class GridNestedRowColumnComponent implements IGridNestedRowColumnComponent {
 

@@ -1,31 +1,53 @@
+// Angular core imports
 import { AfterViewInit, ChangeDetectorRef, Component, ContentChildren, DoCheck, ElementRef, EventEmitter, Inject, Injector, Input, IterableDiffers, OnDestroy, OnInit, Optional, Output, QueryList, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { GridService } from '../services/grid.service';
-import { IGridComponent } from '../interfaces/component-interfaces/grid.interface';
-import { GridPlugin } from '../interfaces/grid-plugin';
+
+// Angular common
+import { CommonModule } from '@angular/common';
+
+// Angular DI tokens
+import { GRID_COLUMN_SERVICE } from '../tokens/grid-column-service.token';
+import { GRID_SERVICE } from '../tokens/grid-service.token';
+import { WIDGETS_CONFIG } from '../../shared/tokens/widgets-config.token';
+
+// Interfaces
+import { CellEvent, RowEvent } from '../interfaces';
 import { GridApi } from '../interfaces/grid-api';
 import { GridOptions } from '../interfaces/grid-options';
+import { IGridBodyComponent } from '../interfaces/component-interfaces/grid-body.interface';
+import { IGridComponent } from '../interfaces/component-interfaces/grid.interface';
 import { IGridFooterComponent } from '../interfaces/component-interfaces/grid-footer.interface';
 import { IGridHeaderComponent } from '../interfaces/component-interfaces/grid-header.interface';
-import { IGridBodyComponent } from '../interfaces/component-interfaces/grid-body.interface';
 import { IGridMenuBarComponent } from '../interfaces/component-interfaces/grid-menu-bar.interface';
 import { IGridPagerComponent } from '../interfaces/component-interfaces/grid-pager.interface';
 import { IGridScrollerComponent } from '../interfaces/component-interfaces/grid-scroller.interface';
-import { WIDGETS_CONFIG } from '../../shared/tokens/widgets-config.token';
-import { WidgetsConfig } from '../../shared/interfaces/widgets-config.interface';
-import { IGridService } from '../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../interfaces/service-interfaces/grid-column.interface';
-import { GRID_SERVICE } from '../tokens/grid-service.token';
-import { GRID_COLUMN_SERVICE } from '../tokens/grid-column-service.token';
+import { IGridService } from '../interfaces/service-interfaces/grid.interface';
 import { PluginOptions } from '../interfaces/plugin-options';
-import { CellEvent, RowEvent } from '../interfaces';
+import { WidgetsConfig } from '../../shared/interfaces/widgets-config.interface';
+
+// Plugins
+import { GridPlugin } from '../interfaces/grid-plugin';
+
+// Services
+import { GridService } from '../services/grid.service';
+
+// Components
+import { GridBodyComponent } from './grid-body/grid-body.component';
+import { GridFooterComponent } from './grid-footer/grid-footer.component';
+import { GridHeaderComponent } from './grid-header/grid-header.component';
+import { GridMenuBarComponent } from './grid-menu-bar/grid-menu-bar.component';
+import { GridPagerComponent } from './grid-pager/grid-pager.component';
+import { GridScrollerComponent } from './grid-scroller/grid-scroller.component';
 
 @Component({
   selector: 'cw-grid',
+  standalone: true,
   templateUrl: './grid.component.html',
   providers: [
     { provide: GRID_SERVICE, useClass: GridService }
   ],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, GridFooterComponent, GridHeaderComponent, GridBodyComponent, GridMenuBarComponent, GridPagerComponent, GridScrollerComponent],
 })
 export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy, AfterViewInit {
   private iterableDiffer: any;

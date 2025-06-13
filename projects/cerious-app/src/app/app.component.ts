@@ -5,7 +5,7 @@ import { MockServerDataSource } from './testing/mock-server.datasource';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
 })
 export class AppComponent implements AfterViewInit, OnInit {
   data!: Array<any>;

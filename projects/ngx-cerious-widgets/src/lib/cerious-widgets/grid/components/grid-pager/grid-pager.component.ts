@@ -1,14 +1,21 @@
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import { IGridPagerComponent } from '../../interfaces/component-interfaces/grid-pager.interface';
+
 import { PagerInfo } from '../../interfaces/pager-info';
+
+import { IGridScrollService, IGridService } from '../../interfaces';
+
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
-import { IGridScrollService, IGridService } from '../../interfaces';
 
 @Component({
   selector: 'cw-grid-pager',
+  standalone: true,
   templateUrl: './grid-pager.component.html',
-      encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule]
 })
 export class GridPagerComponent implements IGridPagerComponent, AfterViewInit {
 

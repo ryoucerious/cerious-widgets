@@ -1,20 +1,26 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, Output, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
+import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+
 import { IGridRowComponent } from '../../interfaces/component-interfaces/grid-row.interface';
+import { IGridRowColumnComponent } from '../../interfaces/component-interfaces/grid-row-column.interface';
+import { IGridRowFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-row-feature-column.interface';
+import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
+import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
+import { ColumnDef } from '../../interfaces/column-def';
+
 import { GridRow } from '../../models/grid-row';
 import { GridRowColumnComponent } from '../grid-row-column/grid-row-column.component';
 import { GridRowFeatureColumnComponent } from '../grid-row-feature-column/grid-row-feature-column.component';
-import { IGridRowColumnComponent } from '../../interfaces/component-interfaces/grid-row-column.interface';
-import { IGridRowFeatureColumnComponent } from '../../interfaces/component-interfaces/grid-row-feature-column.interface';
-import { ColumnDef } from '../../interfaces/column-def';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
-import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
-import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 
 @Component({
   selector: 'cw-grid-row',
+  standalone: true,
   templateUrl: './grid-row.component.html',
-      encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, GridRowColumnComponent, GridRowFeatureColumnComponent]
 })
 export class GridRowComponent implements IGridRowComponent, AfterViewInit {
   

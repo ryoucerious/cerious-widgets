@@ -1,17 +1,23 @@
 import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { IGridFooterComponent } from '../../interfaces/component-interfaces/grid-footer.interface';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { GridFooterRowComponent } from '../grid-footer-row/grid-footer-row.component';
-import { IGridFooterRowComponent } from '../../interfaces/component-interfaces/grid-footer-row.interface';
+
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+
+import { IGridFooterComponent } from '../../interfaces/component-interfaces/grid-footer.interface';
+import { IGridFooterRowComponent } from '../../interfaces/component-interfaces/grid-footer-row.interface';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 
+import { GridFooterRowComponent } from '../grid-footer-row/grid-footer-row.component';
+
 @Component({
   selector: 'cw-grid-footer',
+  standalone: true,
   templateUrl: './grid-footer.component.html',
-    encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, GridFooterRowComponent]
 })
 export class GridFooterComponent implements IGridFooterComponent, AfterViewInit, OnInit, OnDestroy {
 

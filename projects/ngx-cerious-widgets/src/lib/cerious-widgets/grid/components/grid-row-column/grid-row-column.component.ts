@@ -1,17 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Inject, Input, ViewEncapsulation } from '@angular/core';
-import { IGridRowColumnComponent } from '../../interfaces/component-interfaces/grid-row-column.interface';
-import { ColumnDef } from '../../interfaces/column-def';
-import { GridRow } from '../../models/grid-row';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
-import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
-import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
+
 import { ColumnFormat, ColumnType } from '../../enums';
+import { ColumnDef } from '../../interfaces/column-def';
+import { IGridRowColumnComponent } from '../../interfaces/component-interfaces/grid-row-column.interface';
+import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
+import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
+
+import { GridRow } from '../../models/grid-row';
+
+import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
 
 @Component({
   selector: 'cw-grid-row-column',
+  standalone: true,
   templateUrl: './grid-row-column.component.html',
-      encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule]
 })
 export class GridRowColumnComponent implements IGridRowColumnComponent {
 

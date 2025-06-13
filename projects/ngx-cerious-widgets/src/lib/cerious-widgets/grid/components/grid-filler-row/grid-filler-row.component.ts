@@ -1,21 +1,25 @@
 import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { GridFillerRowColumnComponent } from '../grid-filler-row-column/grid-filler-row-column.component';
 import { GridFillerRowFeatureColumnComponent } from '../grid-filler-row-feature-column/grid-filler-row-feature-column.component';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+import { GridRow } from '../../models';
 import {
   ColumnDef,
   IGridColumnService,
   IGridFillerRowColumnComponent,
   IGridFillerRowComponent,
   IGridFillerRowFeatureColumnComponent,
-  IGridService } from '../../interfaces';
-import { GridRow } from '../../models';
+  IGridService
+} from '../../interfaces';
 
 @Component({
   selector: 'cw-grid-filler-row',
+  standalone: true,
   templateUrl: './grid-filler-row.component.html',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, GridFillerRowColumnComponent, GridFillerRowFeatureColumnComponent]
 })
 export class GridFillerRowComponent implements IGridFillerRowComponent {
 

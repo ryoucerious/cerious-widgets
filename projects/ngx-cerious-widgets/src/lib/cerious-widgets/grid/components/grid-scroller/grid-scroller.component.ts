@@ -1,15 +1,23 @@
+// Angular imports
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+
+// Interface imports
 import { IGridScrollerComponent } from '../../interfaces/component-interfaces/grid-scroller.interface';
 import { ScrollDelta } from '../../interfaces/scroll-delta';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
-import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
 import { IGridScrollService } from '../../interfaces/service-interfaces/grid-scroll.interface';
+import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
+
+// Token imports
+import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
 
 @Component({
   selector: 'cw-grid-scroller',
+  standalone: true,
   templateUrl: './grid-scroller.component.html',
-      encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule]
 })
 export class GridScrollerComponent implements IGridScrollerComponent {
 

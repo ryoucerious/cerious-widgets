@@ -1,16 +1,23 @@
 import { Component, ContentChild, ElementRef, Inject, Input, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { GridColumnSizerComponent } from '../grid-column-sizer/grid-column-sizer.component';
+
 import { IGridHeaderColumnComponent } from '../../interfaces/component-interfaces/grid-header-column.interface';
-import { GridRow } from '../../models/grid-row';
 import { ColumnDef } from '../../interfaces/column-def';
-import { GRID_SERVICE } from '../../tokens/grid-service.token';
-import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 
+import { GridRow } from '../../models/grid-row';
+
+import { GRID_SERVICE } from '../../tokens/grid-service.token';
+import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+
 @Component({
   selector: 'cw-grid-header-column',
+  standalone: true,
   templateUrl: './grid-header-column.component.html',
-    encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, GridColumnSizerComponent]
 })
 export class GridHeaderColumnComponent implements IGridHeaderColumnComponent {
 
