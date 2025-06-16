@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GridHeaderRowComponent } from '../grid-header-row/grid-header-row.component';
@@ -25,6 +25,8 @@ export class GridHeaderComponent implements IGridHeaderComponent {
   @ViewChild('breadcrumb', { static: false }) breadcrumb!: ElementRef | undefined;
   @ViewChild('tableHead', { static: true }) tableHead!: ElementRef;
   @ViewChildren(GridHeaderRowComponent) rowComponents!: QueryList<IGridHeaderRowComponent>;
+
+  @Input() headerClasses: string = '';
   
   get headerWidth(): string {
     return this.gridService.headerWidth;

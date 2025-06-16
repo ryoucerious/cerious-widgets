@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -25,6 +25,8 @@ export class GridFooterComponent implements IGridFooterComponent, AfterViewInit,
 
   @ViewChild('tableFooter') tableFooter!: ElementRef;
   @ViewChildren(GridFooterRowComponent) rowComponents!: QueryList<IGridFooterRowComponent>;
+
+  @Input() footerClasses: string = '';
 
   get gridDataset() {
     return this.gridService.gridDataset;

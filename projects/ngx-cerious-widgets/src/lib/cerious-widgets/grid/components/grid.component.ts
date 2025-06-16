@@ -78,6 +78,13 @@ export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy
   set plugins(value: GridPlugin[]) { this.pluginsSignal.set(value); }
   get plugins() { return this.pluginsSignal(); }
 
+  @Input() gridContainerClasses: string = '';
+  @Input() menuBarClasses: string = '';
+  @Input() headerClasses: string = '';
+  @Input() bodyClasses: string = '';
+  @Input() footerClasses: string = '';
+  @Input() pagerClasses: string = '';
+
   readonly dataChangeSignal = signal<any>(null);
   @Output() dataChange = this.sh.toEventEmitter(this.dataChangeSignal);
 

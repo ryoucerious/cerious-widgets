@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Inject, Output, signal, Signal, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, Output, signal, Signal, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IGridMenuBarComponent } from '../../interfaces/component-interfaces/grid-menu-bar.interface';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
@@ -19,6 +19,8 @@ export class GridMenuBarComponent implements IGridMenuBarComponent {
 
   @ViewChild('menuBar') menuBar: ElementRef | undefined;
   @ViewChild('pluginBar') pluginBar: ElementRef | undefined;
+
+  @Input() menuBarClasses: string = '';
 
   get gridOptions() {
     return this.gridService.gridOptions;

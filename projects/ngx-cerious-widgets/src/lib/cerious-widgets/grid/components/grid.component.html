@@ -2,13 +2,14 @@
      class="cw-grid"
      role="grid"
      aria-label="Data Grid"
+     [ngClass]="gridContainerClasses"
      (resized)="resize()"
      (mousemove)="onMouseMove($event)"
      (mouseup)="onMouseUp($event)">
-  <cw-grid-menu-bar #gridMenuBar *ngIf="shouldShowMenuBar()"></cw-grid-menu-bar>
-  <cw-grid-header #gridHeader></cw-grid-header>
-  <cw-grid-body #gridBody></cw-grid-body>
-  <cw-grid-footer #gridFooter *ngIf="shouldShowFooter()"></cw-grid-footer>
+  <cw-grid-menu-bar #gridMenuBar *ngIf="shouldShowMenuBar()" [menuBarClasses]="menuBarClasses"></cw-grid-menu-bar>
+  <cw-grid-header #gridHeader [headerClasses]="headerClasses"></cw-grid-header>
+  <cw-grid-body #gridBody [bodyClasses]="bodyClasses"></cw-grid-body>
+  <cw-grid-footer #gridFooter *ngIf="shouldShowFooter()" [footerClasses]="footerClasses"></cw-grid-footer>
   <cw-grid-scroller #gridScroller></cw-grid-scroller>
-  <cw-grid-pager #gridPager *ngIf="shouldShowPager()"></cw-grid-pager>
+  <cw-grid-pager #gridPager *ngIf="shouldShowPager()" [pagerClasses]="pagerClasses"></cw-grid-pager>
 </div>

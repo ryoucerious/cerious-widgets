@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { IGridPagerComponent } from '../../interfaces/component-interfaces/grid-pager.interface';
@@ -22,6 +22,8 @@ export class GridPagerComponent implements IGridPagerComponent, AfterViewInit {
   pagerInfo!: PagerInfo;
 
   @ViewChild('tablePager') tablePager!: ElementRef;
+
+  @Input() pagerClasses: string = '';
 
   get gridDataset() {
     return this.gridService.gridDataset;

@@ -3,6 +3,7 @@
      role="rowgroup"
      [style.overflowX]="os === 'iOS' || os === 'Mac OS' ? 'auto' : 'hidden'"
      [style.overflowX]="'hidden'"
+     [ngClass]="headerClasses"
      (keydown)="onKeyDown($event)">
     <ng-container *ngFor="let row of rows; let rowIndex = index">
         <cw-grid-header-row class="cw-table-row column-headers-standard"

@@ -5,6 +5,7 @@
      [style.overflowX]="'hidden'"
      [style.scrollbarWidth]="0"
      [style.scrollbarHeight]="0"
+     [ngClass]="bodyClasses"
      (scroll)="scrollGrid($event)"
      (click)="onClick($event)"
      (dblclick)="onDoubleClick($event)"

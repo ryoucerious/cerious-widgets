@@ -2,7 +2,8 @@
      class="cw-table-foot"
      role="rowgroup"
      [style.overflowX]="os === 'iOS' || os === 'Mac OS' ? 'auto' : 'hidden'"
-     [style.overflowX]="'hidden'">
+     [style.overflowX]="'hidden'"
+     [ngClass]="footerClasses">
   <ng-container *ngFor="let row of rows; let rowIndex = index">
     <cw-grid-footer-row class="cw-table-row"
                         role="row"

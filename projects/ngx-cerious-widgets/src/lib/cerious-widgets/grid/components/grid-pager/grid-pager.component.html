@@ -1,5 +1,8 @@
-<div #tablePager class="cw-table-pager" role="navigation" aria-label="Table Pager">
-  
+<div #tablePager
+     class="cw-table-pager"
+     role="navigation"
+     aria-label="Table Pager"
+     [ngClass]="pagerClasses">
   <div class="cw-paging">
     <span *ngIf="!hasGroupBy" aria-live="polite">
       Viewing

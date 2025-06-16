@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, Input, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -48,6 +48,8 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
   totalHeight = 0; // Total height of all rows
   topOffset = '0px'; // Top offset for the grid body
   bottomOffset = '0px'; // Bottom offset for the grid body
+
+  @Input() bodyClasses: string = '';
   
   @ViewChild('tableBody', { static: true }) tableBody!: ElementRef;
   @ViewChildren(GridFillerRowComponent) fillerRowComponents!: QueryList<IGridFillerRowComponent>;
