@@ -11,6 +11,7 @@ import { GridRow } from '../../models/grid-row';
 
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
+import { SectionClassConfig } from '../../interfaces';
 
 @Component({
   selector: 'cw-grid-row-column',
@@ -31,6 +32,8 @@ export class GridRowColumnComponent implements IGridRowColumnComponent {
   @Input()
   set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
   get gridRow() { return this.gridRowSignal()!; }
+  
+  @Input() classes: SectionClassConfig = {};
 
   // Expose enums to the template
   ColumnType = ColumnType;

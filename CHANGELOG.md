@@ -13,3 +13,13 @@ All notable changes to this project will be documented in this file.
 ### Notes
 - This version maintains backward compatibility with non-standalone usage.
 - Consumers can now use the grid directly in `standalone: true` components with `importProvidersFrom()` or custom providers.
+
+## [1.0.11] - 2025-06-15
+### Added
+- Support for custom classes such as Tailwind CSS.
+
+### Changed
+- Fixed an issue that was causing the gridRow to loose its reference.
+
+### Notes
+- You can now use custom classes by applying them directly to the GridComponent template.

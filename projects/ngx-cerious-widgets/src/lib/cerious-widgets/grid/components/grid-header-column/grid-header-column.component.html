@@ -2,6 +2,7 @@
      role="columnheader" 
      [style.width]="getWidth()" 
      [attr.data-column-id]="column.id"
+     [ngClass]="classes.cell"
      (mouseover)="$event.stopPropagation()">
     <div class="column-content">
         <ng-container *ngIf="column.headerCellTemplate && templates[column.headerCellTemplate]"

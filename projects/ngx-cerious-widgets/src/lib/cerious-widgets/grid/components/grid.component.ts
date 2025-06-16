@@ -39,6 +39,7 @@ import { GridHeaderComponent } from './grid-header/grid-header.component';
 import { GridMenuBarComponent } from './grid-menu-bar/grid-menu-bar.component';
 import { GridPagerComponent } from './grid-pager/grid-pager.component';
 import { GridScrollerComponent } from './grid-scroller/grid-scroller.component';
+import { SectionClassConfig } from '../interfaces/section-class-config-interface';
 
 @Component({
   selector: 'cw-grid',
@@ -78,12 +79,12 @@ export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy
   set plugins(value: GridPlugin[]) { this.pluginsSignal.set(value); }
   get plugins() { return this.pluginsSignal(); }
 
-  @Input() gridContainerClasses: string = '';
-  @Input() menuBarClasses: string = '';
-  @Input() headerClasses: string = '';
-  @Input() bodyClasses: string = '';
-  @Input() footerClasses: string = '';
-  @Input() pagerClasses: string = '';
+  @Input() gridContainerClasses: SectionClassConfig = {};
+  @Input() menuBarClasses: SectionClassConfig = {};
+  @Input() headerClasses: SectionClassConfig = {};
+  @Input() bodyClasses: SectionClassConfig = {};
+  @Input() footerClasses: SectionClassConfig = {};
+  @Input() pagerClasses: SectionClassConfig = {};
 
   readonly dataChangeSignal = signal<any>(null);
   @Output() dataChange = this.sh.toEventEmitter(this.dataChangeSignal);

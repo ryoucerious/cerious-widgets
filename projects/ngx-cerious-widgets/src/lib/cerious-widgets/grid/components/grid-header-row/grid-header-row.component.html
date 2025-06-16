@@ -1,7 +1,10 @@
 <!-- Render the feature column only at the top level -->
 <ng-container *ngIf="hasRowFeatures && !isChildRow">
     <cw-grid-header-feature-column class="table-col table-col-pinned table-col-feature"
-                                   [class]="{'last-pinned': pinnedColumns.length === 0}"
+                                   [ngClass]="{
+                                    'last-pinned': pinnedColumns.length === 0
+                                    }"
+                                   [classes]="classes"
                                    [style.width]="featureColumnWidth"
                                    role="presentation"
                                    aria-hidden="true">
@@ -14,6 +17,7 @@
      [cdkDropListData]="gridRow.columnDefs"
      [cdkDropListConnectedTo]="dropId"
      cdkDropListOrientation="horizontal"
+     [ngClass]="classes.row"
      (cdkDropListDropped)="drop($event)"
      role="row">
     <ng-container *ngFor="let column of gridRow.columnDefs">
@@ -23,7 +27,11 @@
                  cdkDrag
                  [cdkDragDisabled]="column.draggable === false"
                  class="group-header"
-                 [ngClass]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned, 'has-children': column.children && column.children.length > 0}"
+                 [ngClass]="{
+                    'table-col-pinned': column.pinned,
+                    'last-pinned': column.lastPinned,
+                    'has-children': column.children && column.children.length > 0
+                    }"
                  [attr.data-column-id]="column.id"
                  [attr.colspan]="getColspan(column)"
                  [attr.rowspan]="getRowspan(column)"
@@ -62,7 +70,11 @@
 
                 <cw-grid-header-column *ngIf="column.children.length > 0"
                                        class="table-col group-column"
-                                       [ngClass]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned}"
+                                       [ngClass]="{
+                                        'table-col-pinned': column.pinned,
+                                        'last-pinned': column.lastPinned
+                                        }"
+                                       [classes]="classes"
                                        [column]="column"
                                        [style]="{'width': getParentWidth(column), 'overflow': 'hidden'}"
                                        role="columnheader">
@@ -82,7 +94,11 @@
                                 cdkDrag
                                 [cdkDragDisabled]="column.draggable === false"
                                 class="table-col leaf-column"
-                                [class]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned}"
+                                [ngClass]="{
+                                  'table-col-pinned': column.pinned,
+                                  'last-pinned': column.lastPinned
+                                }"
+                                [classes]="classes"
                                 [column]="column"
                                 [style]="{'width': getColumnWidth(column), 'overflow': 'hidden'}"
                                 role="columnheader">

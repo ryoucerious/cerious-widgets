@@ -9,6 +9,7 @@ import { IGridScrollService, IGridService } from '../../interfaces';
 
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
+import { SectionClassConfig } from '../../interfaces/section-class-config-interface';
 
 @Component({
   selector: 'cw-grid-pager',
@@ -23,7 +24,7 @@ export class GridPagerComponent implements IGridPagerComponent, AfterViewInit {
 
   @ViewChild('tablePager') tablePager!: ElementRef;
 
-  @Input() pagerClasses: string = '';
+  @Input() classes: SectionClassConfig = {};
 
   get gridDataset() {
     return this.gridService.gridDataset;
@@ -65,6 +66,19 @@ export class GridPagerComponent implements IGridPagerComponent, AfterViewInit {
         }
       });
     });
+  }
+
+  getPagerCellClasses(isActive: boolean): any {
+    const result: { [key: string]: boolean } = {};
+    if (this.classes && this.classes.cell) {
+      this.classes.cell.split(' ').forEach(cls => {
+        if (cls) result[cls] = true;
+      });
+    }
+    if (isActive) {
+      result['active'] = true;
+    }
+    return result;
   }
 
   /**

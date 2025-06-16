@@ -16,6 +16,7 @@ import { IGridColumnService } from '../../interfaces/service-interfaces/grid-col
 
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+import { SectionClassConfig } from '../../interfaces/section-class-config-interface';
 
 @Component({
   selector: 'cw-grid-footer-row',
@@ -27,6 +28,8 @@ import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 export class GridFooterRowComponent implements IGridFooterRowComponent {
   
   readonly gridRowSignal = signal<GridRow | undefined>(undefined);
+  
+  @Input() classes: SectionClassConfig = {};
 
   @Input()
   set gridRow(value: GridRow) { this.gridRowSignal.set(value); }

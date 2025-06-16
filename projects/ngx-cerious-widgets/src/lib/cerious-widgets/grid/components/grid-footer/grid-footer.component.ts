@@ -11,6 +11,7 @@ import { IGridService } from '../../interfaces/service-interfaces/grid.interface
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 
 import { GridFooterRowComponent } from '../grid-footer-row/grid-footer-row.component';
+import { SectionClassConfig } from '../../interfaces/section-class-config-interface';
 
 @Component({
   selector: 'cw-grid-footer',
@@ -26,7 +27,7 @@ export class GridFooterComponent implements IGridFooterComponent, AfterViewInit,
   @ViewChild('tableFooter') tableFooter!: ElementRef;
   @ViewChildren(GridFooterRowComponent) rowComponents!: QueryList<IGridFooterRowComponent>;
 
-  @Input() footerClasses: string = '';
+  @Input() classes: SectionClassConfig = {};
 
   get gridDataset() {
     return this.gridService.gridDataset;

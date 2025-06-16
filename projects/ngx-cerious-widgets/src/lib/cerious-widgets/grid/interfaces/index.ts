@@ -13,6 +13,7 @@ export * from './cell-event';
 export * from './row-event';
 export * from './scroll-delta';
 export * from './sort-state';
+export * from './section-class-config-interface';
 
 export * from './service-interfaces/grid-column.interface';
 export * from './service-interfaces/grid-scroll.interface';

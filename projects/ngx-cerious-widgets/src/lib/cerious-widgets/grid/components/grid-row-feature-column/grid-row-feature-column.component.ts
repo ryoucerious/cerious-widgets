@@ -11,6 +11,7 @@ import { IGridRowFeatureColumnComponent } from '../../interfaces/component-inter
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { SignalHelperService } from '../../../shared/services/signal-helper.services';
+import { SectionClassConfig } from '../../interfaces';
 
 @Component({
   selector: 'cw-grid-row-feature-column',
@@ -26,6 +27,8 @@ export class GridRowFeatureColumnComponent implements IGridRowFeatureColumnCompo
   @Input()
   set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
   get gridRow() { return this.gridRowSignal()!; }
+
+  @Input() classes: SectionClassConfig = {};
 
   readonly toggleNestedRowSignal = signal<GridRow | undefined>(undefined);
   @Output() toggleNestedRow = this.sh.toEventEmitter(this.toggleNestedRowSignal as Signal<GridRow>);

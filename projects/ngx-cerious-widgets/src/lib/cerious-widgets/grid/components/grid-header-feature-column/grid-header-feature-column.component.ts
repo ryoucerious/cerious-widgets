@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -8,6 +8,7 @@ import { IGridColumnService } from '../../interfaces/service-interfaces/grid-col
 
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+import { SectionClassConfig } from '../../interfaces';
 
 @Component({
   selector: 'cw-grid-header-feature-column',
@@ -21,6 +22,8 @@ export class GridHeaderFeatureColumnComponent implements IGridHeaderFeatureColum
   private subscriptions: Subscription[] = [];
 
   selected = false;
+
+  @Input() classes: SectionClassConfig = {};
 
   get featureWidth() {
     return this.gridColumnService.getFeatureWidth(this.gridService.gridOptions) + 'px';
@@ -66,7 +69,6 @@ export class GridHeaderFeatureColumnComponent implements IGridHeaderFeatureColum
     this.selected = !this.selected;
     this.gridService.gridDataset?.dataset?.forEach(row => row.selected = this.selected);
     this.gridService.gridDataset.selectedRows = this.gridService.gridDataset?.dataset?.filter(row => row.selected);
-    this.gridService.render();
   }
 
 }

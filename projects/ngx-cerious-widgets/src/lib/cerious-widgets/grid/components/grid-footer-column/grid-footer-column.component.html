@@ -1,4 +1,5 @@
-<div class="text-nowrap" [style.width]="getWidth()">
+<div class="text-nowrap" [style.width]="getWidth()" [ngClass]="classes.cell"
+     [attr.data-column-id]="column.id" (mouseover)="$event.stopPropagation()">
     <ng-template *ngIf="column.footerCellTemplate && templates[column.footerCellTemplate]"
             [ngTemplateOutlet]="templates[column.footerCellTemplate]"
             [ngTemplateOutletContext]="{column: column}">

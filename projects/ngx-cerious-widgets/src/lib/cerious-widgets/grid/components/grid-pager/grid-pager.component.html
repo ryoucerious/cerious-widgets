@@ -2,7 +2,7 @@
      class="cw-table-pager"
      role="navigation"
      aria-label="Table Pager"
-     [ngClass]="pagerClasses">
+     [ngClass]="classes.container">
   <div class="cw-paging">
     <span *ngIf="!hasGroupBy" aria-live="polite">
       Viewing
@@ -13,14 +13,13 @@
       ({{pagerInfo?.start}}-{{pagerInfo?.total}}) of {{pagerInfo?.total}}
     </span>
   </div>
-  <!-- I believe this is the only use of Boostrap col -->
   <div class="cw-paging-controls" *ngIf="(gridOptions.pageSize && (gridDataset?.pages?.length || 0) > 1) && !hasGroupBy">
-    <div class="btn-group" role="group" aria-label="Pagination Controls">
+    <div class="btn-group" role="group" aria-label="Pagination Controls" [ngClass]="classes.row">
       <button class="btn btn-sm btn-default table-pager-btn m-0"
               [ngStyle]="{'min-width': 'initial'}"
               *ngFor="let page of gridDataset.pages"
               title="{{'Page ' + page.text}}"
-              [ngClass]="{'active': gridDataset.pageNumber === page.value}"
+              [ngClass]="getPagerCellClasses(gridDataset.pageNumber === page.value)"
               (click)="gridPageClick(page.value)"
               role="button"
               [attr.aria-current]="gridDataset.pageNumber === page.value ? 'page' : null"
@@ -28,9 +27,6 @@
         <span *ngIf="page.text !== 'First' && page.text !== 'Last'">
           {{page.text}}
         </span>
-        <!-- <fa-icon *ngIf="page.text === 'First' || page.text === 'Last'"
-                [icon]="['fas', page.text === 'First' ? 'chevron-left' : 'chevron-right']">
-        </fa-icon> -->
         <span *ngIf="page.text === 'First' || page.text === 'Last'"
               [ngClass]="{'chevron-left': page.text === 'First', 'chevron-right': page.text === 'Last'}">
         </span>

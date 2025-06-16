@@ -3,14 +3,15 @@
      role="rowgroup"
      [style.overflowX]="os === 'iOS' || os === 'Mac OS' ? 'auto' : 'hidden'"
      [style.overflowX]="'hidden'"
-     [ngClass]="headerClasses"
+     [ngClass]="classes.container"
      (keydown)="onKeyDown($event)">
     <ng-container *ngFor="let row of rows; let rowIndex = index">
         <cw-grid-header-row class="cw-table-row column-headers-standard"
                             role="row"
                             [attr.aria-rowindex]="rowIndex + 1"
                             [gridRow]="row"
-                            [style.minWidth]="rowMinWidth">
+                            [style.minWidth]="rowMinWidth"
+                            [classes]="classes">
         </cw-grid-header-row>
     </ng-container>
 

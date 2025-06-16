@@ -84,6 +84,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       height: 'auto',
       columnWidth: '175px',
       enableVirtualScroll: true,
+      enableMultiselect: true,
       pageSize: 50,
       noDataMessage: "There are no records based on your search criteria.",
       columnDefs: [...MOCK_COLUMN_DEFS]

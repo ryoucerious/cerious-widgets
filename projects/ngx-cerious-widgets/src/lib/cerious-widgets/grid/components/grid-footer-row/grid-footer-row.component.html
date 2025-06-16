@@ -1,6 +1,7 @@
 <ng-container *ngIf="hasRowFeatures">
     <cw-grid-footer-feature-column class="table-col table-col-pinned table-col-feature"
-                                   [class]="{'last-pinned': pinnedColumns.length === 0}"
+                                   [ngClass]="{'last-pinned': pinnedColumns.length === 0}"
+                                   [classes]="classes"
                                    [style.width]="featureColumnWidth"
                                    role="gridcell"
                                    aria-hidden="true">
@@ -9,7 +10,11 @@
 <ng-container *ngFor="let column of gridRow.columnDefs">
     <ng-container *ngIf="column.visible !== false">
         <cw-grid-footer-column class="table-col"
-                               [class]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned}"
+                               [ngClass]="{
+                                 'table-col-pinned': column.pinned,
+                                 'last-pinned': column.lastPinned
+                               }"
+                               [classes]="classes"
                                [column]="column"
                                [style]="{'width': getColumnWidth(column), 'overflow': 'hidden'}"
                                role="gridcell">

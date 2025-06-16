@@ -62,7 +62,6 @@
             vertical-align: middle;
             overflow-x: hidden;
             position: relative;
-            background-color: rgb(240,240,240);
             
             .cell-content-wrapper {
                 padding: 4px 8px;
@@ -77,40 +76,30 @@
             border-right: none;
         }
 
-        &.odd .table-col {
+        &.odd {
             // alternating row color
             background-color: white;
         }
 
         &.group-by-row {
-            .table-col {
-                background-color: #e2e2e2;
-            }
+            background-color: #e2e2e2;
 
             &.odd {
-                .table-col {
-                    background-color: #ededed;
-                }
+                background-color: #ededed;
             }
         }
 
         &:not(.nested-grid):not(.filler-row):hover {
-            > .table-col {
-                background-color: rgb(200,210,218);
-            }
+            background-color: rgb(200,210,218);
         }
 
         &.filler-row {
-            .table-col {
-                background-color: rgb(250,250,250);
-                overflow: hidden;
-            }
+            background-color: rgb(250,250,250);
+            overflow: hidden;
         }
 
         &.group-by-footer-row {
-            .table-col {
-                background: rgb(255,255,255);
-            }
+            background: rgb(255,255,255);
         }
     }
 

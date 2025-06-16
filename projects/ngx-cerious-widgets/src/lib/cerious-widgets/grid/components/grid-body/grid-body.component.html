@@ -5,7 +5,7 @@
      [style.overflowX]="'hidden'"
      [style.scrollbarWidth]="0"
      [style.scrollbarHeight]="0"
-     [ngClass]="bodyClasses"
+     [ngClass]="classes.container"
      (scroll)="scrollGrid($event)"
      (click)="onClick($event)"
      (dblclick)="onDoubleClick($event)"
@@ -47,22 +47,24 @@
                             class="cw-table-row" 
                             role="row"
                             tabindex="0"
-                            [attr.data-row-id]="item.id"
+                            [attr.data-row-id]="item.row.id"
                             [class.even]="(startIndex + rowIndex) % 2 === 0" 
                             [class.odd]="(startIndex + rowIndex) % 2 !== 0" 
-                            [gridRow]="item"
+                            [ngClass]="classes.row"
+                            [gridRow]="item.row"
                             [style.minWidth]="rowMinWidth"
-                            (toggleNestedRow)="toggleNestedRow(item, rowIndex)"
+                            [classes]="classes"
+                            (toggleNestedRow)="toggleNestedRow(item.row, rowIndex)"
                             (resize)="updateRowHeight(startIndex + rowIndex, rowElement.el.nativeElement.offsetHeight)">
                 </cw-grid-row>
 
                 <!-- Nested Row -->
-                <cw-nested-row *ngIf="item.nestedExpanded"
+                <cw-nested-row *ngIf="item.row.nestedExpanded"
                             #nestedRowElement
                             class="cw-table-row nested-row"
                             role="row"
                             tabindex="0"
-                            [gridRow]="item"
+                            [gridRow]="item.row"
                             [style.minWidth]="rowMinWidth"
                             (resize)="updateRowHeight(startIndex + rowIndex, nestedRowElement.el.nativeElement.offsetHeight, true)">
                 </cw-nested-row>

@@ -12,6 +12,7 @@ import { IGridService } from '../../interfaces/service-interfaces/grid.interface
 
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
+import { SectionClassConfig } from '../../interfaces/section-class-config-interface';
 
 @Component({
   selector: 'cw-grid-header',
@@ -26,7 +27,7 @@ export class GridHeaderComponent implements IGridHeaderComponent {
   @ViewChild('tableHead', { static: true }) tableHead!: ElementRef;
   @ViewChildren(GridHeaderRowComponent) rowComponents!: QueryList<IGridHeaderRowComponent>;
 
-  @Input() headerClasses: string = '';
+  @Input() classes: SectionClassConfig = {};
   
   get headerWidth(): string {
     return this.gridService.headerWidth;

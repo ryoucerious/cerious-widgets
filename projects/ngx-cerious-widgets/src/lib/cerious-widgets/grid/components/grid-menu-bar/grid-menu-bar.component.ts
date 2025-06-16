@@ -4,6 +4,7 @@ import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { CommonModule } from '@angular/common';
 import { SignalHelperService } from '../../../shared/services/signal-helper.services';
+import { SectionClassConfig } from '../../interfaces/section-class-config-interface';
 
 @Component({
   selector: 'cw-grid-menu-bar',
@@ -20,7 +21,7 @@ export class GridMenuBarComponent implements IGridMenuBarComponent {
   @ViewChild('menuBar') menuBar: ElementRef | undefined;
   @ViewChild('pluginBar') pluginBar: ElementRef | undefined;
 
-  @Input() menuBarClasses: string = '';
+  @Input() classes: SectionClassConfig = {};
 
   get gridOptions() {
     return this.gridService.gridOptions;

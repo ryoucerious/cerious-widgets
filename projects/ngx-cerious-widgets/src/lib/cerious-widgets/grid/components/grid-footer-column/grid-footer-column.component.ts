@@ -8,6 +8,7 @@ import { IGridColumnService } from '../../interfaces/service-interfaces/grid-col
 
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+import { SectionClassConfig } from '../../interfaces';
 
 @Component({
   selector: 'cw-grid-footer-column',
@@ -23,6 +24,8 @@ export class GridFooterColumnComponent implements IGridFooterColumnComponent {
   @Input()
   set column(value: ColumnDef) { this.columnSignal.set(value); }
   get column() { return this.columnSignal()!; }
+
+  @Input() classes: SectionClassConfig = {};
 
   get templates() {
     return this.gridService.templates;

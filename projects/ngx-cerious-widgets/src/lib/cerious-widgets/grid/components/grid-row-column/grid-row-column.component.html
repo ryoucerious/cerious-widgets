@@ -1,5 +1,6 @@
 <div srole="gridcell"
      class="cell-content-wrapper"
+     [ngClass]="classes.cell"
      [style.width]="getWidth()" 
      [style.text-align]="getAlignment()"
      [attr.aria-label]="column.label || 'Column'">

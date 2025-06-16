@@ -3,6 +3,7 @@
                                 [class]="{'last-pinned': pinnedColumns.length === 0}"
                                 [gridRow]="gridRow"
                                 [style.width]="featureColumnWidth"
+                                [classes]="classes"
                                 (toggleNestedRow)="toggleNestedRowValue($event)"
                                 role="gridcell"
                                 aria-hidden="true">
@@ -15,6 +16,7 @@
                             [gridRow]="gridRow"
                             [column]="column"
                             [style]="{'width': getColumnWidth(column), 'overflow': 'hidden'}"
+                            [classes]="classes"
                             [attr.data-cell-id]="column.id"
                             role="gridcell"
                             [attr.aria-colindex]="colIndex + 1">

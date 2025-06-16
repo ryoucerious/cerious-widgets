@@ -17,6 +17,7 @@ import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
 import { IGridColumnService } from '../../interfaces/service-interfaces/grid-column.interface';
+import { SectionClassConfig } from '../../interfaces/section-class-config-interface';
 
 @Component({
   selector: 'cw-grid-header-row',
@@ -39,6 +40,8 @@ export class GridHeaderRowComponent implements IGridHeaderRowComponent {
   @Input()
   set isChildRow(value: boolean) { this.isChildRowSignal.set(value); }
   get isChildRow() { return this.isChildRowSignal(); }
+
+  @Input() classes: SectionClassConfig = {};
 
   @ViewChildren(GridHeaderColumnComponent) columnComponents!: QueryList<IGridHeaderColumnComponent>;
   @ViewChildren(GridHeaderRowComponent) childRowComponents!: QueryList<IGridHeaderRowComponent>;

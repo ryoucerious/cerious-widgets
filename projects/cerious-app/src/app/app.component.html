@@ -1,5 +1,16 @@
-<div style="height: 100%;">
+<div style="height: 100%;" class="border-red-200">
   <cw-grid #grid
+      [gridContainerClasses]="{ container: '' }"
+      [menuBarClasses]="{ container: '' }"
+      [headerClasses]="{ container: '', 
+                         row: '',
+                         cell: '' }"
+      [bodyClasses]="{ container: '', 
+                         row: '',
+                         cell: '' }"
+      [pagerClasses]="{ container: '', 
+                         row: '',
+                         cell: '' }"
       [gridOptions]="gridOptions"
       [data]="data">
       <ng-template #headerTemplate>

@@ -23,6 +23,7 @@ import { GridRow } from '../../models/grid-row';
 import { GridDataset } from '../../interfaces/grid-dataset';
 import { GridOptions } from '../../interfaces/grid-options';
 import { ScrollDelta } from '../../interfaces/scroll-delta';
+import { SectionClassConfig } from '../../interfaces/section-class-config-interface';
 
 @Component({
   selector: 'cw-grid-body',
@@ -49,7 +50,7 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
   topOffset = '0px'; // Top offset for the grid body
   bottomOffset = '0px'; // Bottom offset for the grid body
 
-  @Input() bodyClasses: string = '';
+  @Input() classes: SectionClassConfig = {};
   
   @ViewChild('tableBody', { static: true }) tableBody!: ElementRef;
   @ViewChildren(GridFillerRowComponent) fillerRowComponents!: QueryList<IGridFillerRowComponent>;
@@ -513,7 +514,7 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
               // Add rows in the group
               rows.forEach(row => {
                 this.flattenedRows.push({
-                  ...row,
+                  row,
                   depth, // Maintain the depth for rows within this group
                 });
               });
@@ -529,7 +530,7 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
     } else if (this.rows?.length) {
       // If no group-by data, use flat rows
       this.flattenedRows = this.rows.map(row => ({
-        ...row,
+        row,
         depth: 0, // Flat rows have no depth
       }));
     } else {
