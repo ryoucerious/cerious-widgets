@@ -6,12 +6,27 @@ import { TemplateRegistryService } from '../../shared/services/template-registry
 import { PluginOptions } from '../interfaces';
 import { PluginConfig } from '../../shared/interfaces/plugin-config.interface';
 
+export interface ExcelExportOptions {
+  fileName?: string;
+  sheetName?: string;
+  includeHeaders?: boolean;
+  batchSize?: number;
+  maxChunkSize?: number;
+  autoSplitLargeDatasets?: boolean;
+  optimizeDataTypes?: boolean; // New: Automatically detect and use optimal data types
+  useRequestAnimationFrame?: boolean; // New: Use RAF for smoother UI updates
+  onProgress?: (processed: number, total: number) => void;
+  onComplete?: () => void;
+  onError?: (error: string) => void;
+}
+
 @Injectable()
 export class ExportToExcelPlugin implements GridPlugin {
   private exportButton!: HTMLButtonElement;
   private gridApi!: GridApi;
   private renderer: Renderer2;
   private pluginOptions: PluginOptions | PluginConfig = {};
+  private isExporting = false;
 
   constructor(
     private templateRegistry: TemplateRegistryService,
@@ -37,7 +52,7 @@ export class ExportToExcelPlugin implements GridPlugin {
    * - Cloning the grid data to avoid mutating the original.
    * - Flattening grouped columns for a structured export.
    * - Creating grouped headers and mapping data to match the column structure.
-   * - Using the `XLSX` library to generate and export the Excel file.
+   * - Using the `write-excel-file` library to generate and export the Excel file.
    */
   onInit(api: GridApi, config?: PluginOptions): void {
     this.gridApi = api;
@@ -85,7 +100,9 @@ export class ExportToExcelPlugin implements GridPlugin {
   
     // Add the click event listener
     this.renderer.listen(this.exportButton, 'click', () => {
-      this.exportGridDataToExcel();
+      if (!this.isExporting) {
+        this.exportGridDataToExcel();
+      }
     });
   
     // Append to menu bar
@@ -178,70 +195,418 @@ export class ExportToExcelPlugin implements GridPlugin {
   }
 
   /**
-   * Exports the grid data to an Excel file.
+   * Exports the grid data to an Excel file using lazy-loaded write-excel-file library.
    *
    * This method performs the following steps:
-   * 1. Retrieves and clones the grid data to avoid mutating the original data.
+   * 1. Retrieves the grid data and only clones it if there's a callback that might modify it.
    * 2. Invokes a user-supplied callback (`onBeforeExportToExcel`) to allow modifications to the data before export.
-   * 3. Flattens the grouped column definitions to create a flat structure for export.
-   * 4. Maps the data to match the flattened column structure.
-   * 5. Creates grouped header rows based on the column definitions.
-   * 6. Converts the data and headers into an Excel worksheet.
-   * 7. Appends the worksheet to a new workbook.
-   * 8. Writes the workbook to a file named `export.xlsx`.
+   * 3. Uses chunked processing for large datasets to prevent UI blocking.
+   * 4. Flattens the grouped column definitions to create a flat structure for export.
+   * 5. Generates and downloads the Excel file using dynamic import.
    *
    * The exported Excel file includes:
-   * - Grouped headers at the top.
+   * - Headers based on the column definitions.
    * - Data rows aligned with the flattened column structure.
-   *
-   * Note: This method uses the `XLSX` library for Excel file generation.
    */
   private async exportGridDataToExcel(): Promise<void> {
-    const XLSX = await import('xlsx');
+    try {
+      this.isExporting = true;
+      this.updateButtonState(true);
 
-    const data = this.gridApi.getData().map(data => ({ ...data })); // Clone the data to avoid mutating the original
-    const groupedColumns = this.gridApi.getColumnDefs();
-  
-    // Invoke the user-supplied callback to modify the data
-    const modifiedData = (this.pluginOptions['onBeforeExportToExcel']
-      ? this.pluginOptions['onBeforeExportToExcel'](data, groupedColumns)
-      : data) || data;
-  
+      const originalData = this.gridApi.getData();
+      const groupedColumns = this.gridApi.getColumnDefs();
+    
+      // Handle data transformation with callback protection
+      let exportData = originalData;
+      if (this.pluginOptions['onBeforeExportToExcel']) {
+        // Clone data only when there's a callback to prevent mutation of original data
+        const clonedData = originalData.map(row => ({ ...row }));
+        exportData = this.pluginOptions['onBeforeExportToExcel'](clonedData, groupedColumns) || clonedData;
+      }
+      // If no callback, use original data directly for better performance
+    
+      // Check if we should use chunked processing for large datasets
+      const shouldUseChunked = exportData.length > (this.pluginOptions['batchSize'] ?? 10000);
+      
+      if (shouldUseChunked) {
+        await this.exportWithChunkedProcessing(exportData, groupedColumns);
+      } else {
+        await this.exportSynchronously(exportData, groupedColumns);
+      }
+    } catch (error) {
+      console.error('Excel export failed:', error);
+      const errorCallback = this.pluginOptions['onError'];
+      if (errorCallback) {
+        errorCallback(error instanceof Error ? error.message : 'Export failed');
+      }
+    } finally {
+      this.isExporting = false;
+      this.updateButtonState(false);
+    }
+  }
+
+  /**
+   * Updates the button state during export
+   */
+  private updateButtonState(isExporting: boolean): void {
+    if (this.exportButton) {
+      this.renderer.setProperty(
+        this.exportButton, 
+        'disabled', 
+        isExporting
+      );
+      this.renderer.setProperty(
+        this.exportButton, 
+        'innerText', 
+        isExporting ? 'Exporting...' : 'Export to Excel'
+      );
+    }
+  }
+
+  /**
+   * Exports data using main thread with optimized chunked processing for large datasets
+   */
+  private async exportWithChunkedProcessing(data: any[], groupedColumns: ColumnDef[]): Promise<void> {
+    try {
+      // Dynamically import write-excel-file to keep the plugin lightweight
+      const writeExcelFile = await import('write-excel-file');
+      
+      const flattenedColumns = this.flattenColumns(groupedColumns);
+      
+      // For very large datasets, offer to split into multiple files
+      const maxChunkSize = this.pluginOptions['maxChunkSize'] || 25000;
+      if (data.length > maxChunkSize) {
+        const userWantsMultipleFiles = confirm(
+          `This dataset has ${data.length.toLocaleString()} rows. ` +
+          `Would you like to split it into multiple Excel files for faster processing? ` +
+          `(Each file will contain up to ${maxChunkSize.toLocaleString()} rows)`
+        );
+
+        if (userWantsMultipleFiles) {
+          await this.exportMultipleFiles(data, groupedColumns, maxChunkSize);
+          return;
+        }
+      }
+      
+      // Create optimized schema with cached column field access
+      const columnFields = flattenedColumns.map(col => col.field).filter(Boolean) as string[];
+      const columnLabels = flattenedColumns.map(col => col.label || col.field || 'Unknown');
+      
+      const schema = columnFields.map((field, index) => {
+        const dataType = this.getOptimalDataType(data[0]?.[field]);
+        const schemaEntry: any = {
+          column: columnLabels[index],
+          value: (row: any) => {
+            const value = row[field];
+            if (value === undefined || value === null) return '';
+            
+            // Convert string dates to Date objects when schema expects Date
+            if (typeof dataType === 'object' && dataType.type === Date && typeof value === 'string') {
+              const dateValue = new Date(value);
+              return isNaN(dateValue.getTime()) ? value : dateValue;
+            }
+            
+            return value;
+          }
+        };
+        
+        // Handle date format requirement
+        if (typeof dataType === 'object' && dataType.type === Date) {
+          schemaEntry.type = Date;
+          schemaEntry.format = dataType.format;
+        } else {
+          schemaEntry.type = dataType;
+        }
+        
+        return schemaEntry;
+      });
+
+      // Use requestAnimationFrame for better UI responsiveness during processing
+      const chunkSize = this.pluginOptions['batchSize'] || 5000;
+      let processedCount = 0;
+      
+      // Update button text for processing
+      this.renderer.setProperty(
+        this.exportButton, 
+        'innerText', 
+        'Processing data...'
+      );
+      
+      // Process in smaller chunks with requestAnimationFrame for smoother UI
+      for (let i = 0; i < data.length; i += chunkSize) {
+        processedCount = Math.min(i + chunkSize, data.length);
+        
+        // Update progress
+        const progressCallback = this.pluginOptions['onProgress'];
+        if (progressCallback) {
+          progressCallback(processedCount, data.length);
+        }
+        
+        // Update button text with progress
+        this.renderer.setProperty(
+          this.exportButton, 
+          'innerText', 
+          `Processing ${processedCount.toLocaleString()}/${data.length.toLocaleString()}...`
+        );
+        
+        // Use requestAnimationFrame for smoother UI updates
+        await new Promise(resolve => requestAnimationFrame(() => resolve(undefined)));
+      }
+      
+      // Update button text for file generation
+      this.renderer.setProperty(
+        this.exportButton, 
+        'innerText', 
+        'Generating Excel file...'
+      );
+      
+      // Generate Excel file using original data with optimized schema
+      const buffer = await (writeExcelFile as any).default(data, {
+        schema,
+        headerStyle: {
+          backgroundColor: '#eeeeee',
+          fontWeight: 'bold',
+          align: 'center'
+        }
+      });
+
+      // Download the file
+      const fileName = this.pluginOptions['fileName'] || 'export.xlsx';
+      this.downloadFile(buffer, fileName);
+      
+      const completeCallback = this.pluginOptions['onComplete'];
+      if (completeCallback) {
+        completeCallback();
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Exports data as multiple Excel files for very large datasets
+   */
+  private async exportMultipleFiles(
+    data: any[], 
+    groupedColumns: ColumnDef[], 
+    chunkSize: number
+  ): Promise<void> {
+    const totalChunks = Math.ceil(data.length / chunkSize);
+    const baseFileName = this.pluginOptions['fileName'] || 'export.xlsx';
+    const fileNameBase = baseFileName.replace('.xlsx', '');
+    
+    // Dynamically import write-excel-file
+    const writeExcelFile = await import('write-excel-file');
+    const flattenedColumns = this.flattenColumns(groupedColumns);
+    
+    // Create optimized schema with cached column field access and proper data types
+    const columnFields = flattenedColumns.map(col => col.field).filter(Boolean) as string[];
+    const columnLabels = flattenedColumns.map(col => col.label || col.field || 'Unknown');
+    
+    const schema = columnFields.map((field, index) => {
+      const dataType = this.getOptimalDataType(data[0]?.[field]);
+      const schemaEntry: any = {
+        column: columnLabels[index],
+        value: (row: any) => {
+          const value = row[field];
+          if (value === undefined || value === null) return '';
+          
+          // Convert string dates to Date objects when schema expects Date
+          if (typeof dataType === 'object' && dataType.type === Date && typeof value === 'string') {
+            const dateValue = new Date(value);
+            return isNaN(dateValue.getTime()) ? value : dateValue;
+          }
+          
+          return value;
+        }
+      };
+      
+      // Handle date format requirement
+      if (typeof dataType === 'object' && dataType.type === Date) {
+        schemaEntry.type = Date;
+        schemaEntry.format = dataType.format;
+      } else {
+        schemaEntry.type = dataType;
+      }
+      
+      return schemaEntry;
+    });
+    
+    for (let i = 0; i < totalChunks; i++) {
+      const start = i * chunkSize;
+      const end = Math.min(start + chunkSize, data.length);
+      const chunk = data.slice(start, end);
+      
+      const chunkFileName = totalChunks > 1 
+        ? `${fileNameBase}_part_${i + 1}_of_${totalChunks}.xlsx`
+        : `${fileNameBase}.xlsx`;
+
+      // Update button text with current file progress
+      this.renderer.setProperty(
+        this.exportButton, 
+        'innerText', 
+        `Exporting file ${i + 1}/${totalChunks}...`
+      );
+
+      // Generate and download this chunk using optimized schema
+      const buffer = await (writeExcelFile as any).default(chunk, {
+        schema,
+        headerStyle: {
+          backgroundColor: '#eeeeee',
+          fontWeight: 'bold',
+          align: 'center'
+        }
+      });
+
+      this.downloadFile(buffer, chunkFileName);
+      
+      // Small delay between files to prevent overwhelming the browser
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Call progress callback
+      const progressCallback = this.pluginOptions['onProgress'];
+      if (progressCallback) {
+        progressCallback(end, data.length);
+      }
+    }
+
+    // Show completion message
+    if (totalChunks > 1) {
+      alert(`Export completed! ${totalChunks} files were created with a total of ${data.length.toLocaleString()} rows.`);
+    }
+    
+    // Call the completion callback
+    const completeCallback = this.pluginOptions['onComplete'];
+    if (completeCallback) {
+      completeCallback();
+    }
+  }
+
+  /**
+   * Fallback synchronous export for smaller datasets
+   */
+  private async exportSynchronously(data: any[], groupedColumns: ColumnDef[]): Promise<void> {
+    // Dynamically import write-excel-file to keep the plugin lightweight
+    const writeExcelFile = await import('write-excel-file');
+
     // Flatten the grouped columns for export
     const flattenedColumns = this.flattenColumns(groupedColumns);
-  
-    // Map the data to match the flattened column structure
-    const exportData = modifiedData.map((row: any) =>
-      flattenedColumns.reduce((acc, col) => {
-        if (col.label && col.field) {
-          acc[col.label] = row[col.field];
+      
+    // Create optimized schema with cached column field access and proper data types
+    const columnFields = flattenedColumns.map(col => col.field).filter(Boolean) as string[];
+    const columnLabels = flattenedColumns.map(col => col.label || col.field || 'Unknown');
+    
+    const schema = columnFields.map((field, index) => {
+      const dataType = this.getOptimalDataType(data[0]?.[field]);
+      const schemaEntry: any = {
+        column: columnLabels[index],
+        value: (row: any) => {
+          const value = row[field];
+          if (value === undefined || value === null) return '';
+          
+          // Convert string dates to Date objects when schema expects Date
+          if (typeof dataType === 'object' && dataType.type === Date && typeof value === 'string') {
+            const dateValue = new Date(value);
+            return isNaN(dateValue.getTime()) ? value : dateValue;
+          }
+          
+          return value;
         }
-        return acc;
-      }, {} as Record<string, any>)
-    );
-  
-    // Create a header row for grouped columns
-    const headerRows = this.createGroupedHeaders(groupedColumns);
-  
-    // Convert the data to a worksheet
-    const worksheet = XLSX.utils.json_to_sheet([], { skipHeader: true });
-  
-    // Add the grouped headers to the worksheet
-    XLSX.utils.sheet_add_aoa(worksheet, headerRows, { origin: 'A1' });
-  
-    // Add the data rows below the headers
-    XLSX.utils.sheet_add_json(worksheet, exportData, {
-      skipHeader: true,
-      origin: `A${headerRows.length + 1}`, // Offset data rows below the headers
+      };
+      
+      // Handle date format requirement
+      if (typeof dataType === 'object' && dataType.type === Date) {
+        schemaEntry.type = Date;
+        schemaEntry.format = dataType.format;
+      } else {
+        schemaEntry.type = dataType;
+      }
+      
+      return schemaEntry;
     });
-  
-    // Create a workbook and append the worksheet
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
-  
-    // Export the workbook
+
+    // Use the original data directly with the optimized schema
+    const buffer = await (writeExcelFile as any).default(data, {
+      schema,
+      headerStyle: {
+        backgroundColor: '#eeeeee',
+        fontWeight: 'bold',
+        align: 'center'
+      }
+    });
+
+    // Download the file
     const fileName = this.pluginOptions['fileName'] || 'export.xlsx';
-    XLSX.writeFile(workbook, fileName);
+    this.downloadFile(buffer, fileName);
+
+    // Call completion callback if provided
+    const completeCallback = this.pluginOptions['onComplete'];
+    if (completeCallback) {
+      completeCallback();
+    }
+  }
+
+  /**
+   * Determines the optimal data type for Excel export based on the value
+   */
+  private getOptimalDataType(value: any): any {
+    if (value === null || value === undefined) {
+      return String;
+    }
+    
+    if (typeof value === 'number') {
+      return Number;
+    }
+    
+    if (typeof value === 'boolean') {
+      return Boolean;
+    }
+    
+    if (value instanceof Date) {
+      return {
+        type: Date,
+        format: 'mm/dd/yyyy' // Required format for Date cells
+      };
+    }
+    
+    // Check if string value looks like a date
+    if (typeof value === 'string') {
+      // Check for common date patterns
+      if (/^\d{4}-\d{2}-\d{2}/.test(value) || /^\d{1,2}\/\d{1,2}\/\d{4}/.test(value)) {
+        return {
+          type: Date,
+          format: 'mm/dd/yyyy' // Required format for Date cells
+        };
+      }
+      
+      // Check if it's a numeric string
+      if (!isNaN(Number(value)) && value.trim() !== '') {
+        return Number;
+      }
+    }
+    
+    return String;
+  }
+
+  /**
+   * Downloads a file from an ArrayBuffer
+   */
+  private downloadFile(buffer: ArrayBuffer, fileName: string): void {
+    const blob = new Blob([buffer], { 
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+    });
+    
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.style.display = 'none';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    URL.revokeObjectURL(url);
   }
 
   /**

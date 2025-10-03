@@ -28,51 +28,10 @@ export class AppComponent implements AfterViewInit, OnInit {
   ) {}
 
   ngAfterViewInit() {
-    // // Register server-side plugin
-    // const dataSource = new MockServerDataSource();
-    // const serverSidePlugin = new ServerSidePlugin(dataSource);
-    // this.pluginManagerService.registerPlugins({'server-side': async () => serverSidePlugin }, this.grid.gridApi);
-
-    // this.pluginManagerService.loadPlugin(
-    //   'export-to-excel',
-    //   this.grid.gridApi,
-    //   { 
-    //     enableExportToExcel: true,
-    //     onBeforeExportToExcel: (data: any, columns: any) => {
-    //       console.log('Export to excel', data);
-    //     }
-    //   }
-    // );
-    // this.pluginManagerService.loadPlugin('multi-sort', this.grid.gridApi, { enableMultiSort: true });
-    // this.pluginManagerService.loadPlugin(
-    //   'save-state',
-    //   this.grid.gridApi,
-    //   {
-    //     enableSaveState: true,
-    //     onSaveState: (state: any) => {
-    //       this.gridStates.push(state);
-    //       console.log('State saved', state);
-    //     },
-    //     onLoadState: (state: any) => {
-    //       console.log('State loaded', state);
-    //     },
-    //     onDeleteState: (state: any) => {
-    //       this.gridStates = this.gridStates.filter(s => s !== state);
-    //       console.log('State deleted', state);
-    //     },
-    //     label: 'Favorite'
-    //   });
-    // this.pluginManagerService.loadPlugin('column-visibility', this.grid.gridApi, { enableColumnVisibility: true });
-    // this.pluginManagerService.loadPlugin(
-    //   'column-menu',
-    //   this.grid.gridApi,
-    //   {
-    //     enableColumnMenu: true,
-    //     enablePinning: true,
-    //     enableGroupBy: true
-    //   }
-    // );
-    // this.pluginManagerService.loadPlugin('global-text-filter', this.grid.gridApi, { enableGlobalTextFilter: true });
+    this.pluginManagerService.loadPlugin(
+      'export-to-excel',
+      this.grid.gridApi
+    );
   }
 
   ngOnInit() {
@@ -87,7 +46,28 @@ export class AppComponent implements AfterViewInit, OnInit {
       enableMultiselect: true,
       pageSize: 50,
       noDataMessage: "There are no records based on your search criteria.",
-      columnDefs: [...MOCK_COLUMN_DEFS]
+      columnDefs: [...MOCK_COLUMN_DEFS],
+    };
+
+    this.pluginOptions = {
+      ExportToExcel: {
+        enableExportToExcel: true, 
+        useStreamingExport: true,
+        maxChunkSize: 25000,          // Smaller chunks for better single-file success
+        webWorkerThreshold: 1000,     // Use worker for smaller datasets
+        batchSize: 10000,             // Larger batches for speed
+        autoSplitLargeDatasets: true, // Skip confirmation for 1M+ rows
+        onProgress: (processed: any, total: any) => {
+          const percent = Math.round((processed / total) * 100);
+          console.log(`Progress: ${percent}% (${processed.toLocaleString()}/${total.toLocaleString()})`);
+        },
+        onComplete: () => {
+          alert('All files exported successfully!');
+        },
+        onError: (error: any) => {
+          console.error('Export error:', error);
+        }
+      }
     };
 
     // Client Side Data
