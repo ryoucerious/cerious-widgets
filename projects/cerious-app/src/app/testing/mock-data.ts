@@ -18,7 +18,7 @@ function randomDate(start: Date, end: Date): string {
     .toISOString().split('T')[0];
 }
 
-export const MOCK_DATA = Array.from({ length: 10000 }).map((_, i) => ({
+export const MOCK_DATA = Array.from({ length: 1000000 }).map((_, i) => ({
   id: i + 1,
   name: `Product ${i + 1}`,
   category: categories[i % categories.length],

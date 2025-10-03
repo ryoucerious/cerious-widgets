@@ -250,11 +250,85 @@ describe('GridBodyComponent', () => {
     expect((component as any).updateVisibleRows).toHaveBeenCalled();
   });
 
-  it('should call gridScrollService.scrollGrid on wheelGrid', () => {
-    const event = new WheelEvent('wheel', { deltaY: 10, deltaX: 5 });
+  it('should handle wheel events and call scrollGrid with normalized deltas', () => {
+    const event = new WheelEvent('wheel', { deltaY: 100, deltaX: 50 });
     spyOn(event, 'preventDefault');
+    spyOn(component, 'scrollGrid');
+    
+    // Mock the tableBody element
+    const mockElement = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    component.tableBody = { nativeElement: mockElement } as any;
+    
     component.wheelGrid(event);
+    
     expect(event.preventDefault).toHaveBeenCalled();
+    expect(component.scrollGrid).toHaveBeenCalledWith({
+      target: {
+        scrollLeft: 50, // deltaX applied
+        scrollTop: 100  // deltaY applied
+      }
+    });
+  });
+
+  it('should handle vertical-only wheel scrolling', () => {
+    const event = new WheelEvent('wheel', { deltaY: 120, deltaX: 0 });
+    spyOn(event, 'preventDefault');
+    spyOn(component, 'scrollGrid');
+    
+    const mockElement = {
+      scrollLeft: 100,
+      scrollTop: 200
+    };
+    component.tableBody = { nativeElement: mockElement } as any;
+    
+    component.wheelGrid(event);
+    
+    expect(event.preventDefault).toHaveBeenCalled();
+    expect(component.scrollGrid).toHaveBeenCalledWith({
+      target: {
+        scrollLeft: 100, // unchanged (no deltaX)
+        scrollTop: 320   // 200 + 120
+      }
+    });
+  });
+
+  it('should normalize large wheel deltas to prevent jumps', () => {
+    // Simulate large deltas that can occur on Windows 11
+    const event = new WheelEvent('wheel', { deltaY: 1000, deltaX: 0 });
+    spyOn(event, 'preventDefault');
+    spyOn(component, 'scrollGrid');
+    
+    const mockElement = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    component.tableBody = { nativeElement: mockElement } as any;
+    
+    component.wheelGrid(event);
+    
+    expect(event.preventDefault).toHaveBeenCalled();
+    
+    // The large delta should be normalized to prevent sudden jumps
+    const call = (component.scrollGrid as jasmine.Spy).calls.mostRecent();
+    const scrollTop = call.args[0].target.scrollTop;
+    
+    // Should be much less than the original 1000 delta
+    expect(scrollTop).toBeLessThan(100);
+    expect(scrollTop).toBeGreaterThan(0);
+  });
+
+  it('should ignore wheel events with no delta', () => {
+    const event = new WheelEvent('wheel', { deltaY: 0, deltaX: 0 });
+    spyOn(event, 'preventDefault');
+    spyOn(component, 'scrollGrid');
+    
+    component.wheelGrid(event);
+    
+    expect(event.preventDefault).not.toHaveBeenCalled();
+    expect(component.scrollGrid).not.toHaveBeenCalled();
   });
 
   it('should calculate total height for flat rows', () => {
