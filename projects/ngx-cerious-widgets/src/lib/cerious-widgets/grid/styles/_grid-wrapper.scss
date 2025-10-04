@@ -44,6 +44,7 @@
         z-index: 100;
         padding:0 !important;
         margin:0 !important;
+        background: $grid-body-background; // default background
 
         .feature-item {
             text-align: center;
@@ -52,6 +53,63 @@
 
         &.group-data {
             border-bottom: none !important;
+        }
+    }
+
+    // Feature column backgrounds should match their row backgrounds
+    .cw-table-body .cw-table-row {
+        &.odd .table-col-feature {
+            background-color: $light-100;
+        }
+
+        &.group-by-row .table-col-feature {
+            background-color: #e2e2e2;
+
+            &.odd .table-col-feature {
+                background-color: #ededed;
+            }
+        }
+
+        &:not(.nested-grid):not(.filler-row):hover .table-col-feature {
+            background-color: rgb(200,210,218);
+        }
+
+        &.filler-row .table-col-feature {
+            background-color: rgb(250,250,250);
+        }
+
+        &.group-by-footer-row .table-col-feature {
+            background: $light-100;
+        }
+
+        // Pinned column backgrounds should also match their row backgrounds
+        &.odd .table-col-pinned {
+            background-color: $light-100 !important;
+        }
+
+        &.group-by-row .table-col-pinned {
+            background-color: #e2e2e2 !important;
+
+            &.odd .table-col-pinned {
+                background-color: #ededed !important;
+            }
+        }
+
+        &:not(.nested-grid):not(.filler-row):hover .table-col-pinned {
+            background-color: rgb(200,210,218) !important;
+        }
+
+        &.filler-row .table-col-pinned {
+            background-color: rgb(250,250,250) !important;
+        }
+
+        &.group-by-footer-row .table-col-pinned {
+            background: $light-100 !important;
+        }
+
+        // Default background for pinned columns
+        .table-col-pinned {
+            background-color: $grid-body-background !important;
         }
     }
 
