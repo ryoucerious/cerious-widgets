@@ -46,7 +46,7 @@ With a modern plugin system, rich templating support, and no heavy dependencies,
   - 💾 **Save & Restore Views** — Favorites, state, layout  
 
   ## 📤 Output & Licensing
-  - 📦 **Excel Export** — One-liner export with [`xlsx`](https://www.npmjs.com/package/xlsx)  
+  - 📦 **Excel Export** — One-liner export with [`write-excel-file`](https://www.npmjs.com/package/write-excel-file)  
   - 🔓 **MIT Licensed and Fully Open Source**
 
 ---
