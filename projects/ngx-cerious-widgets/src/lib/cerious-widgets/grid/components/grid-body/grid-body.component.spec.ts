@@ -112,6 +112,13 @@ describe('GridBodyComponent', () => {
     Object.values(mockGridService.grid).forEach((emitter: any) => emitter.emit.calls?.reset?.());
     mockGridScrollService.scrollGrid.calls.reset();
     mockGridColumnService.flattenColumns.calls.reset();
+    
+    // Clean up any scroll timeouts
+    if (component['scrollTimeout']) {
+      clearTimeout(component['scrollTimeout']);
+      component['scrollTimeout'] = null;
+    }
+    component['isWheelScrolling'] = false;
   });
 
   it('should create', () => {
@@ -250,86 +257,159 @@ describe('GridBodyComponent', () => {
     expect((component as any).updateVisibleRows).toHaveBeenCalled();
   });
 
-  it('should handle wheel events and call scrollGrid with normalized deltas', () => {
+  it('should handle wheel events and call scrollGrid with raw deltas', fakeAsync(() => {
     const event = new WheelEvent('wheel', { deltaY: 100, deltaX: 50 });
     spyOn(event, 'preventDefault');
+    spyOn(event, 'stopPropagation');
     spyOn(component, 'scrollGrid');
     
     // Mock the tableBody element
     const mockElement = {
       scrollLeft: 0,
-      scrollTop: 0
+      scrollTop: 0,
+      scrollHeight: 1000,
+      clientHeight: 300,
+      scrollWidth: 1000,
+      clientWidth: 300
     };
     component.tableBody = { nativeElement: mockElement } as any;
     
     component.wheelGrid(event);
     
     expect(event.preventDefault).toHaveBeenCalled();
+    expect(event.stopPropagation).toHaveBeenCalled();
     expect(component.scrollGrid).toHaveBeenCalledWith({
       target: {
-        scrollLeft: 50, // deltaX applied
-        scrollTop: 100  // deltaY applied
+        scrollLeft: 50, // deltaX applied directly
+        scrollTop: 100  // deltaY applied directly
       }
     });
-  });
+    
+    // Advance time to clear debouncing
+    tick(60);
+  }));
 
-  it('should handle vertical-only wheel scrolling', () => {
+  it('should handle vertical-only wheel scrolling', fakeAsync(() => {
     const event = new WheelEvent('wheel', { deltaY: 120, deltaX: 0 });
     spyOn(event, 'preventDefault');
+    spyOn(event, 'stopPropagation');
     spyOn(component, 'scrollGrid');
     
     const mockElement = {
       scrollLeft: 100,
-      scrollTop: 200
+      scrollTop: 200,
+      scrollHeight: 1000,
+      clientHeight: 300,
+      scrollWidth: 1000,
+      clientWidth: 300
     };
     component.tableBody = { nativeElement: mockElement } as any;
     
     component.wheelGrid(event);
     
     expect(event.preventDefault).toHaveBeenCalled();
+    expect(event.stopPropagation).toHaveBeenCalled();
     expect(component.scrollGrid).toHaveBeenCalledWith({
       target: {
         scrollLeft: 100, // unchanged (no deltaX)
         scrollTop: 320   // 200 + 120
       }
     });
-  });
+    
+    // Advance time to clear debouncing
+    tick(60);
+  }));
 
-  it('should normalize large wheel deltas to prevent jumps', () => {
-    // Simulate large deltas that can occur on Windows 11
-    const event = new WheelEvent('wheel', { deltaY: 1000, deltaX: 0 });
-    spyOn(event, 'preventDefault');
+  it('should prevent rapid wheel events with debouncing', fakeAsync(() => {
+    const event1 = new WheelEvent('wheel', { deltaY: 100, deltaX: 0 });
+    const event2 = new WheelEvent('wheel', { deltaY: 100, deltaX: 0 });
+    const event3 = new WheelEvent('wheel', { deltaY: 100, deltaX: 0 });
+    spyOn(event1, 'preventDefault');
+    spyOn(event2, 'preventDefault');
+    spyOn(event3, 'stopPropagation');
     spyOn(component, 'scrollGrid');
     
     const mockElement = {
       scrollLeft: 0,
-      scrollTop: 0
+      scrollTop: 0,
+      scrollHeight: 1000,
+      clientHeight: 300,
+      scrollWidth: 1000,
+      clientWidth: 300
+    };
+    component.tableBody = { nativeElement: mockElement } as any;
+    
+    // First wheel event should work
+    component.wheelGrid(event1);
+    expect(component.scrollGrid).toHaveBeenCalledTimes(1);
+    expect(component['isWheelScrolling']).toBe(true);
+    
+    // Second wheel event should be blocked by debouncing
+    component.wheelGrid(event2);
+    expect(component.scrollGrid).toHaveBeenCalledTimes(1); // Still only 1 call
+    
+    // Advance time to clear the debouncing timeout
+    tick(60);
+    expect(component['isWheelScrolling']).toBe(false);
+    
+    // Now the third event should work
+    component.wheelGrid(event3);
+    expect(component.scrollGrid).toHaveBeenCalledTimes(2);
+    
+    // Clean up any remaining timers
+    tick(60);
+  }));
+
+  it('should respect scroll bounds in wheel events', fakeAsync(() => {
+    const event = new WheelEvent('wheel', { deltaY: 1000, deltaX: 1000 });
+    spyOn(event, 'preventDefault');
+    spyOn(component, 'scrollGrid');
+    
+    const mockElement = {
+      scrollLeft: 600, // Near right edge
+      scrollTop: 600,  // Near bottom edge
+      scrollHeight: 700, // Max scroll top = 700 - 200 = 500
+      clientHeight: 200,
+      scrollWidth: 800,  // Max scroll left = 800 - 300 = 500
+      clientWidth: 300
     };
     component.tableBody = { nativeElement: mockElement } as any;
     
     component.wheelGrid(event);
     
-    expect(event.preventDefault).toHaveBeenCalled();
+    expect(component.scrollGrid).toHaveBeenCalledWith({
+      target: {
+        scrollLeft: 500, // Clamped to max (800 - 300)
+        scrollTop: 500   // Clamped to max (700 - 200)
+      }
+    });
     
-    // The large delta should be normalized to prevent sudden jumps
-    const call = (component.scrollGrid as jasmine.Spy).calls.mostRecent();
-    const scrollTop = call.args[0].target.scrollTop;
-    
-    // Should be much less than the original 1000 delta
-    expect(scrollTop).toBeLessThan(100);
-    expect(scrollTop).toBeGreaterThan(0);
-  });
+    tick(60);
+  }));
 
-  it('should ignore wheel events with no delta', () => {
+  it('should not scroll when there is no change', fakeAsync(() => {
     const event = new WheelEvent('wheel', { deltaY: 0, deltaX: 0 });
     spyOn(event, 'preventDefault');
     spyOn(component, 'scrollGrid');
     
+    const mockElement = {
+      scrollLeft: 100,
+      scrollTop: 100,
+      scrollHeight: 1000,
+      clientHeight: 300,
+      scrollWidth: 1000,
+      clientWidth: 300
+    };
+    component.tableBody = { nativeElement: mockElement } as any;
+    
     component.wheelGrid(event);
     
+    // Should not prevent default or call scrollGrid for zero deltas
     expect(event.preventDefault).not.toHaveBeenCalled();
     expect(component.scrollGrid).not.toHaveBeenCalled();
-  });
+    
+    tick(60);
+  }));
 
   it('should calculate total height for flat rows', () => {
     component.rowHeights.set('1', 20);
@@ -368,15 +448,22 @@ describe('GridBodyComponent', () => {
     expect(component.visibleRows.length).toBeGreaterThan(0);
   });
 
-  it('should unsubscribe and disconnect on destroy', () => {
+  it('should unsubscribe, disconnect, and cleanup timeout on destroy', () => {
     const sub1 = { unsubscribe: jasmine.createSpy('unsubscribe') };
     const sub2 = { unsubscribe: jasmine.createSpy('unsubscribe') };
     const obs1 = { disconnect: jasmine.createSpy('disconnect') };
     component['subscriptions'] = [sub1 as any, sub2 as any];
     component['resizeObservers'] = [obs1 as any];
+    
+    // Set up a scroll timeout
+    component['scrollTimeout'] = setTimeout(() => {}, 1000);
+    spyOn(window, 'clearTimeout');
+    
     component.ngOnDestroy();
+    
     expect(sub1.unsubscribe).toHaveBeenCalled();
     expect(sub2.unsubscribe).toHaveBeenCalled();
     expect(obs1.disconnect).toHaveBeenCalled();
+    expect(clearTimeout).toHaveBeenCalled();
   });
 });

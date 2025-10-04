@@ -39,6 +39,8 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
   private buffer = 10;
   private resizeObservers: ResizeObserver[] = [];
   private flattenedRows: any[] = [];
+  private scrollTimeout: any = null;
+  private isWheelScrolling = false;
 
   expandedGroups: { [key: string]: boolean } = {};
   expandedGroupData: { [key: string]: any[] } = {};
@@ -145,6 +147,12 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
     try {
       this.subscriptions.forEach(sub => sub.unsubscribe());
       this.resizeObservers.forEach(observer => observer.disconnect());
+      
+      // Clean up scroll timeout to prevent memory leaks
+      if (this.scrollTimeout) {
+        clearTimeout(this.scrollTimeout);
+        this.scrollTimeout = null;
+      }
     } catch (error) {
       console.error('Error during destruction in GridBodyComponent:', error);
     }
@@ -437,8 +445,7 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
 
   /**
    * Handles wheel scrolling and updates the scroll position using the proper scroll service.
-   * This method normalizes wheel deltas across different browsers and operating systems
-   * to prevent sudden jumps, especially on Windows 11 browsers.
+   * Uses debouncing to prevent auto-scrolling issues with rapid wheel events.
    * 
    * @param e <WheelEvent> - the event triggered by scrolling with a mouse wheel or trackpad
    */
@@ -446,38 +453,45 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
     // Handle both horizontal and vertical wheel scrolling
     if (Math.abs(e.deltaX) > 0 || Math.abs(e.deltaY) > 0) {
       e.preventDefault(); // Prevent default browser scrolling
+      e.stopPropagation(); // Prevent event bubbling
+      
+      // Prevent rapid wheel events from causing auto-scroll
+      if (this.isWheelScrolling) {
+        return;
+      }
+      
+      this.isWheelScrolling = true;
       
       const el = this.tableBody.nativeElement;
       
-      // Normalize wheel deltas to prevent jumps on Windows 11
-      // Different browsers and OS combinations can have vastly different delta values
-      const normalizeWheelDelta = (delta: number): number => {
-        // Clamp large deltas that can cause sudden jumps
-        const maxDelta = 120; // Standard wheel delta unit
-        const clampedDelta = Math.max(-maxDelta, Math.min(maxDelta, delta));
-        
-        // For very large deltas (common on Windows 11), scale them down
-        if (Math.abs(delta) > maxDelta * 3) {
-          return clampedDelta * 0.3; // Reduce sensitivity for large deltas
-        }
-        
-        return clampedDelta;
-      };
+      // Calculate new scroll positions with bounds checking
+      const maxScrollTop = Math.max(0, el.scrollHeight - el.clientHeight);
+      const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
       
-      const normalizedDeltaX = normalizeWheelDelta(e.deltaX);
-      const normalizedDeltaY = normalizeWheelDelta(e.deltaY);
+      const newScrollLeft = Math.max(0, Math.min(maxScrollLeft, el.scrollLeft + e.deltaX));
+      const newScrollTop = Math.max(0, Math.min(maxScrollTop, el.scrollTop + e.deltaY));
       
-      // Calculate new scroll positions using the current scroll position
-      const newScrollLeft = Math.max(0, el.scrollLeft + normalizedDeltaX);
-      const newScrollTop = Math.max(0, el.scrollTop + normalizedDeltaY);
+      // Only scroll if there's actually a change to prevent unnecessary updates
+      if (newScrollLeft !== el.scrollLeft || newScrollTop !== el.scrollTop) {
+        // Use the proper scrollGrid method for synchronized scrolling
+        this.scrollGrid({
+          target: {
+            scrollLeft: newScrollLeft,
+            scrollTop: newScrollTop
+          }
+        });
+      }
       
-      // Use the proper scrollGrid method for synchronized scrolling
-      this.scrollGrid({
-        target: {
-          scrollLeft: newScrollLeft,
-          scrollTop: newScrollTop
-        }
-      });
+      // Clear any existing timeout
+      if (this.scrollTimeout) {
+        clearTimeout(this.scrollTimeout);
+      }
+      
+      // Reset scrolling flag after a short delay to prevent rapid scrolling
+      this.scrollTimeout = setTimeout(() => {
+        this.isWheelScrolling = false;
+        this.scrollTimeout = null;
+      }, 50); // 50ms debounce
     }
   }
   
