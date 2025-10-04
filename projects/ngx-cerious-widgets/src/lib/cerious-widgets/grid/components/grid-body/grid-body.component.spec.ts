@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
+import { ZonelessCompatService } from '../../../shared/services/zoneless-compat.service';
 import { GridFooterComponent } from '../grid-footer/grid-footer.component';
 import { GridFillerRowColumnComponent } from '../grid-filler-row-column/grid-filler-row-column.component';
 import { GridHeaderComponent } from '../grid-header/grid-header.component';
@@ -85,7 +86,8 @@ describe('GridBodyComponent', () => {
         { provide: GRID_SERVICE, useValue: mockGridService },
         { provide: GRID_COLUMN_SERVICE, useValue: mockGridColumnService },
         { provide: GRID_SCROLL_SERVICE, useValue: mockGridScrollService },
-        { provide: ElementRef, useClass: MockElementRef }
+        { provide: ElementRef, useClass: MockElementRef },
+        ZonelessCompatService
       ]
     })
       .overrideComponent(GridBodyComponent, {
@@ -465,5 +467,19 @@ describe('GridBodyComponent', () => {
     expect(sub2.unsubscribe).toHaveBeenCalled();
     expect(obs1.disconnect).toHaveBeenCalled();
     expect(clearTimeout).toHaveBeenCalled();
+  });
+
+  describe('Zoneless Compatibility', () => {
+    it('should extend ZonelessCompatibleComponent', () => {
+      expect(component).toBeInstanceOf(Object.getPrototypeOf(Object.getPrototypeOf(component)).constructor);
+    });
+
+    it('should call super.ngOnDestroy()', () => {
+      const superSpy = spyOn(Object.getPrototypeOf(Object.getPrototypeOf(component)), 'ngOnDestroy');
+      
+      component.ngOnDestroy();
+      
+      expect(superSpy).toHaveBeenCalled();
+    });
   });
 });

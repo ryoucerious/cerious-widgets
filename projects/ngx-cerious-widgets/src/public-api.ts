@@ -12,6 +12,9 @@ export * from './lib/cerious-widgets/shared/directives/template-registrar.direct
 
 export * from './lib/cerious-widgets/shared/services/index';
 
+// Zoneless compatibility exports
+export * from './lib/cerious-widgets/components/base/zoneless-compatible.component';
+
 export * from './lib/cerious-widgets/grid/enums/index';
 export * from './lib/cerious-widgets/grid/interfaces/index';
 export * from './lib/cerious-widgets/grid/plugins/index';
