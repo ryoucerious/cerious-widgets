@@ -444,8 +444,15 @@ describe('GridBodyComponent', () => {
     component.rowHeights.set('4', 10);
     component.rowHeights.set('5', 10);
     component.rowHeights.set('6', 10);
-    component.tableBody.nativeElement.clientHeight = 30;
-    component.tableBody.nativeElement.scrollTop = 0;
+    // Mock tableBody.nativeElement
+    component.tableBody = {
+      nativeElement: {
+        clientHeight: 30,
+        scrollTop: 0
+      }
+    } as any;
+    (component as any).windowedRows = (component as any).flattenedRows;
+    (component as any).updateThrottleMs = 0;
     (component as any).updateVisibleRows();
     expect(component.visibleRows.length).toBeGreaterThan(0);
   });
