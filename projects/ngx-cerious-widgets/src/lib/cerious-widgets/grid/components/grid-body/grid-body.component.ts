@@ -52,6 +52,24 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
   topOffset = '0px'; // Top offset for the grid body
   bottomOffset = '0px'; // Bottom offset for the grid body
 
+  // Data windowing for large datasets - keep windows small for stability
+  private readonly WINDOW_SIZE = 1000; // 1K rows per window (proven stable size)
+  private readonly WINDOW_OVERLAP = 100; // 100 row overlap between windows
+  private currentWindowStart = 0;
+  private currentWindowEnd = 0;
+  private windowedRows: any[] = [];
+  private virtualTopOffset = 0; // Virtual offset for windowing
+
+  // Throttling for updateVisibleRows to prevent flickering
+  private updateThrottleTimer: any = null;
+  private lastUpdateTime = 0;
+  private updateThrottleMs = 16; // ~60fps throttling
+  private isUpdatingRows = false;
+  
+  // Scroll settlement detection
+  private scrollSettlementTimer: any = null;
+  private scrollSettlementDelay = 150; // 150ms after scroll stops
+
   @Input() classes: SectionClassConfig = {};
   
   @ViewChild('tableBody', { static: true }) tableBody!: ElementRef;
@@ -152,6 +170,18 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
       if (this.scrollTimeout) {
         clearTimeout(this.scrollTimeout);
         this.scrollTimeout = null;
+      }
+      
+      // Clean up update throttle timer
+      if (this.updateThrottleTimer) {
+        clearTimeout(this.updateThrottleTimer);
+        this.updateThrottleTimer = null;
+      }
+      
+      // Clean up scroll settlement timer
+      if (this.scrollSettlementTimer) {
+        clearTimeout(this.scrollSettlementTimer);
+        this.scrollSettlementTimer = null;
       }
     } catch (error) {
       console.error('Error during destruction in GridBodyComponent:', error);
@@ -333,9 +363,47 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
         this.gridService.hasVerticalScrollbar,
         this.gridService.scrollbarWidth
       );
+      
+      // Detect when scrolling stops and force final update
+      this.detectScrollSettlement();
     } catch (error) {
       console.error('Error during scrollGrid in GridBodyComponent:', error);
     }
+  }
+
+  /**
+   * Detects when scrolling has stopped and forces a final updateVisibleRows call
+   */
+  private detectScrollSettlement(): void {
+    // Clear any existing settlement timer
+    if (this.scrollSettlementTimer) {
+      clearTimeout(this.scrollSettlementTimer);
+    }
+    
+    // Set a timer to detect when scrolling has stopped
+    this.scrollSettlementTimer = setTimeout(() => {
+      // Force a final update when scrolling settles, bypassing throttling
+      this.forceUpdateVisibleRows();
+      this.scrollSettlementTimer = null;
+    }, this.scrollSettlementDelay);
+  }
+
+  /**
+   * Forces an immediate update of visible rows, bypassing throttling
+   */
+  private forceUpdateVisibleRows(): void {
+    // Clear any pending throttled updates
+    if (this.updateThrottleTimer) {
+      clearTimeout(this.updateThrottleTimer);
+      this.updateThrottleTimer = null;
+    }
+    
+    // Reset throttling state to allow immediate update
+    this.isUpdatingRows = false;
+    this.lastUpdateTime = 0;
+    
+    // Call updateVisibleRows immediately
+    this.updateVisibleRows();
   }
 
   /**
@@ -616,66 +684,138 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
   }
 
   private updateVisibleRows(): void {
+    // Throttle updates to prevent flickering during fast scrolling
+    const now = performance.now();
+    
+    // Prevent overlapping updates and throttle calls
+    if (this.isUpdatingRows || (now - this.lastUpdateTime < this.updateThrottleMs)) {
+      // Clear any existing throttle timer
+      if (this.updateThrottleTimer) {
+        clearTimeout(this.updateThrottleTimer);
+      }
+      
+      // Schedule an update for later
+      this.updateThrottleTimer = setTimeout(() => {
+        this.updateThrottleTimer = null;
+        this.updateVisibleRows();
+      }, this.updateThrottleMs);
+      
+      return;
+    }
+    
+    this.isUpdatingRows = true;
+    this.lastUpdateTime = now;
+
     this.zone.runOutsideAngular(() => {
       const bodyElement = this.tableBody.nativeElement;
       const scrollTop = bodyElement.scrollTop;
       const viewportHeight = bodyElement.clientHeight;
 
-      // Find first visible row
-      let top = 0;
-      let first = 0;
-      for (; first < this.flattenedRows.length; first++) {
-        const row = this.flattenedRows[first];
-        const rowHeight = row.isGroup
-          ? this.rowHeights.get(`group-${row.key}`) || 30
-          : this.rowHeights.get(row.id) || 30;
-        if (top + rowHeight > scrollTop) break;
-        top += rowHeight;
+      // Apply windowing first
+      this.applyDataWindowing();
+
+      // Work with windowed data instead of full dataset
+      const activeRows = this.windowedRows;
+      if (activeRows.length === 0) {
+        this.visibleRows = [];
+        this.topOffset = '0px';
+        this.bottomOffset = '0px';
+        this.isUpdatingRows = false;
+        return;
       }
 
-      // Find last visible row
-      let bottom = top;
-      let last = first;
-      for (; last < this.flattenedRows.length; last++) {
-        const row = this.flattenedRows[last];
-        const rowHeight = row.isGroup
-          ? this.rowHeights.get(`group-${row.key}`) || 30
-          : this.rowHeights.get(row.id) || 30;
-        bottom += rowHeight;
-        if (bottom >= scrollTop + viewportHeight) break;
-      }
-
+      // Use fast estimation instead of expensive row-by-row calculations
+      const avgRowHeight = 30; // Use fixed average row height for speed
+      const rowsInViewport = Math.ceil(viewportHeight / avgRowHeight);
+      const bufferSize = Math.min(this.buffer, 10); // Limit buffer for performance
+      
+      // Calculate positions using estimation relative to window
+      const windowScrollTop = scrollTop - this.virtualTopOffset;
+      const estimatedFirstRow = Math.max(0, Math.floor(windowScrollTop / avgRowHeight));
+      const estimatedLastRow = Math.min(activeRows.length, estimatedFirstRow + rowsInViewport);
+      
       // Add buffer
-      let start = Math.max(0, first - this.buffer);
-      let end = last + this.buffer + 1;
-      if (end >= this.flattenedRows.length) {
-        end = this.flattenedRows.length;
-        start = Math.max(0, end - (last - first + 1) - this.buffer * 2);
-      }
-      this.startIndex = start;
-      this.endIndex = end;
-      this.visibleRows = this.flattenedRows.slice(start, end);
+      let start = Math.max(0, estimatedFirstRow - bufferSize);
+      let end = Math.min(activeRows.length, estimatedLastRow + bufferSize);
+      
+      // Set indices relative to the original dataset
+      this.startIndex = this.currentWindowStart + start;
+      this.endIndex = this.currentWindowStart + end;
+      this.visibleRows = activeRows.slice(start, end);
 
-      // Calculate offsets
-      let topOffsetValue = 0;
-      for (let i = 0; i < start; i++) {
-        const row = this.flattenedRows[i];
-        const rowHeight = row.isGroup
-          ? this.rowHeights.get(`group-${row.key}`) || 30
-          : this.rowHeights.get(row.id) || 30;
-        topOffsetValue += rowHeight;
-      }
+      // Fast offset calculation using estimation
+      const topOffsetValue = this.virtualTopOffset + (start * avgRowHeight);
       this.topOffset = `${topOffsetValue}px`;
 
-      let bottomOffsetValue = 0;
-      for (let i = end; i < this.flattenedRows.length; i++) {
-        const row = this.flattenedRows[i];
-        const rowHeight = row.isGroup
-          ? this.rowHeights.get(`group-${row.key}`) || 30
-          : this.rowHeights.get(row.id) || 30;
-        bottomOffsetValue += rowHeight;
-      }
+      // Fast bottom offset calculation
+      const remainingRows = this.flattenedRows.length - (this.currentWindowStart + end);
+      const bottomOffsetValue = remainingRows * avgRowHeight;
       this.bottomOffset = `${bottomOffsetValue}px`;
+      
+      this.isUpdatingRows = false;
     });
+  }
+
+  /**
+   * Determines if data windowing should be applied based on dataset size
+   */
+  private shouldUseWindowing(): boolean {
+    return this.flattenedRows.length > 2000; // Start windowing for datasets > 2K rows
+  }
+
+  /**
+   * Apply data windowing to break large datasets into manageable 1K row chunks
+   */
+  private applyDataWindowing(): void {
+    if (!this.shouldUseWindowing()) {
+      // Small dataset, no windowing needed
+      this.windowedRows = this.flattenedRows;
+      this.virtualTopOffset = 0;
+      this.currentWindowStart = 0;
+      this.currentWindowEnd = this.flattenedRows.length;
+      return;
+    }
+
+    // Find current scroll position to determine window
+    const bodyElement = this.tableBody?.nativeElement;
+    if (!bodyElement) {
+      this.windowedRows = this.flattenedRows.slice(0, this.WINDOW_SIZE);
+      this.virtualTopOffset = 0;
+      this.currentWindowStart = 0;
+      this.currentWindowEnd = Math.min(this.WINDOW_SIZE, this.flattenedRows.length);
+      return;
+    }
+
+    const scrollTop = bodyElement.scrollTop;
+    const estimatedRowIndex = Math.floor(scrollTop / 30); // Assuming 30px row height
+    
+    this.updateDataWindow(estimatedRowIndex);
+  }
+
+  /**
+   * Update the data window based on the current row index
+   */
+  private updateDataWindow(currentRowIndex: number): boolean {
+    const idealWindowStart = Math.max(0, currentRowIndex - this.WINDOW_OVERLAP);
+    const idealWindowEnd = Math.min(this.flattenedRows.length, idealWindowStart + this.WINDOW_SIZE);
+    
+    // Check if we need to shift the window
+    const shouldShift = this.windowedRows.length === 0 ||
+                       currentRowIndex < this.currentWindowStart + this.WINDOW_OVERLAP ||
+                       currentRowIndex > this.currentWindowEnd - this.WINDOW_OVERLAP;
+    
+    if (shouldShift) {
+      this.currentWindowStart = idealWindowStart;
+      this.currentWindowEnd = idealWindowEnd;
+      this.windowedRows = this.flattenedRows.slice(this.currentWindowStart, this.currentWindowEnd);
+      
+      // Calculate virtual offset for the windowed data (estimated)
+      this.virtualTopOffset = this.currentWindowStart * 30; // 30px estimated row height
+      
+      console.log(`Data window updated: ${this.currentWindowStart}-${this.currentWindowEnd} (${this.windowedRows.length} rows), virtual offset: ${this.virtualTopOffset}px`);
+      return true;
+    }
+    
+    return false;
   }
 }
