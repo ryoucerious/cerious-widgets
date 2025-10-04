@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GridComponent, GridOptions, PluginManagerService, PluginOptions, ServerSidePlugin } from 'ngx-cerious-widgets';
+import { GridComponent, GridOptions, PluginManagerService, PluginOptions, ServerSidePlugin, ZonelessCompatService } from 'ngx-cerious-widgets';
 import { MOCK_COLUMN_DEFS, MOCK_DATA } from './testing/mock-data';
 import { MockServerDataSource } from './testing/mock-server.datasource';
 
@@ -26,7 +26,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   constructor(
     private pluginManagerService: PluginManagerService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private zonelessCompat: ZonelessCompatService
   ) {}
 
   // Visual metrics display
@@ -54,6 +55,27 @@ export class AppComponent implements AfterViewInit, OnInit {
    */
   getDatasetSize(): string {
     return this.data ? this.data.length.toLocaleString() : '0';
+  }
+
+  /**
+   * Check if the app is running in zoneless mode
+   */
+  get isZonelessMode(): boolean {
+    return this.zonelessCompat.isZonelessMode;
+  }
+
+  /**
+   * Get the change detection mode label
+   */
+  get changeDetectionMode(): string {
+    return this.isZonelessMode ? 'Zoneless' : 'Zone.js';
+  }
+
+  /**
+   * Get the appropriate icon for the current mode
+   */
+  get changeDetectionIcon(): string {
+    return this.isZonelessMode ? '⚡' : '🔄';
   }
 
   /**
