@@ -79,9 +79,13 @@
         <div style="font-size: 12px; opacity: 0.9;">Total Rows</div>
       </div>
 
-      <div *ngIf="!displayMetrics.isLoading" class="metric-card" style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center; backdrop-filter: blur(10px);">
-        <div style="font-size: 18px; font-weight: bold;">{{displayMetrics.performanceGrade}}</div>
-        <div style="font-size: 12px; opacity: 0.9;">Performance Grade</div>
+      <div *ngIf="!displayMetrics.isLoading" class="metric-card" 
+           style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center; backdrop-filter: blur(10px);"
+           [style.background]="isZonelessMode ? 'rgba(34, 197, 94, 0.2)' : 'rgba(59, 130, 246, 0.2)'"
+           title="{{isZonelessMode ? 'Running in zoneless mode for optimal performance' : 'Running with Zone.js change detection'}}">
+        <div style="font-size: 24px; margin-bottom: 5px;">{{changeDetectionIcon}}</div>
+        <div style="font-size: 18px; font-weight: bold;">{{changeDetectionMode}}</div>
+        <div style="font-size: 12px; opacity: 0.9;">Change Detection</div>
       </div>
     </div>
 
