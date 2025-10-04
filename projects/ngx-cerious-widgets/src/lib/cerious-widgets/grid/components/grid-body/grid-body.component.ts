@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { GridFillerRowComponent } from '../grid-filler-row/grid-filler-row.component';
 import { GridRowComponent } from '../grid-row/grid-row.component';
 import { GridNestedRowComponent } from '../grid-nested-row/grid-nested-row.component';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 
 import { IGridBodyComponent } from '../../interfaces/component-interfaces/grid-body.interface';
 import { IGridFillerRowComponent } from '../../interfaces/component-interfaces/grid-filler-row.interface';
@@ -32,7 +33,7 @@ import { SectionClassConfig } from '../../interfaces/section-class-config-interf
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, GridFillerRowComponent, GridRowComponent, GridNestedRowComponent]
 })
-export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnInit, OnDestroy {
+export class GridBodyComponent extends ZonelessCompatibleComponent implements IGridBodyComponent, AfterViewInit, OnInit, OnDestroy {
 
   private subscriptions: Array<Subscription> = [];
   private rowHeight = 30;
@@ -116,7 +117,9 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
     @Inject(GRID_SCROLL_SERVICE) private gridScrollService: IGridScrollService,
     public el: ElementRef,
     private zone: NgZone
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     try {
@@ -161,7 +164,7 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
     }
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
     try {
       this.subscriptions.forEach(sub => sub.unsubscribe());
       this.resizeObservers.forEach(observer => observer.disconnect());
@@ -186,6 +189,9 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
     } catch (error) {
       console.error('Error during destruction in GridBodyComponent:', error);
     }
+    
+    // Call parent cleanup
+    super.ngOnDestroy();
   }
 
   /**
@@ -706,7 +712,7 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
     this.isUpdatingRows = true;
     this.lastUpdateTime = now;
 
-    this.zone.runOutsideAngular(() => {
+    this.runOutsideAngular(() => {
       const bodyElement = this.tableBody.nativeElement;
       const scrollTop = bodyElement.scrollTop;
       const viewportHeight = bodyElement.clientHeight;
@@ -742,6 +748,9 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
       this.startIndex = this.currentWindowStart + start;
       this.endIndex = this.currentWindowStart + end;
       this.visibleRows = activeRows.slice(start, end);
+      
+      // Trigger change detection in zoneless mode
+      this.markForCheck();
 
       // Fast offset calculation using estimation
       const topOffsetValue = this.virtualTopOffset + (start * avgRowHeight);

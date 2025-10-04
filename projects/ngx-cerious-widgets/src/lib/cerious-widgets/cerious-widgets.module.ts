@@ -9,6 +9,7 @@ import { GRID_SERVICE } from './grid/tokens/grid-service.token';
 import { GRID_COLUMN_SERVICE } from './grid/tokens/grid-column-service.token';
 import { GRID_SCROLL_SERVICE } from './grid/tokens/grid-scroll-services.token';
 import { GridColumnService, GridScrollService, GridService } from './grid/services';
+import { ZonelessCompatService } from './shared/services/zoneless-compat.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import { GridColumnService, GridScrollService, GridService } from './grid/servic
     DragDropModule,
     GridComponent
   ],
-  providers: [],
+  providers: [
+    ZonelessCompatService
+  ],
   exports: [
     TemplateRegistrarDirective,
     GridComponent
@@ -44,6 +47,7 @@ export class CeriousWidgetsModule {
         { provide: GRID_SERVICE, useClass: GridService },
         { provide: GRID_COLUMN_SERVICE, useClass: GridColumnService },
         { provide: GRID_SCROLL_SERVICE, useClass: GridScrollService },
+        ZonelessCompatService
       ]
     };
   }
