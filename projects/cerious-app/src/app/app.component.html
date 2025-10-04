@@ -1,23 +1,134 @@
-<div style="height: 100%;" class="border-red-200">
-  <cw-grid #grid
-      [gridContainerClasses]="{ container: '' }"
-      [menuBarClasses]="{ container: '' }"
-      [headerClasses]="{ container: '', 
-                         row: '',
-                         cell: '' }"
-      [bodyClasses]="{ container: '', 
-                         row: '',
-                         cell: '' }"
-      [pagerClasses]="{ container: '', 
-                         row: '',
-                         cell: '' }"
-      [gridOptions]="gridOptions"
-      [pluginOptions]="pluginOptions"
-      [data]="data">
-      <ng-template #headerTemplate>
-        <div style="padding-left: 10px;">
-          <h2>Cerious Grid</h2>
+<div style="height: 100vh; display: flex; flex-direction: column;" class="border-red-200">
+  <!-- Performance Dashboard -->
+  <div style="padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-bottom: 2px solid #ddd;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <h2 style="margin: 0; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+        🚀 Cerious Grid Performance Dashboard
+      </h2>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <!-- Scroll Test Status - Fixed height container to prevent layout shifts -->
+        <div style="min-width: 200px; height: 36px; display: flex; align-items: center; font-size: 14px; color: rgba(255,255,255,0.9);">
+          <div *ngIf="displayMetrics.isScrollTesting" style="display: flex; flex-direction: column; line-height: 1.2;">
+            <div style="font-weight: bold; font-size: 13px;">{{displayMetrics.currentScrollTest}}</div>
+            <div style="font-size: 11px; opacity: 0.8;">Row: {{displayMetrics.currentScrollPosition.toLocaleString()}}</div>
+          </div>
         </div>
-      </ng-template>
-  </cw-grid>
+        <button 
+          (click)="testScrollPerformance()" 
+          [disabled]="displayMetrics.isScrollTesting"
+          style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"
+          [style.opacity]="displayMetrics.isScrollTesting ? '0.6' : '1'">
+          {{displayMetrics.isScrollTesting ? '🔄 Testing...' : '🏃‍♂️ Test Scroll'}}
+        </button>
+        <button 
+          (click)="getCurrentMemoryUsage()" 
+          style="padding: 8px 16px; background: #007cba; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+          💾 Check Memory
+        </button>
+        <button 
+          (click)="debugScrollableElements()" 
+          style="padding: 8px 16px; background: #6f42c1; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+          🔍 Debug Elements
+        </button>
+      </div>
+    </div>
+    
+    <!-- Quick Scroll Test Buttons -->
+    <div style="display: flex; gap: 5px; margin-bottom: 15px; font-size: 12px;">
+      <span style="margin-right: 10px; opacity: 0.8;">Quick scroll test:</span>
+      <button (click)="scrollToPosition(0)" style="padding: 4px 8px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 3px; cursor: pointer;">Top</button>
+      <button (click)="scrollToPosition(0.25)" style="padding: 4px 8px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 3px; cursor: pointer;">25%</button>
+      <button (click)="scrollToPosition(0.5)" style="padding: 4px 8px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 3px; cursor: pointer;">50%</button>
+      <button (click)="scrollToPosition(0.75)" style="padding: 4px 8px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 3px; cursor: pointer;">75%</button>
+      <button (click)="scrollToPosition(1)" style="padding: 4px 8px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 3px; cursor: pointer;">Bottom</button>
+    </div>
+
+    <!-- Metrics Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+      <!-- Loading State -->
+      <div *ngIf="displayMetrics.isLoading" style="grid-column: 1 / -1; text-align: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+        <div style="font-size: 24px; margin-bottom: 10px;">⏳</div>
+        <div>Initializing grid with {{getDatasetSize()}} rows...</div>
+      </div>
+
+      <!-- Performance Metrics Cards -->
+      <div *ngIf="!displayMetrics.isLoading" class="metric-card" style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center; backdrop-filter: blur(10px);">
+        <div style="font-size: 24px; margin-bottom: 5px;">⏱️</div>
+        <div style="font-size: 18px; font-weight: bold;">{{displayMetrics.totalTime.toFixed(1)}}ms</div>
+        <div style="font-size: 12px; opacity: 0.9;">Total Render Time</div>
+      </div>
+
+      <div *ngIf="!displayMetrics.isLoading" class="metric-card" style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center; backdrop-filter: blur(10px);" 
+           title="{{displayMetrics.memoryUsed < 1 ? 'Estimated memory usage. For accurate measurements use Chrome with DevTools open.' : 'Actual memory usage from Performance API'}}">
+        <div style="font-size: 24px; margin-bottom: 5px;">💾</div>
+        <div style="font-size: 18px; font-weight: bold;">
+          {{displayMetrics.memoryUsed.toFixed(1)}}MB
+          <span *ngIf="displayMetrics.memoryUsed < 1" style="font-size: 12px; opacity: 0.7;">*</span>
+        </div>
+        <div style="font-size: 12px; opacity: 0.9;">
+          Memory Used
+          <div *ngIf="displayMetrics.memoryUsed < 1" style="font-size: 10px; margin-top: 2px; opacity: 0.7;">
+            *Estimated
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!displayMetrics.isLoading" class="metric-card" style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center; backdrop-filter: blur(10px);">
+        <div style="font-size: 24px; margin-bottom: 5px;">📊</div>
+        <div style="font-size: 18px; font-weight: bold;">{{getDatasetSize()}}</div>
+        <div style="font-size: 12px; opacity: 0.9;">Total Rows</div>
+      </div>
+
+      <div *ngIf="!displayMetrics.isLoading" class="metric-card" style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; text-align: center; backdrop-filter: blur(10px);">
+        <div style="font-size: 18px; font-weight: bold;">{{displayMetrics.performanceGrade}}</div>
+        <div style="font-size: 12px; opacity: 0.9;">Performance Grade</div>
+      </div>
+    </div>
+
+    <!-- Detailed Breakdown -->
+    <div *ngIf="!displayMetrics.isLoading" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; font-size: 14px;">
+      <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 6px; text-align: center;">
+        <div style="font-weight: bold;">{{displayMetrics.dataSetupTime.toFixed(1)}}ms</div>
+        <div style="opacity: 0.8;">Data Setup</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 6px; text-align: center;">
+        <div style="font-weight: bold;">{{displayMetrics.gridInitTime.toFixed(1)}}ms</div>
+        <div style="opacity: 0.8;">Grid Init</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 6px; text-align: center;">
+        <div style="font-weight: bold;">{{displayMetrics.firstRenderTime.toFixed(1)}}ms</div>
+        <div style="opacity: 0.8;">First Render</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 6px; text-align: center;" 
+           title="{{displayMetrics.memoryEfficiency < 0.1 ? 'Estimated efficiency. For accurate measurements use Chrome with DevTools open.' : 'Actual memory efficiency from Performance API'}}">
+        <div style="font-weight: bold;">
+          {{displayMetrics.memoryEfficiency.toFixed(3)}}
+          <span *ngIf="displayMetrics.memoryEfficiency < 0.1" style="font-size: 10px; opacity: 0.7;">*</span>
+        </div>
+        <div style="opacity: 0.8;">MB per 1K rows</div>
+      </div>
+    </div>
+    
+    <!-- Memory Measurement Help -->
+    <div *ngIf="!displayMetrics.isLoading && displayMetrics.memoryUsed < 1" style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 6px; font-size: 12px; margin-top: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">📝 For Accurate Memory Measurements:</div>
+      <div style="opacity: 0.9; line-height: 1.4;">
+        1. Use Chrome or Edge browser<br>
+        2. Open DevTools (F12)<br>
+        3. Click "Check Memory" button<br>
+        4. Or start Chrome with: <code style="background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 2px;">--enable-precise-memory-info</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid Container -->
+    <cw-grid #grid
+        [gridOptions]="gridOptions"
+        [data]="data">
+        <ng-template #headerTemplate>
+          <div style="padding-left: 10px;">
+            <h3>Cerious Grid - 1 Million Row Performance Demo</h3>
+          </div>
+        </ng-template>
+    </cw-grid>
 </div>

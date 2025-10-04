@@ -436,17 +436,48 @@ export class GridBodyComponent implements IGridBodyComponent, AfterViewInit, OnI
   }
 
   /**
-   * Prevent default wheel scrolling and update the scroll position using the ScrollDelta
+   * Handles wheel scrolling and updates the scroll position using the proper scroll service.
+   * This method normalizes wheel deltas across different browsers and operating systems
+   * to prevent sudden jumps, especially on Windows 11 browsers.
+   * 
    * @param e <WheelEvent> - the event triggered by scrolling with a mouse wheel or trackpad
    */
   wheelGrid = (e: WheelEvent) => {
-    // Only handle horizontal scroll (deltaX)
-    if (Math.abs(e.deltaX) > 0 && Math.abs(e.deltaY) > 0) {
+    // Handle both horizontal and vertical wheel scrolling
+    if (Math.abs(e.deltaX) > 0 || Math.abs(e.deltaY) > 0) {
+      e.preventDefault(); // Prevent default browser scrolling
+      
       const el = this.tableBody.nativeElement;
-      el.scrollLeft += e.deltaX;
-      el.scrollTop += e.deltaY;
-      // Optionally prevent default to avoid browser bounce
-      e.preventDefault();
+      
+      // Normalize wheel deltas to prevent jumps on Windows 11
+      // Different browsers and OS combinations can have vastly different delta values
+      const normalizeWheelDelta = (delta: number): number => {
+        // Clamp large deltas that can cause sudden jumps
+        const maxDelta = 120; // Standard wheel delta unit
+        const clampedDelta = Math.max(-maxDelta, Math.min(maxDelta, delta));
+        
+        // For very large deltas (common on Windows 11), scale them down
+        if (Math.abs(delta) > maxDelta * 3) {
+          return clampedDelta * 0.3; // Reduce sensitivity for large deltas
+        }
+        
+        return clampedDelta;
+      };
+      
+      const normalizedDeltaX = normalizeWheelDelta(e.deltaX);
+      const normalizedDeltaY = normalizeWheelDelta(e.deltaY);
+      
+      // Calculate new scroll positions using the current scroll position
+      const newScrollLeft = Math.max(0, el.scrollLeft + normalizedDeltaX);
+      const newScrollTop = Math.max(0, el.scrollTop + normalizedDeltaY);
+      
+      // Use the proper scrollGrid method for synchronized scrolling
+      this.scrollGrid({
+        target: {
+          scrollLeft: newScrollLeft,
+          scrollTop: newScrollTop
+        }
+      });
     }
   }
   
