@@ -1,6 +1,6 @@
 {
   "name": "ngx-cerious-widgets",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "repository": {
     "type": "git",
     "url": "https://github.com/rYOUcerious/cerious-widgets.git"
@@ -26,7 +26,7 @@
     "@angular/router": "^16.2.12",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
-    "xlsx": "0.18.5",
+    "write-excel-file": "^2.3.10",
     "zone.js": "~0.13.3"
   },
   "devDependencies": {
@@ -36,7 +36,6 @@
     "@compodoc/compodoc": "^1.1.26",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
-    "@types/xlsx": "^0.0.36",
     "angular-eslint": "19.4.0",
     "eslint": "^8.57.1",
     "jasmine-core": "~3.10.0",

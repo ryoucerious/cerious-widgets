@@ -247,7 +247,28 @@ export class AppComponent implements AfterViewInit, OnInit {
       heightOffset: 10,
       // pageSize: 50,
       noDataMessage: "There are no records based on your search criteria.",
-      columnDefs: [...MOCK_COLUMN_DEFS]
+      columnDefs: [...MOCK_COLUMN_DEFS],
+    };
+
+    this.pluginOptions = {
+      ExportToExcel: {
+        enableExportToExcel: true, 
+        useStreamingExport: true,
+        maxChunkSize: 25000,          // Smaller chunks for better single-file success
+        webWorkerThreshold: 1000,     // Use worker for smaller datasets
+        batchSize: 10000,             // Larger batches for speed
+        autoSplitLargeDatasets: true, // Skip confirmation for 1M+ rows
+        onProgress: (processed: any, total: any) => {
+          const percent = Math.round((processed / total) * 100);
+          console.log(`Progress: ${percent}% (${processed.toLocaleString()}/${total.toLocaleString()})`);
+        },
+        onComplete: () => {
+          alert('All files exported successfully!');
+        },
+        onError: (error: any) => {
+          console.error('Export error:', error);
+        }
+      }
     };
 
     // Client Side Data

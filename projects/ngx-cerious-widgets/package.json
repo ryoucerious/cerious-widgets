@@ -15,7 +15,7 @@
     "@angular/platform-browser": ">=16.0.0",
     "@angular/platform-browser-dynamic": ">=16.0.0",
     "@angular/router": ">=16.0.0",
-    "xlsx": ">=0.18.5",
+    "write-excel-file": ">=1.4.25",
     "rxjs": ">=7.4.0",
     "zone.js": ">=0.13.3"
   },
