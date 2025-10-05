@@ -71,6 +71,8 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
   private scrollSettlementTimer: any = null;
   private scrollSettlementDelay = 150; // 150ms after scroll stops
 
+  private _isUpdating = false;
+
   @Input() classes: SectionClassConfig = {};
   
   @ViewChild('tableBody', { static: true }) tableBody!: ElementRef;
@@ -124,6 +126,9 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
   ngOnInit(): void {
     try {
       this.subscriptions.push(this.gridScrollService.afterScroll.subscribe(() => {
+        if (this._isUpdating) {
+          return;
+        }
         this.calculateTotalHeight();
         this.updateVisibleRows();
         setTimeout(() => this.measureRowHeightsAndCorrect());
@@ -690,6 +695,8 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
   }
 
   private updateVisibleRows(): void {
+    this._isUpdating = true;
+
     // Throttle updates to prevent flickering during fast scrolling
     const now = performance.now();
     
@@ -762,6 +769,10 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
       this.bottomOffset = `${bottomOffsetValue}px`;
       
       this.isUpdatingRows = false;
+
+      setTimeout(() => {
+        this._isUpdating = false;
+      });
     });
   }
 
