@@ -1,4 +1,5 @@
 import { Component, ElementRef, Inject, Input, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -25,7 +26,7 @@ import { SectionClassConfig } from '../../interfaces/section-class-config-interf
   templateUrl: './grid-header-row.component.html',
   imports: [CommonModule, CdkDrag, CdkDropList, GridHeaderColumnComponent, GridHeaderFeatureColumnComponent],
 })
-export class GridHeaderRowComponent implements IGridHeaderRowComponent {
+export class GridHeaderRowComponent extends ZonelessCompatibleComponent implements IGridHeaderRowComponent {
 
   dropId: string = `${Math.random().toString(36).substring(2, 9)}`
   moveItemInArray = moveItemInArray;
@@ -83,7 +84,9 @@ export class GridHeaderRowComponent implements IGridHeaderRowComponent {
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) { }
+  ) {
+    super();
+  }
 
   /**
    * Handles the drop event for drag-and-drop functionality within the grid header row.

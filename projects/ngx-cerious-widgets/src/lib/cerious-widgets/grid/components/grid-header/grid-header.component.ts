@@ -1,4 +1,5 @@
 import { Component, ElementRef, Inject, Input, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 
 import { GridHeaderRowComponent } from '../grid-header-row/grid-header-row.component';
@@ -21,7 +22,7 @@ import { SectionClassConfig } from '../../interfaces/section-class-config-interf
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, GridHeaderRowComponent]
 })
-export class GridHeaderComponent implements IGridHeaderComponent {
+export class GridHeaderComponent extends ZonelessCompatibleComponent implements IGridHeaderComponent {
   
   @ViewChild('breadcrumb', { static: false }) breadcrumb!: ElementRef | undefined;
   @ViewChild('tableHead', { static: true }) tableHead!: ElementRef;
@@ -61,7 +62,9 @@ export class GridHeaderComponent implements IGridHeaderComponent {
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_SCROLL_SERVICE) private gridScrollService: IGridScrollService
-  ) { }
+  ) {
+    super();
+  }
 
   
   /**

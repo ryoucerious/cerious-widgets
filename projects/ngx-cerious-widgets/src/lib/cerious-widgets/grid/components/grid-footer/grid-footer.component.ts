@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -20,7 +21,7 @@ import { SectionClassConfig } from '../../interfaces/section-class-config-interf
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, GridFooterRowComponent]
 })
-export class GridFooterComponent implements IGridFooterComponent, AfterViewInit, OnInit, OnDestroy {
+export class GridFooterComponent extends ZonelessCompatibleComponent implements IGridFooterComponent, AfterViewInit, OnInit, OnDestroy {
 
   private subscriptions: Array<Subscription> = [];
 
@@ -57,7 +58,9 @@ export class GridFooterComponent implements IGridFooterComponent, AfterViewInit,
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(this.gridService.afterRender.subscribe(() => this.flattenColumnsForRows()));
@@ -67,8 +70,9 @@ export class GridFooterComponent implements IGridFooterComponent, AfterViewInit,
     setTimeout(() => setTimeout(() => this.flattenColumnsForRows()));
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    super.ngOnDestroy();
   }
 
   // Flatten nested columns for all rows

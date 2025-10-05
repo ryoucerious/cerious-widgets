@@ -1,4 +1,5 @@
 import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -17,7 +18,7 @@ import { SectionClassConfig } from '../../interfaces';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridHeaderFeatureColumnComponent implements IGridHeaderFeatureColumnComponent, OnInit, OnDestroy {
+export class GridHeaderFeatureColumnComponent extends ZonelessCompatibleComponent implements IGridHeaderFeatureColumnComponent, OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
@@ -41,7 +42,9 @@ export class GridHeaderFeatureColumnComponent implements IGridHeaderFeatureColum
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(this.gridService.rowSelect.subscribe(() => {
@@ -53,7 +56,7 @@ export class GridHeaderFeatureColumnComponent implements IGridHeaderFeatureColum
     }));
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 

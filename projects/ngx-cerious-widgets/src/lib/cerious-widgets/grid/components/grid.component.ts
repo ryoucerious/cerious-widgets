@@ -40,6 +40,7 @@ import { GridMenuBarComponent } from './grid-menu-bar/grid-menu-bar.component';
 import { GridPagerComponent } from './grid-pager/grid-pager.component';
 import { GridScrollerComponent } from './grid-scroller/grid-scroller.component';
 import { SectionClassConfig } from '../interfaces/section-class-config-interface';
+import { ZonelessCompatibleComponent } from '../../components/base/zoneless-compatible.component';
 
 @Component({
   selector: 'cw-grid',
@@ -51,7 +52,7 @@ import { SectionClassConfig } from '../interfaces/section-class-config-interface
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, GridFooterComponent, GridHeaderComponent, GridBodyComponent, GridMenuBarComponent, GridPagerComponent, GridScrollerComponent],
 })
-export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy, AfterViewInit {
+export class GridComponent extends ZonelessCompatibleComponent implements IGridComponent, DoCheck, OnInit, OnDestroy, AfterViewInit {
   private iterableDiffer: any;
   private pluginInstances: GridPlugin[] = [];
   private resizeObserver: ResizeObserver | null = null;
@@ -147,6 +148,7 @@ export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService,
     @Optional() @Inject(WIDGETS_CONFIG) public config: WidgetsConfig
   ) {
+    super();
     this.iterableDiffer = this.iterableDiffers.find([]).create();
     this.gridApi = this.gridService.gridApi;
     this.pluginInstances = (this.config?.plugins || []).map(pluginType => 
@@ -212,7 +214,7 @@ export class GridComponent implements IGridComponent, DoCheck, OnInit, OnDestroy
     this.gridService.setData(this.data);   
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
     this.plugins.forEach(p => p.onDestroy?.());
 
     if (this.gridService.gridOptions.container) {

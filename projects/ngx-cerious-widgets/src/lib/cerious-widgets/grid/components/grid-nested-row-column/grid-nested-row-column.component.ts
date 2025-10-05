@@ -1,4 +1,5 @@
 import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 
 import { IGridNestedRowColumnComponent } from '../../interfaces/component-interfaces/grid-nested-row-column.interface';
@@ -13,7 +14,7 @@ import { GRID_SERVICE } from '../../tokens/grid-service.token';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridNestedRowColumnComponent implements IGridNestedRowColumnComponent {
+export class GridNestedRowColumnComponent extends ZonelessCompatibleComponent implements IGridNestedRowColumnComponent {
 
   readonly gridRowSignal = signal<GridRow | undefined>(undefined);
 
@@ -32,6 +33,8 @@ export class GridNestedRowColumnComponent implements IGridNestedRowColumnCompone
   constructor(
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService
-  ) { }
+  ) {
+    super();
+  }
 
 }

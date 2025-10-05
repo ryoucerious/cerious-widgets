@@ -1,4 +1,5 @@
 import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 
 import { ColumnDef } from '../../interfaces/column-def';
@@ -17,7 +18,7 @@ import { SectionClassConfig } from '../../interfaces';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridFooterColumnComponent implements IGridFooterColumnComponent {
+export class GridFooterColumnComponent extends ZonelessCompatibleComponent implements IGridFooterColumnComponent {
 
   readonly columnSignal = signal<ColumnDef | undefined>(undefined);
 
@@ -35,7 +36,9 @@ export class GridFooterColumnComponent implements IGridFooterColumnComponent {
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) { }
+  ) {
+    super();
+  }
 
   /**
    * Retrieves the width of the grid column as a string.

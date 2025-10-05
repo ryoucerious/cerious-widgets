@@ -1,4 +1,5 @@
 import { Component, ElementRef, Inject, Input, QueryList, signal, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 import { GridFillerRowColumnComponent } from '../grid-filler-row-column/grid-filler-row-column.component';
 import { GridFillerRowFeatureColumnComponent } from '../grid-filler-row-feature-column/grid-filler-row-feature-column.component';
@@ -21,7 +22,7 @@ import {
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, GridFillerRowColumnComponent, GridFillerRowFeatureColumnComponent]
 })
-export class GridFillerRowComponent implements IGridFillerRowComponent {
+export class GridFillerRowComponent extends ZonelessCompatibleComponent implements IGridFillerRowComponent {
 
   readonly gridRowSignal = signal<GridRow | undefined>(undefined);
 
@@ -67,7 +68,9 @@ export class GridFillerRowComponent implements IGridFillerRowComponent {
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) { }
+  ) {
+    super();
+  }
 
   /**
    * Retrieves the width of a specified column as a string.

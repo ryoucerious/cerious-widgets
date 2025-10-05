@@ -1,6 +1,7 @@
 // Angular imports
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 
 // Interface imports
 import { IGridScrollerComponent } from '../../interfaces/component-interfaces/grid-scroller.interface';
@@ -19,7 +20,7 @@ import { GRID_SERVICE } from '../../tokens/grid-service.token';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridScrollerComponent implements IGridScrollerComponent {
+export class GridScrollerComponent extends ZonelessCompatibleComponent implements IGridScrollerComponent {
 
   @ViewChild('scroller', { static: true }) scroller!: ElementRef;
   
@@ -55,7 +56,9 @@ export class GridScrollerComponent implements IGridScrollerComponent {
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_SCROLL_SERVICE) private gridScrollService: IGridScrollService
-  ) { }
+  ) {
+    super();
+  }
   
   /**
    * Calculates and returns the scroll height for the grid scroller.

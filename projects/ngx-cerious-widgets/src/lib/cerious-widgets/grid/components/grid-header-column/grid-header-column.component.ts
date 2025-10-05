@@ -1,4 +1,5 @@
 import { Component, ContentChild, ElementRef, Inject, Input, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 import { GridColumnSizerComponent } from '../grid-column-sizer/grid-column-sizer.component';
 
@@ -20,7 +21,7 @@ import { SectionClassConfig } from '../../interfaces';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, GridColumnSizerComponent]
 })
-export class GridHeaderColumnComponent implements IGridHeaderColumnComponent {
+export class GridHeaderColumnComponent extends ZonelessCompatibleComponent implements IGridHeaderColumnComponent {
 
   readonly columnSignal = signal<ColumnDef | undefined>(undefined);
   readonly gridRowSignal = signal<GridRow | undefined>(undefined);
@@ -47,7 +48,9 @@ export class GridHeaderColumnComponent implements IGridHeaderColumnComponent {
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) {}
+  ) {
+    super();
+  }
 
   /**
    * Retrieves the width of the grid header column.

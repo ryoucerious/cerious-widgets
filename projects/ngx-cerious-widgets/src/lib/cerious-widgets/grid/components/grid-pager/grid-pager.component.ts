@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Inject, Input, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 
 import { IGridPagerComponent } from '../../interfaces/component-interfaces/grid-pager.interface';
@@ -18,7 +19,7 @@ import { SectionClassConfig } from '../../interfaces/section-class-config-interf
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridPagerComponent implements IGridPagerComponent, AfterViewInit {
+export class GridPagerComponent extends ZonelessCompatibleComponent implements IGridPagerComponent, AfterViewInit {
 
   pagerInfo!: PagerInfo;
 
@@ -43,6 +44,7 @@ export class GridPagerComponent implements IGridPagerComponent, AfterViewInit {
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_SCROLL_SERVICE) private gridScrollService: IGridScrollService
   ) {
+    super();
     this.pagerInfo = {
       start: 0,
       end: 0,

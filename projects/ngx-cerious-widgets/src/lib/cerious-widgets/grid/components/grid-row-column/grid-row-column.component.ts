@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 
 import { ColumnFormat, ColumnType } from '../../enums';
 import { ColumnDef } from '../../interfaces/column-def';
@@ -20,7 +21,7 @@ import { SectionClassConfig } from '../../interfaces';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridRowColumnComponent implements IGridRowColumnComponent {
+export class GridRowColumnComponent extends ZonelessCompatibleComponent implements IGridRowColumnComponent {
 
   readonly columnSignal = signal<ColumnDef | undefined>(undefined);
   readonly gridRowSignal = signal<GridRow | undefined>(undefined);
@@ -47,7 +48,9 @@ export class GridRowColumnComponent implements IGridRowColumnComponent {
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) { }
+  ) {
+    super();
+  }
 
   /**
    * TrackBy function for dropdown options to optimize rendering in Angular templates.

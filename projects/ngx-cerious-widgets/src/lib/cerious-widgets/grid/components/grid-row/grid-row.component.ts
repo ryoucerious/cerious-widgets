@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, Output, QueryList, Signal, signal, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
@@ -24,7 +25,7 @@ import { SectionClassConfig } from '../../interfaces';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, GridRowColumnComponent, GridRowFeatureColumnComponent]
 })
-export class GridRowComponent implements IGridRowComponent, AfterViewInit {
+export class GridRowComponent extends ZonelessCompatibleComponent implements IGridRowComponent, AfterViewInit {
   
   readonly gridRowSignal = signal<GridRow | undefined>(undefined);
 
@@ -68,7 +69,9 @@ export class GridRowComponent implements IGridRowComponent, AfterViewInit {
     private sh: SignalHelperService,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) { }
+  ) {
+    super();
+  }
 
   ngAfterViewInit() {
     this.gridRow.elementRef = this.el;

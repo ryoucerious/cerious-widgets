@@ -1,4 +1,5 @@
 import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 import { ColumnDef } from '../../interfaces/column-def';
 import { IGridService } from '../../interfaces/service-interfaces/grid.interface';
@@ -12,7 +13,7 @@ import { GRID_SERVICE } from '../../tokens/grid-service.token';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridColumnSizerComponent implements IGridColumnSizerComponent {
+export class GridColumnSizerComponent extends ZonelessCompatibleComponent implements IGridColumnSizerComponent {
 
   readonly columnSignal = signal<ColumnDef | undefined>(undefined);
 
@@ -23,7 +24,9 @@ export class GridColumnSizerComponent implements IGridColumnSizerComponent {
   constructor(
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,
-  ) { }
+  ) {
+    super();
+  }
 
   onMouseDown(e: MouseEvent) {
     e.preventDefault();

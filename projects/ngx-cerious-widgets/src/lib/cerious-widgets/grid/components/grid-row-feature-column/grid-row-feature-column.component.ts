@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Inject, Input, Output, Signal, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 
 import { GridRow } from '../../models/grid-row';
 
@@ -20,7 +21,7 @@ import { SectionClassConfig } from '../../interfaces';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridRowFeatureColumnComponent implements IGridRowFeatureColumnComponent {
+export class GridRowFeatureColumnComponent extends ZonelessCompatibleComponent implements IGridRowFeatureColumnComponent {
 
   readonly gridRowSignal = signal<GridRow | undefined>(undefined);
 
@@ -57,7 +58,9 @@ export class GridRowFeatureColumnComponent implements IGridRowFeatureColumnCompo
     private sh: SignalHelperService,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService
-  ) {}
+  ) {
+    super();
+  }
 
   /**
    * Toggles the selection state of a grid row based on the grid's selection mode.
