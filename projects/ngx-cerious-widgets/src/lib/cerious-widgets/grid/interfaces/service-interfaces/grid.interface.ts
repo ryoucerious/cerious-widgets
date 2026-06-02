@@ -59,6 +59,8 @@ export interface IGridService {
   afterResize: Subject<any>;
   afterRender: Subject<any>;
   afterUpdateHeaderOrder: Subject<any>;
+  afterColumnResize: Subject<any>;
+  afterCellEdit: Subject<any>;
   pageChange: ReplaySubject<any>;
   rowSelect: ReplaySubject<any>;
   selectedRowsChange: ReplaySubject<any>;

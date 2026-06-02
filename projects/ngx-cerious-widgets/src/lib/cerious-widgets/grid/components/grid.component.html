@@ -3,9 +3,7 @@
      role="grid"
      aria-label="Data Grid"
      [ngClass]="gridContainerClasses.container"
-     (resized)="resize()"
-     (mousemove)="onMouseMove($event)"
-     (mouseup)="onMouseUp($event)">
+     (resized)="resize()">
   <cw-grid-menu-bar #gridMenuBar *ngIf="shouldShowMenuBar()" [classes]="menuBarClasses"></cw-grid-menu-bar>
   <cw-grid-header #gridHeader [classes]="headerClasses"></cw-grid-header>
   <cw-grid-body #gridBody [classes]="bodyClasses"></cw-grid-body>

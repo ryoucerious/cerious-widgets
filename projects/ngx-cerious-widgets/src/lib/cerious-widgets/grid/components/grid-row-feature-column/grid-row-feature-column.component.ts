@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Inject, Input, Output, Signal, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Input, Output, Signal, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 
 import { GridRow } from '../../models/grid-row';
@@ -19,6 +19,7 @@ import { SectionClassConfig } from '../../interfaces';
   standalone: true,
   templateUrl: './grid-row-feature-column.component.html',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule]
 })
 export class GridRowFeatureColumnComponent extends ZonelessCompatibleComponent implements IGridRowFeatureColumnComponent {
@@ -29,6 +30,7 @@ export class GridRowFeatureColumnComponent extends ZonelessCompatibleComponent i
   set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
   get gridRow() { return this.gridRowSignal()!; }
 
+  @Input() refreshTick = 0;
   @Input() classes: SectionClassConfig = {};
 
   readonly toggleNestedRowSignal = signal<GridRow | undefined>(undefined);

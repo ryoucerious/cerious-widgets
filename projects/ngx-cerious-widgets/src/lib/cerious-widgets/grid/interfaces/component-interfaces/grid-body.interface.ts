@@ -7,11 +7,6 @@ import { ScrollDelta } from "../scroll-delta";
 import { GridOptions } from "../grid-options";
 
 export interface IGridBodyComponent {
-  visibleRows: GridRow[];
-  startIndex: number;
-  endIndex: number;
-  rowHeights: Map<number | string, number>;
-  totalHeight: number;
   tableBody: ElementRef;
   fillerRowComponents: QueryList<IGridFillerRowComponent>;
   rowComponents: QueryList<IGridRowComponent>;
@@ -24,17 +19,11 @@ export interface IGridBodyComponent {
   gridOptions: GridOptions;
   groupHeaders: QueryList<ElementRef>;
   templates: { [key: string]: TemplateRef<any> };
-  topOffset: string;
-  bottomOffset: string;
 
   onClick: (event: MouseEvent) => void;
   onKeypress: (event: KeyboardEvent) => void;
   onKeydown: (event: KeyboardEvent) => void;
   onKeyup: (event: KeyboardEvent) => void;
-  scrollGrid: (event: any) => void;
-  shouldShowFillerRows: () => boolean;
-  toggleNestedRow: (row: GridRow, visibleIndex: number) => void;
-  trackByRow: (index: number, row: GridRow) => string | number;
-  wheelGrid: (event: WheelEvent) => void;
+  toggleNestedRow: (row: GridRow) => void;
   el: ElementRef
 }

@@ -1,4 +1,4 @@
-import { ColumnDef } from "ngx-cerious-widgets";
+import { ColumnDef, ColumnType } from "ngx-cerious-widgets";
 
 const categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Garden', 'Toys', 'Sports', 'Automotive'];
 const statuses = ['Active', 'Inactive', 'Pending', 'Discontinued'];
@@ -34,18 +34,21 @@ export const MOCK_DATA = Array.from({ length: 1000000 }).map((_, i) => ({
   dimensions: `${Math.floor(Math.random() * 100)}x${Math.floor(Math.random() * 100)}x${Math.floor(Math.random() * 100)} cm`
 }));
 
+const categoryOptions = categories.map(c => ({ id: c, value: c }));
+const statusOptions = statuses.map(s => ({ id: s, value: s }));
+
 export const MOCK_COLUMN_DEFS = [
-  { id: 'id', field: 'id', label: 'ID', type: 'number' },
-  { id: 'name', field: 'name', label: 'Name', type: 'string' },
-  { id: 'category', field: 'category', label: 'Category', type: 'string' },
-  { id: 'price', field: 'price', label: 'Price', type: 'number', format: 'currency' },
-  { id: 'date', field: 'date', label: 'Date', type: 'date' },
-  { id: 'status', field: 'status', label: 'Status', type: 'string' },
-  { id: 'description', field: 'description', label: 'Description', type: 'string' },
-  { id: 'stock', field: 'stock', label: 'Stock', type: 'number' },
-  { id: 'rating', field: 'rating', label: 'Rating', type: 'number', format: 'stars' },
-  { id: 'sku', field: 'sku', label: 'SKU', type: 'string' },
-  { id: 'supplier', field: 'supplier', label: 'Supplier', type: 'string' },
-  { id: 'weight', field: 'weight', label: 'Weight', type: 'number' },
-  { id: 'dimensions', field: 'dimensions', label: 'Dimensions', type: 'string' }
+  { id: 'id', field: 'id', label: 'ID', type: ColumnType.Number },
+  { id: 'name', field: 'name', label: 'Name (text)', type: ColumnType.String, editable: true },
+  { id: 'category', field: 'category', label: 'Category (dropdown)', type: ColumnType.Dropdown, editable: true, valueOptions: categoryOptions },
+  { id: 'price', field: 'price', label: 'Price (number)', type: ColumnType.Number, editable: true, format: 'currency' },
+  { id: 'date', field: 'date', label: 'Date', type: ColumnType.Date },
+  { id: 'status', field: 'status', label: 'Status (dropdown)', type: ColumnType.Dropdown, editable: true, valueOptions: statusOptions },
+  { id: 'description', field: 'description', label: 'Description (text)', type: ColumnType.String, editable: true },
+  { id: 'stock', field: 'stock', label: 'Stock (number)', type: ColumnType.Number, editable: true },
+  { id: 'rating', field: 'rating', label: 'Rating', type: ColumnType.Number, format: 'stars' },
+  { id: 'sku', field: 'sku', label: 'SKU', type: ColumnType.String },
+  { id: 'supplier', field: 'supplier', label: 'Supplier', type: ColumnType.String },
+  { id: 'weight', field: 'weight', label: 'Weight (number)', type: ColumnType.Number, editable: true },
+  { id: 'dimensions', field: 'dimensions', label: 'Dimensions', type: ColumnType.String }
 ] as ColumnDef[];

@@ -17,7 +17,9 @@
     "@angular/router": ">=16.0.0",
     "write-excel-file": ">=1.4.25",
     "rxjs": ">=7.4.0",
-    "zone.js": ">=0.13.3"
+    "zone.js": ">=0.13.3",
+    "@ceriousdevtech/cerious-scroll": ">=1.0.1",
+    "@ceriousdevtech/ngx-cerious-scroll": ">=1.0.1"
   },
   "dependencies": {
     "tslib": "^2.3.0"

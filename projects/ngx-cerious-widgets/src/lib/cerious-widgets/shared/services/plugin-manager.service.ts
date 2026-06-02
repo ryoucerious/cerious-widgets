@@ -45,7 +45,7 @@ export class PluginManagerService {
           parent: this.injector, // Use the parent injector
         });
 
-        const pluginInstance = pluginInjector.get(PluginClass);
+        const pluginInstance: any = pluginInjector.get(PluginClass);
         pluginInstance.onInit(gridApi, config); // Initialize the plugin with the grid API
       } else {
         console.error(`Plugin with key "${pluginKey}" not found.`);

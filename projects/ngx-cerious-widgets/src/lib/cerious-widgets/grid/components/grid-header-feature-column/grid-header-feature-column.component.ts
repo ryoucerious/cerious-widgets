@@ -72,6 +72,7 @@ export class GridHeaderFeatureColumnComponent extends ZonelessCompatibleComponen
     this.selected = !this.selected;
     this.gridService.gridDataset?.dataset?.forEach(row => row.selected = this.selected);
     this.gridService.gridDataset.selectedRows = this.gridService.gridDataset?.dataset?.filter(row => row.selected);
+    this.gridService.selectedRowsChange.next(this.gridService.gridDataset.selectedRows);
   }
 
 }

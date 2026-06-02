@@ -60,6 +60,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "preserveSymlinks": true,
             "outputPath": "dist/cerious-app",
             "index": "projects/cerious-app/src/index.html",
             "main": "projects/cerious-app/src/main.ts",

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
 import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 
 import { ColumnFormat, ColumnType } from '../../enums';
@@ -14,11 +14,34 @@ import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { SectionClassConfig } from '../../interfaces';
 
+// Display modes for the cell template. Precomputed once per column change so
+// the template can run a single ngSwitch instead of four sibling *ngIf blocks
+// — a meaningful win when a row recycle CDs N cells at once.
+enum CellMode {
+  Plain = 0,
+  Template = 1,
+  Editable = 2,
+  Format = 3,
+}
+
+// Currency formatters are expensive to construct; cache by locale+currency.
+const CURRENCY_FORMATTERS = new Map<string, Intl.NumberFormat>();
+function getCurrencyFormatter(locale = 'en-US', currency = 'USD'): Intl.NumberFormat {
+  const key = `${locale}|${currency}`;
+  let f = CURRENCY_FORMATTERS.get(key);
+  if (!f) {
+    f = new Intl.NumberFormat(locale, { style: 'currency', currency });
+    CURRENCY_FORMATTERS.set(key, f);
+  }
+  return f;
+}
+
 @Component({
   selector: 'cw-grid-row-column',
   standalone: true,
   templateUrl: './grid-row-column.component.html',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule]
 })
 export class GridRowColumnComponent extends ZonelessCompatibleComponent implements IGridRowColumnComponent {
@@ -33,13 +56,73 @@ export class GridRowColumnComponent extends ZonelessCompatibleComponent implemen
   @Input()
   set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
   get gridRow() { return this.gridRowSignal()!; }
-  
+
+  @Input() refreshTick = 0;
   @Input() classes: SectionClassConfig = {};
 
-  // Expose enums to the template
   ColumnType = ColumnType;
   ColumnFormat = ColumnFormat;
-  
+  CellMode = CellMode;
+
+  // Derived signals — recomputed only when their inputs change. During fast
+  // scroll only `gridRow` flips per recycle, so width/alignment/mode are
+  // served from cache and only `value` re-evaluates per cell.
+  readonly width = computed(() => {
+    const col = this.columnSignal();
+    return col ? this.gridColumnService.getColumnWidth(col, this.gridService.gridOptions) : undefined;
+  });
+
+  readonly alignment = computed(() => {
+    const col = this.columnSignal();
+    if (!col) return 'left';
+    if (col.type === ColumnType.Number || col.format === 'currency' || col.format === 'percentage') {
+      return col.alignment || 'right';
+    }
+    return col.alignment || 'left';
+  });
+
+  readonly cellMode = computed<CellMode>(() => {
+    const col = this.columnSignal();
+    if (!col) return CellMode.Plain;
+    if (col.cellTemplate && this.gridService.templates[col.cellTemplate]) return CellMode.Template;
+    if (col.editable) return CellMode.Editable;
+    if (col.format) return CellMode.Format;
+    return CellMode.Plain;
+  });
+
+  readonly cellTemplateRef = computed(() => {
+    const col = this.columnSignal();
+    return col?.cellTemplate ? this.gridService.templates[col.cellTemplate] : null;
+  });
+
+  readonly value = computed(() => {
+    const col = this.columnSignal();
+    const row = this.gridRowSignal();
+    return col?.field && row ? row.row[col.field] : null;
+  });
+
+  readonly formattedValue = computed(() => {
+    const col = this.columnSignal();
+    const v = this.value();
+    if (!col) return v;
+    switch (col.format) {
+      case ColumnFormat.Currency:
+        return getCurrencyFormatter().format(v);
+      case ColumnFormat.Percentage:
+        return `${v}%`;
+      case ColumnFormat.Stars:
+        return Math.round(v);
+      case ColumnFormat.Date:
+        return new Date(v).toLocaleDateString();
+      case ColumnFormat.DateTime:
+        return new Date(v).toLocaleString();
+      case ColumnFormat.Time:
+        return new Date(v).toLocaleTimeString();
+      default:
+        return v;
+    }
+  });
+
   get templates() {
     return this.gridService.templates;
   }
@@ -52,115 +135,28 @@ export class GridRowColumnComponent extends ZonelessCompatibleComponent implemen
     super();
   }
 
-  /**
-   * TrackBy function for dropdown options to optimize rendering in Angular templates.
-   * This function determines the unique identifier for each item in the dropdown list.
-   *
-   * @param index - The index of the item in the dropdown list.
-   * @param item - The current item in the dropdown list.
-   * @returns The unique identifier for the item, which is either the `id` property of the item
-   *          or the index if the `id` is not available.
-   */
   dropdownTrackBy(index: number, item: any): any {
-    // Track by function for dropdown options
     return item.id || index;
   }
 
-  /**
-   * Determines the text alignment for a grid column based on its type and format.
-   *
-   * - For columns of type `Number` or with a format of `currency` or `percentage`,
-   *   the default alignment is `'right'` unless a specific alignment is provided.
-   * - For all other columns, the default alignment is `'left'` unless a specific alignment is provided.
-   *
-   * @returns {string} The alignment for the column, either `'right'` or `'left'`.
-   */
-  getAlignment(): string {
-    // Default alignment for numbers is 'right', otherwise use the column's alignment or default to 'left'
-    if (this.column.type === ColumnType.Number || this.column.format === 'currency' || this.column.format === 'percentage') {
-      return this.column.alignment || 'right';
-    }
-    return this.column.alignment || 'left';
-  }
+  // Retained for backwards-compatibility with the IGridRowColumnComponent
+  // interface and any external template consumers; internally we read the
+  // computed signals.
+  getAlignment(): string { return this.alignment(); }
+  getWidth(): string { return this.width() as string; }
+  getFormattedValue(): any { return this.formattedValue(); }
+  getValue(): any { return this.value(); }
 
-  /**
-   * Retrieves the width of the current grid column as a string.
-   *
-   * @returns {string} The width of the column, typically in a CSS-compatible format (e.g., '100px', '20%').
-   */
-  getWidth(): string {
-    return this.gridColumnService.getColumnWidth(this.column, this.gridService.gridOptions);
-  }
-
-  /**
-   * Formats the value of a grid cell based on the column's specified format.
-   *
-   * Supported formats include:
-   * - `Currency`: Formats the value as a currency string in USD.
-   * - `Percentage`: Appends a percentage symbol (`%`) to the value.
-   * - `Stars`: Rounds the value to the nearest integer.
-   * - `Date`: Converts the value to a localized date string.
-   * - `DateTime`: Converts the value to a localized date and time string.
-   * - `Time`: Converts the value to a localized time string.
-   * - Default: Returns the raw value without formatting.
-   *
-   * @returns The formatted value based on the column's format.
-   */
-  getFormattedValue(): any {
-    const value = this.getValue();
-
-    // Apply formatting based on column format
-    switch (this.column.format) {
-      case ColumnFormat.Currency:
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
-      case ColumnFormat.Percentage:
-        return `${value}%`;
-      case ColumnFormat.Stars:
-        return Math.round(value); // Return rounded value for stars
-      case ColumnFormat.Date:
-        return new Date(value).toLocaleDateString();
-      case ColumnFormat.DateTime:
-        return new Date(value).toLocaleString();
-      case ColumnFormat.Time:
-        return new Date(value).toLocaleTimeString();
-      default:
-        return value;
-    }
-  }
-
-  /**
-   * Generates an array representing star ratings based on the given value.
-   * Each element in the array corresponds to a star.
-   *
-   * @param value - The numeric value used to determine the number of stars.
-   *                The value is rounded to the nearest integer.
-   * @returns An array of zeros with a length equal to the rounded value.
-   */
   getStars(value: number): number[] {
-    // Generate an array for star ratings
     return Array(Math.round(value)).fill(0);
   }
 
-  /**
-   * Retrieves the value of the grid row's column field.
-   *
-   * @returns The value of the column field from the grid row if the column field is defined;
-   *          otherwise, returns `null`.
-   */
-  getValue(): any {
-    return this.column.field ? this.gridRow.row[this.column.field] : null;
-  }
-
-  /**
-   * Handles the value change event for a grid row column.
-   * Updates the corresponding field in the grid row with the new value.
-   *
-   * @param event - The event object containing the new value.
-   *                The value is expected to be accessible via `event.target.value`.
-   */
   onValueChange(event: any): void {
     if (this.column.field) {
-      this.gridRow.row[this.column.field] = event.target.value;
+      this.gridRow.row[this.column.field] = this.column.type === ColumnType.Boolean
+        ? event.target.checked
+        : event.target.value;
+      this.gridService.afterCellEdit.next(null);
     }
   }
 }
