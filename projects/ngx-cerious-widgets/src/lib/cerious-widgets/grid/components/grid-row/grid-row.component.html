@@ -1,7 +1,8 @@
 <ng-container>
     <cw-grid-row-feature-column class="table-col table-col-pinned table-col-feature"
-                                [class]="{'last-pinned': pinnedColumns.length === 0}"
+                                [class.last-pinned]="pinnedColumns.length === 0"
                                 [gridRow]="gridRow"
+                                [refreshTick]="refreshTick"
                                 [style.width]="featureColumnWidth"
                                 [classes]="classes"
                                 (toggleNestedRow)="toggleNestedRowValue($event)"
@@ -9,13 +10,16 @@
                                 aria-hidden="true">
     </cw-grid-row-feature-column>
 </ng-container>
-<ng-container *ngFor="let column of gridRow.columnDefs; let colIndex = index">
+<ng-container *ngFor="let column of gridRow.columnDefs; let colIndex = index; trackBy: trackByColumnId">
     <ng-container *ngIf="column.visible !== false">
         <cw-grid-row-column class="table-col"
-                            [class]="{'table-col-pinned': column.pinned, 'last-pinned': column.lastPinned}"
+                            [class.table-col-pinned]="column.pinned"
+                            [class.last-pinned]="column.lastPinned"
                             [gridRow]="gridRow"
                             [column]="column"
-                            [style]="{'width': getColumnWidth(column), 'overflow': 'hidden'}"
+                            [refreshTick]="refreshTick"
+                            [style.width]="column.width"
+                            style="overflow: hidden"
                             [classes]="classes"
                             [attr.data-cell-id]="column.id"
                             role="gridcell"

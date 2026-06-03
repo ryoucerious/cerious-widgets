@@ -1,96 +1,86 @@
 <div #tableBody
      class="cw-table-body"
+     [class.cw-table-body--no-virtual]="!useVirtualScroll"
      role="grid"
      aria-label="Data Grid"
-     [style.overflowX]="'hidden'"
-     [style.scrollbarWidth]="0"
-     [style.scrollbarHeight]="0"
      [ngClass]="classes.container"
-     (scroll)="scrollGrid($event)"
      (click)="onClick($event)"
      (dblclick)="onDoubleClick($event)"
      (keydown)="onKeydown($event)"
      (keyup)="onKeyup($event)"
-     (keypress)="onKeypress($event)"
-     (wheel)="wheelGrid($event)">
+     (keypress)="onKeypress($event)">
 
-    <ng-container *ngIf="visibleRows.length > 0">
-
-        <!-- Top offset for rows above the visible range -->
-        <div [style.height]="topOffset"></div>
-
-        <!-- Render visible rows (including groups and rows) -->
-        <ng-container *ngFor="let item of visibleRows; let rowIndex = index; trackBy: trackByRow">
-            <!-- Check if the item is a group -->
-            <ng-container *ngIf="item.isGroup; else renderRow">
-                <!-- Group Header -->
-                <div #groupHeader
-                    class="group-header"
-                    role="row"
-                    [attr.aria-expanded]="expandedGroups[item.key]"
-                    [attr.aria-level]="item.depth"
-                    [style.paddingLeft.px]="item.depth * 20">
-                    <button (click)="toggleGroupCollapse(item.key)"
-                            [attr.aria-label]="'Toggle group ' + item.key">
-                        {{ expandedGroups[item.key] ? '-' : '+' }}
-                    </button>
-                    &nbsp;
-                    <span>{{ getGroupColumnLabel(item.depth - 1) }}: {{ item.key }}</span>
-                    &nbsp;
-                    <span>({{ item.rowCount }} {{ item.rowCount === 1 ? 'item' : 'items'}})</span>
-                </div>
-            </ng-container>
-
-            <!-- Render a row -->
-            <ng-template #renderRow>
-                <cw-grid-row #rowElement
-                            class="cw-table-row" 
-                            role="row"
-                            tabindex="0"
-                            [attr.data-row-id]="item.row.id"
-                            [class.even]="(startIndex + rowIndex) % 2 === 0" 
-                            [class.odd]="(startIndex + rowIndex) % 2 !== 0" 
-                            [ngClass]="classes.row"
-                            [gridRow]="item.row"
-                            [style.minWidth]="rowMinWidth"
-                            [classes]="classes"
-                            (toggleNestedRow)="toggleNestedRow(item.row, rowIndex)"
-                            (resize)="updateRowHeight(startIndex + rowIndex, rowElement.el.nativeElement.offsetHeight)">
-                </cw-grid-row>
-
-                <!-- Nested Row -->
-                <cw-nested-row *ngIf="item.row.nestedExpanded"
-                            #nestedRowElement
-                            class="cw-table-row nested-row"
-                            role="row"
-                            tabindex="0"
-                            [gridRow]="item.row"
-                            [style.minWidth]="rowMinWidth"
-                            (resize)="updateRowHeight(startIndex + rowIndex, nestedRowElement.el.nativeElement.offsetHeight, true)">
-                </cw-nested-row>
-            </ng-template>
-        </ng-container>
-
-        <!-- Bottom offset for rows below the visible range -->
-        <div [style.height]="bottomOffset"></div>
-
-        <!-- Render filler rows if needed -->
-        <ng-container *ngIf="shouldShowFillerRows()">
-            <ng-container *ngFor="let row of fillerRows; let rowIndex = index;">
-                <cw-grid-filler-row class="cw-table-row filler-row"
-                                    role="row"
-                                    tabindex="0"
-                                    [gridRow]="row"
-                                    [style.minWidth]="rowMinWidth"
-                                    [style.lineHeight]="fillerRowHeight + 'px'">
-                </cw-grid-filler-row>
-            </ng-container>
-        </ng-container>
-    </ng-container>
-    <!-- Show a message when there are no rows to display -->
-    <ng-container *ngIf="visibleRows.length === 0">
-        <div class="cw-no-data">
-            {{gridOptions.noDataMessage}}
+    <ng-container *ngIf="useVirtualScroll; else nonVirtual">
+        <div class="cw-table-body__virtual-host"
+             ceriousScroll
+             [ceriousScrollItems]="flattenedRows"
+             [ceriousScrollItemTemplate]="rowTemplate"
+             [ceriousScrollOptions]="scrollOptions"
+             (ceriousScrollReady)="onScrollerReady($event)">
         </div>
     </ng-container>
+
+    <ng-template #nonVirtual>
+        <div #nonVirtualContent class="cw-table-body__static-content">
+            <ng-container *ngFor="let item of flattenedRows; let i = index; trackBy: trackByRow">
+                <ng-container *ngTemplateOutlet="rowTemplate; context: { $implicit: item, index: i }"></ng-container>
+            </ng-container>
+        </div>
+    </ng-template>
+
+    <!-- Empty-state message rendered as a normal child of the body. -->
+    <div class="cw-no-data" *ngIf="flattenedRows.length === 0">
+        {{ gridOptions.noDataMessage }}
+    </div>
 </div>
+
+<!-- Row template rendered by the cerious-scroll engine for each visible item. -->
+<ng-template #rowTemplate let-item let-index="index">
+  <ng-container *ngIf="item">
+    <!-- Group header -->
+    <div *ngIf="item.isGroup"
+         class="group-header"
+         role="row"
+         [attr.aria-expanded]="expandedGroups[item.key]"
+         [attr.aria-level]="item.depth"
+         [style.minWidth]="rowMinWidth"
+         [style.paddingLeft.px]="item.depth * 20">
+        <button (click)="toggleGroupCollapse(item.key)"
+                [attr.aria-label]="'Toggle group ' + item.key">
+            {{ expandedGroups[item.key] ? '-' : '+' }}
+        </button>
+        &nbsp;
+        <span>{{ getGroupColumnLabel(item.depth - 1) }}: {{ item.key }}</span>
+        &nbsp;
+        <span>({{ item.rowCount }} {{ item.rowCount === 1 ? 'item' : 'items' }})</span>
+    </div>
+
+    <!-- Data row -->
+    <ng-container *ngIf="!item.isGroup">
+        <cw-grid-row #rowElement
+                     class="cw-table-row"
+                     role="row"
+                     tabindex="0"
+                     [attr.data-row-id]="item.row.id"
+                     [class.even]="index % 2 === 0"
+                     [class.odd]="index % 2 !== 0"
+                     [ngClass]="classes.row"
+                     [gridRow]="item.row"
+                     [refreshTick]="refreshTick"
+                     [style.minWidth]="rowMinWidth"
+                     [classes]="classes"
+                     (toggleNestedRow)="toggleNestedRow(item.row)">
+        </cw-grid-row>
+
+        <!-- Nested row rendered with the same item so its height is measured together. -->
+        <cw-nested-row *ngIf="item.row.nestedExpanded"
+                       #nestedRowElement
+                       class="cw-table-row nested-row"
+                       role="row"
+                       tabindex="0"
+                       [gridRow]="item.row"
+                       [style.minWidth]="rowMinWidth">
+        </cw-nested-row>
+    </ng-container>
+  </ng-container>
+</ng-template>

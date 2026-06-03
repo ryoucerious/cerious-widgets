@@ -19,6 +19,10 @@ export class GridScrollService implements IGridScrollService {
   afterScroll: Subject<boolean> = new Subject<boolean>();
   scrollDelta: ScrollDelta = { top: 0, left: 0 };
 
+  // Cached lookups for the scroll hot path. Reset when the body element changes.
+  private cachedBodyEl: HTMLElement | null = null;
+  private cachedContentEl: HTMLElement | null = null;
+
   constructor(
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService,
     private zone: NgZone
@@ -53,66 +57,57 @@ export class GridScrollService implements IGridScrollService {
     scrollbarWidth: number
   ): void {
     try {
-      const gridBodyElement = gridBody?.tableBody?.nativeElement;
-      const gridHeaderElement = gridHeader?.tableHead?.nativeElement;
-      const gridScrollerElement = gridScroller?.el?.nativeElement;
-      const gridFooterElement = gridFooter?.tableFooter?.nativeElement;
+      const gridBodyElement = gridBody?.tableBody?.nativeElement as HTMLElement | undefined;
+      const gridHeaderElement = gridHeader?.tableHead?.nativeElement as HTMLElement | undefined;
+      const gridFooterElement = gridFooter?.tableFooter?.nativeElement as HTMLElement | undefined;
 
-      // Check if grid body element is available
       if (!gridBodyElement) {
         return;
       }
 
-      // Store delta value for later use
-      this.scrollDelta = delta;
+      // Cache the engine content element across frames; querySelector on every
+      // scroll event was a measurable cost on long scroll bursts.
+      if (this.cachedBodyEl !== gridBodyElement) {
+        this.cachedBodyEl = gridBodyElement;
+        this.cachedContentEl = gridBodyElement.querySelector(
+          "[data-cerious-scroll-content]"
+        ) as HTMLElement | null;
+      }
+      const contentElement = this.cachedContentEl;
 
-      // Calculate the maximum scrollable dimensions
-      const verticalScrollbarWidth = hasVerticalScrollbar ? scrollbarWidth : 0;
-      const maxScrollTop = Math.max(gridBodyElement.scrollHeight - gridBodyElement.clientHeight, 0);
-      const maxScrollLeft = Math.max(
-        gridBodyElement.scrollWidth - (gridBodyElement.clientWidth + verticalScrollbarWidth),
-        0
-      );
+      // Clamp the desired horizontal scroll to the valid range.
+      const horizontalExtent = contentElement?.scrollWidth ?? gridBodyElement.scrollWidth;
+      const maxScrollLeft = Math.max(horizontalExtent - gridBodyElement.clientWidth, 0);
+      const nextLeft = Math.min(Math.max(delta.left, 0), maxScrollLeft);
 
-      // Clamp the scrollDelta values to the valid range
-      this.scrollDelta.top = Math.min(Math.max(this.scrollDelta.top, 0), maxScrollTop);
-      this.scrollDelta.left = Math.min(Math.max(this.scrollDelta.left, 0), maxScrollLeft);
-
-      // Prevent scroll jumps by clamping scrollTop within valid bounds
-      if (gridBodyElement.scrollTop > maxScrollTop) {
-        gridBodyElement.scrollTop = maxScrollTop;
+      // No-op when nothing changed (scroll-wheel/keyboard often dispatch many
+      // events at the same offset — skip the DOM writes entirely).
+      if (nextLeft === this.scrollDelta.left) {
+        return;
       }
 
-      // Run scroll actions outside of Angular zone
+      this.scrollDelta.left = nextLeft;
+
       this.zone.runOutsideAngular(() => {
         try {
-          if (e?.target !== gridBodyElement) {
-            // If source element is not grid body, scroll left
-            gridBodyElement.scrollLeft = this.scrollDelta.left;
-          }
-          if (e?.target !== gridScrollerElement) {
-            // If source element is not grid scroller, scroll top
-            gridBodyElement.scrollTop = this.scrollDelta.top;
+          const offsetPx = `${nextLeft}px`;
+
+          if (contentElement) {
+            contentElement.style.transform = nextLeft
+              ? `translateX(${-nextLeft}px)`
+              : "";
           }
 
-          // Always scroll header and footer left
           if (gridHeaderElement) {
-            gridHeaderElement.scrollLeft = this.scrollDelta.left;
+            gridHeaderElement.scrollLeft = nextLeft;
+            gridHeaderElement.style.setProperty('--cw-pin-offset', offsetPx);
           }
           if (gridFooterElement) {
-            gridFooterElement.scrollLeft = this.scrollDelta.left;
+            gridFooterElement.scrollLeft = nextLeft;
+            gridFooterElement.style.setProperty('--cw-pin-offset', offsetPx);
           }
+          gridBodyElement.style.setProperty('--cw-pin-offset', offsetPx);
 
-          // Update the pinned columns position
-          this.gridColumnService.updatePinnedColumnPos(
-            gridHeader,
-            gridBody,
-            gridFooter,
-            gridOptions,
-            delta
-          );
-
-          // Notify subscribers after scroll
           this.afterScroll.next(true);
         } catch (innerError) {
           console.error("Error during scroll synchronization:", innerError);

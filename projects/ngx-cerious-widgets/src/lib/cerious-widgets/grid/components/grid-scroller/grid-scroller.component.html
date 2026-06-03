@@ -4,12 +4,9 @@
       'height': getScrollHeight() + 'px',
       'marginLeft': pinnedColumnWidth + 'px'
      }"
-     [scrollLeft]="scrollDelta.left"
-     (scroll)="scrollGrid($event)"
      role="scrollbar"
      aria-controls="gridTable"
      aria-orientation="horizontal"
-     [attr.aria-valuenow]="scrollDelta.left"
      [attr.aria-valuemin]="0"
      [attr.aria-valuemax]="tableScrollWidth - moddedColumnWidth"
      aria-label="Horizontal grid scroller">

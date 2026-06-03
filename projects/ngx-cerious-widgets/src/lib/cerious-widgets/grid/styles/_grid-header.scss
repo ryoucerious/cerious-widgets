@@ -2,6 +2,15 @@
 // Header Row
 // ============================
 .cw-table-head {
+    // Pinned header cells and the breadcrumb track horizontal scroll via this
+    // CSS variable instead of per-frame inline style writes from JS.
+    --cw-pin-offset: 0px;
+
+    .cw-table-row > .table-col-pinned,
+    .cw-table-row > cw-grid-header-feature-column.table-col-pinned,
+    > .cw-breadcrumb-container {
+        left: var(--cw-pin-offset, 0px);
+    }
 
     .column-headers-standard {
         min-height: 24px;

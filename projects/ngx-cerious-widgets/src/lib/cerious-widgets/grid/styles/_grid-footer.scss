@@ -7,6 +7,12 @@
     font-weight: bold;
     overflow: hidden;
     border-right: none;
+    --cw-pin-offset: 0px;
+
+    .cw-table-row > .table-col-pinned,
+    .cw-table-row > cw-grid-footer-feature-column.table-col-pinned {
+        left: var(--cw-pin-offset, 0px);
+    }
 
     > .cw-table-row {
         width: 100%;

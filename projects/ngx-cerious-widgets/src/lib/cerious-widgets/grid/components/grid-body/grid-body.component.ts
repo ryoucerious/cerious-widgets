@@ -2,6 +2,9 @@ import { AfterViewInit, Component, ElementRef, Inject, Input, NgZone, OnDestroy,
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
+import { CeriousScrollDirective } from '@ceriousdevtech/ngx-cerious-scroll';
+import type { CeriousScrollOptions } from '@ceriousdevtech/ngx-cerious-scroll';
+
 import { GridFillerRowComponent } from '../grid-filler-row/grid-filler-row.component';
 import { GridRowComponent } from '../grid-row/grid-row.component';
 import { GridNestedRowComponent } from '../grid-nested-row/grid-nested-row.component';
@@ -31,51 +34,43 @@ import { SectionClassConfig } from '../../interfaces/section-class-config-interf
   standalone: true,
   templateUrl: './grid-body.component.html',
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, GridFillerRowComponent, GridRowComponent, GridNestedRowComponent]
+  imports: [CommonModule, GridRowComponent, GridNestedRowComponent, CeriousScrollDirective]
 })
 export class GridBodyComponent extends ZonelessCompatibleComponent implements IGridBodyComponent, AfterViewInit, OnInit, OnDestroy {
 
   private subscriptions: Array<Subscription> = [];
   private rowHeight = 30;
-  private buffer = 10;
-  private resizeObservers: ResizeObserver[] = [];
-  private flattenedRows: any[] = [];
-  private scrollTimeout: any = null;
-  private isWheelScrolling = false;
+  flattenedRows: any[] = [];
+
+  /** The cerious-scroll engine instance (vertical virtual scroller). */
+  private scroller: any = null;
+  /** The engine's content element; rows are absolutely positioned inside it. */
+  private contentElement: HTMLElement | null = null;
 
   expandedGroups: { [key: string]: boolean } = {};
   expandedGroupData: { [key: string]: any[] } = {};
-  visibleRows: any[] = [];
-  startIndex = 0;
-  endIndex = 0;
-  rowHeights: Map<number | string, number> = new Map();
-  totalHeight = 0; // Total height of all rows
-  topOffset = '0px'; // Top offset for the grid body
-  bottomOffset = '0px'; // Bottom offset for the grid body
+  refreshTick = 0;
 
-  // Data windowing for large datasets - keep windows small for stability
-  private readonly WINDOW_SIZE = 1000; // 1K rows per window (proven stable size)
-  private readonly WINDOW_OVERLAP = 100; // 100 row overlap between windows
-  private currentWindowStart = 0;
-  private currentWindowEnd = 0;
-  private windowedRows: any[] = [];
-  private virtualTopOffset = 0; // Virtual offset for windowing
-
-  // Throttling for updateVisibleRows to prevent flickering
-  private updateThrottleTimer: any = null;
-  private lastUpdateTime = 0;
-  private updateThrottleMs = 16; // ~60fps throttling
-  private isUpdatingRows = false;
-  
-  // Scroll settlement detection
-  private scrollSettlementTimer: any = null;
-  private scrollSettlementDelay = 150; // 150ms after scroll stops
-
-  private _isUpdating = false;
+  /** Options forwarded to the cerious-scroll engine. */
+  scrollOptions: CeriousScrollOptions = {
+    attachScrollbar: true,
+    autoResize: true,
+    observeContentChanges: true,
+    touch: {
+      // Forward horizontal-dominant touch gestures to the native overflow-x
+      // scroller so mobile users can pan horizontally while still scrolling
+      // vertically through the body. Resolved lazily on each touchstart since
+      // gridScroller isn't available until after view init.
+      getHorizontalScrollTarget: () =>
+        this.gridService.gridScroller?.scroller?.nativeElement ?? null,
+    },
+  };
 
   @Input() classes: SectionClassConfig = {};
-  
+
   @ViewChild('tableBody', { static: true }) tableBody!: ElementRef;
+  @ViewChild('nonVirtualContent', { static: false }) nonVirtualContent?: ElementRef<HTMLElement>;
+  @ViewChild(CeriousScrollDirective) ceriousScroll!: CeriousScrollDirective;
   @ViewChildren(GridFillerRowComponent) fillerRowComponents!: QueryList<IGridFillerRowComponent>;
   @ViewChildren(GridRowComponent) rowComponents!: QueryList<IGridRowComponent>;
   @ViewChildren(GridNestedRowComponent) nestedRowComponents!: QueryList<IGridNestedRowComponent>;
@@ -105,6 +100,16 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
     return this.gridService.gridOptions;
   }
 
+  /** Virtual scrolling is on by default; consumers opt out via `enableVirtualScroll: false`. */
+  get useVirtualScroll(): boolean {
+    return this.gridOptions?.enableVirtualScroll !== false;
+  }
+
+  /** trackBy for the non-virtual `*ngFor`; falls back to index when no row id. */
+  trackByRow = (index: number, item: any): any => {
+    return item?.isGroup ? `g:${item.key}` : (item?.row?.id ?? index);
+  };
+
   get gridDataset(): GridDataset {
     return this.gridService.gridDataset;
   }
@@ -125,30 +130,39 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
 
   ngOnInit(): void {
     try {
-      this.subscriptions.push(this.gridScrollService.afterScroll.subscribe(() => {
-        if (this._isUpdating) {
-          return;
-        }
-        this.calculateTotalHeight();
-        this.updateVisibleRows();
-        setTimeout(() => this.measureRowHeightsAndCorrect());
-      }));
+      // Horizontal scroll synchronisation (transform + pin-offset var + pinned
+      // columns) is done inside GridScrollService.scrollGrid itself — no need
+      // to repeat it here on every afterScroll emission.
       this.subscriptions.push(this.gridService.afterResize.subscribe(() => {
-        this.calculateTotalHeight();
-        this.updateVisibleRows();
-        setTimeout(() => this.measureRowHeightsAndCorrect());
+        this.applyHorizontalOffset();
+        // The viewport height may have changed; let the engine re-measure.
+        this.ceriousScroll?.render();
       }));
       this.subscriptions.push(this.gridService.afterGroupBy.subscribe(() => {
         setTimeout(() => {
           this.flattenData();
-          this.calculateTotalHeight();
-          this.updateVisibleRows();
-          setTimeout(() => this.measureRowHeightsAndCorrect());
+          this.markForCheck();
         });
       }));
       this.subscriptions.push(this.gridService.afterRender.subscribe(() => {
         this.flattenData();
-        setTimeout(() => this.measureRowHeightsAndCorrect());
+        this.markForCheck();
+      }));
+      // In-place row state changes (selection, column width drag) that don't
+      // alter row identity or count. Rebind the embedded view context + local CD
+      // for every visible row — much cheaper than a full re-render and works
+      // with the OnPush row components and the engine's view pool.
+      this.subscriptions.push(this.gridService.selectedRowsChange.subscribe(() => {
+        this.refreshTick++;
+        this.ceriousScroll?.refreshRenderedContent();
+      }));
+      this.subscriptions.push(this.gridService.afterColumnResize.subscribe(() => {
+        this.refreshTick++;
+        this.ceriousScroll?.refreshRenderedContent();
+      }));
+      this.subscriptions.push(this.gridService.afterCellEdit.subscribe(() => {
+        this.refreshTick++;
+        this.ceriousScroll?.refreshRenderedContent();
       }));
     } catch (error) {
       console.error('Error during initialization in GridBodyComponent:', error);
@@ -160,9 +174,12 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
       setTimeout(() => {
         this.gridService.updateGridHeight();
         this.flattenData();
-        this.calculateTotalHeight();
-        this.updateVisibleRows();
-        this.measureRowHeightsAndCorrect();
+        this.markForCheck();
+        // Render once the host has a measured height.
+        setTimeout(() => {
+          this.ceriousScroll?.render();
+          this.applyHorizontalOffset();
+        });
       });
     } catch (error) {
       console.error('Error in ngAfterViewInit in GridBodyComponent:', error);
@@ -172,31 +189,48 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
   override ngOnDestroy(): void {
     try {
       this.subscriptions.forEach(sub => sub.unsubscribe());
-      this.resizeObservers.forEach(observer => observer.disconnect());
-      
-      // Clean up scroll timeout to prevent memory leaks
-      if (this.scrollTimeout) {
-        clearTimeout(this.scrollTimeout);
-        this.scrollTimeout = null;
-      }
-      
-      // Clean up update throttle timer
-      if (this.updateThrottleTimer) {
-        clearTimeout(this.updateThrottleTimer);
-        this.updateThrottleTimer = null;
-      }
-      
-      // Clean up scroll settlement timer
-      if (this.scrollSettlementTimer) {
-        clearTimeout(this.scrollSettlementTimer);
-        this.scrollSettlementTimer = null;
-      }
     } catch (error) {
       console.error('Error during destruction in GridBodyComponent:', error);
     }
-    
+
     // Call parent cleanup
     super.ngOnDestroy();
+  }
+
+  /**
+   * Captures the engine instance and its content element once the scroller is
+   * ready so we can drive horizontal offset and pinned-column positioning.
+   */
+  onScrollerReady(scroller: any): void {
+    this.scroller = scroller;
+    this.contentElement = this.tableBody?.nativeElement?.querySelector('[data-cerious-scroll-content]') ?? null;
+    this.applyHorizontalOffset();
+  }
+
+  /**
+   * Translates the engine content element horizontally to mirror the shared
+   * scroll position. Body pinned cells track this via the `--cw-pin-offset`
+   * CSS variable, so newly rendered rows are positioned without per-frame JS.
+   */
+  private applyHorizontalOffset(): void {
+    const left = this.gridScrollService.scrollDelta?.left || 0;
+    const body = this.tableBody?.nativeElement as HTMLElement | undefined;
+    const content = this.contentElement ?? this.nonVirtualContent?.nativeElement ?? null;
+    if (content) {
+      content.style.transform = left ? `translateX(${-left}px)` : '';
+    }
+    if (body) {
+      body.style.setProperty('--cw-pin-offset', `${left}px`);
+    }
+    // Header/footer/breadcrumb pinned cells still go through the service
+    // (small fixed component arrays — runs only on horizontal scroll).
+    this.gridColumnService.updatePinnedColumnPos(
+      this.gridService.gridHeader,
+      this,
+      this.gridService.gridFooter,
+      this.gridOptions,
+      this.gridScrollService.scrollDelta
+    );
   }
 
   /**
@@ -349,94 +383,7 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
   }
 
   /**
-   * Handles the scroll event for the grid and delegates the scrolling logic
-   * to the `gridScrollService`. It calculates the scroll positions and passes
-   * them along with various grid-related properties to the service.
-   *
-   * @param e - The scroll event triggered by the grid.
-   * 
-   * @throws Will log an error to the console if an exception occurs during the
-   *         execution of the scroll logic.
-   */
-  scrollGrid(e: any): void {
-    try {
-      this.gridScrollService.scrollGrid(
-        e,
-        {
-          top: e.target.scrollTop,
-          left: e.target.scrollLeft
-        },
-        this.gridService.gridOptions,
-        this.gridService.gridHeader,
-        this.gridService.gridBody,
-        this.gridService.gridScroller,
-        this.gridService.gridFooter,
-        this.gridService.hasVerticalScrollbar,
-        this.gridService.scrollbarWidth
-      );
-      
-      // Detect when scrolling stops and force final update
-      this.detectScrollSettlement();
-    } catch (error) {
-      console.error('Error during scrollGrid in GridBodyComponent:', error);
-    }
-  }
-
-  /**
-   * Detects when scrolling has stopped and forces a final updateVisibleRows call
-   */
-  private detectScrollSettlement(): void {
-    // Clear any existing settlement timer
-    if (this.scrollSettlementTimer) {
-      clearTimeout(this.scrollSettlementTimer);
-    }
-    
-    // Set a timer to detect when scrolling has stopped
-    this.scrollSettlementTimer = setTimeout(() => {
-      // Force a final update when scrolling settles, bypassing throttling
-      this.forceUpdateVisibleRows();
-      this.scrollSettlementTimer = null;
-    }, this.scrollSettlementDelay);
-  }
-
-  /**
-   * Forces an immediate update of visible rows, bypassing throttling
-   */
-  private forceUpdateVisibleRows(): void {
-    // Clear any pending throttled updates
-    if (this.updateThrottleTimer) {
-      clearTimeout(this.updateThrottleTimer);
-      this.updateThrottleTimer = null;
-    }
-    
-    // Reset throttling state to allow immediate update
-    this.isUpdatingRows = false;
-    this.lastUpdateTime = 0;
-    
-    // Call updateVisibleRows immediately
-    this.updateVisibleRows();
-  }
-
-  /**
-   * Determines whether filler rows should be displayed in the grid body.
-   *
-   * This method checks if the total height of the grid content is less than
-   * or equal to the height of the viewport. If so, it indicates that filler
-   * rows are needed to fill the remaining space in the grid body.
-   *
-   * @returns `true` if filler rows should be displayed; otherwise, `false`.
-   */
-  shouldShowFillerRows(): boolean {
-    const bodyElement = this.tableBody?.nativeElement;
-    const viewportHeight = bodyElement?.clientHeight || this.gridOptions.height || 0;
-  
-    // Check if totalHeight is less than the viewport height
-    return this.totalHeight <= viewportHeight;
-  }
-
-  /**
    * Toggles the collapse state of a group identified by the given group key.
-   * Updates the total height and visible rows after toggling the state.
    *
    * @param groupKey - The unique identifier of the group to toggle.
    * @throws Will log an error to the console if an exception occurs during the toggle operation.
@@ -458,8 +405,7 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
 
       setTimeout(() => {
         this.flattenData();
-        this.calculateTotalHeight();
-        this.updateVisibleRows();
+        this.markForCheck();
       });
     } catch (error) {
       console.error(`Error toggling group collapse for groupKey "${groupKey}":`, error);
@@ -469,120 +415,24 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
   /**
    * Toggles the visibility of a nested row within the grid.
    *
-   * @param row - The grid row object associated with the nested row to toggle.
-   * @param visibleRowIndex - The index of the visible row relative to the current viewport.
+   * The nested row is part of the same item template as its parent row, so its
+   * height change is picked up by the engine's content observer. We also ask the
+   * engine to recalculate so the total content height and scrollbar update
+   * immediately.
    *
-   * This method calculates the height of the nested row, updates the row height,
-   * recalculates the total grid height, and refreshes the visible rows. It runs
-   * the operations outside Angular's zone to optimize performance. Any errors
-   * encountered during the process are logged to the console.
+   * @param row - The grid row object associated with the nested row to toggle.
    */
-  toggleNestedRow(row: GridRow, visibleRowIndex: number): void {
+  toggleNestedRow(row: GridRow): void {
     try {
-      const fullRowIndex = this.startIndex + visibleRowIndex;
-      const nestedRow = this.nestedRowComponents.toArray()[visibleRowIndex];
-      const height = nestedRow?.el?.nativeElement?.getBoundingClientRect().height;
-
-      this.updateRowHeight(fullRowIndex, height || this.rowHeight, true);
+      setTimeout(() => {
+        this.ceriousScroll?.recalculate();
+        this.applyHorizontalOffset();
+      });
     } catch (error) {
       console.error('Error toggling nested row:', error);
     }
   }
 
-  /**
-   * Tracks rows in a grid for Angular's `*ngFor` directive to optimize rendering.
-   * This method provides a unique identifier for each row, allowing Angular to
-   * efficiently detect changes and avoid unnecessary re-renders.
-   *
-   * @param index - The index of the current row in the iteration.
-   * @param row - The `GridRow` object representing the current row.
-   * @returns A unique identifier for the row, either its `id` property or the index if `id` is not available.
-   */
-  trackByRow(index: number, row: GridRow): string | number {
-    return row.id || index;
-  }
-
-  /**
-   * Updates the height of a specific row in the grid.
-   *
-   * @param index - The index of the row to update.
-   * @param height - The new height of the row.
-   * @param isNested - Optional flag indicating whether the row is nested. Defaults to `false`.
-   *
-   * If the height of the row has changed, the method updates the internal `rowHeights` map
-   * and triggers a recalculation of the total grid height and visible rows after a debounce period.
-   */
-  updateRowHeight(index: number, height: number, isNested: boolean = false): void {
-    const key = isNested ? `nested-${index}` : index;
-    if (this.rowHeights.get(key) !== height) {
-      this.rowHeights.set(key, height);
-
-      this.calculateTotalHeight();
-      this.updateVisibleRows();
-    }
-  }
-
-  /**
-   * Handles wheel scrolling and updates the scroll position using the proper scroll service.
-   * Uses debouncing to prevent auto-scrolling issues with rapid wheel events.
-   * 
-   * @param e <WheelEvent> - the event triggered by scrolling with a mouse wheel or trackpad
-   */
-  wheelGrid = (e: WheelEvent) => {
-    // Handle both horizontal and vertical wheel scrolling
-    if (Math.abs(e.deltaX) > 0 || Math.abs(e.deltaY) > 0) {
-      e.preventDefault(); // Prevent default browser scrolling
-      e.stopPropagation(); // Prevent event bubbling
-      
-      // Prevent rapid wheel events from causing auto-scroll
-      if (this.isWheelScrolling) {
-        return;
-      }
-      
-      this.isWheelScrolling = true;
-      
-      const el = this.tableBody.nativeElement;
-      
-      // Calculate new scroll positions with bounds checking
-      const maxScrollTop = Math.max(0, el.scrollHeight - el.clientHeight);
-      const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
-      
-      const newScrollLeft = Math.max(0, Math.min(maxScrollLeft, el.scrollLeft + e.deltaX));
-      const newScrollTop = Math.max(0, Math.min(maxScrollTop, el.scrollTop + e.deltaY));
-      
-      // Only scroll if there's actually a change to prevent unnecessary updates
-      if (newScrollLeft !== el.scrollLeft || newScrollTop !== el.scrollTop) {
-        // Use the proper scrollGrid method for synchronized scrolling
-        this.scrollGrid({
-          target: {
-            scrollLeft: newScrollLeft,
-            scrollTop: newScrollTop
-          }
-        });
-      }
-      
-      // Clear any existing timeout
-      if (this.scrollTimeout) {
-        clearTimeout(this.scrollTimeout);
-      }
-      
-      // Reset scrolling flag after a short delay to prevent rapid scrolling
-      this.scrollTimeout = setTimeout(() => {
-        this.isWheelScrolling = false;
-        this.scrollTimeout = null;
-      }, 50); // 50ms debounce
-    }
-  }
-  
-  private calculateTotalHeight(): void {
-    this.totalHeight = 0;
-    for (const row of this.flattenedRows) {
-      const rowHeight = row.isGroup
-        ? this.rowHeights.get(`group-${row.key}`) || 30
-        : this.rowHeights.get(row.id) || 30;
-      this.totalHeight += rowHeight;
-    }
-  }
 
   // Flatten nested columns for all rows
   private flattenColumnsForRows(): void {
@@ -601,9 +451,18 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
   }
 
   private getCellFromEvent(e: MouseEvent | KeyboardEvent): any {
-    const columnId = (e.target as HTMLElement).closest('.table-col')?.getAttribute('data-cell-id');
-    const columns = this.rowComponents.map(r => r.columnComponents.toArray().find(c => c.column.id === columnId));
-    return columns[0];
+    const colEl = (e.target as HTMLElement).closest('.table-col') as HTMLElement | null;
+    if (!colEl) {
+      return undefined;
+    }
+    const columnId = colEl.getAttribute('data-cell-id');
+    const column = this.gridColumnService
+      .flattenColumns(this.gridOptions.columnDefs)
+      .find(c => c.id === columnId);
+    if (!column) {
+      return undefined;
+    }
+    return { column, el: new ElementRef(colEl) };
   }
 
   private getRowFromEvent(e: MouseEvent | KeyboardEvent): GridRow | undefined {
@@ -612,15 +471,12 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
   }
 
   private flattenData(): void {
-    // Preserve left scroll position
-    const scrollLeft = this.tableBody.nativeElement.scrollLeft;
-
-    this.flattenedRows = [];
+    const rows: any[] = [];
 
     const traverseGroups = (groups: any[], depth: number): void => {
       for (const group of groups) {
         // Add group header
-        this.flattenedRows.push({
+        rows.push({
           isGroup: true,
           key: group.key,
           depth,
@@ -629,15 +485,15 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
 
         // If the group is expanded, process its rows or subgroups
         if (this.expandedGroups[group.key]) {
-          const rows = this.expandedGroupData[group.key] || group.rows;
-          if (Array.isArray(rows) && rows.length > 0) {
-            if (rows[0]?.key) {
+          const groupRows = this.expandedGroupData[group.key] || group.rows;
+          if (Array.isArray(groupRows) && groupRows.length > 0) {
+            if (groupRows[0]?.key) {
               // Subgroups exist, traverse them recursively
-              traverseGroups(rows, depth + 1);
+              traverseGroups(groupRows, depth + 1);
             } else {
               // Add rows in the group
-              rows.forEach(row => {
-                this.flattenedRows.push({
+              groupRows.forEach(row => {
+                rows.push({
                   row,
                   depth, // Maintain the depth for rows within this group
                 });
@@ -651,6 +507,7 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
     if (this.gridDataset.groupByData?.length) {
       // If group-by data exists, traverse and flatten it
       traverseGroups(this.gridDataset.groupByData, 1);
+      this.flattenedRows = rows;
     } else if (this.rows?.length) {
       // If no group-by data, use flat rows
       this.flattenedRows = this.rows.map(row => ({
@@ -658,184 +515,11 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
         depth: 0, // Flat rows have no depth
       }));
     } else {
-      return;
+      this.flattenedRows = [];
     }
 
     // Flatten columns for all rows
     this.flattenColumnsForRows();
-
-    // Reset left scroll position
-    setTimeout(() => {
-      setTimeout(() => {
-        this.tableBody.nativeElement.scrollLeft = scrollLeft;
-      });
-    });
-  }
-
-  private measureRowHeightsAndCorrect(): void {
-    let changed = false;
-    this.rowComponents.forEach((rowComp, idx) => {
-      const el = rowComp.el?.nativeElement;
-      if (el) {
-        const height = el.getBoundingClientRect().height;
-        const key = this.visibleRows[idx]?.id ?? (this.startIndex + idx);
-        if (this.rowHeights.get(key) !== height) {
-          this.rowHeights.set(key, height);
-          changed = true;
-        }
-      }
-    });
-
-    if (changed) {
-      // If any height changed, recalculate and re-measure after next render
-      this.calculateTotalHeight();
-      this.updateVisibleRows();
-      setTimeout(() => this.measureRowHeightsAndCorrect());
-    }
-  }
-
-  private updateVisibleRows(): void {
-    this._isUpdating = true;
-
-    // Throttle updates to prevent flickering during fast scrolling
-    const now = performance.now();
-    
-    // Prevent overlapping updates and throttle calls
-    if (this.isUpdatingRows || (now - this.lastUpdateTime < this.updateThrottleMs)) {
-      // Clear any existing throttle timer
-      if (this.updateThrottleTimer) {
-        clearTimeout(this.updateThrottleTimer);
-      }
-      
-      // Schedule an update for later
-      this.updateThrottleTimer = setTimeout(() => {
-        this.updateThrottleTimer = null;
-        this.updateVisibleRows();
-      }, this.updateThrottleMs);
-      
-      return;
-    }
-    
-    this.isUpdatingRows = true;
-    this.lastUpdateTime = now;
-
-    this.runOutsideAngular(() => {
-      const bodyElement = this.tableBody.nativeElement;
-      const scrollTop = bodyElement.scrollTop;
-      const viewportHeight = bodyElement.clientHeight;
-
-      // Apply windowing first
-      this.applyDataWindowing();
-
-      // Work with windowed data instead of full dataset
-      const activeRows = this.windowedRows;
-      if (activeRows.length === 0) {
-        this.visibleRows = [];
-        this.topOffset = '0px';
-        this.bottomOffset = '0px';
-        this.isUpdatingRows = false;
-        return;
-      }
-
-      // Use fast estimation instead of expensive row-by-row calculations
-      const avgRowHeight = 30; // Use fixed average row height for speed
-      const rowsInViewport = Math.ceil(viewportHeight / avgRowHeight);
-      const bufferSize = Math.min(this.buffer, 10); // Limit buffer for performance
-      
-      // Calculate positions using estimation relative to window
-      const windowScrollTop = scrollTop - this.virtualTopOffset;
-      const estimatedFirstRow = Math.max(0, Math.floor(windowScrollTop / avgRowHeight));
-      const estimatedLastRow = Math.min(activeRows.length, estimatedFirstRow + rowsInViewport);
-      
-      // Add buffer
-      let start = Math.max(0, estimatedFirstRow - bufferSize);
-      let end = Math.min(activeRows.length, estimatedLastRow + bufferSize);
-      
-      // Set indices relative to the original dataset
-      this.startIndex = this.currentWindowStart + start;
-      this.endIndex = this.currentWindowStart + end;
-      this.visibleRows = activeRows.slice(start, end);
-      
-      // Trigger change detection in zoneless mode
-      this.markForCheck();
-
-      // Fast offset calculation using estimation
-      const topOffsetValue = this.virtualTopOffset + (start * avgRowHeight);
-      this.topOffset = `${topOffsetValue}px`;
-
-      // Fast bottom offset calculation
-      const remainingRows = this.flattenedRows.length - (this.currentWindowStart + end);
-      const bottomOffsetValue = remainingRows * avgRowHeight;
-      this.bottomOffset = `${bottomOffsetValue}px`;
-      
-      this.isUpdatingRows = false;
-
-      setTimeout(() => {
-        this._isUpdating = false;
-      });
-    });
-  }
-
-  /**
-   * Determines if data windowing should be applied based on dataset size
-   */
-  private shouldUseWindowing(): boolean {
-    return this.flattenedRows.length > 2000; // Start windowing for datasets > 2K rows
-  }
-
-  /**
-   * Apply data windowing to break large datasets into manageable 1K row chunks
-   */
-  private applyDataWindowing(): void {
-    if (!this.shouldUseWindowing()) {
-      // Small dataset, no windowing needed
-      this.windowedRows = this.flattenedRows;
-      this.virtualTopOffset = 0;
-      this.currentWindowStart = 0;
-      this.currentWindowEnd = this.flattenedRows.length;
-      return;
-    }
-
-    // Find current scroll position to determine window
-    const bodyElement = this.tableBody?.nativeElement;
-    if (!bodyElement) {
-      this.windowedRows = this.flattenedRows.slice(0, this.WINDOW_SIZE);
-      this.virtualTopOffset = 0;
-      this.currentWindowStart = 0;
-      this.currentWindowEnd = Math.min(this.WINDOW_SIZE, this.flattenedRows.length);
-      return;
-    }
-
-    const scrollTop = bodyElement.scrollTop;
-    const estimatedRowIndex = Math.floor(scrollTop / 30); // Assuming 30px row height
-    
-    this.updateDataWindow(estimatedRowIndex);
-  }
-
-  /**
-   * Update the data window based on the current row index
-   */
-  private updateDataWindow(currentRowIndex: number): boolean {
-    const idealWindowStart = Math.max(0, currentRowIndex - this.WINDOW_OVERLAP);
-    const idealWindowEnd = Math.min(this.flattenedRows.length, idealWindowStart + this.WINDOW_SIZE);
-    
-    // Check if we need to shift the window
-    const shouldShift = this.windowedRows.length === 0 ||
-                       currentRowIndex < this.currentWindowStart + this.WINDOW_OVERLAP ||
-                       currentRowIndex > this.currentWindowEnd - this.WINDOW_OVERLAP;
-    
-    if (shouldShift) {
-      this.currentWindowStart = idealWindowStart;
-      this.currentWindowEnd = idealWindowEnd;
-      this.windowedRows = this.flattenedRows.slice(this.currentWindowStart, this.currentWindowEnd);
-      
-      // Calculate virtual offset for the windowed data (estimated)
-      this.virtualTopOffset = this.currentWindowStart * 30; // 30px estimated row height
-      
-      console.log(`Data window updated: ${this.currentWindowStart}-${this.currentWindowEnd} (${this.windowedRows.length} rows), virtual offset: ${this.virtualTopOffset}px`);
-      return true;
-    }
-    
-    return false;
   }
 }
+

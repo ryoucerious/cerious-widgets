@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { GridRow } from "../models/grid-row";
+import { ColumnType } from "../enums";
 import { 
   ColumnDef,
   GridDataset,
@@ -245,6 +246,15 @@ export class GridColumnService implements IGridColumnService {
         if (!def.width) {
           def.width = gridOptions.columnWidth || '150px';
         }
+        // Precompute alignment once. Called from the row-column template on
+        // every CD pass otherwise, multiplied by ~hundreds of visible cells.
+        if (!def.alignment) {
+          if (def.type === ColumnType.Number || def.format === 'currency' || def.format === 'percentage') {
+            def.alignment = 'right';
+          } else {
+            def.alignment = 'left';
+          }
+        }
       });
 
       gridDataset.headerRows = [new GridRow({ columnDefs: gridOptions.columnDefs })];
@@ -279,44 +289,16 @@ export class GridColumnService implements IGridColumnService {
     }
 
     try {
-      const headerRows = gridHeader.rowComponents.toArray();
-      const bodyRows = gridBody.rowComponents.toArray();
-      const fillerRows = gridBody.fillerRowComponents.toArray();
-      const footerRows = gridFooter?.rowComponents.toArray();
-      const nestedRows = gridBody.nestedRowComponents.toArray();
-
-      const groupByBreadcrumb = gridHeader.breadcrumb?.nativeElement;
-      const groupByHeaders = gridBody.groupHeaders.toArray().map(header => header.nativeElement);
-
-      const pinnedHeaderCols = this.getHeaderPinnedColumns(headerRows);
-      const pinnedBodyCols = this.getPinnedColumns(bodyRows);
-      const pinnedFooterCols = this.getPinnedColumns(footerRows);
-      const pinnedFillerCols = this.getPinnedColumns(fillerRows);
-      const pinnedNestedCols = this.getPinnedColumns(nestedRows);
-
-      const pinnedHeaderFeatureCols = headerRows.flatMap(rows => rows.featureColumnComponent?.el.nativeElement);
-      const pinnedBodyFeatureCols = bodyRows.flatMap(rows => rows.featureColumnComponent?.el.nativeElement);
-      const pinnedFooterFeatureCols = footerRows?.flatMap(rows => rows.featureColumnComponent?.el.nativeElement);
-      const pinnedFillerRowFeatureCols = fillerRows?.flatMap(rows => rows.featureColumnComponent?.el.nativeElement);
-      
-      let columns = pinnedHeaderCols
-        .concat(pinnedBodyCols)
-        .concat(pinnedFooterCols)
-        .concat(pinnedHeaderFeatureCols)
-        .concat(pinnedFillerCols)
-        .concat(pinnedBodyFeatureCols)
-        .concat(pinnedFooterFeatureCols)
-        .concat(pinnedFillerRowFeatureCols)
-        .concat(groupByBreadcrumb)
-        .concat(groupByHeaders);
-
-      if (gridOptions.pinNestedRowTemplate) {
-        columns = columns.concat(pinnedNestedCols);
-      }
-
-      columns.filter(col => col).forEach(col => {
-        col.style.left = scrollDelta.left + 'px';
-      });
+      // Pinned cells and the breadcrumb consume `--cw-pin-offset` on their
+      // section host. One setProperty per section beats walking every pinned
+      // cell on every call, especially when invoked on the scroll hot path.
+      const offset = `${scrollDelta.left}px`;
+      const headerEl = gridHeader.tableHead?.nativeElement as HTMLElement | undefined;
+      const bodyEl = gridBody.tableBody?.nativeElement as HTMLElement | undefined;
+      const footerEl = gridFooter?.tableFooter?.nativeElement as HTMLElement | undefined;
+      headerEl?.style.setProperty('--cw-pin-offset', offset);
+      bodyEl?.style.setProperty('--cw-pin-offset', offset);
+      footerEl?.style.setProperty('--cw-pin-offset', offset);
     } catch (error) {
       console.error("Error updating pinned column positions:", error);
     }

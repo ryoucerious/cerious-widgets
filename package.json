@@ -1,9 +1,9 @@
 {
   "name": "ngx-cerious-widgets",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rYOUcerious/cerious-widgets.git"
+    "url": "https://github.com/ryoucerious/cerious-widgets.git"
   },
   "scripts": {
     "ng": "ng",
@@ -17,6 +17,8 @@
   "dependencies": {
     "@angular/animations": "^18.2.14",
     "@angular/cdk": "^18.2.14",
+    "@ceriousdevtech/cerious-scroll": "^1.0.1",
+    "@ceriousdevtech/ngx-cerious-scroll": "file:../ceriousdevtech/ngx-cerious-scroll/dist/ngx-cerious-scroll",
     "@angular/common": "^18.2.14",
     "@angular/compiler": "^18.2.14",
     "@angular/core": "^18.2.14",

@@ -46,7 +46,14 @@ export interface GridOptions {
     // === Virtual Scrolling ===
 
     /**
-     * Whether virtual scrolling is enabled for the grid.
+     * Whether virtual scrolling is enabled for the grid body.
+     * When `true` (default) rows are rendered through the cerious-scroll
+     * engine, recycling DOM nodes as the user scrolls. When `false` every
+     * row is rendered up-front and the body becomes a native scroll container
+     * — simpler and friendlier to find-in-page / printing, but expensive for
+     * large datasets.
+     *
+     * @default true
      */
     enableVirtualScroll?: boolean;
 

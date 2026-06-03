@@ -1,6 +1,7 @@
 // Angular imports
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, NgZone, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 
 // Interface imports
@@ -20,10 +21,15 @@ import { GRID_SERVICE } from '../../tokens/grid-service.token';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule]
 })
-export class GridScrollerComponent extends ZonelessCompatibleComponent implements IGridScrollerComponent {
+export class GridScrollerComponent extends ZonelessCompatibleComponent implements IGridScrollerComponent, AfterViewInit, OnDestroy {
 
   @ViewChild('scroller', { static: true }) scroller!: ElementRef;
-  
+
+  private afterScrollSub: Subscription | null = null;
+  private suppressEmit = false;
+  private rafId: number | null = null;
+  private pendingScrollLeft = 0;
+
   get hasHorizontalScrollbar() {
     return this.gridService.hasHorizontalScrollbar;
   }
@@ -54,12 +60,80 @@ export class GridScrollerComponent extends ZonelessCompatibleComponent implement
 
   constructor(
     public el: ElementRef,
+    private zone: NgZone,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_SCROLL_SERVICE) private gridScrollService: IGridScrollService
   ) {
     super();
   }
-  
+
+  ngAfterViewInit(): void {
+    const el = this.scroller?.nativeElement as HTMLElement | undefined;
+    if (!el) return;
+
+    // Listen natively so horizontal scroll frames do not schedule Angular CD
+    // (a template `(scroll)` binding would tick CD on every pixel and tank FPS
+    // in zoneless mode).
+    this.zone.runOutsideAngular(() => {
+      el.addEventListener('scroll', this.onNativeScroll, { passive: true });
+    });
+
+    // Reflect external scroll-position updates back to the element only when
+    // they did not originate here. Avoids the per-CD `[scrollLeft]` write the
+    // template binding used to perform on every frame.
+    this.afterScrollSub = this.gridScrollService.afterScroll.subscribe(() => {
+      if (this.suppressEmit) return;
+      const target = this.scrollDelta?.left ?? 0;
+      if (el.scrollLeft !== target) {
+        el.scrollLeft = target;
+      }
+    });
+  }
+
+  override ngOnDestroy(): void {
+    const el = this.scroller?.nativeElement as HTMLElement | undefined;
+    el?.removeEventListener('scroll', this.onNativeScroll);
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+    this.afterScrollSub?.unsubscribe();
+    super.ngOnDestroy();
+  }
+
+  // Native scroll events can fire many times per frame (especially with
+  // trackpads). Capture the latest scrollLeft and dispatch one synchronisation
+  // per animation frame, dropping any intermediate values the browser is going
+  // to repaint past anyway.
+  private onNativeScroll = (e: Event): void => {
+    this.pendingScrollLeft = (e.target as HTMLElement).scrollLeft;
+    if (this.rafId !== null) return;
+    this.rafId = requestAnimationFrame(() => {
+      this.rafId = null;
+      this.suppressEmit = true;
+      try {
+        this.dispatchScroll(this.pendingScrollLeft);
+      } finally {
+        this.suppressEmit = false;
+      }
+    });
+  };
+
+  private dispatchScroll(left: number): void {
+    const delta = { left, top: this.scrollDelta.top };
+    this.gridScrollService.scrollGrid(
+      null as any,
+      delta,
+      this.gridService.gridOptions,
+      this.gridService.gridHeader,
+      this.gridService.gridBody,
+      this.gridService.gridScroller,
+      this.gridService.gridFooter,
+      this.hasVerticalScrollbar,
+      this.gridService.scrollbarWidth
+    );
+  }
+
   /**
    * Calculates and returns the scroll height for the grid scroller.
    *

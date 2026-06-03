@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
 import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
 
@@ -12,6 +12,7 @@ import { GRID_SERVICE } from '../../tokens/grid-service.token';
   standalone: true,
   templateUrl: './grid-nested-row-column.component.html',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule]
 })
 export class GridNestedRowColumnComponent extends ZonelessCompatibleComponent implements IGridNestedRowColumnComponent {

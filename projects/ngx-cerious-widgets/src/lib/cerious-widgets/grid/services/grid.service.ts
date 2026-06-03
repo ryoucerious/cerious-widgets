@@ -86,6 +86,10 @@ export class GridService implements IGridService {
   afterRender: Subject<any> = new Subject<any>();
   afterSetColumnDefs: Subject<any> = new Subject<any>();
   afterUpdateHeaderOrder: Subject<any> = new Subject<any>();
+  /** Emitted on every mouse-move step of a column resize drag. Lets the body
+   * refresh its (OnPush) rendered rows in place without a full re-render. */
+  afterColumnResize: Subject<any> = new Subject<any>();
+  afterCellEdit: Subject<any> = new Subject<any>();
   pageChange: ReplaySubject<any> = new ReplaySubject<any>();
   rowSelect: ReplaySubject<any> = new ReplaySubject<any>();
   selectedRowsChange: ReplaySubject<any> = new ReplaySubject<any>();
@@ -515,15 +519,34 @@ export class GridService implements IGridService {
    */
   resizeColumn = (e: MouseEvent) => {
     if (this.isColumnResizing && this.resizingColumn) {
+      // Capture latest target width on every mousemove pixel, but commit it to
+      // the column model + emit afterColumnResize only once per animation frame.\n
+      // Without this:
+      //   1. Mousemove is wired via native addEventListener (zoneless mode), so
+      //      it fires many times between frames; the footer reads aggregated
+      //      column widths via getters and produces ExpressionChangedAfterIt-
+      //      HasBeenCheckedError (NG0100) when the width mutates mid-tick.
+      //   2. Calling refreshRenderedContent on every pixel makes drag jittery.
       const newWidth = parseInt(this.resizingColumn.width ? this.resizingColumn.width : '0', 0) + (e.pageX - this.mouseX);
       if (newWidth >= 40) {
-        this.resizingColumn.width = newWidth + 'px';
+        this._pendingResizeWidth = newWidth;
+        if (this._pendingResizeFrame == null) {
+          this._pendingResizeFrame = requestAnimationFrame(() => {
+            this._pendingResizeFrame = null;
+            if (this.resizingColumn && this._pendingResizeWidth != null) {
+              this.resizingColumn.width = this._pendingResizeWidth + 'px';
+              this.afterColumnResize.next(this.resizingColumn);
+            }
+          });
+        }
       }
       this.mouseX = e.pageX;
     } else {
       this.endColumnResizing();
     }
   }
+  private _pendingResizeFrame: number | null = null;
+  private _pendingResizeWidth: number | null = null;
 
   /**
    * Requests data for the grid, either using a provided request or a default request configuration.
@@ -723,7 +746,15 @@ export class GridService implements IGridService {
    * to this calculated width to determine if a horizontal scrollbar is needed.
    */
   setHasHorizontalScrollbar(): void {
-    // Set the hasHorizontalScrollbar property based on whether the scrollWidth is greater than the offsetWidth of the tableBody element
+    // The cerious-scroll engine clips horizontal overflow inside its content
+    // element, so the body's own scrollWidth no longer reflects the row width.
+    // Measure the engine content element instead.
+    const content = this.getScrollContentEl();
+    if (content) {
+      this.hasHorizontalScrollbar = content.scrollWidth > content.clientWidth;
+      return;
+    }
+    // Fallback (pre-engine layout)
     const testWidth = this.gridBody.tableBody.nativeElement.offsetWidth - (this.hasVerticalScrollbar ? this.scrollbarWidth : 0);
     this.hasHorizontalScrollbar = this.gridBody.tableBody.nativeElement.scrollWidth > testWidth;
   }
@@ -740,8 +771,25 @@ export class GridService implements IGridService {
    * @returns {void}
    */
   setHasVerticalScrollbar(): void {
-    // Set the hasVerticalScrollbar property based on whether the scrollHeight is greater than the offsetHeight of the tableBody element
+    // The engine owns vertical scrolling via its own scrollbar element. Detect a
+    // scrollbar by asking that element whether it is scrollable.
+    const scrollbar = this.getScrollbarEl();
+    if (scrollbar) {
+      this.hasVerticalScrollbar = scrollbar.scrollHeight > scrollbar.clientHeight;
+      return;
+    }
+    // Fallback (pre-engine layout)
     this.hasVerticalScrollbar = this.gridBody.tableBody.nativeElement.scrollHeight > this.gridBody.tableBody.nativeElement.offsetHeight;
+  }
+
+  /** Returns the cerious-scroll engine content element, if present. */
+  private getScrollContentEl(): HTMLElement | null {
+    return this.gridBody?.tableBody?.nativeElement?.querySelector('[data-cerious-scroll-content]') ?? null;
+  }
+
+  /** Returns the cerious-scroll engine vertical scrollbar element, if present. */
+  private getScrollbarEl(): HTMLElement | null {
+    return this.gridBody?.tableBody?.nativeElement?.querySelector('[data-cerious-scrollbar]') ?? null;
   }
 
   
@@ -818,19 +866,10 @@ export class GridService implements IGridService {
     }
   
     // Calculate the height of the filler row
-    let childrenHeight = 0;
-    this.gridBody.rowComponents.forEach(component => {
-      childrenHeight += component.el.nativeElement.getBoundingClientRect().height;
-    });
-    this.gridBody.nestedRowComponents.forEach(component => {
-      childrenHeight += component.el.nativeElement.getBoundingClientRect().height;
-    });
-    
-    const borderBottomWidth = Math.ceil(parseFloat(window.getComputedStyle(gridBody).getPropertyValue('border-bottom-width')));
-    const borderTopWidth = Math.ceil(parseFloat(window.getComputedStyle(gridBody).getPropertyValue('border-top-width')));
-    const fillerRowHeight = gridBody.offsetHeight - childrenHeight - borderBottomWidth - borderTopWidth;
-
-    this.fillerRowHeight = fillerRowHeight >=0 ? fillerRowHeight : 0;
+    // Filler rows are not used with the cerious-scroll engine (the engine fills
+    // the viewport itself), and engine rows are embedded views not captured by
+    // rowComponents. Keep the filler height at zero.
+    this.fillerRowHeight = 0;
   }
 
   /**
@@ -1468,8 +1507,16 @@ export class GridService implements IGridService {
     if (!tableBody) return;
   
     const tableEl = tableBody.nativeElement as HTMLElement;
+
+    // With the cerious-scroll engine, the body itself has no native horizontal
+    // scrollbar (the engine clips overflow inside its content element). Drive
+    // the bottom scroller height from the engine-aware overflow flag instead.
+    if (this.hasHorizontalScrollbar !== undefined) {
+      this.scrollbarHeight = this.hasHorizontalScrollbar ? this.scrollbarSize : 0;
+      return;
+    }
+
     const hasScroll = tableEl.scrollWidth !== tableEl.clientWidth;
-    
     this.scrollbarHeight = hasScroll ? tableEl.offsetHeight - tableEl.clientHeight : 0;
   }
 
@@ -1483,6 +1530,17 @@ export class GridService implements IGridService {
     if (!tableBody) return;
     
     const tableEl = tableBody.nativeElement as HTMLElement;
+
+    // With the engine, the vertical scrollbar is a fixed-width overlay element
+    // rather than a native scrollbar that shrinks clientWidth.
+    const scrollbar = this.getScrollbarEl();
+    if (scrollbar) {
+      const hasScroll = this.hasVerticalScrollbar;
+      this.scrollbarWidth = hasScroll ? scrollbar.offsetWidth : 0;
+      this.headerWidth = hasScroll ? `${tableEl.clientWidth - scrollbar.offsetWidth}px` : '100%';
+      return;
+    }
+
     const hasScroll = tableEl.scrollHeight !== tableEl.clientHeight;
     const scrollbarWidth = hasScroll ? tableEl.offsetWidth - tableEl.clientWidth : 0;
     this.scrollbarWidth = scrollbarWidth > 0 ? scrollbarWidth : 0;
@@ -1496,7 +1554,11 @@ export class GridService implements IGridService {
   private setTableScrollValues(): void {
     let widthOffset = 0;
     this.tableScrollHeight = 0;
-    this.tableScrollWidth = parseInt(this.gridBody.tableBody.nativeElement.scrollWidth, 0) - widthOffset;
+    // Prefer the engine content element's scrollWidth (full row width); fall back
+    // to the body's scrollWidth for the pre-engine layout.
+    const content = this.getScrollContentEl();
+    const scrollWidth = content ? content.scrollWidth : this.gridBody.tableBody.nativeElement.scrollWidth;
+    this.tableScrollWidth = scrollWidth - widthOffset;
       
     if (this.hasHorizontalScrollbar) {
       this.tableScrollHeight += this.scrollbarSize;

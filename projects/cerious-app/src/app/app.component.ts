@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GridComponent, GridOptions, PluginManagerService, PluginOptions, ServerSidePlugin, ZonelessCompatService } from 'ngx-cerious-widgets';
 import { MOCK_COLUMN_DEFS, MOCK_DATA } from './testing/mock-data';
@@ -10,7 +10,7 @@ import { MockServerDataSource } from './testing/mock-server.datasource';
   templateUrl: './app.component.html',
   imports: [GridComponent, CommonModule]
 })
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   data!: Array<any>;
   gridOptions!: GridOptions;
   pluginOptions!: PluginOptions;
@@ -30,25 +30,24 @@ export class AppComponent implements AfterViewInit, OnInit {
     private zonelessCompat: ZonelessCompatService
   ) {}
 
-  // Visual metrics display
-  displayMetrics = {
+  // Live performance metrics shown in the dashboard bar
+  metrics = {
+    fps: 0,
+    avgFps: 0,
+    minFps: 0,
     memoryUsed: 0,
-    memoryEfficiency: 0,
+    renderedRows: 0,
+    scrollPercent: 0,
     isLoading: true,
-    isScrollTesting: false,
-    currentScrollTest: '',
-    scrollTestProgress: 0,
-    currentScrollPosition: 0,
-    totalTime: 0,
-    dataSetupTime: 0,
-    gridInitTime: 0,
-    firstRenderTime: 0,
-    performanceGrade: 'A+'
   };
 
-  // Scroll test state
-  scrollTestRunning = false;
-  scrollTestProgress = 0;
+  stressTesting = false;
+
+  // FPS meter internals
+  private rafId = 0;
+  private frameCount = 0;
+  private lastFpsTs = 0;
+  private fpsSamples: number[] = [];
 
   /**
    * Get formatted dataset size for display
@@ -82,178 +81,147 @@ export class AppComponent implements AfterViewInit, OnInit {
    * Get current memory usage or estimation
    */
   getCurrentMemoryUsage(): void {
-    const startTime = performance.now();
-    
     if ('memory' in performance) {
-      const memory = (performance as any).memory;
-      const currentUsed = memory.usedJSHeapSize / (1024 * 1024);
-      this.displayMetrics.memoryUsed = currentUsed;
-      this.displayMetrics.memoryEfficiency = currentUsed / (MOCK_DATA.length / 1000);
+      this.metrics.memoryUsed = (performance as any).memory.usedJSHeapSize / (1024 * 1024);
     } else {
       // Estimate based on data size - each row roughly 13 columns * 50 bytes average
-      const estimatedMemory = (MOCK_DATA.length * 13 * 50) / (1024 * 1024);
-      this.displayMetrics.memoryUsed = estimatedMemory;
-      this.displayMetrics.memoryEfficiency = estimatedMemory / (MOCK_DATA.length / 1000);
+      this.metrics.memoryUsed = (MOCK_DATA.length * 13 * 50) / (1024 * 1024);
     }
-    
-    // Mock timing data for demonstration
-    this.displayMetrics.dataSetupTime = 45.2;
-    this.displayMetrics.gridInitTime = 89.7;
-    this.displayMetrics.firstRenderTime = 156.3;
-    this.displayMetrics.totalTime = this.displayMetrics.dataSetupTime + this.displayMetrics.gridInitTime + this.displayMetrics.firstRenderTime;
-    
-    // Calculate performance grade
-    if (this.displayMetrics.totalTime < 200) {
-      this.displayMetrics.performanceGrade = 'A+';
-    } else if (this.displayMetrics.totalTime < 500) {
-      this.displayMetrics.performanceGrade = 'A';
-    } else if (this.displayMetrics.totalTime < 1000) {
-      this.displayMetrics.performanceGrade = 'B';
-    } else {
-      this.displayMetrics.performanceGrade = 'C';
-    }
-    
     this.cdr.detectChanges();
   }
 
   /**
-   * Start scroll test with visible animation
+   * Reads live grid + runtime metrics into the dashboard (rendered DOM rows,
+   * memory, scroll position). Called once per FPS sample tick.
    */
-  async startScrollTest(): Promise<void> {
-    if (this.scrollTestRunning || !this.grid?.gridBody?.tableBody) {
-      return;
+  private updateLiveMetrics(): void {
+    const body: HTMLElement | undefined = this.grid?.gridBody?.tableBody?.nativeElement;
+    if (body) {
+      this.metrics.renderedRows = body.querySelectorAll('cw-grid-row').length;
+      const scrollbar = this.getEngineScrollbar();
+      if (scrollbar) {
+        const max = scrollbar.scrollHeight - scrollbar.clientHeight;
+        this.metrics.scrollPercent = max > 0 ? Math.round((scrollbar.scrollTop / max) * 100) : 0;
+      }
     }
-
-    this.scrollTestRunning = true;
-    this.displayMetrics.scrollTestProgress = 0;
-    this.displayMetrics.currentScrollTest = 'Scrolling down through data...';
-    this.cdr.detectChanges();
-
-    const scrollContainer = this.grid.gridBody.tableBody.nativeElement;
-    const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-    
-    // Scroll down
-    for (let i = 0; i <= 100; i += 5) {
-      this.displayMetrics.scrollTestProgress = i / 2; // 0-50%
-      const scrollPosition = (maxScroll * i) / 100;
-      scrollContainer.scrollTop = scrollPosition;
-      this.displayMetrics.currentScrollPosition = Math.round((i / 100) * MOCK_DATA.length);
-      this.cdr.detectChanges();
-      await this.delay(50);
-    }
-
-    this.displayMetrics.currentScrollTest = 'Scrolling back to top...';
-    
-    // Scroll back up
-    for (let i = 100; i >= 0; i -= 5) {
-      this.displayMetrics.scrollTestProgress = 50 + (100 - i) / 2; // 50-100%
-      const scrollPosition = (maxScroll * i) / 100;
-      scrollContainer.scrollTop = scrollPosition;
-      this.displayMetrics.currentScrollPosition = Math.round((i / 100) * MOCK_DATA.length);
-      this.cdr.detectChanges();
-      await this.delay(50);
-    }
-
-    this.scrollTestRunning = false;
-    this.displayMetrics.scrollTestProgress = 0;
-    this.displayMetrics.currentScrollPosition = 0;
-    
-    // Update memory measurement after scroll test
-    this.getCurrentMemoryUsage();
-    
-    this.cdr.detectChanges();
-  }
-
-  /**
-   * Quick scroll to top
-   */
-  scrollToTop(): void {
-    if (this.grid?.gridBody?.tableBody) {
-      this.grid.gridBody.tableBody.nativeElement.scrollTop = 0;
-      this.displayMetrics.currentScrollPosition = 0;
-      // Update memory after scroll
-      setTimeout(() => this.getCurrentMemoryUsage(), 100);
+    if ('memory' in performance) {
+      this.metrics.memoryUsed = (performance as any).memory.usedJSHeapSize / (1024 * 1024);
     }
   }
 
   /**
-   * Quick scroll to bottom
+   * Returns the cerious-scroll engine vertical scrollbar element, if present.
    */
-  scrollToBottom(): void {
-    if (this.grid?.gridBody?.tableBody) {
-      const scrollContainer = this.grid.gridBody.tableBody.nativeElement;
-      scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      this.displayMetrics.currentScrollPosition = MOCK_DATA.length;
-      // Update memory after scroll
-      setTimeout(() => this.getCurrentMemoryUsage(), 100);
-    }
+  private getEngineScrollbar(): HTMLElement | null {
+    const body: HTMLElement | undefined = this.grid?.gridBody?.tableBody?.nativeElement;
+    return body ? body.querySelector('[data-cerious-scrollbar]') : null;
   }
 
   /**
-   * Simple delay utility
+   * Starts a requestAnimationFrame loop that measures real frames-per-second and
+   * refreshes the live metrics roughly twice a second.
+   */
+  private startFpsMeter(): void {
+    const loop = (now: number) => {
+      if (this.lastFpsTs === 0) this.lastFpsTs = now;
+      this.frameCount++;
+      const elapsed = now - this.lastFpsTs;
+      if (elapsed >= 500) {
+        const fps = Math.round((this.frameCount * 1000) / elapsed);
+        this.metrics.fps = fps;
+        this.metrics.minFps = this.metrics.minFps === 0 ? fps : Math.min(this.metrics.minFps, fps);
+        this.fpsSamples.push(fps);
+        if (this.fpsSamples.length > 120) this.fpsSamples.shift();
+        this.metrics.avgFps = Math.round(
+          this.fpsSamples.reduce((a, b) => a + b, 0) / this.fpsSamples.length
+        );
+        this.frameCount = 0;
+        this.lastFpsTs = now;
+        this.updateLiveMetrics();
+        this.cdr.detectChanges();
+      }
+      this.rafId = requestAnimationFrame(loop);
+    };
+    this.rafId = requestAnimationFrame(loop);
+  }
+
+  /**
+   * Returns a status color for an FPS reading (green/amber/red).
+   */
+  fpsColor(fps: number): string {
+    if (fps >= 55) return '#22c55e';
+    if (fps >= 30) return '#f59e0b';
+    return '#ef4444';
+  }
+
+  /**
+   * Resets the rolling min/avg FPS samples.
+   */
+  resetFps(): void {
+    this.metrics.minFps = 0;
+    this.fpsSamples = [];
+  }
+
+  /**
+   * Simple delay utility.
    */
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**
-   * Test scroll performance with visible animation
+   * Resolves on the next animation frame so a scroll sweep stays aligned with
+   * the browser's render cadence instead of saturating the main thread.
    */
-  async testScrollPerformance(): Promise<void> {
-    if (this.displayMetrics.isScrollTesting) return;
-    
-    this.displayMetrics.isScrollTesting = true;
-    this.displayMetrics.currentScrollTest = 'Testing scroll performance...';
-    this.displayMetrics.scrollTestProgress = 0;
-    this.cdr.detectChanges();
-    
+  private nextFrame(): Promise<void> {
+    return new Promise(resolve => requestAnimationFrame(() => resolve()));
+  }
+
+  /**
+   * Scrolls the grid to a fraction (0-1) of its content via the engine scrollbar.
+   */
+  scrollToPosition(percentage: number): void {
+    const scrollbar = this.getEngineScrollbar();
+    if (!scrollbar) return;
+    const max = scrollbar.scrollHeight - scrollbar.clientHeight;
+    scrollbar.scrollTop = max * percentage;
+  }
+
+  /**
+   * Runs an automated scroll sweep (top -> bottom -> top) to stress the virtual
+   * scroller while the FPS meter captures the minimum frame rate.
+   */
+  async runFpsStressTest(): Promise<void> {
+    const scrollbar = this.getEngineScrollbar();
+    if (this.stressTesting || !scrollbar) return;
+
+    this.stressTesting = true;
+    this.resetFps();
+    const max = scrollbar.scrollHeight - scrollbar.clientHeight;
+    const steps = 150;
     try {
-      await this.startScrollTest();
+      for (let i = 0; i <= steps; i++) {
+        scrollbar.scrollTop = (max * i) / steps;
+        await this.delay(8);
+      }
+      for (let i = steps; i >= 0; i--) {
+        scrollbar.scrollTop = (max * i) / steps;
+        await this.delay(8);
+      }
     } finally {
-      this.displayMetrics.isScrollTesting = false;
-      this.displayMetrics.currentScrollTest = '';
-      this.displayMetrics.scrollTestProgress = 0;
+      this.stressTesting = false;
       this.cdr.detectChanges();
     }
   }
 
-  /**
-   * Debug scrollable elements
-   */
-  debugScrollableElements(): void {
-    console.log('🔍 Debug - Grid Component:', this.grid);
-    console.log('🔍 Debug - Grid Body:', this.grid?.gridBody);
-    console.log('🔍 Debug - Table Body:', this.grid?.gridBody?.tableBody);
-    console.log('🔍 Debug - Native Element:', this.grid?.gridBody?.tableBody?.nativeElement);
-    
-    if (this.grid?.gridBody?.tableBody?.nativeElement) {
-      const element = this.grid.gridBody.tableBody.nativeElement;
-      console.log('🔍 Debug - Scroll Properties:', {
-        scrollHeight: element.scrollHeight,
-        clientHeight: element.clientHeight,
-        scrollTop: element.scrollTop,
-        canScroll: element.scrollHeight > element.clientHeight
-      });
-    }
-  }
-
-  /**
-   * Scroll to specific position (0-1 range)
-   */
-  scrollToPosition(percentage: number): void {
-    if (!this.grid?.gridBody?.tableBody) return;
-    
-    const scrollContainer = this.grid.gridBody.tableBody.nativeElement;
-    const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-    const targetPosition = maxScroll * percentage;
-    
-    scrollContainer.scrollTop = targetPosition;
-    this.displayMetrics.currentScrollPosition = Math.round((targetPosition / maxScroll) * MOCK_DATA.length);
-    // Update memory after scroll
-    setTimeout(() => this.getCurrentMemoryUsage(), 100);
-  }
-
   ngAfterViewInit() {
+    this.startFpsMeter();
+  }
+
+  ngOnDestroy() {
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+    }
   }
 
   ngOnInit() {
@@ -266,7 +234,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       columnWidth: '175px',
       enableVirtualScroll: true,
       enableMultiselect: true,
-      heightOffset: 10,
+      heightOffset: 20,
       // pageSize: 50,
       noDataMessage: "There are no records based on your search criteria.",
       columnDefs: [...MOCK_COLUMN_DEFS],
@@ -297,11 +265,11 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.data = [...MOCK_DATA];
     
     // Start loading state and measure memory after data assignment
-    this.displayMetrics.isLoading = true;
+    this.metrics.isLoading = true;
     
     setTimeout(() => {
       this.getCurrentMemoryUsage();
-      this.displayMetrics.isLoading = false;
+      this.metrics.isLoading = false;
     }, 500);
   }
 }
