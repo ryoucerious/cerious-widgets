@@ -3,7 +3,11 @@
   "version": "1.0.16",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rYOUcerious/cerious-widgets.git"
+    "url": "https://github.com/ryoucerious/cerious-widgets.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "peerDependencies": {
     "@angular/animations": ">=16.0.0",
