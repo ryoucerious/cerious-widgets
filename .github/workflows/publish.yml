@@ -42,7 +42,9 @@ jobs:
           echo "Publishing version: $VERSION"
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --no-audit --no-fund
 
       - name: Sync library version
         working-directory: projects/ngx-cerious-widgets
