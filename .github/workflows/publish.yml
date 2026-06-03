@@ -1,0 +1,58 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Override version (defaults to release tag or current package.json)"
+        required: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Resolve version
+        id: ver
+        run: |
+          INPUT="${{ github.event.inputs.version }}"
+          TAG="${GITHUB_REF_NAME#v}"
+          if [ -n "$INPUT" ]; then
+            VERSION="${INPUT#v}"
+          elif [ "${{ github.event_name }}" = "release" ]; then
+            VERSION="$TAG"
+          else
+            VERSION="$(node -p "require('./projects/ngx-cerious-widgets/package.json').version")"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Publishing version: $VERSION"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync library version
+        working-directory: projects/ngx-cerious-widgets
+        run: npm version "${{ steps.ver.outputs.version }}" --no-git-tag-version --allow-same-version
+
+      - name: Build library
+        run: npm run build -- ngx-cerious-widgets --configuration production
+
+      - name: Publish
+        working-directory: dist/ngx-cerious-widgets
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
