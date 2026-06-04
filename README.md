@@ -7,7 +7,11 @@
 **A seriously powerful Angular grid — for developers who demand control, flexibility, and performance.**  
 Part of the [Cerious Widgets](https://github.com/rYOUcerious/cerious-widgets) collection.
 
-See: https://ryoucerious.github.io/cerious-widgets/
+## 🔗 Links
+
+- 🌐 **Live Demo:** https://ryoucerious.github.io/cerious-widgets/
+- 📖 **API Documentation:** https://ryoucerious.github.io/cerious-widgets/docs/api/
+- 📦 **npm:** https://www.npmjs.com/package/ngx-cerious-widgets
 
 ---
 
