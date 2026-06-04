@@ -1,6 +1,6 @@
 {
   "name": "ngx-cerious-widgets",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "repository": {
     "type": "git",
     "url": "https://github.com/ryoucerious/cerious-widgets.git"
@@ -11,14 +11,14 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test ngx-cerious-widgets",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "docs:api": "compodoc -p projects/ngx-cerious-widgets/tsconfig.lib.json -d docs/docs/api -n \"ngx-cerious-widgets documentation\" --theme stripe && npm run docs:api:theme",
+    "docs:api:theme": "cp tools/compodoc-cerious-theme.css docs/docs/api/styles/cerious-theme.css && node -e \"const f='docs/docs/api/styles/style.css',fs=require('fs');const c=fs.readFileSync(f,'utf8');if(!c.includes('cerious-theme.css'))fs.appendFileSync(f,'@import \\\"./cerious-theme.css\\\";\\n');\""
   },
   "private": false,
   "dependencies": {
     "@angular/animations": "^18.2.14",
     "@angular/cdk": "^18.2.14",
-    "@ceriousdevtech/cerious-scroll": "^1.0.2",
-    "@ceriousdevtech/ngx-cerious-scroll": "^1.0.2",
     "@angular/common": "^18.2.14",
     "@angular/compiler": "^18.2.14",
     "@angular/core": "^18.2.14",
@@ -26,6 +26,7 @@
     "@angular/platform-browser": "^18.2.14",
     "@angular/platform-browser-dynamic": "^18.2.14",
     "@angular/router": "^18.2.14",
+    "@ceriousdevtech/ngx-cerious-scroll": "^1.0.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "write-excel-file": "^2.3.10",

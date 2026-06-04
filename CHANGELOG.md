@@ -33,3 +33,13 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - `GridRowColumnComponent` refactored to use cached computed signals and a single consolidated `ngSwitch` block, reducing per-cell change-detection cost during fast vertical scrolling.
 - Currency cell formatting now uses a memoized `Intl.NumberFormat` instance per locale/currency pair instead of constructing a new formatter per cell render.
+
+## [1.0.17] - 2026-06-04
+### Added
+- New Compodoc theme override (`tools/compodoc-cerious-theme.css`) and `docs:api` / `docs:api:theme` npm scripts that generate and reskin the API documentation to match the Cerious DevTech dark theme.
+- New demo SPA theme override (`docs/cerious-theme.css`) applied to the prebuilt docs site, including a sticky frosted navbar with content blur, dark glass sidebar, attached tab-card layout for example pages, themed code blocks, scrollbars, and mobile-friendly breakpoints.
+
+### Changed
+- Bumped `@ceriousdevtech/ngx-cerious-scroll` to `^1.0.4`.
+- Moved `@angular/cdk` and `@ceriousdevtech/ngx-cerious-scroll` from `peerDependencies` to `dependencies` so consumers no longer have to install them manually. Added `allowedNonPeerDependencies` to `ng-package.json` to satisfy ng-packagr.
+- Removed direct `@ceriousdevtech/cerious-scroll` dependency; it is now pulled in transitively through `@ceriousdevtech/ngx-cerious-scroll`.
