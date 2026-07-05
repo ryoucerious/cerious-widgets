@@ -23,7 +23,7 @@ import { IGridScrollerComponent } from '../interfaces/component-interfaces/grid-
 import { IGridColumnService } from '../interfaces/service-interfaces/grid-column.interface';
 import { IGridService } from '../interfaces/service-interfaces/grid.interface';
 import { PluginOptions } from '../interfaces/plugin-options';
-import { WidgetsConfig } from '../../shared/interfaces/widgets-config.interface';
+import { resolveGridConfig, WidgetsConfig } from '../../shared/interfaces/widgets-config.interface';
 
 // Plugins
 import { GridPlugin } from '../interfaces/grid-plugin';
@@ -31,6 +31,7 @@ import { GridPlugin } from '../interfaces/grid-plugin';
 // Services
 import { GridService } from '../services/grid.service';
 import { SignalHelperService } from '../../shared/services/signal-helper.services';
+import { PluginManagerService } from '../../shared/services/plugin-manager.service';
 
 // Components
 import { GridBodyComponent } from './grid-body/grid-body.component';
@@ -144,6 +145,7 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
     private injector: Injector,
     private iterableDiffers: IterableDiffers,
     private sh: SignalHelperService,
+    private pluginManager: PluginManagerService,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService,
     @Optional() @Inject(WIDGETS_CONFIG) public config: WidgetsConfig
@@ -151,12 +153,16 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
     super();
     this.iterableDiffer = this.iterableDiffers.find([]).create();
     this.gridApi = this.gridService.gridApi;
-    this.pluginInstances = (this.config?.plugins || []).map(pluginType => 
+
+    // Resolve the effective grid config (merges deprecated top-level keys with
+    // the per-component `grid` block).
+    const gridConfig = resolveGridConfig(this.config);
+    this.pluginInstances = (gridConfig.plugins || []).map(pluginType =>
       this.injector.get(pluginType)
     );
 
     if (this.config && !this.pluginOptions) {
-      this.pluginOptions = this.config.pluginOptions || {};
+      this.pluginOptions = gridConfig.pluginOptions || {};
     }
   }
 
@@ -224,7 +230,9 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
   }
 
   override ngOnDestroy(): void {
-    this.plugins.forEach(p => p.onDestroy?.());
+    // Tear down every plugin the manager initialized for this grid (covers both
+    // `plugins` inputs and config-provided plugin instances).
+    this.pluginManager.destroyPlugins(this.gridApi);
 
     if (this.gridService.gridOptions.container) {
       this.gridService.gridOptions.container.removeEventListener('resize', () => this.resize());
@@ -289,7 +297,7 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
    */
   registerPlugins(): void {
     const allPlugins = [...(this.plugins || []), ...(this.pluginInstances || [])];
-    allPlugins.forEach(p => p.onInit(this.gridApi));
+    this.pluginManager.initPlugins(this.gridApi, allPlugins);
   }
 
   /**
@@ -302,7 +310,7 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
     if (!this.plugins.some(p => p === plugin)) {
       this.plugins.push(plugin);
     }
-    plugin.onInit(this.gridApi);
+    this.pluginManager.initPlugins(this.gridApi, [plugin]);
   }
 
   /**

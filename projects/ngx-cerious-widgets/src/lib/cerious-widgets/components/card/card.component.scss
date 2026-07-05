@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-lg);
+  box-shadow: var(--cw-shadow-sm);
+  padding: 1.25rem;
+  font-family: var(--cw-font);
+  color: var(--cw-text);
+}
+
+.cw-card__heading { margin-bottom: 0.75rem; }
+
+.cw-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cw-card__subtitle {
+  margin-top: 0.125rem;
+  font-size: 0.8125rem;
+  color: var(--cw-text-muted);
+}
+
+.cw-card__body {
+  font-size: 0.875rem;
+  color: var(--cw-text-secondary);
+}
+
+.cw-card__footer {
+  &:not(:empty) { margin-top: 1rem; }
+}

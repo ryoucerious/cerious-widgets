@@ -1,0 +1,112 @@
+// ============================================================================
+// Overlay
+// ----------------------------------------------------------------------------
+// Minimal positioning rules for the CDK overlay container (a subset of
+// @angular/cdk's overlay-prebuilt.css — just what connected/flexible overlays
+// need), plus the cerious token-styled panel surface. Shipped in the library
+// stylesheet so consumers don't need a separate CDK CSS import.
+// ============================================================================
+
+.cdk-overlay-container,
+.cdk-global-overlay-wrapper {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 1000;
+}
+
+.cdk-overlay-container:empty {
+  display: none;
+}
+
+.cdk-overlay-connected-position-bounding-box {
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  min-width: 1px;
+  min-height: 1px;
+}
+
+// Global (centered) overlays — dialogs.
+.cdk-global-overlay-wrapper {
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+}
+
+// Backdrops (dialogs / modal overlays).
+.cdk-overlay-backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  opacity: 1;
+}
+
+.cdk-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+// Cerious floating surface (dropdowns, menus, popovers, tooltips build on this).
+.cw-overlay-panel {
+  background: var(--cw-surface);
+  color: var(--cw-text);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-lg);
+  box-shadow: var(--cw-shadow-lg);
+  padding: 0.375rem;
+  font-family: var(--cw-font);
+  overflow: auto;
+  animation: cw-overlay-in 0.12s ease-out;
+}
+
+// Frost theme: glassmorphism — blur + bright white edge + inner highlight.
+[data-cw-theme='frost'] .cw-overlay-panel {
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    var(--cw-shadow-lg);
+}
+
+@keyframes cw-overlay-in {
+  from { opacity: 0; transform: translateY(-2px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-overlay-panel { animation: none; }
+}
+
+// Dialog backdrop (global: the CDK renders it outside any component scope).
+.cw-dialog-backdrop {
+  background: rgba(15, 23, 42, 0.55);
+}
+
+// Image preview backdrop — darker, for a lightbox feel.
+.cw-image__backdrop {
+  background: rgba(15, 23, 42, 0.85);
+}

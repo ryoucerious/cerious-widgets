@@ -1,0 +1,32 @@
+@if (value().length === 0) {
+  <div class="cw-data-view__empty">{{ emptyMessage() }}</div>
+} @else if (useVirtual()) {
+  <!-- Large non-paginated list: virtualized with cerious-scroll -->
+  <div class="cw-data-view__list cw-data-view__list--virtual" [style.height]="listHeight()">
+    <cerious-scroll [items]="value()">
+      <ng-template ceriousScrollItem let-item>
+        <div class="cw-data-view__item">
+          @if (itemTemplate(); as tpl) {
+            <ng-container [ngTemplateOutlet]="tpl.template" [ngTemplateOutletContext]="{ $implicit: item, layout: 'list' }" />
+          }
+        </div>
+      </ng-template>
+    </cerious-scroll>
+  </div>
+} @else {
+  <div class="cw-data-view__content" [class.cw-data-view__content--grid]="layout() === 'grid'" [style.--cw-dv-min]="gridMinColumn()">
+    @for (item of pageItems(); track $index) {
+      <div class="cw-data-view__item">
+        @if (itemTemplate(); as tpl) {
+          <ng-container [ngTemplateOutlet]="tpl.template" [ngTemplateOutletContext]="{ $implicit: item, layout: layout() }" />
+        }
+      </div>
+    }
+  </div>
+
+  @if (paginated()) {
+    <div class="cw-data-view__pager">
+      <cw-paginator [totalRecords]="value().length" [pageSize]="effectivePageSize()" [pageSizeOptions]="[]" (pageChange)="onPageChange($event)" />
+    </div>
+  }
+}

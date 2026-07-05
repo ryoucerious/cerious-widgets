@@ -1,0 +1,16 @@
+@for (event of events(); track $index; let last = $last) {
+  <div class="cw-timeline__event">
+    @if (showOpposite()) {
+      <div class="cw-timeline__opposite">{{ event.opposite }}</div>
+    }
+    <div class="cw-timeline__separator">
+      <span class="cw-timeline__marker" [attr.data-severity]="event.severity ?? 'info'">
+        @if (event.icon) { <i class="cw-timeline__icon" [class]="event.icon"></i> }
+      </span>
+      @if (!last) {
+        <span class="cw-timeline__connector"></span>
+      }
+    </div>
+    <div class="cw-timeline__content">{{ event.content }}</div>
+  </div>
+}

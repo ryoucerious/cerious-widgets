@@ -1,0 +1,77 @@
+:host {
+  display: inline-flex;
+  font-family: var(--cw-font);
+  font-size: 0.875rem;
+  color: var(--cw-text);
+}
+
+.cw-radio-button__wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+:host(.cw-radio-button--disabled) .cw-radio-button__wrapper {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+// Real input, visually hidden but focusable: keyboard + forms stay native.
+.cw-radio-button__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cw-radio-button__circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  box-sizing: border-box;
+  border: 1px solid var(--cw-border-strong);
+  border-radius: 50%;
+  background: var(--cw-surface);
+  transition: border-color 0.12s ease;
+}
+
+.cw-radio-button__wrapper:hover .cw-radio-button__circle {
+  border-color: var(--cw-accent);
+}
+
+.cw-radio-button__input:focus-visible + .cw-radio-button__circle {
+  box-shadow: var(--cw-focus-ring);
+  border-color: var(--cw-accent);
+}
+
+// Accent, not primary: the mock keeps radios blue in dark (where the primary
+// is teal) and purple in frost.
+.cw-radio-button__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cw-accent);
+  transform: scale(0);
+  transition: transform 0.12s ease;
+}
+
+:host(.cw-radio-button--checked) .cw-radio-button__circle {
+  border-color: var(--cw-accent);
+}
+
+:host(.cw-radio-button--checked) .cw-radio-button__dot {
+  transform: scale(1);
+}
+
+.cw-radio-button__label {
+  user-select: none;
+}

@@ -1,0 +1,12 @@
+@if (image()) {
+  <img class="cw-chip__image" [src]="image()" [alt]="label()" />
+} @else if (icon()) {
+  <i class="cw-chip__icon" [class]="icon()"></i>
+}
+<span class="cw-chip__label">{{ label() }}</span>
+<ng-content />
+@if (removable()) {
+  <button type="button" class="cw-chip__remove" aria-label="Remove" (click)="onRemove($event)">
+    <span class="cw-chip__remove-x" aria-hidden="true"></span>
+  </button>
+}

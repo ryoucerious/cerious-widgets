@@ -1,0 +1,40 @@
+:host {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--cw-font);
+  cursor: pointer;
+  outline: none;
+  touch-action: none;
+
+  &:focus-visible {
+    border-radius: 50%;
+    box-shadow: var(--cw-focus-ring);
+  }
+}
+
+:host(.cw-knob--disabled) {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cw-knob__svg {
+  display: block;
+}
+
+.cw-knob__track {
+  stroke: var(--cw-neutral-bg);
+}
+
+.cw-knob__range {
+  stroke: var(--cw-primary);
+  transition: stroke-dasharray 0.1s ease;
+}
+
+.cw-knob__value {
+  position: absolute;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cw-text);
+}

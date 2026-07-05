@@ -1,0 +1,38 @@
+<div class="cw-galleria__stage">
+  @if (showNavigators() && images().length > 1) {
+    <button type="button" class="cw-galleria__nav cw-galleria__nav--prev" aria-label="Previous image" [disabled]="!canPrev()" (click)="prev()">
+      <span class="cw-galleria__arrow cw-galleria__arrow--left"></span>
+    </button>
+  }
+
+  @if (active(); as image) {
+    <img class="cw-galleria__image" [src]="image.src" [alt]="image.alt ?? ''" />
+  }
+
+  @if (showNavigators() && images().length > 1) {
+    <button type="button" class="cw-galleria__nav cw-galleria__nav--next" aria-label="Next image" [disabled]="!canNext()" (click)="next()">
+      <span class="cw-galleria__arrow cw-galleria__arrow--right"></span>
+    </button>
+  }
+
+  @if (images().length > 1) {
+    <span class="cw-galleria__counter">{{ current() + 1 }} / {{ images().length }}</span>
+  }
+</div>
+
+@if (showThumbnails() && images().length > 1) {
+  <div class="cw-galleria__thumbnails" role="tablist">
+    @for (image of images(); track $index) {
+      <button
+        type="button"
+        class="cw-galleria__thumb"
+        [class.cw-galleria__thumb--active]="$index === current()"
+        [attr.aria-label]="'Image ' + ($index + 1)"
+        [attr.aria-selected]="$index === current()"
+        (click)="go($index)"
+      >
+        <img [src]="thumb(image)" [alt]="image.alt ?? ''" />
+      </button>
+    }
+  </div>
+}

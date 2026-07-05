@@ -1,0 +1,86 @@
+import { GRID_FEATURES } from './grid-features';
+
+export interface NavItem {
+  path: string;
+  name: string;
+  desc: string;
+  group: string;
+  children?: { path: string; name: string }[];
+}
+
+/** Single source of truth for the sidebar and the overview grid. */
+export const NAV_ITEMS: NavItem[] = [
+  {
+    path: 'grid',
+    name: 'Grid',
+    desc: 'Virtualized data grid with sorting, grouping, pinning, editing & more',
+    group: 'Data',
+    children: GRID_FEATURES.map(f => ({ path: f.path, name: f.name }))
+  },
+  { path: 'button', name: 'Button', desc: 'Clickable action with variants', group: 'Form' },
+  { path: 'input-text', name: 'InputText', desc: 'Token-styled native input', group: 'Form' },
+  { path: 'input-number', name: 'InputNumber', desc: 'Numeric input with steppers', group: 'Form' },
+  { path: 'password', name: 'Password', desc: 'Password with strength meter', group: 'Form' },
+  { path: 'input-otp', name: 'InputOTP', desc: 'Segmented one-time-code input', group: 'Form' },
+  { path: 'input-mask', name: 'InputMask', desc: 'Pattern-masked text input', group: 'Form' },
+  { path: 'textarea', name: 'Textarea', desc: 'Auto-resizing textarea', group: 'Form' },
+  { path: 'input-group', name: 'InputGroup', desc: 'Input with seamed addons', group: 'Form' },
+  { path: 'float-label', name: 'FloatLabel', desc: 'Floating field label', group: 'Form' },
+  { path: 'inplace', name: 'Inplace', desc: 'Click-to-edit value', group: 'Form' },
+  { path: 'knob', name: 'Knob', desc: 'Circular dial input', group: 'Form' },
+  { path: 'color-picker', name: 'ColorPicker', desc: 'Colour swatch & palette', group: 'Form' },
+  { path: 'select', name: 'Select', desc: 'Single-select dropdown', group: 'Form' },
+  { path: 'multi-select', name: 'MultiSelect', desc: 'Multi-select with chips & virtual scroll', group: 'Form' },
+  { path: 'autocomplete', name: 'AutoComplete', desc: 'Typeahead input (virtualized)', group: 'Form' },
+  { path: 'listbox', name: 'Listbox', desc: 'Inline selection list (virtualized)', group: 'Form' },
+  { path: 'date-picker', name: 'DatePicker', desc: 'Calendar date input', group: 'Form' },
+  { path: 'select-button', name: 'SelectButton', desc: 'Segmented choice & toggle buttons', group: 'Form' },
+  { path: 'checkbox', name: 'Checkbox', desc: 'Boolean checkbox', group: 'Form' },
+  { path: 'radio-button', name: 'RadioButton', desc: 'Single choice in a group', group: 'Form' },
+  { path: 'toggle-switch', name: 'ToggleSwitch', desc: 'On/off switch', group: 'Form' },
+  { path: 'rating', name: 'Rating', desc: 'Star rating input', group: 'Form' },
+  { path: 'slider', name: 'Slider', desc: 'Numeric range slider', group: 'Form' },
+  { path: 'badge', name: 'Badge', desc: 'Small count / status indicator', group: 'Display' },
+  { path: 'tag', name: 'Tag', desc: 'Labelled pill', group: 'Display' },
+  { path: 'chip', name: 'Chip', desc: 'Removable value pill', group: 'Display' },
+  { path: 'divider', name: 'Divider', desc: 'Content separator line', group: 'Display' },
+  { path: 'avatar', name: 'Avatar', desc: 'User / entity representation', group: 'Display' },
+  { path: 'spinner', name: 'Spinner', desc: 'Indeterminate loading', group: 'Display' },
+  { path: 'progress-bar', name: 'ProgressBar', desc: 'Determinate progress', group: 'Display' },
+  { path: 'skeleton', name: 'Skeleton', desc: 'Loading placeholder', group: 'Display' },
+  { path: 'card', name: 'Card', desc: 'Card, panel & toolbar surfaces', group: 'Display' },
+  { path: 'timeline', name: 'Timeline', desc: 'Event sequence with markers', group: 'Display' },
+  { path: 'meter-group', name: 'MeterGroup', desc: 'Multi-segment meter', group: 'Display' },
+  { path: 'scroll-top', name: 'ScrollTop', desc: 'Back-to-top button', group: 'Display' },
+  { path: 'carousel', name: 'Carousel', desc: 'Rotating content slides', group: 'Display' },
+  { path: 'fieldset', name: 'Fieldset', desc: 'Collapsible legend group', group: 'Display' },
+  { path: 'block-ui', name: 'BlockUI', desc: 'Region loading overlay', group: 'Display' },
+  { path: 'data-view', name: 'DataView', desc: 'List / grid of items (virtualized)', group: 'Display' },
+  { path: 'splitter', name: 'Splitter', desc: 'Resizable split panels', group: 'Display' },
+  { path: 'image', name: 'Image', desc: 'Image with preview viewer', group: 'Display' },
+  { path: 'galleria', name: 'Galleria', desc: 'Image gallery with thumbnails', group: 'Display' },
+  { path: 'scroll-panel', name: 'ScrollPanel', desc: 'Themed-scrollbar container', group: 'Display' },
+  { path: 'alert', name: 'Alert', desc: 'Inline feedback message', group: 'Display' },
+  { path: 'accordion', name: 'Accordion', desc: 'Collapsible content panels', group: 'Display' },
+  { path: 'tabs', name: 'Tabs', desc: 'Tabbed content container', group: 'Navigation' },
+  { path: 'breadcrumb', name: 'Breadcrumb', desc: 'Hierarchical page trail', group: 'Navigation' },
+  { path: 'steps', name: 'Steps', desc: 'Numbered progress sequence', group: 'Navigation' },
+  { path: 'stepper', name: 'Stepper', desc: 'Multi-step wizard', group: 'Navigation' },
+  { path: 'tiered-menu', name: 'TieredMenu', desc: 'Nested submenu menu', group: 'Navigation' },
+  { path: 'menu', name: 'Menu', desc: 'Action / navigation menu', group: 'Navigation' },
+  { path: 'menubar', name: 'Menubar', desc: 'Horizontal app menu bar', group: 'Navigation' },
+  { path: 'panel-menu', name: 'PanelMenu', desc: 'Inline accordion menu', group: 'Navigation' },
+  { path: 'tree', name: 'Tree', desc: 'Hierarchical tree (virtualized)', group: 'Navigation' },
+  { path: 'order-list', name: 'OrderList', desc: 'Reorderable list (virtualized)', group: 'Navigation' },
+  { path: 'pick-list', name: 'PickList', desc: 'Dual-list transfer (virtualized)', group: 'Navigation' },
+  { path: 'paginator', name: 'Paginator', desc: 'Standalone pager', group: 'Navigation' },
+  { path: 'context-menu', name: 'ContextMenu', desc: 'Right-click menu', group: 'Navigation' },
+  { path: 'popover', name: 'Popover', desc: 'Anchored overlay panel', group: 'Overlay' },
+  { path: 'tooltip', name: 'Tooltip', desc: 'Hover / focus text bubble', group: 'Overlay' },
+  { path: 'dialog', name: 'Dialog', desc: 'Focus-trapped modal', group: 'Overlay' },
+  { path: 'drawer', name: 'Drawer', desc: 'Edge-sliding panel', group: 'Overlay' },
+  { path: 'toast', name: 'Toast', desc: 'Queued notifications', group: 'Overlay' },
+  { path: 'confirm', name: 'ConfirmDialog', desc: 'Promise-based confirmations', group: 'Overlay' },
+  { path: 'speed-dial', name: 'SpeedDial', desc: 'Radial action button', group: 'Overlay' },
+  { path: 'dock', name: 'Dock', desc: 'Magnifying icon dock', group: 'Navigation' }
+];

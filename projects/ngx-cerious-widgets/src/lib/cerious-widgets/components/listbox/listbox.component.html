@@ -1,0 +1,45 @@
+@if (filterable()) {
+  <input
+    type="text"
+    class="cw-listbox__filter"
+    placeholder="Search..."
+    [value]="filterTerm()"
+    (input)="onFilterInput($event)"
+  />
+}
+
+<ng-template #optionRow let-option>
+  <button
+    type="button"
+    class="cw-listbox__option"
+    role="option"
+    [attr.aria-selected]="isSelected(option)"
+    [class.cw-listbox__option--selected]="isSelected(option)"
+    [disabled]="isDisabled()"
+    (click)="select(option)"
+    (blur)="onTouched()"
+  >
+    @if (multiple()) {
+      <span class="cw-listbox__box" aria-hidden="true"><span class="cw-listbox__check"></span></span>
+    }
+    <span class="cw-listbox__label">{{ option.label }}</span>
+  </button>
+</ng-template>
+
+@if (filteredOptions().length === 0) {
+  <div class="cw-listbox__empty">No results</div>
+} @else if (useVirtual()) {
+  <div class="cw-listbox__list cw-listbox__list--virtual" [style.height]="listHeight()">
+    <cerious-scroll [items]="filteredOptions()">
+      <ng-template ceriousScrollItem let-option>
+        <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option }" />
+      </ng-template>
+    </cerious-scroll>
+  </div>
+} @else {
+  <div class="cw-listbox__list" [style.max-height]="listHeight()">
+    @for (option of filteredOptions(); track $index) {
+      <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option }" />
+    }
+  </div>
+}

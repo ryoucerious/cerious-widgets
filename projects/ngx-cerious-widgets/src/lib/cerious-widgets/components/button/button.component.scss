@@ -1,0 +1,76 @@
+:host {
+  // Per-button accent, switched by severity below.
+  --_accent: var(--cw-accent);
+  --_on-accent: var(--cw-text-on-accent);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-sizing: border-box;
+  height: 2.25rem;
+  padding: 0 0.9rem;
+  border: 1px solid transparent;
+  border-radius: var(--cw-radius);
+  font-family: var(--cw-font);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.12s ease, border-color 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+}
+
+// --- Severity → accent ---
+:host([data-severity='secondary']) { --_accent: var(--cw-slate-500); }
+:host([data-severity='success'])   { --_accent: var(--cw-success); }
+:host([data-severity='warn'])      { --_accent: var(--cw-warn); }
+:host([data-severity='danger'])    { --_accent: var(--cw-danger); }
+
+// --- Variant: filled (default) ---
+:host {
+  background: var(--_accent);
+  color: var(--_on-accent);
+  border-color: var(--_accent);
+}
+:host(:hover) { filter: brightness(0.94); }
+
+// --- Variant: outlined ---
+:host([data-variant='outlined']) {
+  background: transparent;
+  color: var(--_accent);
+  border-color: var(--_accent);
+  filter: none;
+}
+:host([data-variant='outlined']:hover) { background: color-mix(in srgb, var(--_accent) 10%, transparent); }
+
+// --- Variant: text ---
+:host([data-variant='text']) {
+  background: transparent;
+  color: var(--_accent);
+  border-color: transparent;
+  filter: none;
+}
+:host([data-variant='text']:hover) { background: color-mix(in srgb, var(--_accent) 12%, transparent); }
+
+// --- Focus ---
+:host(:focus-visible) {
+  outline: none;
+  box-shadow: var(--cw-focus-ring);
+}
+
+// --- Sizes ---
+:host([data-size='small']) { height: 1.75rem; padding: 0 0.65rem; font-size: 0.8rem; }
+:host([data-size='large']) { height: 2.75rem; padding: 0 1.2rem; font-size: 1rem; }
+
+// --- Disabled / loading ---
+:host([disabled]) {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: none;
+  pointer-events: none;
+}
+
+.cw-button__icon { font-size: 1em; line-height: 1; }
+.cw-button__spinner { display: inline-flex; }

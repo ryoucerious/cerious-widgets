@@ -1,0 +1,22 @@
+<div class="cw-meter-group__track" [style.height.px]="size()" role="meter" [attr.aria-valuemax]="total()">
+  @for (segment of segments(); track $index) {
+    <span
+      class="cw-meter-group__segment"
+      [style.width.%]="segment.percent"
+      [style.background]="segment.color"
+      [attr.aria-label]="segment.label + ': ' + segment.value"
+    ></span>
+  }
+</div>
+
+@if (showLegend()) {
+  <ul class="cw-meter-group__legend">
+    @for (segment of segments(); track $index) {
+      <li class="cw-meter-group__legend-item">
+        <span class="cw-meter-group__dot" [style.background]="segment.color"></span>
+        <span class="cw-meter-group__legend-label">{{ segment.label }}</span>
+        <span class="cw-meter-group__legend-value">{{ segment.value }}</span>
+      </li>
+    }
+  </ul>
+}

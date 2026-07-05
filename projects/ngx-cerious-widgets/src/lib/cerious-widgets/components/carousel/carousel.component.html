@@ -1,0 +1,34 @@
+<div class="cw-carousel__viewport">
+  @if (showNavigators() && slides().length > 1) {
+    <button type="button" class="cw-carousel__nav cw-carousel__nav--prev" aria-label="Previous slide" [disabled]="!canPrev()" (click)="prev()">
+      <span class="cw-carousel__arrow cw-carousel__arrow--left"></span>
+    </button>
+  }
+
+  <div class="cw-carousel__stage" aria-live="polite">
+    @if (activeTemplate(); as tpl) {
+      <ng-container [ngTemplateOutlet]="tpl" />
+    }
+  </div>
+
+  @if (showNavigators() && slides().length > 1) {
+    <button type="button" class="cw-carousel__nav cw-carousel__nav--next" aria-label="Next slide" [disabled]="!canNext()" (click)="next()">
+      <span class="cw-carousel__arrow cw-carousel__arrow--right"></span>
+    </button>
+  }
+</div>
+
+@if (showIndicators() && slides().length > 1) {
+  <div class="cw-carousel__indicators" role="tablist">
+    @for (slide of slides(); track $index) {
+      <button
+        type="button"
+        class="cw-carousel__dot"
+        [class.cw-carousel__dot--active]="$index === current()"
+        [attr.aria-label]="'Go to slide ' + ($index + 1)"
+        [attr.aria-selected]="$index === current()"
+        (click)="go($index)"
+      ></button>
+    }
+  </div>
+}

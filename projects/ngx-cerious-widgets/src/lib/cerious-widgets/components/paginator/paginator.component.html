@@ -1,0 +1,30 @@
+<div class="cw-paginator__left">
+  @if (pageSizeOptions().length) {
+    <select class="cw-paginator__size" [value]="currentPageSize()" (change)="onPageSizeChange($event)" aria-label="Rows per page">
+      @for (option of pageSizeOptions(); track option) {
+        <option [value]="option">{{ option }}</option>
+      }
+    </select>
+  }
+  <span class="cw-paginator__summary">Showing {{ rangeStart() }} to {{ rangeEnd() }} of {{ totalRecords() }} results</span>
+</div>
+
+<div class="cw-paginator__buttons">
+  <button type="button" class="cw-paginator__btn" aria-label="First page" [disabled]="currentPage() === 0" (click)="goTo(0)">«</button>
+  <button type="button" class="cw-paginator__btn" aria-label="Previous page" [disabled]="currentPage() === 0" (click)="goTo(currentPage() - 1)">‹</button>
+  @for (p of pageWindow(); track $index) {
+    @if (p === -1) {
+      <span class="cw-paginator__ellipsis">…</span>
+    } @else {
+      <button
+        type="button"
+        class="cw-paginator__btn"
+        [class.cw-paginator__btn--active]="p === currentPage()"
+        [attr.aria-current]="p === currentPage() ? 'page' : null"
+        (click)="goTo(p)"
+      >{{ p + 1 }}</button>
+    }
+  }
+  <button type="button" class="cw-paginator__btn" aria-label="Next page" [disabled]="currentPage() === pageCount() - 1" (click)="goTo(currentPage() + 1)">›</button>
+  <button type="button" class="cw-paginator__btn" aria-label="Last page" [disabled]="currentPage() === pageCount() - 1" (click)="goTo(pageCount() - 1)">»</button>
+</div>

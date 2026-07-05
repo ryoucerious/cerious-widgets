@@ -1,0 +1,42 @@
+<input
+  #inputEl
+  type="text"
+  class="cw-autocomplete__input"
+  role="combobox"
+  aria-autocomplete="list"
+  [attr.aria-expanded]="isOpen()"
+  [placeholder]="placeholder()"
+  [disabled]="isDisabled()"
+  (input)="onInput($event)"
+  (keydown)="onKeydown($event)"
+  (blur)="onTouched()"
+/>
+
+<ng-template #panel>
+  <ng-template #optionRow let-option let-index="index">
+    <button
+      type="button"
+      class="cw-autocomplete__option"
+      role="option"
+      [class.cw-autocomplete__option--highlighted]="index === highlightedIndex()"
+      (click)="selectOption(option, $event)"
+      (mouseenter)="highlightedIndex.set(index)"
+    >{{ option.label }}</button>
+  </ng-template>
+
+  @if (useVirtual()) {
+    <div class="cw-autocomplete__list cw-autocomplete__list--virtual" role="listbox">
+      <cerious-scroll [items]="suggestions()">
+        <ng-template ceriousScrollItem let-option let-index="index">
+          <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option, index }" />
+        </ng-template>
+      </cerious-scroll>
+    </div>
+  } @else {
+    <div class="cw-autocomplete__list" role="listbox">
+      @for (option of suggestions(); track $index; let index = $index) {
+        <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option, index }" />
+      }
+    </div>
+  }
+</ng-template>

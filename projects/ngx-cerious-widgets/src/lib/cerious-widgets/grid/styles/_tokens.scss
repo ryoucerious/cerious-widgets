@@ -1,0 +1,252 @@
+// ============================================================================
+// cerious-widgets design tokens
+// ----------------------------------------------------------------------------
+// Runtime CSS custom properties, three layers:
+//   1. Primitive — the raw palette (theme-independent)
+//   2. Core      — the values from the mockup's "Design Tokens (Core)" table
+//   3. Semantic  — intent roles the components reference (set per theme)
+//
+// Three themes ship: Cerious Light (`:root`, default), Cerious Frost
+// (`[data-cw-theme="frost"]`), and Cerious Dark (`.cw-dark` /
+// `[data-cw-theme="dark"]`). Switch by setting the class / attribute on any
+// ancestor — usually <html>. Re-skin by overriding the semantic layer.
+// ============================================================================
+
+:root {
+  color-scheme: light;
+
+  // --- 1. Primitive palette (Tailwind slate + brand scales) ---
+  --cw-white:     #ffffff;
+  --cw-slate-50:  #f8fafc;
+  --cw-slate-100: #f1f5f9;
+  --cw-slate-200: #e2e8f0;
+  --cw-slate-300: #cbd5e1;
+  --cw-slate-400: #94a3b8;
+  --cw-slate-500: #64748b;
+  --cw-slate-600: #475569;
+  --cw-slate-700: #334155;
+  --cw-slate-800: #1e293b;
+  --cw-slate-900: #0f172a;
+
+  --cw-blue-400:  #60a5fa;
+  --cw-blue-500:  #3b82f6;
+  --cw-blue-600:  #2563eb;
+  --cw-accent-500: #2563eb; // retained alias for components referencing it
+
+  // --- 2 + 3. Cerious Light (default) ---
+  // Brand
+  --cw-primary:        #2563eb;
+  --cw-primary-hover:  #1d4edb;
+  --cw-primary-active: #1e40af;
+  --cw-accent:         #2563eb; // components' interactive brand colour
+  --cw-accent-alt:     #8366f1; // secondary accent (purple)
+
+  // Surfaces
+  --cw-surface-0:      #ffffff;
+  --cw-surface-1:      #f8fafc;
+  --cw-surface-2:      #eef2f7;
+  --cw-surface:        var(--cw-surface-0); // card / base
+  --cw-surface-sunken: var(--cw-surface-1); // app / page background
+  --cw-surface-raised: var(--cw-surface-2); // menubar / header / raised
+  --cw-surface-header: var(--cw-surface-2);
+  --cw-surface-pager:  var(--cw-surface-1);
+
+  // Grid rows (set per theme).
+  --cw-grid-row-bg:   #fefefe; // regular data rows
+  --cw-grid-group-bg: #f9fafc; // group-header rows
+  --cw-grid-group-fg: var(--cw-accent); // group-header label
+
+  // Lines (mockup hairlines are very soft: section dividers ~#f0f1f5,
+  // row dividers ~#f2f4f7)
+  --cw-border:        #e2e8f0;
+  --cw-border-strong: #cbd5e1;
+  --cw-divider:       #eef0f4; // header/body/pager section dividers
+  --cw-row-border:    #f1f3f7;
+
+  // Text
+  --cw-text:           #0f172a;
+  --cw-text-primary:   #0f172a;
+  --cw-text-secondary: #64748b;
+  --cw-text-muted:     #64748b;
+  --cw-text-on-accent: #ffffff;
+
+  // Neutral fill (badges/tags/tracks)
+  --cw-neutral-bg: #eef2f7;
+  --cw-neutral-fg: #475569;
+  --cw-surface-hover: #eef2f7;
+
+  // Chip pill (accent-tinted per the mock: blue / lavender / teal)
+  --cw-chip-bg: rgba(59, 130, 246, 0.14);
+  --cw-chip-fg: #2563eb;
+
+  // Accordion open-header label (plain text; frost tints it accent)
+  --cw-accordion-active-fg: var(--cw-text);
+
+  // Focus
+  --cw-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.25);
+
+  // Page background (solid for light/dark; gradient for frost)
+  --cw-page-bg: var(--cw-surface-1);
+
+  // --- Shape scale ---
+  --cw-radius-sm: 4px;
+  --cw-radius-md: 8px;
+  --cw-radius-lg: 12px;
+  --cw-radius-xl: 16px;
+  --cw-radius: var(--cw-radius-md); // default used by components
+
+  // --- Elevation ---
+  --cw-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.05);
+  --cw-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.05);
+  --cw-shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.14), 0 4px 8px rgba(15, 23, 42, 0.06);
+
+  // --- Type ---
+  --cw-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  // --- Severity (soft tinted surface + readable foreground) ---
+  --cw-success:    #16a34a;
+  --cw-success-bg: #f0fdf4;
+  --cw-success-fg: #15803d;
+  --cw-info:       #2563eb;
+  --cw-info-bg:    #eff6ff;
+  --cw-info-fg:    #1d4ed8;
+  --cw-warn:       #d97706;
+  --cw-warn-bg:    #fffbeb;
+  --cw-warn-fg:    #b45309;
+  --cw-danger:     #dc2626;
+  --cw-danger-bg:  #fef2f2;
+  --cw-danger-fg:  #b91c1c;
+}
+
+// ============================================================================
+// Cerious Frost — glassmorphism: purple brand, translucent surfaces, gradient.
+// ============================================================================
+[data-cw-theme='frost'] {
+  --cw-primary:        #6c63ff;
+  --cw-primary-hover:  #5b52e6;
+  --cw-primary-active: #4f46e5;
+  --cw-accent:         #6c63ff;
+  --cw-accent-alt:     #a855f7;
+
+  // Milky glass: high enough alpha that the card interior reads near-white
+  // with a gentle lavender tint (mockup rows sample ~rgb(240, 232, 249)),
+  // while the gradient still glows through at the edges.
+  --cw-surface-0:      rgba(255, 255, 255, 0.55);
+  --cw-surface-1:      rgba(255, 255, 255, 0.35);
+  --cw-surface-2:      rgba(255, 255, 255, 0.62);
+  --cw-surface:        var(--cw-surface-0);
+  --cw-surface-sunken: transparent;
+  --cw-surface-raised: var(--cw-surface-2);
+  --cw-surface-header: rgba(255, 255, 255, 0.14);
+  --cw-surface-pager:  transparent;
+
+  // Data rows stay transparent on the frosted card (see _grid-wrapper); group
+  // rows match them with a faint grey-slate tint.
+  --cw-grid-row-bg:   var(--cw-surface-0);
+  --cw-grid-group-bg: rgba(148, 163, 184, 0.08);
+
+  // Frost hairlines are brighter white lines over the milky glass.
+  --cw-border:        rgba(255, 255, 255, 0.55);
+  --cw-border-strong: rgba(148, 163, 184, 0.45);
+  --cw-divider:       rgba(255, 255, 255, 0.75);
+  --cw-row-border:    rgba(255, 255, 255, 0.5);
+
+  --cw-text:           #0f172a;
+  --cw-text-primary:   #0f172a;
+  --cw-text-secondary: #475569;
+  --cw-text-muted:     #475569;
+  --cw-text-on-accent: #ffffff;
+
+  --cw-neutral-bg: rgba(108, 99, 255, 0.14);
+  --cw-neutral-fg: #4f46e5;
+  --cw-surface-hover: rgba(108, 99, 255, 0.10);
+
+  --cw-chip-bg: rgba(168, 85, 247, 0.16);
+  --cw-chip-fg: #7c3aed;
+
+  --cw-accordion-active-fg: var(--cw-accent);
+
+  --cw-focus-ring: 0 0 0 3px rgba(108, 99, 255, 0.3);
+
+  // Soft pastel gradient behind the frosted glass (mockup panel samples
+  // ~rgb(235, 228, 249) lavender-pink drifting to a pale cyan).
+  --cw-page-bg: linear-gradient(135deg, #dbe3fc 0%, #eee0f9 45%, #d7f0f9 100%);
+
+  --cw-shadow-sm: 0 2px 8px rgba(79, 70, 229, 0.08);
+  --cw-shadow-md: 0 8px 24px rgba(79, 70, 229, 0.12);
+  --cw-shadow-lg: 0 16px 40px rgba(79, 70, 229, 0.18);
+
+  --cw-info:       #6c63ff;
+  --cw-info-bg:    rgba(108, 99, 255, 0.12);
+  --cw-info-fg:    #4f46e5;
+}
+
+// ============================================================================
+// Cerious Dark — IDE-inspired: blue brand, teal accent, slate surfaces.
+// ============================================================================
+.cw-dark,
+[data-cw-theme='dark'] {
+  color-scheme: dark;
+
+  // Mockup dark: teal primary (Add Customer / active pager page); group
+  // labels and info accents stay blue.
+  --cw-primary:        #14b8a6;
+  --cw-primary-hover:  #2dd4bf;
+  --cw-primary-active: #0d9488;
+  --cw-accent:         #3b8df8;
+  --cw-accent-alt:     #2dd4bf;
+
+  // Deep desaturated navies sampled from the mockup: page #0d1825, card
+  // #141e2a, data rows #121c28, group rows #16202b (lighter than data rows).
+  --cw-surface-0:      #0d1825;
+  --cw-surface-1:      #141e2a;
+  --cw-surface-2:      #1d2836;
+  --cw-surface:        var(--cw-surface-1); // card
+  --cw-surface-sunken: var(--cw-surface-0); // page
+  --cw-surface-raised: var(--cw-surface-2); // raised
+  --cw-surface-header: var(--cw-surface-1); // header = card colour
+  --cw-surface-pager:  var(--cw-surface-1);
+
+  --cw-grid-row-bg:   #121c28; // a touch darker than the card
+  --cw-grid-group-bg: #16202b; // a touch lighter than the data rows
+  --cw-grid-group-fg: #f1f5f9; // white group labels in dark (not accent blue)
+
+  --cw-border:        #202a36;
+  --cw-border-strong: #293442;
+  --cw-divider:       #242e3a; // header/pager dividers a touch stronger than row lines
+  --cw-row-border:    #202a36;
+
+  --cw-text:           #f1f5f9;
+  --cw-text-primary:   #f1f5f9;
+  --cw-text-secondary: #94a3b8;
+  --cw-text-muted:     #94a3b8;
+  --cw-text-on-accent: #ffffff;
+
+  --cw-neutral-bg: #1b2634;
+  --cw-neutral-fg: #cbd5e1;
+  --cw-surface-hover: #1a2534;
+
+  --cw-chip-bg: rgba(45, 212, 191, 0.14);
+  --cw-chip-fg: #2dd4bf;
+
+  --cw-focus-ring: 0 0 0 3px rgba(20, 184, 166, 0.35);
+
+  --cw-page-bg: var(--cw-surface-0);
+
+  --cw-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --cw-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --cw-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+
+  --cw-success:    #22c55e;
+  --cw-success-bg: #14321f;
+  --cw-success-fg: #4ade80;
+  --cw-info:       #3b8df8;
+  --cw-info-bg:    #14243d;
+  --cw-info-fg:    #7ab5fb;
+  --cw-warn:       #f59e0b;
+  --cw-warn-bg:    #3a2c10;
+  --cw-warn-fg:    #fbbf24;
+  --cw-danger:     #ef4444;
+  --cw-danger-bg:  #3a1a1a;
+  --cw-danger-fg:  #f87171;
+}

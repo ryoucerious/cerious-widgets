@@ -1,0 +1,25 @@
+:host {
+  display: inline-flex;
+  font-family: var(--cw-font);
+}
+
+:host(.cw-input-mask--disabled) { opacity: 0.6; }
+
+.cw-input-mask__input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--cw-font);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--cw-text);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border-strong);
+  border-radius: var(--cw-radius-sm);
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+
+  &::placeholder { color: var(--cw-text-muted); }
+  &:focus { border-color: var(--cw-accent); box-shadow: var(--cw-focus-ring); }
+  &:disabled { cursor: not-allowed; }
+}

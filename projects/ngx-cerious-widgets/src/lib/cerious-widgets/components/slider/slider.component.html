@@ -1,0 +1,15 @@
+@if (showValue()) {
+  <output class="cw-slider__bubble" [style.left]="bubbleLeft()" aria-hidden="true">{{ value() }}</output>
+}
+<input
+  type="range"
+  class="cw-slider__input"
+  [min]="min()"
+  [max]="max()"
+  [step]="step()"
+  [value]="value()"
+  [disabled]="isDisabled()"
+  [style.--_fill.%]="percent()"
+  (input)="onInput($event)"
+  (blur)="onTouched()"
+/>

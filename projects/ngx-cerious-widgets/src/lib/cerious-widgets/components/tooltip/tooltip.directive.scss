@@ -1,0 +1,30 @@
+// A dark bubble in every theme, like the mock.
+:host {
+  display: block;
+  position: relative;
+  max-width: 240px;
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--cw-radius-sm);
+  background: #1e293b;
+  color: #f1f5f9;
+  font-family: var(--cw-font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.35;
+  box-shadow: var(--cw-shadow-md);
+
+  // Arrow: a rotated square centred on the edge facing the host.
+  &::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+    transform: rotate(45deg);
+  }
+}
+
+:host([data-position='right'])::before  { left: -4px; top: calc(50% - 4px); }
+:host([data-position='left'])::before   { right: -4px; top: calc(50% - 4px); }
+:host([data-position='top'])::before    { bottom: -4px; left: calc(50% - 4px); }
+:host([data-position='bottom'])::before { top: -4px; left: calc(50% - 4px); }

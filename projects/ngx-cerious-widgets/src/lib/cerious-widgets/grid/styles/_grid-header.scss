@@ -17,8 +17,8 @@
     }
 
     .group-by-title {
-        border-top: solid 1px rgb(221,221,221);
-        border-bottom: solid 1px rgb(221,221,221);
+        border-top: solid 1px var(--cw-divider);
+        border-bottom: solid 1px var(--cw-divider);
         padding: 4px 4px 4px 10px;
         position: relative;
     }
@@ -35,9 +35,9 @@
             overflow-x: hidden;
             position: relative;
             background: $grid-header-background;
-            border-right: $grid-header-border;
+            border-right: none;
             color: $grid-text-header-footer;
-            font-weight: 400;
+            font-weight: 600;
             z-index: 10;
             justify-content: space-between;
             align-items: center;
@@ -62,7 +62,9 @@
 
             .column-menu-button {
                 position: absolute;
-                top: 6px;
+                // Centre the 10px-tall hamburger glyph (16px footprint, lines
+                // at 0-10px) on the header cell's vertical middle.
+                top: calc(50% - 5px);
                 right: -26px;
                 
                 -webkit-transition: right .2s; /* Safari */ //<<< the compiler should be prefixing automatically
@@ -77,7 +79,13 @@
                 font-size: 0.9em; /* Adjust the size if needed */
             }
 
-            text-align: center;
+            text-align: left;
+            padding: 9px 0;
+
+            .cell-content-wrapper,
+            .column-content {
+                padding-left: 10px;
+            }
 
             &.padding-col {
                 padding: 0;
@@ -95,7 +103,7 @@
             &.nested-group {
                 display: flex;
                 flex-direction: column;
-                border-top: solid 1px grey !important;
+                border-top: solid 1px var(--cw-divider) !important;
             }
 
         }
@@ -111,11 +119,11 @@
         }
 
         .col-span {
-            border-bottom: solid 1px rgb(221,221,221);
+            border-bottom: solid 1px var(--cw-divider);
         }
 
         .sub-header-col {
-            border-top: solid 1px rgb(221,221,221);
+            border-top: solid 1px var(--cw-divider);
         }
 
         .group-header {
@@ -128,7 +136,7 @@
         width: 100%;
 
         .table-col {
-            border-top: solid 1px rgb(221,221,221);
+            border-top: solid 1px var(--cw-border);
 
             div {
                 display: inline-block;
@@ -151,7 +159,7 @@
                     content: ' ';
                     height: 16px;
                     width: 2px;
-                    background-color: #333;
+                    background-color: var(--cw-text);
                 }
                 .close:before {
                     transform: rotate(45deg);

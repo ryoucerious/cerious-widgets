@@ -54,8 +54,10 @@
         <ng-container *ngSwitchCase="CellMode.Format" [ngSwitch]="column.format">
             <div *ngSwitchCase="ColumnFormat.Currency">{{ value() | currency }}</div>
             <div *ngSwitchCase="ColumnFormat.Percentage">{{ value() | percent }}</div>
-            <div *ngSwitchCase="ColumnFormat.Stars">
-                <span *ngFor="let star of getStars(value())">&#9733;</span>
+            <div *ngSwitchCase="ColumnFormat.Stars" class="cw-cell-stars">
+                <span *ngFor="let star of [1,2,3,4,5]"
+                      class="cw-star"
+                      [class.cw-star--on]="star <= value()">&#9733;</span>
             </div>
             <div *ngSwitchCase="ColumnFormat.Date">{{ value() | date:'shortDate' }}</div>
             <div *ngSwitchCase="ColumnFormat.DateTime">{{ value() | date:'short' }}</div>

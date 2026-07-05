@@ -1,0 +1,39 @@
+:host {
+  display: block;
+  font-family: var(--cw-font);
+}
+
+.cw-tabs__header {
+  display: flex;
+  gap: 1.25rem;
+  border-bottom: 1px solid var(--cw-divider);
+}
+
+.cw-tabs__tab {
+  all: unset;
+  box-sizing: border-box;
+  padding: 0.5rem 0.125rem;
+  margin-bottom: -1px; // let the active underline sit on the baseline
+  border-bottom: 2px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--cw-text-muted);
+  cursor: pointer;
+  transition: color 0.12s ease, border-color 0.12s ease;
+
+  &:hover:not(:disabled) { color: var(--cw-text); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); border-radius: var(--cw-radius-sm); }
+  &:disabled { cursor: not-allowed; opacity: 0.45; }
+}
+
+// Primary underline + label, like the mock (teal in dark, purple in frost).
+.cw-tabs__tab--active {
+  color: var(--cw-primary);
+  border-bottom-color: var(--cw-primary);
+}
+
+.cw-tabs__body {
+  padding: 0.875rem 0;
+  font-size: 0.875rem;
+  color: var(--cw-text);
+}

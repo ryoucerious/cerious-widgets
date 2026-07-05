@@ -1,23 +1,15 @@
-import { PluginConfig } from "../../shared/interfaces/plugin-config.interface";
+import { WidgetPlugin } from "../../shared/interfaces/widget-plugin.interface";
 import { GridApi } from "./grid-api";
 
 /**
  * Interface representing a plugin for a grid component.
  * Provides lifecycle hooks and event handlers for interacting with the grid.
+ *
+ * Extends the generic {@link WidgetPlugin} contract (shared across all
+ * cerious-widgets components) with grid-specific row, cell, and data hooks.
+ * The `onInit`, `afterInit`, and `onDestroy` lifecycle hooks are inherited.
  */
-export interface GridPlugin {
-    /**
-     * Called when the grid is initialized.
-     * @param grid - The GridApi instance for interacting with the grid.
-     * @param config - Optional config data for the plugin.
-     */
-    onInit(grid: GridApi, config?: PluginConfig): void;
-
-    /**
-     * Optional hook called after the grid has been initialized.
-     */
-    afterInit?(): void;
-
+export interface GridPlugin extends WidgetPlugin<GridApi> {
     /**
      * Optional handler triggered when a row is clicked.
      * @param row - The data of the clicked row.
@@ -71,9 +63,4 @@ export interface GridPlugin {
      * @param data - The refreshed data.
      */
     onDataRefresh?(data: any): void;
-
-    /**
-     * Optional hook called when the plugin is destroyed.
-     */
-    onDestroy?(): void;
 }

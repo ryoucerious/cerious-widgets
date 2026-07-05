@@ -1,0 +1,47 @@
+<div class="cw-order-list__controls">
+  <button type="button" class="cw-order-list__ctrl" aria-label="Move to top" [disabled]="!canMoveUp()" (click)="moveToEnd(false)">
+    <span class="cw-order-list__ctrl-icon cw-order-list__ctrl-icon--top"></span>
+  </button>
+  <button type="button" class="cw-order-list__ctrl" aria-label="Move up" [disabled]="!canMoveUp()" (click)="move(-1)">
+    <span class="cw-order-list__ctrl-icon cw-order-list__ctrl-icon--up"></span>
+  </button>
+  <button type="button" class="cw-order-list__ctrl" aria-label="Move down" [disabled]="!canMoveDown()" (click)="move(1)">
+    <span class="cw-order-list__ctrl-icon cw-order-list__ctrl-icon--down"></span>
+  </button>
+  <button type="button" class="cw-order-list__ctrl" aria-label="Move to bottom" [disabled]="!canMoveDown()" (click)="moveToEnd(true)">
+    <span class="cw-order-list__ctrl-icon cw-order-list__ctrl-icon--bottom"></span>
+  </button>
+</div>
+
+<div class="cw-order-list__box">
+  @if (header()) {
+    <div class="cw-order-list__header">{{ header() }}</div>
+  }
+
+  <ng-template #itemRow let-item>
+    <button
+      type="button"
+      class="cw-order-list__item"
+      [class.cw-order-list__item--selected]="isSelected(item)"
+      [attr.aria-selected]="isSelected(item)"
+      [disabled]="isDisabled()"
+      (click)="select(item)"
+    >{{ item.label }}</button>
+  </ng-template>
+
+  @if (useVirtual()) {
+    <div class="cw-order-list__list cw-order-list__list--virtual" [style.height]="listHeight()" role="listbox">
+      <cerious-scroll [items]="items()">
+        <ng-template ceriousScrollItem let-item>
+          <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
+        </ng-template>
+      </cerious-scroll>
+    </div>
+  } @else {
+    <div class="cw-order-list__list" [style.max-height]="listHeight()" role="listbox">
+      @for (item of items(); track $index) {
+        <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
+      }
+    </div>
+  }
+</div>

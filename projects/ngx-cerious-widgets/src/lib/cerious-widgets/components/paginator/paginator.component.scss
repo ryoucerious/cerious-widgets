@@ -1,0 +1,75 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-family: var(--cw-font);
+  font-size: 0.8125rem;
+  color: var(--cw-text-muted);
+}
+
+.cw-paginator__left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cw-paginator__size {
+  box-sizing: border-box;
+  padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+  font-family: var(--cw-font);
+  font-size: 0.8125rem;
+  color: var(--cw-text);
+  background-color: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-sm);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+
+  &:focus-visible { outline: none; box-shadow: var(--cw-focus-ring); }
+}
+
+.cw-paginator__summary { white-space: nowrap; }
+
+.cw-paginator__buttons {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cw-paginator__btn {
+  all: unset;
+  box-sizing: border-box;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-sm);
+  background: var(--cw-surface);
+  color: var(--cw-text);
+  font-size: 0.8125rem;
+  cursor: pointer;
+
+  &:hover:not(:disabled):not(.cw-paginator__btn--active) {
+    background: var(--cw-surface-raised);
+    border-color: var(--cw-border-strong);
+  }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+  &:disabled { opacity: 0.45; cursor: not-allowed; }
+}
+
+.cw-paginator__btn--active {
+  background: var(--cw-primary);
+  border-color: var(--cw-primary);
+  color: var(--cw-text-on-accent);
+}
+
+.cw-paginator__ellipsis { padding: 0 2px; }

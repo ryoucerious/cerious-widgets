@@ -1,0 +1,23 @@
+@for (item of items(); track $index) {
+  @if (item.separator) {
+    <div class="cw-tiered-menu__separator" role="separator"></div>
+  } @else {
+    <button
+      #trigger
+      type="button"
+      class="cw-tiered-menu__item"
+      role="menuitem"
+      [class.cw-tiered-menu__item--open]="openItem() === item"
+      [class.cw-tiered-menu__item--danger]="item.danger"
+      [attr.aria-haspopup]="item.items?.length ? 'menu' : null"
+      [attr.aria-expanded]="item.items?.length ? (openItem() === item) : null"
+      [disabled]="item.disabled"
+      (mouseenter)="onItemEnter(item, trigger)"
+      (click)="activate(item)"
+    >
+      @if (item.icon) { <i class="cw-tiered-menu__icon" [class]="item.icon"></i> }
+      <span class="cw-tiered-menu__label">{{ item.label }}</span>
+      @if (item.items?.length) { <span class="cw-tiered-menu__caret" aria-hidden="true"></span> }
+    </button>
+  }
+}

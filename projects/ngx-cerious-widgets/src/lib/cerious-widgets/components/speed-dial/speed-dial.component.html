@@ -1,0 +1,36 @@
+<button
+  type="button"
+  class="cw-speed-dial__trigger"
+  [attr.aria-expanded]="isOpen()"
+  aria-haspopup="true"
+  aria-label="Toggle actions"
+  [disabled]="disabled()"
+  (click)="toggle()"
+>
+  <span class="cw-speed-dial__plus" aria-hidden="true"></span>
+</button>
+
+<ul class="cw-speed-dial__actions" role="menu">
+  @for (item of items(); track $index; let i = $index) {
+    <li class="cw-speed-dial__action-wrap">
+      <button
+        type="button"
+        class="cw-speed-dial__action"
+        role="menuitem"
+        [style.transform]="isOpen() ? offset()(i) : null"
+        [style.transition-delay.ms]="isOpen() ? i * 30 : 0"
+        [attr.aria-label]="item.label"
+        [attr.title]="item.label"
+        [disabled]="item.disabled"
+        [tabindex]="isOpen() ? 0 : -1"
+        (click)="activate(item)"
+      >
+        @if (item.icon) {
+          <i [class]="item.icon"></i>
+        } @else {
+          <span class="cw-speed-dial__action-label">{{ item.label.charAt(0) }}</span>
+        }
+      </button>
+    </li>
+  }
+</ul>

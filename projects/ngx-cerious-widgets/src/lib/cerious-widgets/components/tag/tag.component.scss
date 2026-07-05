@@ -1,0 +1,24 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  box-sizing: border-box;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--cw-radius);
+  font-family: var(--cw-font);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+  background: var(--cw-neutral-bg);
+  color: var(--cw-neutral-fg);
+}
+
+:host(.cw-tag--rounded) { border-radius: 999px; padding-inline: 0.625rem; }
+
+:host([data-severity='success']) { background: var(--cw-success-bg); color: var(--cw-success-fg); }
+:host([data-severity='info'])    { background: var(--cw-info-bg);    color: var(--cw-info-fg); }
+:host([data-severity='warn'])    { background: var(--cw-warn-bg);    color: var(--cw-warn-fg); }
+:host([data-severity='danger'])  { background: var(--cw-danger-bg);  color: var(--cw-danger-fg); }
+
+.cw-tag__icon { font-size: 0.875em; line-height: 1; }
+.cw-tag__label { white-space: nowrap; }

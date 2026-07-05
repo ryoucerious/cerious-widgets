@@ -1,0 +1,48 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 10rem;
+  padding: 0.25rem;
+  box-sizing: border-box;
+  font-family: var(--cw-font);
+}
+
+.cw-menu__item {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--cw-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--cw-text);
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover:not(:disabled) { background: var(--cw-surface-hover); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+  &:disabled { cursor: not-allowed; opacity: 0.5; }
+}
+
+// Active item: accent-tinted pill, like the mock's menu.
+.cw-menu__item--active {
+  background: color-mix(in srgb, var(--cw-accent) 12%, transparent);
+  color: var(--cw-accent);
+}
+
+.cw-menu__item--danger {
+  color: var(--cw-danger-fg);
+
+  &:hover:not(:disabled) { background: var(--cw-danger-bg); }
+}
+
+.cw-menu__icon { font-size: 0.875em; line-height: 1; }
+
+.cw-menu__separator {
+  height: 1px;
+  margin: 0.25rem 0.375rem;
+  background: var(--cw-divider);
+}

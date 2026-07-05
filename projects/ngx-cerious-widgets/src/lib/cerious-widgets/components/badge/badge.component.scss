@@ -1,0 +1,33 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  font-family: var(--cw-font);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  background: var(--cw-neutral-bg);
+  color: var(--cw-neutral-fg);
+}
+
+:host([data-severity='success']) { background: var(--cw-success-bg); color: var(--cw-success-fg); }
+:host([data-severity='info'])    { background: var(--cw-info-bg);    color: var(--cw-info-fg); }
+:host([data-severity='warn'])    { background: var(--cw-warn-bg);    color: var(--cw-warn-fg); }
+:host([data-severity='danger'])  { background: var(--cw-danger-bg);  color: var(--cw-danger-fg); }
+
+:host([data-size='small']) { min-width: 1.125rem; height: 1.125rem; padding: 0 0.375rem; font-size: 0.625rem; }
+:host([data-size='large']) { min-width: 1.875rem; height: 1.875rem; padding: 0 0.625rem; font-size: 0.875rem; }
+
+// Status dot: a filled circle in the solid severity colour.
+:host(.cw-badge--dot) { min-width: 0; width: 0.625rem; height: 0.625rem; padding: 0; background: var(--cw-neutral-fg); }
+:host(.cw-badge--dot[data-severity='success']) { background: var(--cw-success); }
+:host(.cw-badge--dot[data-severity='info'])    { background: var(--cw-info); }
+:host(.cw-badge--dot[data-severity='warn'])    { background: var(--cw-warn); }
+:host(.cw-badge--dot[data-severity='danger'])  { background: var(--cw-danger); }
+:host(.cw-badge--dot[data-size='small']) { width: 0.5rem; height: 0.5rem; }
+:host(.cw-badge--dot[data-size='large']) { width: 0.75rem; height: 0.75rem; }

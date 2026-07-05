@@ -1,0 +1,43 @@
+:host {
+  position: fixed;
+  z-index: 1200; // above CDK overlays (1000)
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 22rem;
+  max-width: calc(100vw - 2rem);
+  pointer-events: none;
+  font-family: var(--cw-font);
+}
+
+:host([data-position='top-right'])    { top: 1rem; right: 1rem; }
+:host([data-position='top-left'])     { top: 1rem; left: 1rem; }
+:host([data-position='bottom-right']) { bottom: 1rem; right: 1rem; }
+:host([data-position='bottom-left'])  { bottom: 1rem; left: 1rem; align-items: flex-start; }
+
+.cw-toast__item {
+  pointer-events: auto;
+  box-shadow: var(--cw-shadow-lg);
+  animation: cw-toast-in 0.18s ease-out;
+}
+
+.cw-toast__summary {
+  display: block;
+  font-weight: 600;
+}
+
+.cw-toast__detail {
+  display: block;
+  margin-top: 0.125rem;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+@keyframes cw-toast-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-toast__item { animation: none; }
+}

@@ -1,0 +1,83 @@
+:host {
+  display: inline-block;
+  font-family: var(--cw-font);
+}
+
+.cw-image__thumb {
+  all: unset;
+  position: relative;
+  display: inline-flex;
+  line-height: 0;
+  border-radius: var(--cw-radius);
+  overflow: hidden;
+}
+
+.cw-image__thumb--preview {
+  cursor: pointer;
+
+  &:hover .cw-image__hint { opacity: 1; }
+  &:hover .cw-image__img { filter: brightness(0.82); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+}
+
+.cw-image__img {
+  display: block;
+  max-width: 100%;
+  border-radius: var(--cw-radius);
+  transition: filter 0.15s ease;
+}
+
+.cw-image__hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  svg { width: 28px; height: 28px; }
+}
+
+// --- Fullscreen viewer (reaches the overlay via the TemplatePortal marker) ---
+.cw-image__viewer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.cw-image__toolbar {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cw-image__tool {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.6);
+  color: #fff;
+  font-size: 1.125rem;
+  cursor: pointer;
+
+  &:hover { background: rgba(15, 23, 42, 0.8); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+}
+
+.cw-image__full {
+  max-width: 90vw;
+  max-height: 88vh;
+  border-radius: var(--cw-radius);
+  transition: transform 0.15s ease;
+  box-shadow: var(--cw-shadow-lg);
+}

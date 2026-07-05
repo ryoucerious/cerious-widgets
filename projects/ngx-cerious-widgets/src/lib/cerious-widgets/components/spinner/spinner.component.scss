@@ -1,0 +1,22 @@
+:host {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.cw-spinner__ring {
+  display: inline-block;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--cw-border-strong);
+  border-top-color: var(--cw-accent);
+  animation: cw-spin 0.7s linear infinite;
+}
+
+@keyframes cw-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-spinner__ring { animation-duration: 1.6s; }
+}

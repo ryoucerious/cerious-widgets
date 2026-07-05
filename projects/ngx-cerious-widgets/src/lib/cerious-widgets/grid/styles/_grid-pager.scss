@@ -4,17 +4,57 @@
 .cw-table-pager {
     background: $grid-pager-background;
     border: none;
-    padding: 4px;
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    color: var(--cw-text-muted);
+    font-family: var(--cw-font);
+    font-size: 13px;
 
+    .cw-paging { white-space: nowrap; }
+
+    .cw-paging-controls .btn-group {
+        display: inline-flex;
+        gap: 4px;
+    }
+
+    // Neat, individually-rounded pager buttons that contrast with the footer.
     .table-pager-btn {
+        min-width: 30px !important;
+        height: 30px;
+        margin: 0 !important;
+        padding: 0 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--cw-border) !important;
+        border-radius: var(--cw-radius-sm) !important;
+        background: var(--cw-surface) !important;
+        color: var(--cw-text) !important;
+        font-size: 13px;
         box-shadow: none;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--cw-surface-raised) !important;
+            border-color: var(--cw-border-strong) !important;
+        }
+
+        &:disabled,
+        &.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
         &:not(:disabled):not(.disabled):active,
         &:not(:disabled):not(.disabled):active:focus,
         &:not(:disabled):not(.disabled).active {
+            background: var(--cw-primary) !important;
+            border-color: var(--cw-primary) !important;
+            color: var(--cw-text-on-accent) !important;
             box-shadow: none;
-            background-color: $dark-450;
         }
     }
 }

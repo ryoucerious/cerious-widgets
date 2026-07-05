@@ -1,0 +1,148 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--cw-page-bg);
+  background-attachment: fixed;
+  color: var(--cw-text);
+  font-family: var(--cw-font);
+}
+
+.app__topbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 54px;
+  padding: 0 1.25rem;
+  border-bottom: 1px solid var(--cw-border);
+  background: var(--cw-surface);
+}
+
+.app__brand {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--cw-text);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+
+  span { color: var(--cw-accent); }
+}
+
+.app__themes {
+  margin-left: auto;
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  background: var(--cw-surface-raised);
+}
+
+.app__theme {
+  padding: 4px 12px;
+  border: none;
+  border-radius: var(--cw-radius-sm);
+  background: transparent;
+  color: var(--cw-text-muted);
+  font-family: var(--cw-font);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.app__theme:hover { color: var(--cw-text); }
+.app__theme--active {
+  background: var(--cw-surface);
+  color: var(--cw-text);
+  box-shadow: var(--cw-shadow-sm);
+}
+
+.app__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.app__sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 1rem 0.75rem;
+  border-right: 1px solid var(--cw-border);
+  background: var(--cw-surface);
+  overflow-y: auto;
+}
+
+.app__navgroup {
+  margin: 1rem 0.5rem 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--cw-text-muted);
+}
+
+.app__navlink {
+  display: block;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--cw-radius);
+  color: var(--cw-text);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.app__navlink:hover { background: var(--cw-surface-raised); }
+.app__navlink--active {
+  background: color-mix(in srgb, var(--cw-accent) 14%, transparent);
+  color: var(--cw-accent);
+  font-weight: 600;
+}
+
+.app__navlink--parent { font-weight: 600; }
+
+.app__navchildren {
+  margin: 0.1rem 0 0.35rem 0.55rem;
+  padding-left: 0.55rem;
+  border-left: 1px solid var(--cw-border);
+}
+.app__navlink--child {
+  font-size: 0.83rem;
+  padding: 0.3rem 0.6rem;
+  color: var(--cw-text-muted);
+}
+.app__navlink--child:hover { color: var(--cw-text); }
+.app__navlink--child.app__navlink--active { color: var(--cw-accent); }
+
+.app__content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+// Frost theme: frosted-glass chrome over the gradient page, with the bright
+// white edge + inner highlight that reads as glass.
+:host-context([data-cw-theme='frost']) {
+  .app__topbar {
+    backdrop-filter: blur(18px) saturate(1.6);
+    -webkit-backdrop-filter: blur(18px) saturate(1.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  .app__sidebar {
+    backdrop-filter: blur(18px) saturate(1.6);
+    -webkit-backdrop-filter: blur(18px) saturate(1.6);
+    border-right: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      inset 1px 0 0 rgba(255, 255, 255, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  // The theme-switch pill also gets the glass edge.
+  .app__themes {
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+}

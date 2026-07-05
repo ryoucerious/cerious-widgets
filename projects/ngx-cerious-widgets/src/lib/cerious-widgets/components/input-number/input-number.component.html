@@ -1,0 +1,30 @@
+@if (showButtons()) {
+  <button
+    type="button"
+    class="cw-input-number__btn cw-input-number__btn--minus"
+    aria-label="Decrement"
+    [disabled]="!canDecrement()"
+    (click)="increment(-step())"
+  >&minus;</button>
+}
+<input
+  type="text"
+  inputmode="decimal"
+  class="cw-input-number__input"
+  [value]="displayValue()"
+  [placeholder]="placeholder()"
+  [disabled]="isDisabled()"
+  (input)="onInput($event)"
+  (focus)="onFocus()"
+  (blur)="onBlur()"
+  (keydown)="onKeydown($event)"
+/>
+@if (showButtons()) {
+  <button
+    type="button"
+    class="cw-input-number__btn cw-input-number__btn--plus"
+    aria-label="Increment"
+    [disabled]="!canIncrement()"
+    (click)="increment(step())"
+  >+</button>
+}

@@ -106,7 +106,49 @@
     // }
   }
 
-  // LEGEND: button-variant($color, $background, $border, $hoverbackground, $hoverborder, $hovercolor, $focusborder, $activecolor, $activeglow)
+  // Token-based light button (themes across Light / Frost / Dark).
   .btn-default {
-    @include button-variant($button-label-color, lighten($dark-450, 25%), lighten($dark-450, 25%), lighten($dark-300, 10%), transparent, $button-label-color, $match-browser-focus, $button-label-color, $active-glow)
+    color: var(--cw-text);
+    height: 28px;
+    line-height: 12px;
+    background-color: var(--cw-surface);
+    border: 1px solid var(--cw-border-strong);
+    border-radius: var(--cw-radius);
+    cursor: pointer;
+    transition: background-color .12s ease, border-color .12s ease, box-shadow .12s ease;
+
+    &:hover {
+      color: var(--cw-text);
+      text-decoration: none;
+      background-color: var(--cw-surface-raised);
+      border-color: var(--cw-border-strong);
+    }
+
+    &:focus,
+    &.focus,
+    &:focus-visible {
+      outline: none;
+      color: var(--cw-text);
+      background-color: var(--cw-surface-raised);
+      border-color: var(--cw-accent);
+      box-shadow: var(--cw-focus-ring);
+    }
+
+    &:active,
+    &.active,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active {
+      color: var(--cw-text);
+      background-color: var(--cw-surface-raised);
+      border-color: var(--cw-border-strong);
+      box-shadow: none;
+    }
+
+    &:disabled,
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      opacity: .5;
+      cursor: not-allowed;
+    }
   }

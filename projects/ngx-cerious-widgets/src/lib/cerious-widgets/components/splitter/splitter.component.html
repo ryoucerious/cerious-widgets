@@ -1,0 +1,16 @@
+@for (panel of panels(); track $index; let i = $index; let last = $last) {
+  <div class="cw-splitter__panel" [style.flex-basis]="size(i)">
+    <ng-container [ngTemplateOutlet]="panel.template" />
+  </div>
+  @if (!last) {
+    <div
+      class="cw-splitter__gutter"
+      role="separator"
+      [attr.aria-orientation]="layout() === 'horizontal' ? 'vertical' : 'horizontal'"
+      tabindex="0"
+      (pointerdown)="onGutterDown(i, $event)"
+    >
+      <span class="cw-splitter__gutter-handle" aria-hidden="true"></span>
+    </div>
+  }
+}

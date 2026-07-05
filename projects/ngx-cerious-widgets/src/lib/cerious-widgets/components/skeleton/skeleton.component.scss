@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  background: var(--cw-neutral-bg);
+}
+
+:host(.cw-skeleton--animated) {
+  background-image: linear-gradient(
+    90deg,
+    var(--cw-neutral-bg) 0%,
+    var(--cw-surface) 50%,
+    var(--cw-neutral-bg) 100%
+  );
+  background-size: 200% 100%;
+  animation: cw-skeleton-shimmer 1.3s ease-in-out infinite;
+}
+
+@keyframes cw-skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host(.cw-skeleton--animated) { animation: none; }
+}

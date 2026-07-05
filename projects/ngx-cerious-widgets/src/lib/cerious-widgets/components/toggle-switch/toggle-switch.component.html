@@ -1,0 +1,18 @@
+<label class="cw-toggle-switch__wrapper">
+  <input
+    type="checkbox"
+    role="switch"
+    class="cw-toggle-switch__input"
+    [checked]="checked()"
+    [disabled]="isDisabled()"
+    (change)="onInputChange($event)"
+    (blur)="onTouched()"
+  />
+  <span class="cw-toggle-switch__track" aria-hidden="true">
+    <span class="cw-toggle-switch__thumb"></span>
+  </span>
+  @if (label()) {
+    <span class="cw-toggle-switch__label">{{ label() }}</span>
+  }
+  <ng-content />
+</label>

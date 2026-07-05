@@ -1,0 +1,89 @@
+:host {
+  display: inline-flex;
+  font-family: var(--cw-font);
+  font-size: 0.875rem;
+  color: var(--cw-text);
+}
+
+.cw-checkbox__wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+:host(.cw-checkbox--disabled) .cw-checkbox__wrapper {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+// Real input, visually hidden but focusable: keyboard + forms stay native.
+.cw-checkbox__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cw-checkbox__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  box-sizing: border-box;
+  border: 1px solid var(--cw-border-strong);
+  border-radius: var(--cw-radius-sm);
+  background: var(--cw-surface);
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.cw-checkbox__wrapper:hover .cw-checkbox__box {
+  border-color: var(--cw-accent);
+}
+
+.cw-checkbox__input:focus-visible + .cw-checkbox__box {
+  box-shadow: var(--cw-focus-ring);
+  border-color: var(--cw-accent);
+}
+
+// CSS-drawn check mark (two borders rotated), no icon dependency.
+.cw-checkbox__check {
+  width: 4px;
+  height: 8px;
+  border: solid var(--cw-text-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transform-origin: center;
+  transition: transform 0.12s ease;
+  margin-top: -2px;
+}
+
+.cw-checkbox__dash {
+  width: 8px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--cw-text-on-accent);
+}
+
+// Accent, not primary: the mock keeps checkboxes blue in dark (where the
+// primary is teal) and purple in frost.
+:host(.cw-checkbox--checked) .cw-checkbox__box,
+.cw-checkbox__input:indeterminate + .cw-checkbox__box {
+  background: var(--cw-accent);
+  border-color: var(--cw-accent);
+}
+
+:host(.cw-checkbox--checked) .cw-checkbox__check {
+  transform: rotate(45deg) scale(1);
+}
+
+.cw-checkbox__label {
+  user-select: none;
+}

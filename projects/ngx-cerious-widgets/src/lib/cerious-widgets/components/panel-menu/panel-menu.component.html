@@ -1,0 +1,28 @@
+<ng-template #level let-items let-depth="depth">
+  @for (item of items; track $index) {
+    <div class="cw-panel-menu__group" role="treeitem" [attr.aria-expanded]="item.items?.length ? isExpanded(item) : null">
+      <button
+        type="button"
+        class="cw-panel-menu__item"
+        [class.cw-panel-menu__item--parent]="item.items?.length"
+        [disabled]="item.disabled"
+        [style.padding-left.rem]="depth * 1 + 0.75"
+        (click)="activate(item)"
+      >
+        @if (item.items?.length) {
+          <span class="cw-panel-menu__chevron" [class.cw-panel-menu__chevron--open]="isExpanded(item)" aria-hidden="true"></span>
+        }
+        @if (item.icon) { <i class="cw-panel-menu__icon" [class]="item.icon"></i> }
+        <span class="cw-panel-menu__label">{{ item.label }}</span>
+      </button>
+
+      @if (item.items?.length && isExpanded(item)) {
+        <div class="cw-panel-menu__children">
+          <ng-container [ngTemplateOutlet]="level" [ngTemplateOutletContext]="{ $implicit: item.items, depth: depth + 1 }" />
+        </div>
+      }
+    </div>
+  }
+</ng-template>
+
+<ng-container [ngTemplateOutlet]="level" [ngTemplateOutletContext]="{ $implicit: items(), depth: 0 }" />

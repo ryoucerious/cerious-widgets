@@ -4,10 +4,14 @@
 .cw-table-menu-bar {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background: $grid-menubar-background;
-    padding: .25rem;
+    padding: 6px 8px;
     height: auto; /* Allow height to adjust based on content */
     min-height: 30px; /* Optional: Set a minimum height */
+    // No divider under the toolbar in the mockup — the table box's own top
+    // border provides the separation, with a small gap.
+    margin-bottom: 6px;
 
     .table-menu-bar-left {
         display: flex;

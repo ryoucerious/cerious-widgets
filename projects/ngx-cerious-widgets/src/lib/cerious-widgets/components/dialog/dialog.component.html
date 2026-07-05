@@ -1,0 +1,18 @@
+<ng-template #panel>
+  <div class="cw-dialog__panel" role="dialog" aria-modal="true" [attr.aria-label]="header() || null" [style.width]="width()" cdkTrapFocus cdkTrapFocusAutoCapture>
+    <div class="cw-dialog__header">
+      <span class="cw-dialog__title">{{ header() }}</span>
+      @if (closable()) {
+        <button type="button" class="cw-dialog__close" aria-label="Close" (click)="close()">
+          <span class="cw-dialog__close-x" aria-hidden="true"></span>
+        </button>
+      }
+    </div>
+    <div class="cw-dialog__body">
+      <ng-content />
+    </div>
+    <div class="cw-dialog__footer">
+      <ng-content select="[cwDialogFooter]" />
+    </div>
+  </div>
+</ng-template>

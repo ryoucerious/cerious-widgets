@@ -1,0 +1,35 @@
+:host {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  padding-top: 0.5rem;
+  font-family: var(--cw-font);
+}
+
+// Give the projected control room and full width.
+:host ::ng-deep > input,
+:host ::ng-deep > textarea,
+:host ::ng-deep > select,
+:host ::ng-deep > .cw-input {
+  width: 100%;
+}
+
+.cw-float-label__label {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 0.25rem;
+  color: var(--cw-text-muted);
+  font-size: 0.875rem;
+  pointer-events: none;
+  transition: top 0.14s ease, font-size 0.14s ease, color 0.14s ease;
+  background: var(--cw-surface);
+}
+
+.cw-float-label__label--floated {
+  top: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--cw-accent);
+}

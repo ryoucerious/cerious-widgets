@@ -1,14 +1,26 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { GridBodyComponent } from './grid-body.component';
-import { ElementRef, NgZone } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { Subject } from 'rxjs';
+import { CeriousScrollDirective } from '@ceriousdevtech/ngx-cerious-scroll';
+
+// Stub for the cerious-scroll engine. A *unit* test for GridBodyComponent must
+// not mount the real virtual-scroll directive: it performs DOM measurement and
+// scheduling against the live element, which is both out of scope here and (on a
+// detached test element) destabilises the headless browser. This stub matches
+// the directive's selector and the inputs/outputs the template binds.
+@Directive({ selector: '[ceriousScroll]', standalone: true })
+class StubCeriousScrollDirective {
+  @Input() ceriousScrollItems: any;
+  @Input() ceriousScrollItemTemplate: any;
+  @Input() ceriousScrollOptions: any;
+  @Output() ceriousScrollReady = new EventEmitter<any>();
+  recalculate(): void {}
+}
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
 import { GRID_COLUMN_SERVICE } from '../../tokens/grid-column-service.token';
 import { ZonelessCompatService } from '../../../shared/services/zoneless-compat.service';
-import { GridFooterComponent } from '../grid-footer/grid-footer.component';
-import { GridFillerRowColumnComponent } from '../grid-filler-row-column/grid-filler-row-column.component';
-import { GridHeaderComponent } from '../grid-header/grid-header.component';
 
 // Mocks and stubs
 const mockGridService = {
@@ -48,6 +60,9 @@ const mockGridService = {
   afterResize: new Subject<void>(),
   afterGroupBy: new Subject<void>(),
   afterRender: new Subject<void>(),
+  selectedRowsChange: new Subject<void>(),
+  afterColumnResize: new Subject<void>(),
+  afterCellEdit: new Subject<void>(),
   updateGridHeight: jasmine.createSpy('updateGridHeight')
 };
 
@@ -67,6 +82,7 @@ class MockElementRef {
     scrollHeight: 100,
     scrollWidth: 100,
     getBoundingClientRect: () => ({ height: 100, width: 100 }),
+    querySelector: () => null,
     set scrollTop(val: number) {},
     set scrollLeft(val: number) {}
   };
@@ -75,7 +91,6 @@ class MockElementRef {
 describe('GridBodyComponent', () => {
   let component: GridBodyComponent;
   let fixture: ComponentFixture<GridBodyComponent>;
-  let zone: NgZone;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -91,7 +106,12 @@ describe('GridBodyComponent', () => {
       ]
     })
       .overrideComponent(GridBodyComponent, {
-        set: {
+        // Swap the real virtual-scroll engine for the lightweight stub, and
+        // provide the service mocks at the component level. (set/add cannot be
+        // combined in a single override, so everything goes through add/remove.)
+        remove: { imports: [CeriousScrollDirective] },
+        add: {
+          imports: [StubCeriousScrollDirective],
           providers: [
             { provide: GRID_SERVICE, useValue: mockGridService },
             { provide: GRID_COLUMN_SERVICE, useValue: mockGridColumnService },
@@ -110,17 +130,15 @@ describe('GridBodyComponent', () => {
   });
 
   afterEach(() => {
+    // Destroy the fixture so the mounted CeriousScrollDirective tears down its
+    // requestAnimationFrame loop. Without this, every spec leaks a live rAF loop
+    // and the accumulation eventually starves the headless browser's event loop.
+    fixture?.destroy();
+
     // Reset spies and subjects
     Object.values(mockGridService.grid).forEach((emitter: any) => emitter.emit.calls?.reset?.());
     mockGridScrollService.scrollGrid.calls.reset();
     mockGridColumnService.flattenColumns.calls.reset();
-    
-    // Clean up any scroll timeouts
-    if (component['scrollTimeout']) {
-      clearTimeout(component['scrollTimeout']);
-      component['scrollTimeout'] = null;
-    }
-    component['isWheelScrolling'] = false;
   });
 
   it('should create', () => {
@@ -204,17 +222,16 @@ describe('GridBodyComponent', () => {
     expect(mockGridService.grid.rowKeyup.emit).toHaveBeenCalled();
   });
 
-  it('should call gridScrollService.scrollGrid on scrollGrid', () => {
-    const event = { target: { scrollTop: 10, scrollLeft: 5 } };
-    component.scrollGrid(event);
-    expect(mockGridScrollService.scrollGrid).toHaveBeenCalled();
-  });
+  it('should capture the scroller instance on onScrollerReady', () => {
+    const mockScroller = { recalculate: jasmine.createSpy('recalculate') };
+    component.tableBody = {
+      nativeElement: { querySelector: () => null }
+    } as any;
+    spyOn(component as any, 'applyHorizontalOffset');
 
-  it('should determine if filler rows should be shown', () => {
-    component.totalHeight = 50;
-    expect(component.shouldShowFillerRows()).toBeTrue();
-    component.totalHeight = 150;
-    expect(component.shouldShowFillerRows()).toBeFalse();
+    component.onScrollerReady(mockScroller);
+
+    expect((component as any).scroller).toBe(mockScroller);
   });
 
   it('should toggle group collapse and update expandedGroups', fakeAsync(() => {
@@ -224,205 +241,30 @@ describe('GridBodyComponent', () => {
     component.gridDataset.groupByData = [
       { key: 'group1', rows: [{ id: '1', nestedExpanded: false }] }
     ];
-    spyOn(component as any, 'calculateTotalHeight');
-    spyOn(component as any, 'updateVisibleRows');
+    spyOn(component as any, 'flattenData');
     component.toggleGroupCollapse('group1');
     tick();
     expect(component.expandedGroups['group1']).toBeTrue();
     expect(component.expandedGroupData['group1']).toBeDefined();
-    expect((component as any).calculateTotalHeight).toHaveBeenCalled();
-    expect((component as any).updateVisibleRows).toHaveBeenCalled();
+    expect((component as any).flattenData).toHaveBeenCalled();
   }));
 
-  it('should call updateRowHeight on toggleNestedRow', () => {
-    component.nestedRowComponents = {
-      toArray: () => [{ el: { nativeElement: { getBoundingClientRect: () => ({ height: 42 }) } } }]
-    } as any;
-    spyOn(component, 'updateRowHeight');
-    component.startIndex = 0;
-    component.toggleNestedRow({ id: '1' } as any, 0);
-    expect(component.updateRowHeight).toHaveBeenCalledWith(0, 42, true);
-  });
+  it('should recalculate the scroller on toggleNestedRow', fakeAsync(() => {
+    const recalculate = jasmine.createSpy('recalculate');
+    (component as any).ceriousScroll = { recalculate };
+    spyOn(component as any, 'applyHorizontalOffset');
 
-  it('should track row by id or index', () => {
-    expect(component.trackByRow(1, { id: 'abc' } as any)).toBe('abc');
+    component.toggleNestedRow({ id: '1' } as any);
+    tick();
+
+    expect(recalculate).toHaveBeenCalled();
+    expect((component as any).applyHorizontalOffset).toHaveBeenCalled();
+  }));
+
+  it('should track row by row id, group key, or index', () => {
+    expect(component.trackByRow(1, { row: { id: 'abc' } } as any)).toBe('abc');
+    expect(component.trackByRow(3, { isGroup: true, key: 'g1' } as any)).toBe('g:g1');
     expect(component.trackByRow(2, {} as any)).toBe(2);
-  });
-
-  it('should update row height and recalculate', () => {
-    spyOn(component as any, 'calculateTotalHeight');
-    spyOn(component as any, 'updateVisibleRows');
-    component.rowHeights.clear();
-    component.updateRowHeight(1, 55);
-    expect(component.rowHeights.get(1)).toBe(55);
-    expect((component as any).calculateTotalHeight).toHaveBeenCalled();
-    expect((component as any).updateVisibleRows).toHaveBeenCalled();
-  });
-
-  it('should handle wheel events and call scrollGrid with raw deltas', fakeAsync(() => {
-    const event = new WheelEvent('wheel', { deltaY: 100, deltaX: 50 });
-    spyOn(event, 'preventDefault');
-    spyOn(event, 'stopPropagation');
-    spyOn(component, 'scrollGrid');
-    
-    // Mock the tableBody element
-    const mockElement = {
-      scrollLeft: 0,
-      scrollTop: 0,
-      scrollHeight: 1000,
-      clientHeight: 300,
-      scrollWidth: 1000,
-      clientWidth: 300
-    };
-    component.tableBody = { nativeElement: mockElement } as any;
-    
-    component.wheelGrid(event);
-    
-    expect(event.preventDefault).toHaveBeenCalled();
-    expect(event.stopPropagation).toHaveBeenCalled();
-    expect(component.scrollGrid).toHaveBeenCalledWith({
-      target: {
-        scrollLeft: 50, // deltaX applied directly
-        scrollTop: 100  // deltaY applied directly
-      }
-    });
-    
-    // Advance time to clear debouncing
-    tick(60);
-  }));
-
-  it('should handle vertical-only wheel scrolling', fakeAsync(() => {
-    const event = new WheelEvent('wheel', { deltaY: 120, deltaX: 0 });
-    spyOn(event, 'preventDefault');
-    spyOn(event, 'stopPropagation');
-    spyOn(component, 'scrollGrid');
-    
-    const mockElement = {
-      scrollLeft: 100,
-      scrollTop: 200,
-      scrollHeight: 1000,
-      clientHeight: 300,
-      scrollWidth: 1000,
-      clientWidth: 300
-    };
-    component.tableBody = { nativeElement: mockElement } as any;
-    
-    component.wheelGrid(event);
-    
-    expect(event.preventDefault).toHaveBeenCalled();
-    expect(event.stopPropagation).toHaveBeenCalled();
-    expect(component.scrollGrid).toHaveBeenCalledWith({
-      target: {
-        scrollLeft: 100, // unchanged (no deltaX)
-        scrollTop: 320   // 200 + 120
-      }
-    });
-    
-    // Advance time to clear debouncing
-    tick(60);
-  }));
-
-  it('should prevent rapid wheel events with debouncing', fakeAsync(() => {
-    const event1 = new WheelEvent('wheel', { deltaY: 100, deltaX: 0 });
-    const event2 = new WheelEvent('wheel', { deltaY: 100, deltaX: 0 });
-    const event3 = new WheelEvent('wheel', { deltaY: 100, deltaX: 0 });
-    spyOn(event1, 'preventDefault');
-    spyOn(event2, 'preventDefault');
-    spyOn(event3, 'stopPropagation');
-    spyOn(component, 'scrollGrid');
-    
-    const mockElement = {
-      scrollLeft: 0,
-      scrollTop: 0,
-      scrollHeight: 1000,
-      clientHeight: 300,
-      scrollWidth: 1000,
-      clientWidth: 300
-    };
-    component.tableBody = { nativeElement: mockElement } as any;
-    
-    // First wheel event should work
-    component.wheelGrid(event1);
-    expect(component.scrollGrid).toHaveBeenCalledTimes(1);
-    expect(component['isWheelScrolling']).toBe(true);
-    
-    // Second wheel event should be blocked by debouncing
-    component.wheelGrid(event2);
-    expect(component.scrollGrid).toHaveBeenCalledTimes(1); // Still only 1 call
-    
-    // Advance time to clear the debouncing timeout
-    tick(60);
-    expect(component['isWheelScrolling']).toBe(false);
-    
-    // Now the third event should work
-    component.wheelGrid(event3);
-    expect(component.scrollGrid).toHaveBeenCalledTimes(2);
-    
-    // Clean up any remaining timers
-    tick(60);
-  }));
-
-  it('should respect scroll bounds in wheel events', fakeAsync(() => {
-    const event = new WheelEvent('wheel', { deltaY: 1000, deltaX: 1000 });
-    spyOn(event, 'preventDefault');
-    spyOn(component, 'scrollGrid');
-    
-    const mockElement = {
-      scrollLeft: 600, // Near right edge
-      scrollTop: 600,  // Near bottom edge
-      scrollHeight: 700, // Max scroll top = 700 - 200 = 500
-      clientHeight: 200,
-      scrollWidth: 800,  // Max scroll left = 800 - 300 = 500
-      clientWidth: 300
-    };
-    component.tableBody = { nativeElement: mockElement } as any;
-    
-    component.wheelGrid(event);
-    
-    expect(component.scrollGrid).toHaveBeenCalledWith({
-      target: {
-        scrollLeft: 500, // Clamped to max (800 - 300)
-        scrollTop: 500   // Clamped to max (700 - 200)
-      }
-    });
-    
-    tick(60);
-  }));
-
-  it('should not scroll when there is no change', fakeAsync(() => {
-    const event = new WheelEvent('wheel', { deltaY: 0, deltaX: 0 });
-    spyOn(event, 'preventDefault');
-    spyOn(component, 'scrollGrid');
-    
-    const mockElement = {
-      scrollLeft: 100,
-      scrollTop: 100,
-      scrollHeight: 1000,
-      clientHeight: 300,
-      scrollWidth: 1000,
-      clientWidth: 300
-    };
-    component.tableBody = { nativeElement: mockElement } as any;
-    
-    component.wheelGrid(event);
-    
-    // Should not prevent default or call scrollGrid for zero deltas
-    expect(event.preventDefault).not.toHaveBeenCalled();
-    expect(component.scrollGrid).not.toHaveBeenCalled();
-    
-    tick(60);
-  }));
-
-  it('should calculate total height for flat rows', () => {
-    component.rowHeights.set('1', 20);
-    component.rowHeights.set('2', 30);
-    component.gridDataset.groupByData = [];
-    component.gridDataset.bodyRows = [
-      { id: '1', nestedExpanded: false, row: {}, columnDefs: [] },
-      { id: '2', nestedExpanded: false, row: {}, columnDefs: [] }
-    ];
-    (component as any).calculateTotalHeight();
-    expect(component.totalHeight).toBe(0);
   });
 
   it('should flatten data for groupByData', () => {
@@ -431,49 +273,18 @@ describe('GridBodyComponent', () => {
     ];
     component.expandedGroups = { g1: true };
     (component as any).flattenData();
-    expect((component as any).flattenedRows.length).toBeGreaterThan(0);
+    expect(component.flattenedRows.length).toBeGreaterThan(0);
   });
 
-  it('should update visible rows', () => {
-    (component as any).flattenedRows = [
-      { id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }, { id: '5' }, { id: '6' }
-    ];
-    component.rowHeights.set('1', 10);
-    component.rowHeights.set('2', 10);
-    component.rowHeights.set('3', 10);
-    component.rowHeights.set('4', 10);
-    component.rowHeights.set('5', 10);
-    component.rowHeights.set('6', 10);
-    // Mock tableBody.nativeElement
-    component.tableBody = {
-      nativeElement: {
-        clientHeight: 30,
-        scrollTop: 0
-      }
-    } as any;
-    (component as any).windowedRows = (component as any).flattenedRows;
-    (component as any).updateThrottleMs = 0;
-    (component as any).updateVisibleRows();
-    expect(component.visibleRows.length).toBeGreaterThan(0);
-  });
-
-  it('should unsubscribe, disconnect, and cleanup timeout on destroy', () => {
+  it('should unsubscribe and call super on destroy', () => {
     const sub1 = { unsubscribe: jasmine.createSpy('unsubscribe') };
     const sub2 = { unsubscribe: jasmine.createSpy('unsubscribe') };
-    const obs1 = { disconnect: jasmine.createSpy('disconnect') };
     component['subscriptions'] = [sub1 as any, sub2 as any];
-    component['resizeObservers'] = [obs1 as any];
-    
-    // Set up a scroll timeout
-    component['scrollTimeout'] = setTimeout(() => {}, 1000);
-    spyOn(window, 'clearTimeout');
-    
+
     component.ngOnDestroy();
-    
+
     expect(sub1.unsubscribe).toHaveBeenCalled();
     expect(sub2.unsubscribe).toHaveBeenCalled();
-    expect(obs1.disconnect).toHaveBeenCalled();
-    expect(clearTimeout).toHaveBeenCalled();
   });
 
   describe('Zoneless Compatibility', () => {
@@ -483,9 +294,9 @@ describe('GridBodyComponent', () => {
 
     it('should call super.ngOnDestroy()', () => {
       const superSpy = spyOn(Object.getPrototypeOf(Object.getPrototypeOf(component)), 'ngOnDestroy');
-      
+
       component.ngOnDestroy();
-      
+
       expect(superSpy).toHaveBeenCalled();
     });
   });

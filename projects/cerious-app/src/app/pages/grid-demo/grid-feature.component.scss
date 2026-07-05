@@ -1,0 +1,36 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.grid-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 1.5rem 1.75rem;
+}
+
+.grid-page__header {
+  margin-bottom: 1.25rem;
+}
+
+.grid-page__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--cw-text);
+}
+
+.grid-page__desc {
+  margin: 0;
+  max-width: 70ch;
+  color: var(--cw-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.grid-page__grid {
+  flex: 1;
+  min-height: 0;
+}

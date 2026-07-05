@@ -1,0 +1,18 @@
+<label class="cw-radio-button__wrapper">
+  <input
+    type="radio"
+    class="cw-radio-button__input"
+    [name]="name()"
+    [checked]="checked()"
+    [disabled]="isDisabled()"
+    (change)="onInputChange()"
+    (blur)="onTouched()"
+  />
+  <span class="cw-radio-button__circle" aria-hidden="true">
+    <span class="cw-radio-button__dot"></span>
+  </span>
+  @if (label()) {
+    <span class="cw-radio-button__label">{{ label() }}</span>
+  }
+  <ng-content />
+</label>

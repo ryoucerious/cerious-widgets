@@ -1,0 +1,22 @@
+<label class="cw-checkbox__wrapper">
+  <input
+    type="checkbox"
+    class="cw-checkbox__input"
+    [checked]="checked()"
+    [disabled]="isDisabled()"
+    [indeterminate]="showIndeterminate()"
+    (change)="onInputChange($event)"
+    (blur)="onTouched()"
+  />
+  <span class="cw-checkbox__box" aria-hidden="true">
+    @if (showIndeterminate()) {
+      <span class="cw-checkbox__dash"></span>
+    } @else {
+      <span class="cw-checkbox__check"></span>
+    }
+  </span>
+  @if (label()) {
+    <span class="cw-checkbox__label">{{ label() }}</span>
+  }
+  <ng-content />
+</label>

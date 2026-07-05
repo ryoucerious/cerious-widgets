@@ -70,7 +70,7 @@
 // ============================
 // chevron symbols
 // ============================
-@mixin chevron($direction: right, $size: 8px, $thickness: 2px, $color: $light-100) {
+@mixin chevron($direction: right, $size: 8px, $thickness: 2px, $color: var(--cw-text-muted)) {
   display: inline-block;
   width: $size;
   height: $size;

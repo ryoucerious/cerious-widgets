@@ -1,0 +1,14 @@
+<ol class="cw-breadcrumb__list">
+  @for (item of items(); track $index; let last = $last) {
+    <li class="cw-breadcrumb__item">
+      @if (item.url && !last) {
+        <a class="cw-breadcrumb__link" [href]="item.url">{{ item.label }}</a>
+      } @else {
+        <span class="cw-breadcrumb__current" [attr.aria-current]="last ? 'page' : null">{{ item.label }}</span>
+      }
+      @if (!last) {
+        <span class="cw-breadcrumb__separator" aria-hidden="true"></span>
+      }
+    </li>
+  }
+</ol>

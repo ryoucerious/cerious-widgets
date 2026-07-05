@@ -61,7 +61,7 @@ describe("scrollGrid", () => {
     mockGridOptions = {} as GridOptions;
 
     mockGridHeader = jasmine.createSpyObj("IGridHeaderComponent", [], {
-      tableHead: { nativeElement: { scrollLeft: 0 } },
+      tableHead: { nativeElement: { scrollLeft: 0, style: { setProperty: () => {} } } },
     });
     mockGridBody = jasmine.createSpyObj("IGridBodyComponent", [], {
       tableBody: {
@@ -72,6 +72,10 @@ describe("scrollGrid", () => {
           clientWidth: 700,
           scrollTop: 0,
           scrollLeft: 0,
+          // The horizontal-sync hot path caches the cerious-scroll content
+          // element via querySelector; no virtual content in the mock.
+          querySelector: () => null,
+          style: { setProperty: () => {} },
         },
       },
     });
@@ -79,7 +83,7 @@ describe("scrollGrid", () => {
       el: { nativeElement: {} },
     });
     mockGridFooter = jasmine.createSpyObj("IGridFooterComponent", [], {
-      tableFooter: { nativeElement: { scrollLeft: 0 } },
+      tableFooter: { nativeElement: { scrollLeft: 0, style: { setProperty: () => {} } } },
     });
   });
 
@@ -99,7 +103,10 @@ describe("scrollGrid", () => {
     expect(mockGridColumnService.updatePinnedColumnPos).not.toHaveBeenCalled();
   });
 
-  it("should clamp scrollDelta values within valid bounds", () => {
+  it("should clamp the horizontal scrollDelta within valid bounds", () => {
+    // maxScrollLeft = scrollWidth(800) - clientWidth(700) = 100.
+    // Vertical scrolling is now owned by the cerious-scroll engine, so `top`
+    // is left untouched by the service.
     service.scrollGrid(
       mockEvent,
       { top: 600, left: 900 },
@@ -111,10 +118,10 @@ describe("scrollGrid", () => {
       true,
       10
     );
-    expect(service.scrollDelta).toEqual({ top: 100, left: 90 });
+    expect(service.scrollDelta).toEqual({ top: 0, left: 100 });
   });
 
-  it("should update scroll positions of grid elements", () => {
+  it("should sync horizontal scroll position of header and footer", () => {
     service.scrollGrid(
       mockEvent,
       mockDelta,
@@ -127,13 +134,15 @@ describe("scrollGrid", () => {
       10
     );
 
-    expect(mockGridBody.tableBody.nativeElement.scrollLeft).toBe(90);
-    expect(mockGridBody.tableBody.nativeElement.scrollTop).toBe(50);
-    expect(mockGridHeader.tableHead.nativeElement.scrollLeft).toBe(90);
-    expect(mockGridFooter.tableFooter.nativeElement.scrollLeft).toBe(90);
+    // left clamps to maxScrollLeft (100); header/footer mirror it horizontally.
+    expect(mockGridHeader.tableHead.nativeElement.scrollLeft).toBe(100);
+    expect(mockGridFooter.tableFooter.nativeElement.scrollLeft).toBe(100);
+    // The body no longer scrolls vertically through this service.
+    expect(mockGridBody.tableBody.nativeElement.scrollTop).toBe(0);
   });
 
-  it("should call updatePinnedColumnPos with correct arguments", () => {
+  it("should no longer drive pinned columns from the scroll service", () => {
+    // Pinned-column positioning moved into GridBodyComponent.applyHorizontalOffset.
     service.scrollGrid(
       mockEvent,
       mockDelta,
@@ -146,13 +155,7 @@ describe("scrollGrid", () => {
       10
     );
 
-    expect(mockGridColumnService.updatePinnedColumnPos).toHaveBeenCalledWith(
-      mockGridHeader,
-      mockGridBody,
-      mockGridFooter,
-      mockGridOptions,
-      mockDelta
-    );
+    expect(mockGridColumnService.updatePinnedColumnPos).not.toHaveBeenCalled();
   });
 
   it("should emit afterScroll event", (done) => {

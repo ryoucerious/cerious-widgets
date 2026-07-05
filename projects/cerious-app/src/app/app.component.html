@@ -1,85 +1,39 @@
-<div style="height: 100vh; display: flex; flex-direction: column;" class="border-red-200">
-  <!-- Live Performance Metrics Bar -->
-  <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px 14px; background: #0f172a; color: #e2e8f0; border-bottom: 1px solid #1e293b; font-family: system-ui, sans-serif;">
-
-    <!-- FPS (primary metric) -->
-    <div style="display: flex; align-items: baseline; gap: 6px; padding: 4px 12px; background: #111827; border-radius: 8px; min-width: 96px;">
-      <span style="font-size: 26px; font-weight: 700; line-height: 1;" [style.color]="fpsColor(metrics.fps)">{{ metrics.fps }}</span>
-      <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7;">FPS</span>
+<div class="app">
+  <header class="app__topbar">
+    <a class="app__brand" routerLink="/">cerious<span>widgets</span></a>
+    <div class="app__themes" role="group" aria-label="Theme">
+      @for (t of themes; track t.id) {
+        <button type="button" class="app__theme" [class.app__theme--active]="theme === t.id" (click)="setTheme(t.id)">
+          {{ t.label }}
+        </button>
+      }
     </div>
+  </header>
 
-    <!-- FPS avg / min -->
-    <div style="display: flex; flex-direction: column; line-height: 1.25; font-size: 12px;">
-      <span>Avg <strong [style.color]="fpsColor(metrics.avgFps)">{{ metrics.avgFps }}</strong></span>
-      <span>Min <strong [style.color]="fpsColor(metrics.minFps)">{{ metrics.minFps }}</strong></span>
-    </div>
+  <div class="app__body">
+    <nav class="app__sidebar">
+      <a class="app__navlink" routerLink="/" routerLinkActive="app__navlink--active"
+         [routerLinkActiveOptions]="{ exact: true }">Overview</a>
 
-    <div style="width: 1px; height: 32px; background: #1e293b;"></div>
+      @for (grp of groups; track grp.group) {
+        <div class="app__navgroup">{{ grp.group }}</div>
+        @for (item of grp.items; track item.path) {
+          @if (item.children?.length) {
+            <a class="app__navlink app__navlink--parent" [routerLink]="item.path" routerLinkActive="app__navlink--active">{{ item.name }}</a>
+            <div class="app__navchildren">
+              @for (child of item.children; track child.path) {
+                <a class="app__navlink app__navlink--child" [routerLink]="child.path" routerLinkActive="app__navlink--active">{{ child.name }}</a>
+              }
+            </div>
+          } @else {
+            <a class="app__navlink" [routerLink]="item.path" routerLinkActive="app__navlink--active">{{ item.name }}</a>
+          }
+        }
+      }
+    </nav>
 
-    <!-- Rendered DOM rows (virtualization efficiency) -->
-    <div style="text-align: center; min-width: 78px;">
-      <div style="font-size: 18px; font-weight: 600;">{{ metrics.renderedRows }}</div>
-      <div style="font-size: 11px; opacity: 0.7;">Rendered Rows</div>
-    </div>
-
-    <!-- Total rows -->
-    <div style="text-align: center; min-width: 90px;">
-      <div style="font-size: 18px; font-weight: 600;">{{ getDatasetSize() }}</div>
-      <div style="font-size: 11px; opacity: 0.7;">Total Rows</div>
-    </div>
-
-    <!-- Scroll position -->
-    <div style="text-align: center; min-width: 70px;">
-      <div style="font-size: 18px; font-weight: 600;">{{ metrics.scrollPercent }}%</div>
-      <div style="font-size: 11px; opacity: 0.7;">Scroll Pos</div>
-    </div>
-
-    <!-- Memory -->
-    <div style="text-align: center; min-width: 84px;"
-         title="{{ metrics.memoryUsed < 1 ? 'Estimated. Use Chrome with --enable-precise-memory-info for accuracy.' : 'Actual JS heap usage from Performance API' }}">
-      <div style="font-size: 18px; font-weight: 600;">{{ metrics.memoryUsed.toFixed(0) }}<span style="font-size: 12px; opacity: 0.7;"> MB</span></div>
-      <div style="font-size: 11px; opacity: 0.7;">JS Heap</div>
-    </div>
-
-    <!-- Change detection mode -->
-    <div style="text-align: center; min-width: 90px;"
-         title="{{ isZonelessMode ? 'Running in zoneless mode' : 'Running with Zone.js change detection' }}">
-      <div style="font-size: 16px; font-weight: 600;">{{ changeDetectionIcon }} {{ changeDetectionMode }}</div>
-      <div style="font-size: 11px; opacity: 0.7;">Change Detection</div>
-    </div>
-
-    <!-- Controls -->
-    <div style="display: flex; gap: 6px; margin-left: auto; align-items: center;">
-      <button (click)="runFpsStressTest()" [disabled]="stressTesting"
-              style="padding: 6px 12px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;"
-              [style.opacity]="stressTesting ? '0.6' : '1'">
-        {{ stressTesting ? 'Testing…' : 'FPS Stress Test' }}
-      </button>
-      <button (click)="resetFps()"
-              style="padding: 6px 12px; background: #334155; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">
-        Reset
-      </button>
-      <button (click)="getCurrentMemoryUsage()"
-              style="padding: 6px 12px; background: #334155; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">
-        Check Memory
-      </button>
-      <span style="font-size: 11px; opacity: 0.6; margin: 0 4px;">Scroll:</span>
-      <button (click)="scrollToPosition(0)" style="padding: 5px 9px; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; border-radius: 5px; cursor: pointer; font-size: 12px;">Top</button>
-      <button (click)="scrollToPosition(0.25)" style="padding: 5px 9px; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; border-radius: 5px; cursor: pointer; font-size: 12px;">25%</button>
-      <button (click)="scrollToPosition(0.5)" style="padding: 5px 9px; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; border-radius: 5px; cursor: pointer; font-size: 12px;">50%</button>
-      <button (click)="scrollToPosition(0.75)" style="padding: 5px 9px; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; border-radius: 5px; cursor: pointer; font-size: 12px;">75%</button>
-      <button (click)="scrollToPosition(1)" style="padding: 5px 9px; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; border-radius: 5px; cursor: pointer; font-size: 12px;">Bottom</button>
-    </div>
+    <main class="app__content">
+      <router-outlet />
+    </main>
   </div>
-
-  <!-- Grid Container -->
-    <cw-grid #grid
-        [gridOptions]="gridOptions"
-        [data]="data">
-        <ng-template #headerTemplate>
-          <div style="padding-left: 10px;">
-            <h3>Cerious Grid - 1 Million Row Performance Demo</h3>
-          </div>
-        </ng-template>
-    </cw-grid>
 </div>

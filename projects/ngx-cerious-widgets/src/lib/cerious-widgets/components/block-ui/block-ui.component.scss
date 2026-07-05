@@ -1,0 +1,31 @@
+:host {
+  position: relative;
+  display: block;
+  font-family: var(--cw-font);
+}
+
+.cw-block-ui__mask {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--cw-surface) 62%, transparent);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  color: var(--cw-text);
+  animation: cw-block-ui-in 0.12s ease-out;
+}
+
+@keyframes cw-block-ui-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-block-ui__mask { animation: none; }
+}
