@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
 import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
+import { InputTextDirective } from '../../../components/input-text/input-text.directive';
 
 import { ColumnFormat, ColumnType } from '../../enums';
 import { ColumnDef } from '../../interfaces/column-def';
@@ -42,7 +43,7 @@ function getCurrencyFormatter(locale = 'en-US', currency = 'USD'): Intl.NumberFo
   templateUrl: './grid-row-column.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule]
+  imports: [CommonModule, InputTextDirective]
 })
 export class GridRowColumnComponent extends ZonelessCompatibleComponent implements IGridRowColumnComponent {
 

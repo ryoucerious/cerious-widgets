@@ -1,0 +1,91 @@
+<doc-page slug="grid">
+  <doc-tab label="Features">
+    <p class="grid-intro">
+      The Grid is the flagship of cerious-widgets — a virtualized data grid with sorting, filtering,
+      grouping, pinning, selection, inline editing, custom cell templates, pagination and Excel export.
+      Behaviour is configured through <code>gridOptions</code>, columns opt into capabilities via their
+      <code>ColumnDef</code>, and larger features (filtering, export, column menu…) are opt-in
+      <strong>plugins</strong> you register once at bootstrap. Pick a feature below:
+    </p>
+
+    <nav class="feature-tabs" role="tablist" aria-label="Grid features">
+      @for (f of features; track f.id) {
+        <button
+          type="button"
+          role="tab"
+          class="feature-tab"
+          [class.feature-tab--active]="activeFeature() === f.id"
+          [attr.aria-selected]="activeFeature() === f.id"
+          (click)="selectFeature(f.id)"
+        >{{ f.label }}</button>
+      }
+    </nav>
+
+    <div class="feature-body">
+      <h3 class="feature-title">{{ current().title }}</h3>
+      <p class="feature-blurb">{{ current().blurb }}</p>
+
+      <div class="grid-stage">
+        @if (gridVisible()) {
+          <cw-grid [data]="config().data" [gridOptions]="config().options" [pluginOptions]="config().plugins" [bodyClasses]="config().bodyClasses">
+            <ng-template #statusTemplate let-value="value">
+              <cw-tag [value]="value" [severity]="statusSeverity(value)" />
+            </ng-template>
+          </cw-grid>
+        }
+      </div>
+
+      <doc-code [code]="current().code" />
+    </div>
+  </doc-tab>
+
+  <doc-tab label="Plugins">
+    <p class="grid-intro">
+      The Grid's heavier features are <strong>plugins</strong> — self-contained units built on the shared
+      <code>WidgetPlugin</code> contract and wired up by the <code>PluginManagerService</code>. Register the
+      ones you need once at bootstrap; each page then turns on what it wants through <code>pluginOptions</code>
+      (a plugin is inert until enabled). This keeps the core grid small and lets you tree-shake what you don't use.
+    </p>
+
+    <doc-code [code]="registerCode" />
+
+    <h3 class="grid-heading">Built-in plugins</h3>
+    <div class="plugin-scroll">
+      <table class="plugin-table">
+        <thead><tr><th>Plugin</th><th>Register</th><th>What it does</th><th>pluginOptions</th></tr></thead>
+        <tbody>
+          @for (p of plugins; track p.name) {
+            <tr>
+              <td><strong>{{ p.name }}</strong></td>
+              <td><code>{{ p.registered }}</code></td>
+              <td>{{ p.purpose }}</td>
+              <td><code class="plugin-config">{{ p.config }}</code></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p class="grid-note">
+      Writing your own plugin? Implement <code>WidgetPlugin&lt;GridApi&gt;</code> (as <code>GridPlugin</code>),
+      register it in <code>forRoot()</code> with a <code>plugins</code> array, and drive it via <code>pluginOptions</code>
+      — the same mechanism the built-ins use.
+    </p>
+  </doc-tab>
+
+  <doc-tab label="API">
+    <doc-section title="cw-grid inputs">
+      <doc-api [props]="gridProps" />
+    </doc-section>
+    <doc-section title="GridOptions">
+      <doc-api [props]="optionProps" />
+    </doc-section>
+    <doc-section title="ColumnDef">
+      <doc-api [props]="columnProps" />
+    </doc-section>
+  </doc-tab>
+
+  <doc-tab label="Theming">
+    <doc-theming [tokens]="themeTokens" />
+  </doc-tab>
+</doc-page>

@@ -14,6 +14,14 @@ body {
 
 a { color: inherit; }
 
+/* The Grid feature demos put one grid on a "stage" whose body is sized to the
+   window (the grid's height:'auto' math assumes a full-page grid, so we size the
+   body directly). calc() makes it scale with the viewport. */
+.cw-grid-stage-body {
+  height: calc(100vh - 22rem);
+  min-height: 320px;
+}
+
 /* Frost theme: give the showcase's own glass surfaces a subtle blur so they read
    as frosted panels rather than flat fills. */
 [data-cw-theme='frost'] {

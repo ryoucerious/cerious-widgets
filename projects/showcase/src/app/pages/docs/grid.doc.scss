@@ -1,0 +1,63 @@
+:host { display: block; }
+
+.grid-intro {
+  margin: 0 0 1.5rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--cw-text);
+  max-width: 68ch;
+}
+.grid-intro code,
+.grid-note code { color: var(--cw-primary); font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 0.85em; }
+
+/* Feature tab bar */
+.feature-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--cw-border);
+}
+.feature-tab {
+  appearance: none;
+  cursor: pointer;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 550;
+  font-family: var(--cw-font);
+  color: var(--cw-text-muted, var(--cw-text-secondary));
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: 999px;
+  transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+.feature-tab:hover { color: var(--cw-text); border-color: var(--cw-border-strong); }
+.feature-tab--active {
+  color: var(--cw-primary-contrast, #fff);
+  background: var(--cw-primary);
+  border-color: var(--cw-primary);
+}
+
+.feature-title { margin: 0 0 0.4rem; font-size: 1.3rem; font-weight: 650; color: var(--cw-text); }
+.feature-blurb { margin: 0 0 1.25rem; font-size: 0.975rem; line-height: 1.65; color: var(--cw-text-muted, var(--cw-text-secondary)); max-width: 68ch; }
+
+/* Grid stage — the single live grid, sized to the viewport so it scales. */
+.grid-stage {
+  width: 100%;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-lg);
+  background: var(--cw-surface);
+  overflow: hidden;
+}
+
+/* Plugins tab */
+.grid-heading { margin: 2rem 0 0.9rem; font-size: 1.1rem; font-weight: 650; color: var(--cw-text); }
+.plugin-scroll { overflow-x: auto; border: 1px solid var(--cw-border); border-radius: var(--cw-radius-lg); }
+.plugin-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.plugin-table th, .plugin-table td { text-align: left; padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--cw-border); vertical-align: top; color: var(--cw-text); }
+.plugin-table th { background: var(--cw-surface-sunken, var(--cw-surface-2)); color: var(--cw-text-muted, var(--cw-text-secondary)); font-weight: 600; }
+.plugin-table tr:last-child td { border-bottom: none; }
+.plugin-table code { font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 0.8rem; }
+.plugin-config { color: var(--cw-primary); white-space: pre-wrap; }
+.grid-note { margin-top: 1.25rem; color: var(--cw-text-muted, var(--cw-text-secondary)); font-size: 0.925rem; line-height: 1.65; max-width: 68ch; }

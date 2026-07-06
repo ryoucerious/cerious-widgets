@@ -131,9 +131,11 @@
   // Milky glass: high enough alpha that the card interior reads near-white
   // with a gentle lavender tint (mockup rows sample ~rgb(240, 232, 249)),
   // while the gradient still glows through at the edges.
-  --cw-surface-0:      rgba(255, 255, 255, 0.55);
-  --cw-surface-1:      rgba(255, 255, 255, 0.35);
-  --cw-surface-2:      rgba(255, 255, 255, 0.62);
+  // Lower alphas → more see-through frosted glass (the backdrop-blur keeps text
+  // readable while the gradient page shows through the panels and rows).
+  --cw-surface-0:      rgba(255, 255, 255, 0.38);
+  --cw-surface-1:      rgba(255, 255, 255, 0.22);
+  --cw-surface-2:      rgba(255, 255, 255, 0.46);
   --cw-surface:        var(--cw-surface-0);
   --cw-surface-sunken: transparent;
   --cw-surface-raised: var(--cw-surface-2);
