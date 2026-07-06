@@ -1,7 +1,7 @@
 <span class="cw-select__label" [class.cw-select__placeholder]="!selectedOption()">
   {{ selectedOption() ? selectedOption()!.label : placeholder() }}
 </span>
-<span class="cw-select__chevron" [class.cw-select__chevron--open]="isOpen()" aria-hidden="true">▾</span>
+<span class="cw-select__chevron" [class.cw-select__chevron--open]="isOpen()" aria-hidden="true"></span>
 
 <ng-template #panel>
   <ul class="cw-select__list" role="listbox">

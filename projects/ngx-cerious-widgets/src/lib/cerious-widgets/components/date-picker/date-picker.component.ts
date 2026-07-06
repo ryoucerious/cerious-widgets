@@ -23,6 +23,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 import { TemplateRegistryService } from '../../shared/services/template-registry.service';
 import { PluginManagerService } from '../../shared/services/plugin-manager.service';
+import { CW_LOCALE } from '../../shared/tokens/locale.token';
 import { WIDGETS_CONFIG } from '../../shared/tokens/widgets-config.token';
 import { resolveDatePickerConfig, WidgetsConfig } from '../../shared/interfaces/widgets-config.interface';
 import { DatePickerApi, DatePickerPlugin } from './date-picker.api';
@@ -83,6 +84,7 @@ export class DatePickerComponent implements ControlValueAccessor, AfterViewInit,
   private readonly templateRegistry = inject(TemplateRegistryService);
   private readonly pluginManager = inject(PluginManagerService);
   private readonly config = inject<WidgetsConfig>(WIDGETS_CONFIG, { optional: true }) ?? undefined;
+  private readonly appLocale = inject(CW_LOCALE);
 
   @ViewChild('panel', { static: true }) private panelTemplate!: TemplateRef<unknown>;
 
@@ -109,18 +111,21 @@ export class DatePickerComponent implements ControlValueAccessor, AfterViewInit,
 
   readonly isDisabled = computed(() => this.disabledInput() || this.cvaDisabled());
 
+  /** Per-instance `locale` input, else the app-wide `CW_LOCALE`, else browser default. */
+  private readonly effectiveLocale = computed(() => this.locale() || this.appLocale || undefined);
+
   readonly displayValue = computed(() => {
     const date = this.value();
-    return date ? date.toLocaleDateString(this.locale() || undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+    return date ? date.toLocaleDateString(this.effectiveLocale(), { year: 'numeric', month: 'short', day: 'numeric' }) : '';
   });
 
   readonly monthTitle = computed(() =>
-    this.viewDate().toLocaleDateString(this.locale() || undefined, { month: 'long', year: 'numeric' })
+    this.viewDate().toLocaleDateString(this.effectiveLocale(), { month: 'long', year: 'numeric' })
   );
 
   /** Localized weekday headers, honouring `firstDayOfWeek`. */
   readonly weekdays = computed(() => {
-    const format = new Intl.DateTimeFormat(this.locale() || undefined, { weekday: 'short' });
+    const format = new Intl.DateTimeFormat(this.effectiveLocale(), { weekday: 'short' });
     // 2024-09-01 was a Sunday.
     return Array.from({ length: 7 }, (_, i) =>
       format.format(new Date(2024, 8, 1 + ((i + this.firstDayOfWeek()) % 7)))

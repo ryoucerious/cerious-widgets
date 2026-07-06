@@ -33,9 +33,18 @@
 // dark/frost. GLOBAL (not scoped to `.cw-grid`) because the standalone
 // virtualized components (Listbox, MultiSelect, Tree, DataView, OrderList,
 // PickList, AutoComplete, VirtualScroller) use the same engine outside the grid.
+// The engine's inline default is a 17px opaque grey strip with a hard 1px left
+// border — reads as a heavy separate column with a "gap" line. Make it a
+// transparent overlay strip with a slim themed thumb instead. Transparent also
+// avoids the white flash on dark/frost (the themed list background shows through).
 [data-cerious-scrollbar='container'] {
-    background: var(--cw-surface) !important;
-    border-left: 1px solid var(--cw-border) !important;
+    background: transparent !important;
+    border-left: none !important;
+
+    &::-webkit-scrollbar { width: 8px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: var(--cw-border-strong); border-radius: 6px; }
+    &::-webkit-scrollbar-thumb:hover { background: var(--cw-text-muted); }
 }
 
 // Themed thin scrollbars for the standalone virtualized panels' viewports.
@@ -52,4 +61,27 @@
     ::-webkit-scrollbar-track { background-color: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--cw-border-strong); border-radius: 6px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--cw-text-muted); }
+}
+
+// cerious-scroll's per-item wrappers don't stretch their child, so rows inside a
+// virtualized list shrink to content width instead of filling the panel. Force
+// the wrappers and the row elements to full width in every standalone
+// virtualized list. Scoped to `--virtual` so DataView's grid layout is untouched.
+.cw-listbox__list--virtual,
+.cw-multi-select__list--virtual,
+.cw-tree__list--virtual,
+.cw-order-list__list--virtual,
+.cw-pick-list__list--virtual,
+.cw-autocomplete__list--virtual,
+.cw-data-view__list--virtual {
+    cerious-scroll > * > * { width: 100%; box-sizing: border-box; }
+}
+.cw-listbox__list--virtual .cw-listbox__option,
+.cw-multi-select__list--virtual .cw-multi-select__option,
+.cw-autocomplete__list--virtual .cw-autocomplete__option,
+.cw-order-list__list--virtual .cw-order-list__item,
+.cw-pick-list__list--virtual .cw-pick-list__item,
+.cw-tree__list--virtual .cw-tree__node {
+    width: 100%;
+    box-sizing: border-box;
 }

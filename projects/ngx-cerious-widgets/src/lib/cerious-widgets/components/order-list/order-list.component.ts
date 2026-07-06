@@ -152,7 +152,24 @@ export class OrderListComponent implements ControlValueAccessor {
     this.orderedValues.set(next);
     this.onChange([...next]);
     this.onTouched();
-    requestAnimationFrame(() => this.scrollDirs().forEach(dir => dir.render()));
+    requestAnimationFrame(() =>
+      this.scrollDirs().forEach(dir => {
+        const range = dir.render();
+        if (!range) {
+          return;
+        }
+        // Keep the moved item just-visible at the nearest edge. `jumpToElement`
+        // always aligns the target to the TOP, so for a downward move we instead
+        // jump to the element `viewportElements-1` rows earlier — that lands the
+        // moved item at the BOTTOM edge rather than yanking the list to the top.
+        if (to < range.startElement) {
+          dir.jumpToElement(to);
+        } else if (to > range.endElement) {
+          const visible = range.viewportElements || range.endElement - range.startElement + 1;
+          dir.jumpToElement(Math.max(0, to - visible + 1));
+        }
+      })
+    );
   }
 
   private normalize(option: unknown): CwOrderItem {

@@ -39,12 +39,19 @@
 
 .cw-select__placeholder { color: var(--cw-text-muted); }
 
+// CSS-drawn caret (▾) — a rotated open corner. Crisper and better-aligned than
+// a unicode glyph, and consistent with the MultiSelect trigger caret.
 .cw-select__chevron {
-  color: var(--cw-text-muted);
-  font-size: 0.7rem;
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: -2px;
+  border-right: 2px solid var(--cw-text-muted);
+  border-bottom: 2px solid var(--cw-text-muted);
+  transform: rotate(45deg);
   transition: transform 0.15s ease;
 }
-.cw-select__chevron--open { transform: rotate(180deg); }
+.cw-select__chevron--open { transform: rotate(225deg); }
 
 // Panel list — rendered in the overlay, but scoped via the component's
 // view encapsulation (the TemplatePortal carries this component's marker).

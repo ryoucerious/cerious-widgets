@@ -64,8 +64,12 @@ export class InputNumberComponent implements ControlValueAccessor {
   readonly value = signal<number | null>(null);
   readonly focused = signal(false);
   private readonly cvaDisabled = signal(false);
+  private readonly appLocale = inject(CW_LOCALE);
 
   readonly isDisabled = computed(() => this.disabledInput() || this.cvaDisabled());
+
+  /** Per-instance `locale` input, else the app-wide `CW_LOCALE`, else browser default. */
+  private readonly effectiveLocale = computed(() => this.locale() || this.appLocale || undefined);
 
   /** While focused, show the raw number; otherwise the formatted string. */
   readonly displayValue = computed(() => {
@@ -76,7 +80,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     if (this.focused()) {
       return String(value);
     }
-    return value.toLocaleString(undefined, {
+    return value.toLocaleString(this.effectiveLocale(), {
       style: this.mode() === 'currency' ? 'currency' : 'decimal',
       currency: this.currency(),
       minimumFractionDigits: this.minFractionDigits(),

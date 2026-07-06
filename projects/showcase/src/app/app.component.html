@@ -1,0 +1,19 @@
+<header class="topbar">
+  <a class="brand" routerLink="/">
+    <span class="brand__mark" aria-hidden="true">◆</span>
+    <span class="brand__name">cerious<strong>widgets</strong></span>
+  </a>
+
+  <nav class="topnav">
+    <a routerLink="/" routerLinkActive="topnav__link--active" [routerLinkActiveOptions]="{ exact: true }" class="topnav__link">Home</a>
+    <a routerLink="/components" routerLinkActive="topnav__link--active" class="topnav__link">Components</a>
+  </nav>
+
+  <div class="topbar__actions">
+    <doc-theme-switcher />
+  </div>
+</header>
+
+<main class="shell">
+  <router-outlet />
+</main>

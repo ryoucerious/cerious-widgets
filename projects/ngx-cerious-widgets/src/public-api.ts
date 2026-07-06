@@ -8,6 +8,7 @@ export * from './lib/cerious-widgets/cerious-widgets.module';
 // === Core / shared (the contract every cerious-widgets component is built on) ===
 // Config: forRoot input shape + per-component config resolver.
 export * from './lib/cerious-widgets/shared/tokens/widgets-config.token';
+export * from './lib/cerious-widgets/shared/tokens/locale.token';
 export * from './lib/cerious-widgets/shared/interfaces/index';
 // Plugin system: generic plugin contract + the manager that wires plugins to a host API.
 // Templating: register named templates with `[cwTemplate]` and read them via the registry.

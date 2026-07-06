@@ -85,7 +85,7 @@
   &::after  { transform: translateY(-50%) rotate(-45deg); }
 }
 
-// Trigger caret (▾)
+// Trigger caret (▾) — rotates to point up when the panel is open.
 .cw-multi-select__caret {
   width: 7px;
   height: 7px;
@@ -94,6 +94,13 @@
   border-bottom: 2px solid var(--cw-text-muted);
   transform: rotate(45deg);
   margin-top: -2px;
+  transition: transform 0.15s ease;
+}
+// The open state lives on the host, so target it via :host() (a scoped
+// `.cw-multi-select--open .caret` descendant selector would not match the host).
+:host(.cw-multi-select--open) .cw-multi-select__caret {
+  margin-top: 2px;
+  transform: rotate(225deg);
 }
 
 // --- Panel (reaches the overlay via the TemplatePortal encapsulation marker) ---
@@ -101,6 +108,13 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  // The CDK overlay pane (.cw-overlay-panel) is display:flex, so this inner
+  // wrapper is a flex item — without this it shrinks to content width instead
+  // of filling the panel, leaving the list narrower than the panel.
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .cw-multi-select__filter {
@@ -136,6 +150,15 @@
     display: block;
     height: 100%;
   }
+
+  // Each virtualized row wrapper must span the full width so its option fills
+  // the panel (unlike the non-virtual flex column, the engine's item wrappers
+  // don't stretch their children by default).
+  cerious-scroll [ceriousscrollitem],
+  cerious-scroll > * > * {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .cw-multi-select__option {
@@ -143,6 +166,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
   box-sizing: border-box;
   height: 34px;
   padding: 0 0.625rem;

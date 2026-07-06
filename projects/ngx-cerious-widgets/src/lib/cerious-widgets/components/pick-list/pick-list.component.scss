@@ -42,6 +42,13 @@
     display: block;
     height: 100%;
   }
+
+  // The engine's item wrappers don't stretch their child, so make each row fill
+  // the width (unlike the non-virtual flex column, which stretches items).
+  cerious-scroll > * > * {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .cw-pick-list__item {
@@ -49,6 +56,7 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  width: 100%;
   height: 34px;
   padding: 0 0.625rem;
   border-radius: var(--cw-radius-sm);
@@ -93,23 +101,35 @@
 }
 
 // CSS-drawn transfer arrows.
+// CSS-drawn chevrons for the transfer controls. Single-chevron variants use
+// only ::before; the "all" variants add ::after as a second chevron offset along
+// the pointing axis (a box-shadow can't do this — it's applied in the element's
+// own rotated coordinate space, so the offset points the wrong way).
 .cw-pick-list__ctrl-icon {
   position: relative;
-  width: 8px;
-  height: 8px;
+  display: inline-block;
+  width: 12px;
+  height: 10px;
 
-  &::before {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 1px;
-    width: 7px;
-    height: 7px;
+    top: 2px;
+    width: 6px;
+    height: 6px;
+    box-sizing: border-box;
     border-right: 2px solid currentColor;
     border-top: 2px solid currentColor;
   }
-  &--right::before      { transform: rotate(45deg); }
-  &--left::before       { transform: rotate(-135deg); left: 0; }
-  &--right-all::before  { transform: rotate(45deg); box-shadow: 4px -4px 0 -2px currentColor; }
-  &--left-all::before   { transform: rotate(-135deg); left: 0; box-shadow: -4px 4px 0 -2px currentColor; }
+  // ::after only appears for the double ("all") variants.
+  &::after { content: none; }
+
+  &--right::before { left: 3px; transform: rotate(45deg); }
+  &--left::before  { left: 3px; transform: rotate(-135deg); }
+
+  &--right-all::before { left: 1px; transform: rotate(45deg); }
+  &--right-all::after  { content: ''; left: 6px; transform: rotate(45deg); }
+  &--left-all::before  { left: 6px; transform: rotate(-135deg); }
+  &--left-all::after   { content: ''; left: 1px; transform: rotate(-135deg); }
 }

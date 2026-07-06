@@ -70,7 +70,14 @@
 }
 
 // Cerious floating surface (dropdowns, menus, popovers, tooltips build on this).
+// This class is applied to the CDK overlay pane, which is `display: flex` (row)
+// — so lay it out as a column with the default `align-items: stretch`, otherwise
+// the panel's single content child shrinks to its content width and lists/inputs
+// render narrower than the panel.
 .cw-overlay-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   background: var(--cw-surface);
   color: var(--cw-text);
   border: 1px solid var(--cw-border);
@@ -80,6 +87,13 @@
   font-family: var(--cw-font);
   overflow: auto;
   animation: cw-overlay-in 0.12s ease-out;
+}
+
+// Direct content of a panel should fill its width (belt-and-braces for the
+// flex-item shrink described above).
+.cw-overlay-panel > * {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 // Frost theme: glassmorphism — blur + bright white edge + inner highlight.
@@ -128,6 +142,18 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cw-overlay-panel { animation: none; }
+}
+
+// The `[cwDialogFooter]` action slot is projected content, so the Dialog's
+// scoped `.cw-dialog__footer` gap only spaces the wrapper — not the buttons
+// inside it. Lay the wrapper's actions out as a spaced, right-aligned row here
+// (global, so it reaches the projected content regardless of encapsulation).
+[cwDialogFooter] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 // Dialog backdrop (global: the CDK renders it outside any component scope).

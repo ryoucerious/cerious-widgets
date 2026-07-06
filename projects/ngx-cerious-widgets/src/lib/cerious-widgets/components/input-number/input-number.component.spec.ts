@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CW_LOCALE } from '../../shared/tokens/locale.token';
 import { InputNumberComponent } from './input-number.component';
 
 describe('InputNumberComponent', () => {
@@ -75,5 +76,45 @@ describe('InputNumberComponent', () => {
     input().dispatchEvent(new Event('input'));
     expect(component.value()).toBe(42);
     expect(emitted).toEqual([42]);
+  });
+
+  it('formats currency using the per-instance locale input', () => {
+    fixture.componentRef.setInput('mode', 'currency');
+    fixture.componentRef.setInput('currency', 'EUR');
+    fixture.componentRef.setInput('locale', 'de-DE');
+    component.writeValue(1234.5);
+    fixture.detectChanges();
+    // de-DE groups with '.' and uses ',' as the decimal separator.
+    expect(component.displayValue()).toBe((1234.5).toLocaleString('de-DE', {
+      style: 'currency', currency: 'EUR', minimumFractionDigits: 0, maximumFractionDigits: 2
+    }));
+    expect(component.displayValue()).toContain('1.234,5');
+  });
+});
+
+describe('InputNumberComponent with CW_LOCALE', () => {
+  it('falls back to the app-wide CW_LOCALE when no locale input is set', () => {
+    TestBed.configureTestingModule({
+      imports: [InputNumberComponent],
+      providers: [{ provide: CW_LOCALE, useValue: 'de-DE' }]
+    });
+    const fixture = TestBed.createComponent(InputNumberComponent);
+    fixture.detectChanges();
+    fixture.componentInstance.writeValue(1234.5);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.displayValue()).toContain('1.234,5');
+  });
+
+  it('per-instance locale input overrides CW_LOCALE', () => {
+    TestBed.configureTestingModule({
+      imports: [InputNumberComponent],
+      providers: [{ provide: CW_LOCALE, useValue: 'de-DE' }]
+    });
+    const fixture = TestBed.createComponent(InputNumberComponent);
+    fixture.componentRef.setInput('locale', 'en-US');
+    fixture.detectChanges();
+    fixture.componentInstance.writeValue(1234.5);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.displayValue()).toContain('1,234.5');
   });
 });

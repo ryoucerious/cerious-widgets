@@ -59,6 +59,12 @@ export class DockComponent {
     return 1 + bump;
   }
 
+  /** Stacking order so the hovered (largest) item paints above its neighbours. */
+  zIndex(index: number): number {
+    const h = this.hovered();
+    return h < 0 ? 0 : 100 - Math.abs(index - h);
+  }
+
   activate(item: CwDockItem): void {
     if (item.disabled) {
       return;

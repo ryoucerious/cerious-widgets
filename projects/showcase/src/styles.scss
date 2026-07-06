@@ -1,0 +1,29 @@
+/* Global resets + showcase-level tweaks. Component tokens (--cw-*) come from the
+   library's grid-styles-generated.scss, added ahead of this file in the build. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: var(--cw-font, 'Inter', system-ui, sans-serif);
+  background: var(--cw-page-bg, var(--cw-surface-sunken, #f8fafc));
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+
+a { color: inherit; }
+
+/* Frost theme: give the showcase's own glass surfaces a subtle blur so they read
+   as frosted panels rather than flat fills. */
+[data-cw-theme='frost'] {
+  .topbar { background: rgba(255, 255, 255, 0.35); }
+  .card,
+  .highlight,
+  .montage,
+  .doc-section__preview,
+  .doc-code {
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  }
+}

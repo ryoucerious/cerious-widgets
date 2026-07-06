@@ -1,6 +1,7 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CW_LOCALE } from '../../shared/tokens/locale.token';
 import { WIDGETS_CONFIG } from '../../shared/tokens/widgets-config.token';
 import { DatePickerApi, DatePickerPlugin } from './date-picker.api';
 import { DatePickerComponent } from './date-picker.component';
@@ -126,5 +127,31 @@ describe('DatePickerComponent', () => {
 
     plugin.api!.setValue(new Date(2027, 0, 5));
     expect(component.api.getValue()!.getFullYear()).toBe(2027);
+  });
+});
+
+describe('DatePickerComponent locale', () => {
+  it('falls back to the app-wide CW_LOCALE for weekday names', () => {
+    TestBed.configureTestingModule({
+      imports: [DatePickerComponent],
+      providers: [{ provide: CW_LOCALE, useValue: 'de-DE' }]
+    });
+    const fixture = TestBed.createComponent(DatePickerComponent);
+    fixture.componentRef.setInput('firstDayOfWeek', 1);
+    fixture.detectChanges();
+    // German weekday abbreviation for Monday.
+    expect(fixture.componentInstance.weekdays()[0]).toBe('Mo');
+  });
+
+  it('per-instance locale input overrides CW_LOCALE', () => {
+    TestBed.configureTestingModule({
+      imports: [DatePickerComponent],
+      providers: [{ provide: CW_LOCALE, useValue: 'de-DE' }]
+    });
+    const fixture = TestBed.createComponent(DatePickerComponent);
+    fixture.componentRef.setInput('locale', 'en-US');
+    fixture.componentRef.setInput('firstDayOfWeek', 1);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.weekdays()[0]).toBe('Mon');
   });
 });

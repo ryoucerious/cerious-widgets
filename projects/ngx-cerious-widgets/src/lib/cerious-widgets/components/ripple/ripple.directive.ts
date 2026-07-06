@@ -24,8 +24,14 @@ export class RippleDirective implements OnInit {
 
   ngOnInit(): void {
     const host = this.el.nativeElement;
-    const style = getComputedStyle(host);
-    if (style.position === 'static') {
+    // The ripple ink is absolutely positioned, so the host must establish a
+    // containing block. Set `position: relative` unless the host is already
+    // positioned. We check for the *positioned* values (rather than `=== 'static'`)
+    // because when the host initialises detached / not yet laid out — e.g. inside
+    // a lazily-rendered template outlet — getComputedStyle can report an empty
+    // string, which is neither `'static'` nor positioned; default that to relative.
+    const pos = getComputedStyle(host).position;
+    if (pos !== 'relative' && pos !== 'absolute' && pos !== 'fixed' && pos !== 'sticky') {
       host.style.position = 'relative';
     }
     host.style.overflow = 'hidden';

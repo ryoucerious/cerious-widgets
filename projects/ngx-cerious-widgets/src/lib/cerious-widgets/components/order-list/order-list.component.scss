@@ -33,42 +33,38 @@
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
-// CSS-drawn chevron icons (single = up/down, double = top/bottom).
+// CSS-drawn chevron icons (single = up/down, double = top/bottom). The "double"
+// variants draw a second chevron with ::after offset along the vertical axis — a
+// box-shadow can't do this, since it's applied in the element's own rotated
+// coordinate space and so points the wrong way.
 .cw-order-list__ctrl-icon {
   position: relative;
-  width: 8px;
-  height: 8px;
+  display: inline-block;
+  width: 10px;
+  height: 12px;
 
-  &::before {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
-    left: 0;
-    width: 8px;
-    height: 8px;
+    left: 2px;
+    width: 6px;
+    height: 6px;
+    box-sizing: border-box;
     border-left: 2px solid currentColor;
     border-top: 2px solid currentColor;
   }
-  &--up::before    { top: 2px; transform: rotate(45deg); }
-  &--down::before  { top: 0; transform: rotate(-135deg); }
-  &--top::before   { top: 1px; transform: rotate(45deg); box-shadow: -0 5px 0 -0 currentColor; }
-  &--bottom::before{ top: -1px; transform: rotate(-135deg); }
-}
+  // ::after only appears for the double ("top"/"bottom") variants.
+  &::after { content: none; }
 
-// Double-chevron via an extra bar for top/bottom.
-.cw-order-list__ctrl-icon--top,
-.cw-order-list__ctrl-icon--bottom { height: 11px; }
-.cw-order-list__ctrl-icon--top::after,
-.cw-order-list__ctrl-icon--bottom::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 8px;
-  height: 8px;
-  border-left: 2px solid currentColor;
-  border-top: 2px solid currentColor;
+  &--up::before   { top: 3px; transform: rotate(45deg); }
+  &--down::before { top: 3px; transform: rotate(-135deg); }
+
+  &--top::before    { top: 1px; transform: rotate(45deg); }
+  &--top::after     { content: ''; top: 5px; transform: rotate(45deg); }
+  &--bottom::before { top: 1px; transform: rotate(-135deg); }
+  &--bottom::after  { content: ''; top: 5px; transform: rotate(-135deg); }
 }
-.cw-order-list__ctrl-icon--top::after    { top: 5px; transform: rotate(45deg); }
-.cw-order-list__ctrl-icon--bottom::after { top: -4px; transform: rotate(-135deg); }
 
 .cw-order-list__box {
   display: flex;
@@ -112,6 +108,7 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  width: 100%;
   height: 34px;
   padding: 0 0.625rem;
   border-radius: var(--cw-radius-sm);
