@@ -1,0 +1,27 @@
+:host {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  font-family: var(--cw-font);
+}
+
+.cw-ifta-label__label {
+  position: absolute;
+  top: 0.375rem;
+  left: 0.75rem;
+  z-index: 1;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--cw-text-muted);
+  pointer-events: none;
+}
+
+// Give the projected control top padding to clear the label, and full width.
+:host ::ng-deep > input,
+:host ::ng-deep > textarea,
+:host ::ng-deep > select,
+:host ::ng-deep > .cw-input {
+  width: 100%;
+  padding-top: 1.25rem;
+  padding-bottom: 0.375rem;
+}

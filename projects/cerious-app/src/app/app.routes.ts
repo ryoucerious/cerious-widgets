@@ -75,5 +75,17 @@ export const routes: Routes = [
   { path: 'input-group', loadComponent: () => import('./pages/input-group-demo.component').then(m => m.InputGroupDemoComponent) },
   { path: 'float-label', loadComponent: () => import('./pages/float-label-demo.component').then(m => m.FloatLabelDemoComponent) },
   { path: 'galleria', loadComponent: () => import('./pages/galleria-demo.component').then(m => m.GalleriaDemoComponent) },
+  { path: 'virtual-scroller', loadComponent: () => import('./pages/virtual-scroller-demo.component').then(m => m.VirtualScrollerDemoComponent) },
+  { path: 'mega-menu', loadComponent: () => import('./pages/mega-menu-demo.component').then(m => m.MegaMenuDemoComponent) },
+  { path: 'editor', loadComponent: () => import('./pages/editor-demo.component').then(m => m.EditorDemoComponent) },
+  { path: 'terminal', loadComponent: () => import('./pages/terminal-demo.component').then(m => m.TerminalDemoComponent) },
+  { path: 'ifta-label', loadComponent: () => import('./pages/ifta-label-demo.component').then(m => m.IftaLabelDemoComponent) },
+  { path: 'ripple', loadComponent: () => import('./pages/ripple-demo.component').then(m => m.RippleDemoComponent) },
+  { path: 'org-chart', loadComponent: () => import('./pages/org-chart-demo.component').then(m => m.OrgChartDemoComponent) },
+  { path: 'dynamic-dialog', loadComponent: () => import('./pages/dynamic-dialog-demo.component').then(m => m.DynamicDialogDemoComponent) },
+  { path: 'animate-on-scroll', loadComponent: () => import('./pages/animate-on-scroll-demo.component').then(m => m.AnimateOnScrollDemoComponent) },
+  { path: 'style-class', loadComponent: () => import('./pages/style-class-demo.component').then(m => m.StyleClassDemoComponent) },
+  { path: 'deferred-content', loadComponent: () => import('./pages/deferred-content-demo.component').then(m => m.DeferredContentDemoComponent) },
+  { path: 'focus-trap', loadComponent: () => import('./pages/focus-trap-demo.component').then(m => m.FocusTrapDemoComponent) },
   { path: '**', redirectTo: '' }
 ];

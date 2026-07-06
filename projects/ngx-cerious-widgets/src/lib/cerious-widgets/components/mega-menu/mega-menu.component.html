@@ -1,0 +1,41 @@
+@for (item of items(); track $index) {
+  <button
+    #trigger
+    type="button"
+    class="cw-mega-menu__item"
+    role="menuitem"
+    [class.cw-mega-menu__item--open]="openItem() === item"
+    [attr.aria-haspopup]="item.columns?.length ? 'menu' : null"
+    [attr.aria-expanded]="item.columns?.length ? (openItem() === item) : null"
+    [disabled]="item.disabled"
+    (click)="onRootClick(item, trigger)"
+  >
+    @if (item.icon) { <i class="cw-mega-menu__icon" [class]="item.icon"></i> }
+    <span class="cw-mega-menu__label">{{ item.label }}</span>
+    @if (item.columns?.length) { <span class="cw-mega-menu__caret" aria-hidden="true"></span> }
+  </button>
+}
+
+<ng-template #panel>
+  <div class="cw-mega-menu__columns" role="menu">
+    @for (column of openColumns(); track $index) {
+      <div class="cw-mega-menu__column">
+        @if (column.header) {
+          <div class="cw-mega-menu__column-header">{{ column.header }}</div>
+        }
+        @for (link of column.items; track $index) {
+          <button
+            type="button"
+            class="cw-mega-menu__link"
+            role="menuitem"
+            [disabled]="link.disabled"
+            (click)="activate(link)"
+          >
+            @if (link.icon) { <i class="cw-mega-menu__icon" [class]="link.icon"></i> }
+            <span>{{ link.label }}</span>
+          </button>
+        }
+      </div>
+    }
+  </div>
+</ng-template>

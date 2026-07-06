@@ -1,0 +1,25 @@
+<div #log class="cw-terminal__log">
+  @if (welcome()) {
+    <div class="cw-terminal__welcome">{{ welcome() }}</div>
+  }
+  @for (line of lines(); track $index) {
+    @if (line.kind === 'command') {
+      <div class="cw-terminal__line cw-terminal__line--command"><span class="cw-terminal__prompt">{{ prompt() }}</span>{{ line.text }}</div>
+    } @else {
+      <div class="cw-terminal__line cw-terminal__line--response">{{ line.text }}</div>
+    }
+  }
+</div>
+<div class="cw-terminal__input-row">
+  <span class="cw-terminal__prompt">{{ prompt() }}</span>
+  <input
+    #input
+    type="text"
+    class="cw-terminal__input"
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-label="Terminal input"
+    (keydown)="onKeydown($event)"
+  />
+</div>

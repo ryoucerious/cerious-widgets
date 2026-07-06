@@ -1,0 +1,30 @@
+<div class="cw-editor__toolbar" role="toolbar">
+  @for (tool of tools; track tool.command) {
+    <button
+      type="button"
+      class="cw-editor__tool"
+      [class.cw-editor__tool--active]="isActive(tool)"
+      [class.cw-editor__tool--italic]="tool.command === 'italic'"
+      [attr.aria-label]="tool.title"
+      [attr.title]="tool.title"
+      [disabled]="!editable"
+      (mousedown)="$event.preventDefault()"
+      (click)="exec(tool)"
+    >{{ tool.label }}</button>
+  }
+</div>
+
+<div class="cw-editor__area-wrap">
+  <div
+    #area
+    class="cw-editor__area"
+    role="textbox"
+    aria-multiline="true"
+    [attr.contenteditable]="editable"
+    (input)="onInput()"
+    (blur)="onTouched()"
+  ></div>
+  @if (isEmpty() && placeholder()) {
+    <div class="cw-editor__placeholder" aria-hidden="true">{{ placeholder() }}</div>
+  }
+</div>

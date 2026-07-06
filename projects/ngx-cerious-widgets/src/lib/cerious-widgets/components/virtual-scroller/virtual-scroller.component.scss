@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  background: var(--cw-surface);
+  font-family: var(--cw-font);
+  overflow: hidden;
+  position: relative;
+
+  cerious-scroll {
+    display: block;
+    height: 100%;
+  }
+}
+
+.cw-virtual-scroller__row {
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--cw-row-border);
+  font-size: 0.875rem;
+  color: var(--cw-text);
+}

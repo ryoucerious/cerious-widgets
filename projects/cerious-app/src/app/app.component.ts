@@ -34,7 +34,7 @@ export class AppComponent {
   }
 
   private groupNav(): NavGroup[] {
-    const order = ['Data', 'Form', 'Display', 'Navigation', 'Overlay'];
+    const order = ['Data', 'Form', 'Display', 'Navigation', 'Overlay', 'Utilities'];
     const map = new Map<string, NavItem[]>();
     for (const item of NAV_ITEMS) {
       (map.get(item.group) ?? map.set(item.group, []).get(item.group)!).push(item);

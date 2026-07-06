@@ -25,13 +25,31 @@
     ::-webkit-scrollbar-thumb:hover {
         background: var(--cw-text-muted);
     }
+}
 
-    // The cerious-scroll engine attaches its vertical scrollbar strip with
-    // inline hardcoded colours (#f0f0f0 / #ccc) — `!important` here outranks
-    // the inline styles so the strip follows the active theme instead of
-    // flashing white on dark/frost.
-    [data-cerious-scrollbar='container'] {
-        background: var(--cw-surface) !important;
-        border-left: 1px solid var(--cw-border) !important;
-    }
+// The cerious-scroll engine attaches its vertical scrollbar strip with inline
+// hardcoded colours (#f0f0f0 / #ccc) — `!important` here outranks the inline
+// styles so the strip follows the active theme instead of flashing white on
+// dark/frost. GLOBAL (not scoped to `.cw-grid`) because the standalone
+// virtualized components (Listbox, MultiSelect, Tree, DataView, OrderList,
+// PickList, AutoComplete, VirtualScroller) use the same engine outside the grid.
+[data-cerious-scrollbar='container'] {
+    background: var(--cw-surface) !important;
+    border-left: 1px solid var(--cw-border) !important;
+}
+
+// Themed thin scrollbars for the standalone virtualized panels' viewports.
+.cw-listbox__list--virtual,
+.cw-multi-select__list--virtual,
+.cw-tree__list--virtual,
+.cw-order-list__list--virtual,
+.cw-pick-list__list--virtual,
+.cw-autocomplete__list--virtual,
+.cw-data-view__list--virtual,
+.cw-virtual-scroller,
+.cw-galleria__thumbnails {
+    ::-webkit-scrollbar { width: 10px; height: 8px; }
+    ::-webkit-scrollbar-track { background-color: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--cw-border-strong); border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--cw-text-muted); }
 }

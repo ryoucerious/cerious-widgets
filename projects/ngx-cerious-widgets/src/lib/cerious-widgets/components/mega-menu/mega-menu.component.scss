@@ -1,0 +1,86 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  box-sizing: border-box;
+  padding: 0.25rem;
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  font-family: var(--cw-font);
+}
+
+.cw-mega-menu__item {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  box-sizing: border-box;
+  padding: 0.4375rem 0.75rem;
+  border-radius: var(--cw-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--cw-text);
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--cw-surface-hover); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.cw-mega-menu__item--open {
+  background: color-mix(in srgb, var(--cw-accent) 12%, transparent);
+  color: var(--cw-accent);
+}
+
+.cw-mega-menu__icon { font-size: 0.875em; line-height: 1; }
+
+.cw-mega-menu__caret {
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  margin-top: -2px;
+  opacity: 0.7;
+}
+
+// --- Mega panel (reaches the overlay via the TemplatePortal marker) ---
+.cw-mega-menu__columns {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.5rem;
+}
+
+.cw-mega-menu__column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 9rem;
+}
+
+.cw-mega-menu__column-header {
+  padding: 0.375rem 0.75rem 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--cw-text-muted);
+}
+
+.cw-mega-menu__link {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  padding: 0.4375rem 0.75rem;
+  border-radius: var(--cw-radius-sm);
+  font-size: 0.875rem;
+  color: var(--cw-text);
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--cw-surface-hover); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}

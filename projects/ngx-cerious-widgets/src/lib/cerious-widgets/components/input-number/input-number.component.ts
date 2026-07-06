@@ -4,11 +4,13 @@ import {
   Component,
   computed,
   forwardRef,
+  inject,
   input,
   numberAttribute,
   signal
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CW_LOCALE } from '../../shared/tokens/locale.token';
 
 /**
  * A numeric input with stepper buttons, min/max clamping and optional
@@ -46,6 +48,8 @@ export class InputNumberComponent implements ControlValueAccessor {
   readonly mode = input<'decimal' | 'currency'>('decimal');
   /** ISO currency code for `mode="currency"`. */
   readonly currency = input<string>('USD');
+  /** BCP-47 locale for formatting (falls back to the app-wide `CW_LOCALE`, then the browser default). */
+  readonly locale = input<string>('');
   /** Minimum fraction digits shown when not focused. */
   readonly minFractionDigits = input(0, { transform: numberAttribute });
   /** Maximum fraction digits shown when not focused. */
