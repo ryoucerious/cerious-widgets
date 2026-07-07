@@ -12,20 +12,20 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="slider"><doc-tab label="Features">
       <doc-section title="Basic" description="Bind with ngModel." [code]="basicCode">
         <div style="width: 100%; max-width: 20rem;">
-          <cw-slider [(ngModel)]="volume" />
+          <cw-slider [(ngModel)]="volume" ariaLabel="Volume" />
         </div>
       </doc-section>
 
       <doc-section title="Min / max / step" [code]="rangeCode">
         <div style="width: 100%; max-width: 20rem;">
-          <cw-slider [min]="0" [max]="200" [step]="10" [(ngModel)]="limit" />
+          <cw-slider [min]="0" [max]="200" [step]="10" [(ngModel)]="limit" ariaLabel="Limit" />
         </div>
       </doc-section>
 
       <doc-section title="Without bubble & disabled" [code]="plainCode">
         <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 20rem;">
-          <cw-slider [showValue]="false" [(ngModel)]="plain" />
-          <cw-slider disabled [ngModel]="30" [showValue]="false" />
+          <cw-slider [showValue]="false" [(ngModel)]="plain" ariaLabel="Value" />
+          <cw-slider disabled [ngModel]="30" [showValue]="false" ariaLabel="Value (disabled)" />
         </div>
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>

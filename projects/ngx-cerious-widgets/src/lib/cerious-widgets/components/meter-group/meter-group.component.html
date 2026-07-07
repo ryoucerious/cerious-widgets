@@ -1,10 +1,10 @@
-<div class="cw-meter-group__track" [style.height.px]="size()" role="meter" [attr.aria-valuemax]="total()">
+<div class="cw-meter-group__track" [style.height.px]="size()" role="img" [attr.aria-label]="a11yLabel()">
   @for (segment of segments(); track $index) {
     <span
       class="cw-meter-group__segment"
       [style.width.%]="segment.percent"
       [style.background]="segment.color"
-      [attr.aria-label]="segment.label + ': ' + segment.value"
+      aria-hidden="true"
     ></span>
   }
 </div>

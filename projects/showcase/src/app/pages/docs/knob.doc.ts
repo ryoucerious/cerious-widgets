@@ -11,13 +11,13 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
   template: `
     <doc-page slug="knob"><doc-tab label="Features">
       <doc-section title="Basic" [code]="basicCode">
-        <cw-knob [(ngModel)]="volume" />
+        <cw-knob [(ngModel)]="volume" aria-label="Volume" />
         <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Volume: {{ volume }}</span>
       </doc-section>
 
       <doc-section title="Percentage & custom range" [code]="rangeCode">
-        <cw-knob [(ngModel)]="progress" valueTemplate="{value}%" [size]="120" />
-        <cw-knob [(ngModel)]="temp" [min]="-20" [max]="40" valueTemplate="{value}°" />
+        <cw-knob [(ngModel)]="progress" valueTemplate="{value}%" [size]="120" aria-label="Progress" />
+        <cw-knob [(ngModel)]="temp" [min]="-20" [max]="40" valueTemplate="{value}°" aria-label="Temperature" />
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>
   `

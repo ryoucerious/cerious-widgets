@@ -20,6 +20,7 @@
     class="cw-editor__area"
     role="textbox"
     aria-multiline="true"
+    [attr.aria-label]="ariaLabel() || 'Rich text editor'"
     [attr.contenteditable]="editable"
     (input)="onInput()"
     (blur)="onTouched()"

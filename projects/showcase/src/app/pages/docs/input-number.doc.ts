@@ -12,16 +12,16 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="input-number">
       <doc-tab label="Features">
         <doc-section title="Basic" description="A numeric input with +/- steppers and arrow-key support." [code]="basicCode">
-          <cw-input-number [(ngModel)]="qty" />
+          <cw-input-number [(ngModel)]="qty" ariaLabel="Quantity" />
           <p class="hint">Value: {{ qty }}</p>
         </doc-section>
 
         <doc-section title="Min, max & step" description="Clamped to a range on blur; step sizes the buttons and arrow keys." [code]="rangeCode">
-          <cw-input-number [(ngModel)]="rating" [min]="0" [max]="10" [step]="0.5" />
+          <cw-input-number [(ngModel)]="rating" [min]="0" [max]="10" [step]="0.5" ariaLabel="Rating" />
         </doc-section>
 
         <doc-section title="Currency" description="Formatted while unfocused, editable as a raw number when focused." [code]="currencyCode">
-          <cw-input-number [(ngModel)]="price" mode="currency" currency="USD" />
+          <cw-input-number [(ngModel)]="price" mode="currency" currency="USD" ariaLabel="Price" />
         </doc-section>
 
         <doc-section title="Locale-aware formatting"
@@ -29,13 +29,13 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
           [code]="localeCode">
           <div class="locale-row">
             <cw-select-button [(ngModel)]="locale" [options]="localeOptions" optionLabel="label" optionValue="value" />
-            <cw-input-number [(ngModel)]="amount" mode="currency" [currency]="currencyFor()" [locale]="locale" />
+            <cw-input-number [(ngModel)]="amount" mode="currency" [currency]="currencyFor()" [locale]="locale" ariaLabel="Amount" />
           </div>
           <p class="hint">{{ locale }} · same value 1234567.89 → formatted above</p>
         </doc-section>
 
         <doc-section title="Without buttons" description="Hide the steppers for a plain formatted numeric field." [code]="noButtonsCode">
-          <cw-input-number [(ngModel)]="plain" [showButtons]="false" placeholder="0" />
+          <cw-input-number [(ngModel)]="plain" [showButtons]="false" placeholder="0" ariaLabel="Amount" />
         </doc-section>
       </doc-tab>
 

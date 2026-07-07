@@ -11,16 +11,16 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
   template: `
     <doc-page slug="listbox"><doc-tab label="Features">
       <doc-section title="Single" [code]="singleCode">
-        <cw-listbox [options]="cities" [(ngModel)]="city" />
+        <cw-listbox [options]="cities" [(ngModel)]="city" aria-label="City" />
         <span style="color: var(--cw-text-muted); font-size: 0.875rem;">City: {{ city ?? '—' }}</span>
       </doc-section>
 
       <doc-section title="Multiple with checkboxes" [code]="multipleCode">
-        <cw-listbox [options]="cities" multiple [(ngModel)]="picked" />
+        <cw-listbox [options]="cities" multiple [(ngModel)]="picked" aria-label="Cities" />
       </doc-section>
 
       <doc-section title="5,000 options — virtualized + filter" description="Only the visible rows exist in the DOM." [code]="virtualCode">
-        <cw-listbox [options]="many" filterable [(ngModel)]="item" />
+        <cw-listbox [options]="many" filterable [(ngModel)]="item" aria-label="Item" />
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>
   `

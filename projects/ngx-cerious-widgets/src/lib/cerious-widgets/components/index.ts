@@ -86,3 +86,4 @@ export * from './animate-on-scroll/animate-on-scroll.directive';
 export * from './style-class/style-class.directive';
 export * from './deferred-content/deferred-content.component';
 export * from './focus-trap/focus-trap.directive';
+export * from './table/table.component';

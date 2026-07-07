@@ -23,6 +23,7 @@
     @for (slide of slides(); track $index) {
       <button
         type="button"
+        role="tab"
         class="cw-carousel__dot"
         [class.cw-carousel__dot--active]="$index === current()"
         [attr.aria-label]="'Go to slide ' + ($index + 1)"

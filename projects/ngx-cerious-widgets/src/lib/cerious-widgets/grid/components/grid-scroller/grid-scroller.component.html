@@ -1,15 +1,14 @@
+<!-- Visual horizontal scroll-sync element (only a spacer div). Native overflow
+     scrolling already exposes this to the platform, and AT users navigate the
+     grid by cell, so it's hidden from the accessibility tree rather than posing
+     as a `scrollbar` widget inside the grid role. -->
 <div #scroller
      style="overflow-x: scroll; overflow-y: hidden;"
      [ngStyle]="{
       'height': getScrollHeight() + 'px',
       'marginLeft': pinnedColumnWidth + 'px'
      }"
-     role="scrollbar"
-     aria-controls="gridTable"
-     aria-orientation="horizontal"
-     [attr.aria-valuemin]="0"
-     [attr.aria-valuemax]="tableScrollWidth - moddedColumnWidth"
-     aria-label="Horizontal grid scroller">
+     aria-hidden="true">
   <div [ngStyle]="{
         'width': tableScrollWidth - moddedColumnWidth + 'px'
        }">

@@ -38,7 +38,7 @@ export class VirtualScrollerItemDirective {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet, CeriousScrollComponent, CeriousScrollItemTemplateDirective],
   template: `
-    <cerious-scroll [items]="items()">
+    <cerious-scroll [items]="getItem() ? null : items()" [totalElements]="totalElements()" [getItem]="getItem()">
       <ng-template ceriousScrollItem let-item let-index="index">
         <div class="cw-virtual-scroller__row">
           @if (itemTemplate(); as tpl) {
@@ -58,6 +58,17 @@ export class VirtualScrollerComponent {
 
   /** The full collection to virtualize. */
   readonly items = input<readonly unknown[]>([]);
+  /**
+   * Total row count when you don't want to materialize the whole collection.
+   * Pair with {@link getItem} to virtualize huge (e.g. 1,000,000-row) datasets
+   * without allocating a giant array. Ignored when `items` is provided.
+   */
+  readonly totalElements = input<number | null>(null);
+  /**
+   * Lazy item accessor: `(index) => item`. Used instead of `items` for very
+   * large datasets — the engine only ever asks for the indices it renders.
+   */
+  readonly getItem = input<((index: number) => unknown) | null>(null);
   /** Viewport height (any CSS length). */
   readonly scrollHeight = input<string>('400px');
 

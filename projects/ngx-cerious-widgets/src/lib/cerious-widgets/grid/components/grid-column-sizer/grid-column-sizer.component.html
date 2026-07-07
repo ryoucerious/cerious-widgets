@@ -1,9 +1,13 @@
 <div *ngIf="column?.resizable"
      class="column-resizer"
      role="separator"
-     aria-orientation="horizontal"
+     aria-orientation="vertical"
      tabindex="0"
-     aria-label="Resize column"
+     [attr.aria-label]="'Resize ' + (column?.label || 'column')"
+     [attr.aria-valuenow]="widthPx"
+     [attr.aria-valuemin]="40"
+     [attr.aria-valuemax]="800"
+     [attr.aria-valuetext]="widthPx + ' pixels'"
      (mousedown)="onMouseDown($event)"
      (mouseup)="onMouseUp($event)">
 </div>

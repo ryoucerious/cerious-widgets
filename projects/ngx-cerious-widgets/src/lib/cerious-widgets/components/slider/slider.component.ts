@@ -45,6 +45,8 @@ export class SliderComponent implements ControlValueAccessor {
   readonly step = input(1, { transform: numberAttribute });
   /** Show the value bubble above the thumb. */
   readonly showValue = input(true, { transform: booleanAttribute });
+  /** Accessible name for the range input (when no visible label is associated). */
+  readonly ariaLabel = input<string>('');
   /** Disable the control (also settable via forms `setDisabledState`). */
   readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
 

@@ -17,7 +17,7 @@
       </button>
 
       @if (item.items?.length && isExpanded(item)) {
-        <div class="cw-panel-menu__children">
+        <div class="cw-panel-menu__children" role="group">
           <ng-container [ngTemplateOutlet]="level" [ngTemplateOutletContext]="{ $implicit: item.items, depth: depth + 1 }" />
         </div>
       }

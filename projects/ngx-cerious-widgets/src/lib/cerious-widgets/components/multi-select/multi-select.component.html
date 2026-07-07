@@ -54,7 +54,7 @@
       <div class="cw-multi-select__empty">No results</div>
     } @else if (useVirtual()) {
       <!-- Large lists: virtualized with cerious-scroll -->
-      <div class="cw-multi-select__list cw-multi-select__list--virtual" role="listbox">
+      <div class="cw-multi-select__list cw-multi-select__list--virtual" role="listbox" aria-multiselectable="true">
         <cerious-scroll [items]="filteredOptions()">
           <ng-template ceriousScrollItem let-option>
             <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option }" />
@@ -62,7 +62,7 @@
         </cerious-scroll>
       </div>
     } @else {
-      <div class="cw-multi-select__list" role="listbox">
+      <div class="cw-multi-select__list" role="listbox" aria-multiselectable="true">
         @for (option of filteredOptions(); track $index) {
           <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option }" />
         }

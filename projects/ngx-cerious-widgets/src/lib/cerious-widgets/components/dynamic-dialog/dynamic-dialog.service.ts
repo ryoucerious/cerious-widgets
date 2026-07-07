@@ -6,7 +6,7 @@ import { DynamicDialogContainer } from './dynamic-dialog.container';
 import { DynamicDialogRef } from './dynamic-dialog.ref';
 
 /**
- * Opens any component imperatively inside a modal dialog, PrimeNG-style.
+ * Opens any component imperatively inside a modal dialog.
  *
  * The opened component injects {@link DynamicDialogRef} to close itself with a
  * result, and {@link DYNAMIC_DIALOG_CONFIG} to read the passed `data`.

@@ -9,6 +9,7 @@
   [step]="step()"
   [value]="value()"
   [disabled]="isDisabled()"
+  [attr.aria-label]="ariaLabel() || null"
   [style.--_fill.%]="percent()"
   (input)="onInput($event)"
   (blur)="onTouched()"

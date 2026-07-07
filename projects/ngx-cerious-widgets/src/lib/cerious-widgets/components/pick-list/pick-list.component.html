@@ -1,6 +1,7 @@
 <ng-template #itemRow let-item>
   <button
     type="button"
+    role="option"
     class="cw-pick-list__item"
     [class.cw-pick-list__item--selected]="isHighlighted(item)"
     [attr.aria-selected]="isHighlighted(item)"
@@ -13,15 +14,15 @@
 <div class="cw-pick-list__panel">
   <div class="cw-pick-list__header">{{ sourceHeader() }}</div>
   @if (sourceVirtual()) {
-    <div class="cw-pick-list__list cw-pick-list__list--virtual" [style.height]="listHeight()" role="listbox">
-      <cerious-scroll [items]="sourceItems()">
+    <div class="cw-pick-list__list cw-pick-list__list--virtual" [style.height]="listHeight()" role="listbox" [attr.aria-label]="sourceHeader()">
+      <cerious-scroll role="group" [items]="sourceItems()">
         <ng-template ceriousScrollItem let-item>
           <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
         </ng-template>
       </cerious-scroll>
     </div>
   } @else {
-    <div class="cw-pick-list__list" [style.max-height]="listHeight()" role="listbox">
+    <div class="cw-pick-list__list" [style.max-height]="listHeight()" role="listbox" [attr.aria-label]="sourceHeader()">
       @for (item of sourceItems(); track $index) {
         <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
       }
@@ -49,15 +50,15 @@
 <div class="cw-pick-list__panel">
   <div class="cw-pick-list__header">{{ targetHeader() }}</div>
   @if (targetVirtual()) {
-    <div class="cw-pick-list__list cw-pick-list__list--virtual" [style.height]="listHeight()" role="listbox">
-      <cerious-scroll [items]="targetItems()">
+    <div class="cw-pick-list__list cw-pick-list__list--virtual" [style.height]="listHeight()" role="listbox" [attr.aria-label]="targetHeader()">
+      <cerious-scroll role="group" [items]="targetItems()">
         <ng-template ceriousScrollItem let-item>
           <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
         </ng-template>
       </cerious-scroll>
     </div>
   } @else {
-    <div class="cw-pick-list__list" [style.max-height]="listHeight()" role="listbox">
+    <div class="cw-pick-list__list" [style.max-height]="listHeight()" role="listbox" [attr.aria-label]="targetHeader()">
       @for (item of targetItems(); track $index) {
         <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
       }

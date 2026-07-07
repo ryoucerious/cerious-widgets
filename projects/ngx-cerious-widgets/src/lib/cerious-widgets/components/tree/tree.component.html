@@ -24,7 +24,9 @@
 
 @if (useVirtual()) {
   <div class="cw-tree__list cw-tree__list--virtual" [style.height]="treeHeight()">
-    <cerious-scroll [items]="flatNodes()">
+    <!-- The scroll viewport is a `group` (a valid child of `tree`) that holds
+         the virtualized treeitems, so the tree structure stays valid. -->
+    <cerious-scroll role="group" [items]="flatNodes()">
       <ng-template ceriousScrollItem let-flat>
         <ng-container [ngTemplateOutlet]="row" [ngTemplateOutletContext]="{ $implicit: flat }" />
       </ng-template>

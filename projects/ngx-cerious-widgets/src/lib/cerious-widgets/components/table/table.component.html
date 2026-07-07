@@ -1,0 +1,50 @@
+<table
+  class="cw-table"
+  [class.cw-table--striped]="striped()"
+  [class.cw-table--hoverable]="hoverable()"
+  [class.cw-table--bordered]="bordered()"
+  [class]="'cw-table--' + size()"
+>
+  <thead>
+    <tr>
+      @for (col of columns(); track col.field) {
+        <th
+          scope="col"
+          [style.width]="col.width"
+          [style.text-align]="col.align || 'left'"
+          [class.cw-table__th--sortable]="col.sortable"
+          [attr.aria-sort]="sortIndicator(col) === 'asc' ? 'ascending' : sortIndicator(col) === 'desc' ? 'descending' : (col.sortable ? 'none' : null)"
+          (click)="toggleSort(col)"
+        >
+          <span class="cw-table__th-label">
+            {{ col.header }}
+            @if (col.sortable) {
+              <span class="cw-table__sort" [attr.data-dir]="sortIndicator(col)" aria-hidden="true">{{
+                sortIndicator(col) === 'asc' ? '↑' : sortIndicator(col) === 'desc' ? '↓' : '↕'
+              }}</span>
+            }
+          </span>
+        </th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (row of rows(); track $index) {
+      <tr (click)="rowClick.emit(row)">
+        @for (col of columns(); track col.field) {
+          <td [style.text-align]="col.align || 'left'">
+            @if (templateFor(col.field); as tpl) {
+              <ng-container [ngTemplateOutlet]="tpl" [ngTemplateOutletContext]="{ $implicit: row, value: row[col.field], column: col }" />
+            } @else {
+              {{ row[col.field] }}
+            }
+          </td>
+        }
+      </tr>
+    } @empty {
+      <tr class="cw-table__empty-row">
+        <td [attr.colspan]="columns().length">{{ emptyMessage() }}</td>
+      </tr>
+    }
+  </tbody>
+</table>

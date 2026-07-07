@@ -25,6 +25,7 @@
     @for (image of images(); track $index) {
       <button
         type="button"
+        role="tab"
         class="cw-galleria__thumb"
         [class.cw-galleria__thumb--active]="$index === current()"
         [attr.aria-label]="'Image ' + ($index + 1)"

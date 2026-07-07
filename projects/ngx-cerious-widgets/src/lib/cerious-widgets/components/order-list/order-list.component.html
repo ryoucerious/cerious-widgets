@@ -21,6 +21,7 @@
   <ng-template #itemRow let-item>
     <button
       type="button"
+      role="option"
       class="cw-order-list__item"
       [class.cw-order-list__item--selected]="isSelected(item)"
       [attr.aria-selected]="isSelected(item)"
@@ -30,15 +31,15 @@
   </ng-template>
 
   @if (useVirtual()) {
-    <div class="cw-order-list__list cw-order-list__list--virtual" [style.height]="listHeight()" role="listbox">
-      <cerious-scroll [items]="items()">
+    <div class="cw-order-list__list cw-order-list__list--virtual" [style.height]="listHeight()" role="listbox" [attr.aria-label]="header() || 'Reorderable list'">
+      <cerious-scroll role="group" [items]="items()">
         <ng-template ceriousScrollItem let-item>
           <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
         </ng-template>
       </cerious-scroll>
     </div>
   } @else {
-    <div class="cw-order-list__list" [style.max-height]="listHeight()" role="listbox">
+    <div class="cw-order-list__list" [style.max-height]="listHeight()" role="listbox" [attr.aria-label]="header() || 'Reorderable list'">
       @for (item of items(); track $index) {
         <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
       }

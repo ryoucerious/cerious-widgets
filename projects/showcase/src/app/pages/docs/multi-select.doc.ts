@@ -12,18 +12,18 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="multi-select">
       <doc-tab label="Features">
         <doc-section title="Basic" description="Bind an array with ngModel; selections render as chips with a filter box." [code]="basicCode">
-          <cw-multi-select [options]="cities" [(ngModel)]="selected" placeholder="Select cities" style="min-width: 18rem;" />
+          <cw-multi-select [options]="cities" [(ngModel)]="selected" placeholder="Select cities" style="min-width: 18rem;" aria-label="Cities" />
           <p class="hint">Selected: {{ selected.length ? selected.join(', ') : '—' }}</p>
         </doc-section>
 
         <doc-section title="10,000 options — virtualized"
           description="Above virtualThreshold the panel renders through ngx-cerious-scroll, so only the visible rows exist in the DOM."
           [code]="virtualCode">
-          <cw-multi-select [options]="many" [(ngModel)]="manySelected" placeholder="Search 10,000 items" style="min-width: 18rem;" />
+          <cw-multi-select [options]="many" [(ngModel)]="manySelected" placeholder="Search 10,000 items" style="min-width: 18rem;" aria-label="Search items" />
         </doc-section>
 
         <doc-section title="Chip overflow" description="maxChips caps visible chips; the rest collapse into a “+N” pill." [code]="chipCode">
-          <cw-multi-select [options]="cities" [(ngModel)]="selected" [maxChips]="2" style="min-width: 18rem;" />
+          <cw-multi-select [options]="cities" [(ngModel)]="selected" [maxChips]="2" style="min-width: 18rem;" aria-label="Cities" />
         </doc-section>
       </doc-tab>
 

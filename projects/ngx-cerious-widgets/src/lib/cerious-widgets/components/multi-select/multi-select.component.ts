@@ -64,7 +64,6 @@ const OPTION_TEMPLATE = 'multiSelect.option';
     'role': 'combobox',
     'tabindex': '0',
     'aria-haspopup': 'listbox',
-    'aria-multiselectable': 'true',
     '[attr.aria-expanded]': 'isOpen()',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
     '[class.cw-multi-select--open]': 'isOpen()',

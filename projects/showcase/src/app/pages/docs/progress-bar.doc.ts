@@ -10,12 +10,12 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
   template: `
     <doc-page slug="progress-bar"><doc-tab label="Features">
       <doc-section title="Determinate" [code]="determinateCode">
-        <cw-progress-bar [value]="35" showValue style="max-width: 320px;" />
+        <cw-progress-bar [value]="35" showValue style="max-width: 320px;" aria-label="Upload progress" />
       </doc-section>
 
       <doc-section title="Interactive" description="Bind the value to reflect live progress." [code]="interactiveCode">
         <div style="width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 0.75rem;">
-          <cw-progress-bar [value]="value" showValue />
+          <cw-progress-bar [value]="value" showValue aria-label="Progress" />
           <div style="display: flex; gap: 0.5rem;">
             <button cwButton size="small" variant="outlined" (click)="value = clamp(value - 10)">−10</button>
             <button cwButton size="small" (click)="value = clamp(value + 10)">+10</button>
@@ -24,7 +24,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
       </doc-section>
 
       <doc-section title="Indeterminate" description="Omit the value for an animated sweep." [code]="indeterminateCode">
-        <cw-progress-bar mode="indeterminate" style="max-width: 320px;" />
+        <cw-progress-bar mode="indeterminate" style="max-width: 320px;" aria-label="Loading" />
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>
   `

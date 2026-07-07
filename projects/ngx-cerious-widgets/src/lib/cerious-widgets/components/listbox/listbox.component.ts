@@ -40,8 +40,11 @@ interface CwOption {
   styleUrl: './listbox.component.scss',
   host: {
     'class': 'cw-listbox',
-    'role': 'listbox',
-    '[attr.aria-multiselectable]': 'multiple() ? "true" : null',
+    // The host groups an optional filter input with the option list; the
+    // `listbox` role lives on the list itself so the input isn't an invalid
+    // child of it.
+    'role': 'group',
+    '[attr.aria-label]': 'ariaLabel() || null',
     '[class.cw-listbox--disabled]': 'isDisabled()'
   },
   providers: [
@@ -53,6 +56,8 @@ export class ListboxComponent implements ControlValueAccessor {
 
   /** The available options — objects, or primitives for a simple list. */
   readonly options = input<readonly unknown[]>([]);
+  /** Accessible name for the list (mirrors the native `aria-label`). */
+  readonly ariaLabel = input<string>('', { alias: 'aria-label' });
   /** Property name to read an option's display label from (for object options). */
   readonly optionLabel = input<string>('label');
   /** Property name to read an option's value from (for object options). */

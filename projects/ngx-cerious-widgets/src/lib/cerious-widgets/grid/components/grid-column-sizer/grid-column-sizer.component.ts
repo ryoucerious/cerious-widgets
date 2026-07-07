@@ -21,6 +21,12 @@ export class GridColumnSizerComponent extends ZonelessCompatibleComponent implem
   set column(value: ColumnDef) { this.columnSignal.set(value); }
   get column() { return this.columnSignal()!; }
 
+  /** Current column width in px, for the resize handle's `aria-valuenow`. */
+  get widthPx(): number {
+    const parsed = parseInt(this.columnSignal()?.width ?? '', 10);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
   constructor(
     public el: ElementRef,
     @Inject(GRID_SERVICE) private gridService: IGridService,

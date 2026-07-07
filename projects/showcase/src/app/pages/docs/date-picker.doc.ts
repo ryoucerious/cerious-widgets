@@ -12,12 +12,12 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="date-picker">
       <doc-tab label="Features">
         <doc-section title="Basic" description="Click to open a calendar; select a day to set the value." [code]="basicCode">
-          <cw-date-picker [(ngModel)]="created" />
+          <cw-date-picker [(ngModel)]="created" aria-label="Created date" />
           <p class="hint">Value: {{ created ? created.toDateString() : '—' }}</p>
         </doc-section>
 
         <doc-section title="Min & max range" description="Days outside the range are disabled." [code]="rangeCode">
-          <cw-date-picker [(ngModel)]="delivery" [min]="today" [max]="maxDate" placeholder="Pick a delivery date" />
+          <cw-date-picker [(ngModel)]="delivery" [min]="today" [max]="maxDate" placeholder="Pick a delivery date" aria-label="Delivery date" />
         </doc-section>
 
         <doc-section title="Locale & first day of week"
@@ -25,7 +25,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
           [code]="localeCode">
           <div class="locale-row">
             <cw-select-button [(ngModel)]="locale" [options]="localeOptions" optionLabel="label" optionValue="value" />
-            <cw-date-picker [(ngModel)]="localized" [locale]="locale" [firstDayOfWeek]="firstDay()" />
+            <cw-date-picker [(ngModel)]="localized" [locale]="locale" [firstDayOfWeek]="firstDay()" aria-label="Localized date" />
           </div>
           <p class="hint">{{ locale }} · week starts {{ firstDay() === 1 ? 'Monday' : 'Sunday' }}</p>
         </doc-section>

@@ -14,6 +14,7 @@ export const routes: Routes = [
 
       // Built documentation pages.
       { path: 'grid', loadComponent: () => import('./pages/docs/grid.doc').then(m => m.GridDocComponent) },
+      { path: 'table', loadComponent: () => import('./pages/docs/table.doc').then(m => m.TableDocComponent) },
       { path: 'button', loadComponent: () => import('./pages/docs/button.doc').then(m => m.ButtonDocComponent) },
       { path: 'org-chart', loadComponent: () => import('./pages/docs/org-chart.doc').then(m => m.OrgChartDocComponent) },
       { path: 'input-number', loadComponent: () => import('./pages/docs/input-number.doc').then(m => m.InputNumberDocComponent) },

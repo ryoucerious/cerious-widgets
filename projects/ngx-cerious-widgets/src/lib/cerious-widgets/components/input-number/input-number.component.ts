@@ -58,6 +58,8 @@ export class InputNumberComponent implements ControlValueAccessor {
   readonly showButtons = input(true, { transform: booleanAttribute });
   /** Input placeholder. */
   readonly placeholder = input<string>('');
+  /** Accessible name for the input (when no visible label is associated). */
+  readonly ariaLabel = input<string>('');
   /** Disable the control (also settable via forms `setDisabledState`). */
   readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
 

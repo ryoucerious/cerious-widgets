@@ -12,16 +12,16 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="select">
       <doc-tab label="Features">
         <doc-section title="Basic" description="Bind with ngModel. Keyboard: ↑ ↓ to move, Enter to select, Esc to close." [code]="basicCode">
-          <cw-select [options]="cities" [(ngModel)]="city" optionLabel="name" optionValue="code" placeholder="Select a city" />
+          <cw-select [options]="cities" [(ngModel)]="city" optionLabel="name" optionValue="code" placeholder="Select a city" aria-label="City" />
           <p class="hint">Value: {{ city ?? '—' }}</p>
         </doc-section>
 
         <doc-section title="Primitive options" description="Options may be plain strings or numbers." [code]="primitiveCode">
-          <cw-select [options]="sizes" [(ngModel)]="size" placeholder="Size" style="min-width: 9rem;" />
+          <cw-select [options]="sizes" [(ngModel)]="size" placeholder="Size" style="min-width: 9rem;" aria-label="Size" />
         </doc-section>
 
         <doc-section title="Disabled" [code]="disabledCode">
-          <cw-select [options]="sizes" disabled placeholder="Disabled" style="min-width: 9rem;" />
+          <cw-select [options]="sizes" disabled placeholder="Disabled" style="min-width: 9rem;" aria-label="Size (disabled)" />
         </doc-section>
       </doc-tab>
 

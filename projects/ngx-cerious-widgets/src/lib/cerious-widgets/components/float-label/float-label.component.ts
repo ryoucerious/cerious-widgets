@@ -9,6 +9,9 @@ import {
   signal
 } from '@angular/core';
 
+/** Process-wide counter for generating unique control ids. */
+let floatLabelSeq = 0;
+
 /**
  * Wraps a form control with a label that sits inside the field, then floats up
  * when the control is focused or has a value.
@@ -26,7 +29,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ng-content />
-    <label class="cw-float-label__label" [class.cw-float-label__label--floated]="floated()">{{ label() }}</label>
+    <label class="cw-float-label__label" [class.cw-float-label__label--floated]="floated()"
+           [attr.for]="controlId()">{{ label() }}</label>
   `,
   styleUrl: './float-label.component.scss',
   host: {
@@ -46,12 +50,23 @@ export class FloatLabelComponent implements AfterContentInit {
 
   private readonly focused = signal(false);
   private readonly filled = signal(false);
+  /** Id of the projected control, so the `<label for>` names it for assistive tech. */
+  protected readonly controlId = signal<string | null>(null);
 
   /** The label floats when the control is focused or holds a value. */
   readonly floated = computed(() => this.focused() || this.filled());
 
   ngAfterContentInit(): void {
+    this.linkLabel();
     this.refreshFilled();
+  }
+
+  /** Associate the label with the projected control, assigning an id if it lacks one. */
+  private linkLabel(): void {
+    const control = this.host.nativeElement.querySelector<HTMLElement>('input, textarea, select');
+    if (!control) { return; }
+    if (!control.id) { control.id = `cw-float-label-${++floatLabelSeq}`; }
+    this.controlId.set(control.id);
   }
 
   onFocus(focused: boolean): void {

@@ -39,6 +39,16 @@ export class MeterGroupComponent {
   readonly size = input(16, { transform: numberAttribute });
   /** Show the legend below the bar. */
   readonly showLegend = input(true);
+  /** Accessible name for the whole meter. Defaults to a summary of the segments. */
+  readonly ariaLabel = input<string>('');
+
+  /**
+   * The bar as a whole is a single image to assistive tech (a multi-segment
+   * part-of-whole display isn't a single scalar `meter`), described by this
+   * composite label; the visible legend carries the per-segment detail.
+   */
+  readonly a11yLabel = computed(() =>
+    this.ariaLabel() || this.segments().map(s => `${s.label}: ${s.value}`).join(', '));
 
   readonly total = computed(() => {
     const explicit = this.max();

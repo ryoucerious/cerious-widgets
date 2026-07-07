@@ -33,6 +33,7 @@ export const GROUP_ORDER: ComponentGroup[] = ['Data', 'Form', 'Display', 'Naviga
 export const COMPONENTS: ComponentDoc[] = [
   // ---- Data ----
   { slug: 'grid', name: 'Grid', group: 'Data', icon: '▦', summary: 'Virtualized data grid — sort, group, pin, edit, export', complex: true, virtualized: true, ready: true },
+  { slug: 'table', name: 'Table', group: 'Data', icon: '☷', summary: 'Lightweight semantic table with sorting & templates', complex: true, ready: true },
 
   // ---- Form ----
   { slug: 'input-number', name: 'InputNumber', group: 'Form', icon: '#', summary: 'Numeric input with steppers, currency & locale formatting', complex: true, ready: true },
@@ -127,7 +128,11 @@ export const TOTAL_COMPONENTS = COMPONENTS.length;
 export function componentsByGroup(): { group: ComponentGroup; items: ComponentDoc[] }[] {
   return GROUP_ORDER.map(group => ({
     group,
-    items: COMPONENTS.filter(c => c.group === group)
+    // Alphabetical within each group (case-insensitive) so the sidebar and
+    // gallery are easy to scan.
+    items: COMPONENTS
+      .filter(c => c.group === group)
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
   })).filter(g => g.items.length > 0);
 }
 

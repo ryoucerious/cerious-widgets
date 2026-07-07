@@ -29,15 +29,17 @@
 @if (filteredOptions().length === 0) {
   <div class="cw-listbox__empty">No results</div>
 } @else if (useVirtual()) {
-  <div class="cw-listbox__list cw-listbox__list--virtual" [style.height]="listHeight()">
-    <cerious-scroll [items]="filteredOptions()">
+  <div class="cw-listbox__list cw-listbox__list--virtual" [style.height]="listHeight()"
+       role="listbox" [attr.aria-multiselectable]="multiple() ? 'true' : null" [attr.aria-label]="ariaLabel() || null">
+    <cerious-scroll role="group" [items]="filteredOptions()">
       <ng-template ceriousScrollItem let-option>
         <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option }" />
       </ng-template>
     </cerious-scroll>
   </div>
 } @else {
-  <div class="cw-listbox__list" [style.max-height]="listHeight()">
+  <div class="cw-listbox__list" [style.max-height]="listHeight()"
+       role="listbox" [attr.aria-multiselectable]="multiple() ? 'true' : null" [attr.aria-label]="ariaLabel() || null">
     @for (option of filteredOptions(); track $index) {
       <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option }" />
     }

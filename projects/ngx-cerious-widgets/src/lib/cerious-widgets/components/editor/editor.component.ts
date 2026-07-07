@@ -47,6 +47,8 @@ export class EditorComponent implements ControlValueAccessor {
 
   /** Placeholder shown while empty. */
   readonly placeholder = input<string>('');
+  /** Accessible name for the editing region. Defaults to "Rich text editor". */
+  readonly ariaLabel = input<string>('');
   /** Disable editing (also settable via forms `setDisabledState`). */
   readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
 
