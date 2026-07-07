@@ -109,6 +109,11 @@ export class GridPagerComponent extends ZonelessCompatibleComponent implements I
    * the grid's 1-based page selection.
    */
   onPaginatorChange(event: CwPageEvent): void {
+    // Apply a page-size change (when a pageSizeOptions select is enabled) before
+    // re-selecting the page so the grid re-pages with the new size.
+    if (event.pageSize !== this.gridService.gridOptions.pageSize) {
+      this.gridService.gridOptions.pageSize = event.pageSize;
+    }
     this.gridPageClick(event.page + 1);
   }
 

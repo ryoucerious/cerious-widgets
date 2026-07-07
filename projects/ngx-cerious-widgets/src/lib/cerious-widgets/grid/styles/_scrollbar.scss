@@ -1,66 +1,35 @@
 // ============================
-// Scrollbar
+// Scrollbar (global)
 // ============================
-.cw-grid {
-    /* Width */
-    ::-webkit-scrollbar {
-        width: 12px;
-    }
+// A slim, themed scrollbar everywhere: the thumb is centered in its track via a
+// transparent border + `background-clip: padding-box`, so it reads as a slim
+// thumb with even margins on both sides — never a thin bar pinned to one edge
+// with a wide empty gap beside it. Applies to every scrollable surface app-wide.
+::-webkit-scrollbar { width: 14px; height: 14px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: var(--cw-border-strong);
+    border-radius: 8px;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--cw-text-muted); background-clip: padding-box; }
+::-webkit-scrollbar-corner { background: transparent; }
 
-    /* Track */
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: var(--cw-border-strong);
-        border-radius: 6px;
-    }
-
-    .navbar-button-container::-webkit-scrollbar-thumb {
-        background: var(--cw-border-strong);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--cw-text-muted);
-    }
+// Firefox
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cw-border-strong) transparent;
 }
 
-// The cerious-scroll engine attaches its vertical scrollbar strip with inline
-// hardcoded colours (#f0f0f0 / #ccc) — `!important` here outranks the inline
-// styles so the strip follows the active theme instead of flashing white on
-// dark/frost. GLOBAL (not scoped to `.cw-grid`) because the standalone
-// virtualized components (Listbox, MultiSelect, Tree, DataView, OrderList,
-// PickList, AutoComplete, VirtualScroller) use the same engine outside the grid.
-// The engine's inline default is a 17px opaque grey strip with a hard 1px left
-// border — reads as a heavy separate column with a "gap" line. Make it a
-// transparent overlay strip with a slim themed thumb instead. Transparent also
-// avoids the white flash on dark/frost (the themed list background shows through).
+// The cerious-scroll engine attaches its scrollbar strip with inline hardcoded
+// colours (#f0f0f0 / #ccc). Override to a transparent overlay strip so the themed
+// scrollbar (from the global rule above) shows through over the list background,
+// on every theme, but keep a themed 1px left border to divide the gutter from the
+// content. GLOBAL because the standalone virtualized components use the same engine.
 [data-cerious-scrollbar='container'] {
     background: transparent !important;
-    border-left: none !important;
-
-    &::-webkit-scrollbar { width: 8px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background: var(--cw-border-strong); border-radius: 6px; }
-    &::-webkit-scrollbar-thumb:hover { background: var(--cw-text-muted); }
-}
-
-// Themed thin scrollbars for the standalone virtualized panels' viewports.
-.cw-listbox__list--virtual,
-.cw-multi-select__list--virtual,
-.cw-tree__list--virtual,
-.cw-order-list__list--virtual,
-.cw-pick-list__list--virtual,
-.cw-autocomplete__list--virtual,
-.cw-data-view__list--virtual,
-.cw-virtual-scroller,
-.cw-galleria__thumbnails {
-    ::-webkit-scrollbar { width: 10px; height: 8px; }
-    ::-webkit-scrollbar-track { background-color: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--cw-border-strong); border-radius: 6px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--cw-text-muted); }
+    border-left: 1px solid var(--cw-border) !important;
 }
 
 // cerious-scroll's per-item wrappers don't stretch their child, so rows inside a

@@ -304,14 +304,18 @@ export class GridService implements IGridService {
   processDataset(): void {
     try {
       if (this.gridDataset && this.dataset) {
+        // Body/filler/footer cells are the LEAF columns. When columns are grouped
+        // (have `children`), the top-level defs are header groups with no `field`;
+        // flatten so each row renders a cell per leaf column (matching the header).
+        const leafColumnDefs = this.gridColumnService.flattenColumns(this.gridOptions.columnDefs);
         this.gridDataset.dataset = this.dataset.map((data: any) => {
           return new GridRow({
             row: data,
-            columnDefs: this.gridOptions.columnDefs
+            columnDefs: leafColumnDefs
           });
         });
-        this.gridDataset.fillerRows = [new GridRow({ columnDefs: this.gridOptions.columnDefs })];
-        this.gridDataset.footerRows = [new GridRow({ columnDefs: this.gridOptions.columnDefs })];
+        this.gridDataset.fillerRows = [new GridRow({ columnDefs: leafColumnDefs })];
+        this.gridDataset.footerRows = [new GridRow({ columnDefs: leafColumnDefs })];
 
         this.gridDataset.totalRowCount = this.gridDataset.dataset.length;
 

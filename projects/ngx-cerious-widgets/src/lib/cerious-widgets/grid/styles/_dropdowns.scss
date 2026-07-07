@@ -1,4 +1,31 @@
 // ============================
+// Column-visibility panel (hosted in a `.cw-overlay-panel` CDK overlay — this
+// styles just its inner checkbox list to read like the library menus).
+// ============================
+.cw-grid-column-list {
+    min-width: 12rem;
+
+    ul { list-style: none; margin: 0; padding: 0; }
+
+    li { border-radius: var(--cw-radius-sm); }
+
+    label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.5rem 0.625rem;
+        font-size: 0.875rem;
+        color: var(--cw-text);
+        cursor: pointer;
+        border-radius: var(--cw-radius-sm);
+    }
+    li:hover label { background: var(--cw-surface-hover); }
+
+    input[type='checkbox'] { accent-color: var(--cw-primary); margin: 0; }
+}
+
+// ============================
 // Dropdown Menu
 // ============================
 .cw-dropdown-menu {

@@ -10,13 +10,19 @@
       <span aria-live="polite">Viewing ({{ pagerInfo?.start }}-{{ pagerInfo?.total }}) of {{ pagerInfo?.total }}</span>
     </div>
   } @else {
-    <!-- Ungrouped: the standalone Paginator drives navigation + the range summary. -->
+    <!-- Ungrouped: the standalone Paginator drives navigation + the range summary.
+         Each region is configurable via gridOptions.pager. -->
     <cw-paginator
       class="cw-grid-paginator"
       [totalRecords]="gridDataset?.totalRowCount || 0"
       [pageSize]="gridOptions.pageSize || 10"
       [page]="(gridDataset?.pageNumber || 1) - 1"
-      [pageSizeOptions]="[gridOptions.pageSize || 10]"
+      [pageSizeOptions]="gridOptions.pager?.pageSizeOptions || [gridOptions.pageSize || 10]"
+      [showPageSize]="gridOptions.pager?.showPageSize ?? true"
+      [showSummary]="gridOptions.pager?.showSummary ?? true"
+      [showFirstLast]="gridOptions.pager?.showFirstLast ?? true"
+      [showPrevNext]="gridOptions.pager?.showPrevNext ?? true"
+      [showPageNumbers]="gridOptions.pager?.showPageNumbers ?? true"
       (pageChange)="onPaginatorChange($event)" />
   }
 </div>

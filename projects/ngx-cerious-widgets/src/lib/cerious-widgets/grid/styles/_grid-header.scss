@@ -175,13 +175,23 @@
         }
     }
 
+    // Rendered only for resizable columns. A visible divider at the column's
+    // right edge marks the grab point (same style as the pinned-column border);
+    // it thickens to the accent on hover so it's clear you can drag it.
     .column-resizer {
         position: absolute;
         top: 0px;
         right: 0px;
         cursor: ew-resize;
-        width: 2px;
+        width: 6px;
         height: 100%;
+        border-right: 1px solid var(--cw-divider);
+        transition: border-color 0.12s ease;
+    }
+    .column-resizer:hover,
+    .column-resizer:focus-visible {
+        outline: none;
+        border-right: 2px solid var(--cw-primary);
     }
 }
 

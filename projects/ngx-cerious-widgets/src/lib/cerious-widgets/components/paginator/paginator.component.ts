@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -45,6 +46,18 @@ export class PaginatorComponent {
   readonly page = input(0, { transform: numberAttribute });
   /** How many numbered buttons to show at once. */
   readonly windowSize = input(5, { transform: numberAttribute });
+
+  // --- Per-part visibility (each region is independently toggleable) ---
+  /** Show the rows-per-page select. */
+  readonly showPageSize = input(true, { transform: booleanAttribute });
+  /** Show the "Showing x to y of n" summary. */
+  readonly showSummary = input(true, { transform: booleanAttribute });
+  /** Show the first / last («, ») buttons. */
+  readonly showFirstLast = input(true, { transform: booleanAttribute });
+  /** Show the previous / next (‹, ›) buttons. */
+  readonly showPrevNext = input(true, { transform: booleanAttribute });
+  /** Show the numbered page buttons (and ellipses). */
+  readonly showPageNumbers = input(true, { transform: booleanAttribute });
 
   /** Emitted on every page or page-size change. */
   readonly pageChange = output<CwPageEvent>();

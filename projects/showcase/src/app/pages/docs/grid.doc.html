@@ -31,6 +31,9 @@
             <ng-template #statusTemplate let-value="value">
               <cw-tag [value]="value" [severity]="statusSeverity(value)" />
             </ng-template>
+            <ng-template #footerLabel><strong>Totals</strong></ng-template>
+            <ng-template #footerPrice><strong>{{ totalOf('price') | currency }}</strong></ng-template>
+            <ng-template #footerStock><strong>{{ totalOf('stock') | number }}</strong></ng-template>
           </cw-grid>
         }
       </div>
@@ -74,8 +77,8 @@
   </doc-tab>
 
   <doc-tab label="API">
-    <doc-section title="cw-grid inputs">
-      <doc-api [props]="gridProps" />
+    <doc-section title="&lt;cw-grid&gt; — inputs, events & methods">
+      <doc-api [props]="gridProps" [events]="gridEvents" [methods]="gridMethods" />
     </doc-section>
     <doc-section title="GridOptions">
       <doc-api [props]="optionProps" />

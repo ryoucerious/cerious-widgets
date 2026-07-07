@@ -9,6 +9,8 @@ export interface Product {
   status: string;
   stock: number;
   rating: number;
+  /** 0–1, for the percentage formatter demo. */
+  progress: number;
 }
 
 const CATEGORIES = ['Electronics', 'Apparel', 'Home', 'Toys', 'Books'];
@@ -24,7 +26,8 @@ export function makeProducts(n: number): Product[] {
     date: new Date(2024, i % 12, (i % 27) + 1),
     status: STATUSES[i % STATUSES.length],
     stock: (i * 53) % 500,
-    rating: 1 + (i % 5)
+    rating: 1 + (i % 5),
+    progress: Math.round(((i * 7) % 100)) / 100
   }));
 }
 
@@ -44,6 +47,51 @@ export function columns(): ColumnDef[] {
     { id: 'price', field: 'price', label: 'Price', type: ColumnType.Number, format: 'currency' as any, ...caps },
     { id: 'status', field: 'status', label: 'Status', type: ColumnType.String, ...caps },
     { id: 'stock', field: 'stock', label: 'Stock', type: ColumnType.Number, ...caps }
+  ] as ColumnDef[];
+}
+
+/** Columns with a two-level hierarchy → a grouped (multi-row) header. */
+export function groupedColumns(): ColumnDef[] {
+  const caps = { sortable: true, filterable: true, resizable: true };
+  return [
+    { id: 'id', field: 'id', label: 'ID', type: ColumnType.Number, width: '70px', ...caps },
+    {
+      id: 'product', label: 'Product', children: [
+        { id: 'name', field: 'name', label: 'Name', type: ColumnType.String, ...caps },
+        { id: 'category', field: 'category', label: 'Category', type: ColumnType.String, ...caps }
+      ]
+    },
+    {
+      id: 'inventory', label: 'Inventory', children: [
+        { id: 'price', field: 'price', label: 'Price', type: ColumnType.Number, format: 'currency' as any, ...caps },
+        { id: 'stock', field: 'stock', label: 'In stock', type: ColumnType.Number, ...caps },
+        { id: 'status', field: 'status', label: 'Status', type: ColumnType.String, ...caps }
+      ]
+    }
+  ] as ColumnDef[];
+}
+
+/** Columns showcasing the built-in value formatters. */
+export function formatColumns(): ColumnDef[] {
+  const caps = { sortable: true, resizable: true };
+  return [
+    { id: 'name', field: 'name', label: 'Name', type: ColumnType.String, ...caps },
+    { id: 'price', field: 'price', label: 'Price', type: ColumnType.Number, format: 'currency' as any, ...caps },
+    { id: 'rating', field: 'rating', label: 'Rating', type: ColumnType.Number, format: 'stars' as any, ...caps },
+    { id: 'progress', field: 'progress', label: 'Fulfilment', type: ColumnType.Number, format: 'percentage' as any, ...caps },
+    { id: 'date', field: 'date', label: 'Created', type: ColumnType.Date, format: 'date' as any, ...caps }
+  ] as ColumnDef[];
+}
+
+/** Columns with footer cells: a label + aggregate totals for price & stock. */
+export function footerColumns(): ColumnDef[] {
+  const caps = { sortable: true, resizable: true };
+  return [
+    { id: 'id', field: 'id', label: 'ID', type: ColumnType.Number, width: '70px', ...caps },
+    { id: 'name', field: 'name', label: 'Name', type: ColumnType.String, footerCellTemplate: 'footerLabel', ...caps },
+    { id: 'category', field: 'category', label: 'Category', type: ColumnType.String, ...caps },
+    { id: 'price', field: 'price', label: 'Price', type: ColumnType.Number, format: 'currency' as any, footerCellTemplate: 'footerPrice', ...caps },
+    { id: 'stock', field: 'stock', label: 'Stock', type: ColumnType.Number, footerCellTemplate: 'footerStock', ...caps }
   ] as ColumnDef[];
 }
 

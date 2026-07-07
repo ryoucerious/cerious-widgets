@@ -15,6 +15,10 @@
 
     .cw-paging { white-space: nowrap; }
 
+    // Let the embedded Paginator fill the pager so its own space-between pushes
+    // the page buttons to the right (summary / size select stay left).
+    .cw-grid-paginator { flex: 1 1 auto; }
+
     .cw-paging-controls .btn-group {
         display: inline-flex;
         gap: 4px;
