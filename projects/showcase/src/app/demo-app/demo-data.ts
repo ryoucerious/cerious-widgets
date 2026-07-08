@@ -5,6 +5,8 @@ export interface Product {
   price: number;
   stock: number;
   status: 'In stock' | 'Low stock' | 'Out of stock';
+  // Index signature so it satisfies cw-table's `Record<string, unknown>` bound.
+  [key: string]: unknown;
 }
 
 export interface Order {
@@ -13,6 +15,7 @@ export interface Order {
   date: Date;
   total: number;
   status: 'Paid' | 'Pending' | 'Refunded';
+  [key: string]: unknown;
 }
 
 export const CATEGORIES = ['Electronics', 'Apparel', 'Home', 'Toys', 'Books'];
@@ -53,3 +56,46 @@ export function orderSeverity(status: Order['status']): 'success' | 'warn' | 'da
 export function productSeverity(status: Product['status']): 'success' | 'warn' | 'danger' | 'neutral' {
   return status === 'In stock' ? 'success' : status === 'Low stock' ? 'warn' : 'danger';
 }
+
+export interface Customer {
+  id: number;
+  name: string;
+  handle: string;
+  initials: string;
+  plan: 'Free' | 'Pro' | 'Enterprise';
+  orders: number;
+  spent: number;
+  rating: number;
+  active: boolean;
+}
+
+export function seedCustomers(): Customer[] {
+  const names = ['Ada Lovelace', 'Grace Hopper', 'Linus Torvalds', 'Margaret Hamilton',
+    'Katherine Johnson', 'Alan Turing', 'Radia Perlman', 'Barbara Liskov',
+    'Donald Knuth', 'Edsger Dijkstra', 'Tim Berners-Lee', 'Hedy Lamarr'];
+  const plans: Customer['plan'][] = ['Free', 'Pro', 'Enterprise'];
+  return names.map((name, i) => {
+    const [f, l] = name.split(' ');
+    return {
+      id: i + 1,
+      name,
+      handle: '@' + (f[0] + l).toLowerCase(),
+      initials: (f[0] + l[0]).toUpperCase(),
+      plan: plans[i % plans.length],
+      orders: 3 + ((i * 13) % 48),
+      spent: Math.round((120 + ((i * 317) % 9800)) * 100) / 100,
+      rating: 3 + (i % 3),
+      active: i % 4 !== 0
+    };
+  });
+}
+
+export function planSeverity(plan: Customer['plan']): 'neutral' | 'info' | 'success' {
+  return plan === 'Enterprise' ? 'success' : plan === 'Pro' ? 'info' : 'neutral';
+}
+
+export const COUNTRIES = ['United States', 'United Kingdom', 'Canada', 'Germany', 'France',
+  'Japan', 'Australia', 'Brazil', 'India', 'Netherlands', 'Sweden', 'Spain'];
+
+export const SKILLS = ['Angular', 'TypeScript', 'RxJS', 'CSS', 'Node.js', 'GraphQL',
+  'Design systems', 'Accessibility', 'Testing', 'Figma'];

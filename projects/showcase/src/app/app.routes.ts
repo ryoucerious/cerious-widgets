@@ -7,6 +7,17 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home.component').then(m => m.HomeComponent)
   },
   {
+    path: 'app',
+    loadComponent: () => import('./demo-app/demo-shell.component').then(m => m.DemoShellComponent),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+      { path: 'dashboard', loadComponent: () => import('./demo-app/dashboard.component').then(m => m.DemoDashboardComponent) },
+      { path: 'products', loadComponent: () => import('./demo-app/products.component').then(m => m.DemoProductsComponent) },
+      { path: 'customers', loadComponent: () => import('./demo-app/customers.component').then(m => m.DemoCustomersComponent) },
+      { path: 'profile', loadComponent: () => import('./demo-app/profile.component').then(m => m.DemoProfileComponent) }
+    ]
+  },
+  {
     path: 'components',
     loadComponent: () => import('./pages/components-layout.component').then(m => m.ComponentsLayoutComponent),
     children: [
