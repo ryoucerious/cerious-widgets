@@ -87,3 +87,8 @@ export * from './style-class/style-class.directive';
 export * from './deferred-content/deferred-content.component';
 export * from './focus-trap/focus-trap.directive';
 export * from './table/table.component';
+export * from './chart/chart.types';
+export * from './chart/area-chart.component';
+export * from './chart/donut-chart.component';
+export * from './chart/sparkline.component';
+export * from './calendar/calendar.component';

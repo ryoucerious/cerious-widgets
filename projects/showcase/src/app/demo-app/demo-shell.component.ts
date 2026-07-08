@@ -35,6 +35,9 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
           <a routerLink="customers" routerLinkActive="is-active" class="admin__nav-link">
             <span class="admin__nav-icon" aria-hidden="true">☺</span> Customers
           </a>
+          <a routerLink="calendar" routerLinkActive="is-active" class="admin__nav-link">
+            <span class="admin__nav-icon" aria-hidden="true">📅</span> Calendar
+          </a>
         </nav>
 
         <div class="admin__spacer"></div>

@@ -34,6 +34,8 @@ export const COMPONENTS: ComponentDoc[] = [
   // ---- Data ----
   { slug: 'grid', name: 'Grid', group: 'Data', icon: '▦', summary: 'Virtualized data grid — sort, group, pin, edit, export', complex: true, virtualized: true, ready: true },
   { slug: 'table', name: 'Table', group: 'Data', icon: '☷', summary: 'Lightweight semantic table with sorting & templates', complex: true, ready: true },
+  { slug: 'chart', name: 'Chart', group: 'Data', icon: '📈', summary: 'Pure-SVG area, donut & sparkline charts', complex: true, ready: true },
+  { slug: 'calendar', name: 'Calendar', group: 'Data', icon: '📅', summary: 'Month-view event calendar with keyboard nav', complex: true, ready: true },
 
   // ---- Form ----
   { slug: 'input-number', name: 'InputNumber', group: 'Form', icon: '#', summary: 'Numeric input with steppers, currency & locale formatting', complex: true, ready: true },

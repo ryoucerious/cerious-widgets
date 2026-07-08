@@ -2,11 +2,11 @@ import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
-  AvatarComponent, BreadcrumbComponent, ButtonComponent, CardComponent, CwTableColumn, CwTimelineEvent,
-  CwToastService, ProgressBarComponent, SelectButtonComponent, TableColumnDirective, TableComponent,
+  AreaChartComponent, AvatarComponent, BreadcrumbComponent, ButtonComponent, CardComponent, CwChartPointEvent,
+  CwChartSeries, CwDonutSegment, CwTableColumn, CwTimelineEvent, CwToastService, DonutChartComponent,
+  ProgressBarComponent, SelectButtonComponent, SparklineComponent, TableColumnDirective, TableComponent,
   TagComponent, TimelineComponent
 } from 'ngx-cerious-widgets';
-import { AreaChartComponent, ChartSeries, DonutChartComponent, DonutSegment, SparklineComponent } from './charts';
 import { Order, orderSeverity, seedOrders } from './demo-data';
 
 interface Kpi { label: string; value: string; delta: string; up: boolean; icon: string; tint: string; spark: number[]; }
@@ -45,7 +45,7 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
           </div>
           <div class="kpi__value">{{ k.value }}</div>
           <div class="kpi__label">{{ k.label }}</div>
-          <app-sparkline [data]="k.spark" [color]="k.tint" />
+          <cw-sparkline [data]="k.spark" [color]="k.tint" />
         </div>
       }
     </div>
@@ -54,7 +54,7 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
     <div class="dash">
       <div class="dash__col">
         <cw-card title="Revenue overview" subtitle="This year vs. last year">
-          <app-area-chart [series]="revenueSeries()" [labels]="revenueLabels()" ariaLabel="Revenue overview" />
+          <cw-area-chart [series]="revenueSeries()" [labels]="revenueLabels()" (pointClick)="onPoint($event)" ariaLabel="Revenue overview" />
           <div class="legend">
             @for (s of revenueSeries(); track s.name) {
               <span class="legend__item"><i [style.background]="s.color"></i> {{ s.name }}</span>
@@ -76,7 +76,7 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
       <div class="dash__col">
         <cw-card title="Sales by category" subtitle="Share of revenue">
           <div class="donut-wrap">
-            <app-donut-chart [segments]="category" centerValue="$84.1k" centerLabel="Total" ariaLabel="Sales by category" />
+            <cw-donut-chart [segments]="category" centerValue="$84.1k" centerLabel="Total" (segmentClick)="onSlice($event)" ariaLabel="Sales by category" />
             <ul class="cat-legend">
               @for (c of category; track c.label) {
                 <li><i [style.background]="c.color"></i><span>{{ c.label }}</span><strong>{{ c.value }}%</strong></li>
@@ -136,7 +136,7 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
     .legend__item i, .cat-legend i, .legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
 
     .donut-wrap { display: flex; align-items: center; gap: 1rem; }
-    .donut-wrap app-donut-chart { width: 140px; flex: none; }
+    .donut-wrap cw-donut-chart { width: 140px; flex: none; }
     .cat-legend { list-style: none; margin: 0; padding: 0; flex: 1 1 auto; display: flex; flex-direction: column; gap: 0.5rem; }
     .cat-legend li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--cw-text-muted, var(--cw-text-secondary)); }
     .cat-legend li strong { margin-left: auto; color: var(--cw-text); }
@@ -177,7 +177,7 @@ export class DemoDashboardComponent {
     }
   };
 
-  readonly revenueSeries = computed<ChartSeries[]>(() => {
+  readonly revenueSeries = computed<CwChartSeries[]>(() => {
     const d = this.revenueData[this.range()];
     return [
       { name: 'This year', color: '#6c63ff', data: d.thisYear },
@@ -186,7 +186,7 @@ export class DemoDashboardComponent {
   });
   readonly revenueLabels = computed(() => this.revenueData[this.range()].labels);
 
-  readonly category: DonutSegment[] = [
+  readonly category: CwDonutSegment[] = [
     { label: 'Electronics', value: 38, color: '#6c63ff' },
     { label: 'Apparel', value: 24, color: '#22c55e' },
     { label: 'Home', value: 18, color: '#f59e0b' },
@@ -230,5 +230,12 @@ export class DemoDashboardComponent {
 
   exportReport(): void {
     this.toast.show({ severity: 'success', summary: 'Report exported', detail: 'Your report is downloading.' });
+  }
+
+  onPoint(e: CwChartPointEvent): void {
+    this.toast.show({ severity: 'info', summary: e.label, detail: e.values.map(v => `${v.name}: ${v.value}`).join(' · ') });
+  }
+  onSlice(s: CwDonutSegment): void {
+    this.toast.show({ severity: 'info', summary: s.label, detail: `${s.value}% of revenue` });
   }
 }

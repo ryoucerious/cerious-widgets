@@ -14,6 +14,7 @@ export const routes: Routes = [
       { path: 'dashboard', loadComponent: () => import('./demo-app/dashboard.component').then(m => m.DemoDashboardComponent) },
       { path: 'products', loadComponent: () => import('./demo-app/products.component').then(m => m.DemoProductsComponent) },
       { path: 'customers', loadComponent: () => import('./demo-app/customers.component').then(m => m.DemoCustomersComponent) },
+      { path: 'calendar', loadComponent: () => import('./demo-app/calendar.component').then(m => m.DemoCalendarComponent) },
       { path: 'profile', loadComponent: () => import('./demo-app/profile.component').then(m => m.DemoProfileComponent) }
     ]
   },
@@ -26,6 +27,8 @@ export const routes: Routes = [
       // Built documentation pages.
       { path: 'grid', loadComponent: () => import('./pages/docs/grid.doc').then(m => m.GridDocComponent) },
       { path: 'table', loadComponent: () => import('./pages/docs/table.doc').then(m => m.TableDocComponent) },
+      { path: 'chart', loadComponent: () => import('./pages/docs/chart.doc').then(m => m.ChartDocComponent) },
+      { path: 'calendar', loadComponent: () => import('./pages/docs/calendar.doc').then(m => m.CalendarDocComponent) },
       { path: 'button', loadComponent: () => import('./pages/docs/button.doc').then(m => m.ButtonDocComponent) },
       { path: 'org-chart', loadComponent: () => import('./pages/docs/org-chart.doc').then(m => m.OrgChartDocComponent) },
       { path: 'input-number', loadComponent: () => import('./pages/docs/input-number.doc').then(m => m.InputNumberDocComponent) },
