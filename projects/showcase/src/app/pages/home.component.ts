@@ -37,7 +37,7 @@ export class HomeComponent {
 
   readonly highlights = [
     { icon: '🧩', title: `${TOTAL_COMPONENTS}+ components`, text: 'A full, comprehensive catalog — from inputs and overlays to a virtualized data grid.' },
-    { icon: '🎨', title: 'Three themes, zero rebuild', text: 'Cerious Light, Frost glassmorphism and Dark — all driven by --cw-* design tokens.' },
+    { icon: '🎨', title: 'Themeable to the core', text: 'Curated presets that vary color, shape & elevation — plus a runtime engine to set your own brand colors, all from --cw-* tokens.' },
     { icon: '⚡', title: 'Signals & OnPush', text: 'Every component is standalone, zoneless-safe and built on modern Angular signal inputs.' },
     { icon: '♾️', title: 'Virtual scrolling built in', text: `${COMPONENTS.filter(c => c.virtualized).length} data components virtualize huge lists via ngx-cerious-scroll.` }
   ];

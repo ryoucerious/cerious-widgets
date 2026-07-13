@@ -1,53 +1,35 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { CwThemeService } from 'ngx-cerious-widgets';
 
-export type ThemeName = 'light' | 'frost' | 'dark';
-
-const STORAGE_KEY = 'cw-showcase-theme';
+/** Glyph per preset for the switcher. */
+const ICONS: Record<string, string> = {
+  light: '☀', frost: '❄', dark: '☾', cerious: '◆',
+  midnight: '🌙', sandstone: '🏜', emerald: '🌿', grape: '🍇', contrast: '◐',
+  flat: '▭', soft: '◍'
+};
 
 /**
- * App-wide theme state. Applies the selected theme to `<html>` (via
- * `data-cw-theme` + the `.cw-dark` class) so every component — including
- * body-attached CDK overlays — follows it, and persists the choice.
+ * App-wide theme state for the showcase, backed by the library's runtime
+ * {@link CwThemeService}. Lists every built-in preset and applies the selection
+ * to `<html>` (so body-attached CDK overlays follow it too), persisting it.
  */
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  readonly themes: { id: ThemeName; label: string; icon: string }[] = [
-    { id: 'light', label: 'Light', icon: '☀' },
-    { id: 'frost', label: 'Frost', icon: '❄' },
-    { id: 'dark', label: 'Dark', icon: '☾' }
-  ];
+  private readonly cw = inject(CwThemeService);
 
-  readonly theme = signal<ThemeName>(this.readInitial());
+  readonly themes = this.cw.presets
+    .map(p => ({ id: p.name, label: p.label, icon: ICONS[p.name] ?? '◆' }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  /** Current preset name (the library service's signal). */
+  readonly theme = this.cw.theme;
 
   constructor() {
-    this.apply(this.theme());
+    // Frost is the showcase default when nothing is persisted.
+    this.cw.apply({ preset: this.cw.readStored() ?? 'frost', persist: true });
   }
 
-  set(theme: ThemeName): void {
-    this.theme.set(theme);
-    this.apply(theme);
-    try {
-      localStorage.setItem(STORAGE_KEY, theme);
-    } catch {
-      /* storage may be unavailable (private mode) — ignore */
-    }
-  }
-
-  private apply(theme: ThemeName): void {
-    const html = document.documentElement;
-    html.setAttribute('data-cw-theme', theme);
-    html.classList.toggle('cw-dark', theme === 'dark');
-  }
-
-  private readInitial(): ThemeName {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY) as ThemeName | null;
-      if (stored === 'light' || stored === 'frost' || stored === 'dark') {
-        return stored;
-      }
-    } catch {
-      /* ignore */
-    }
-    return 'light';
+  set(id: string): void {
+    this.cw.apply({ preset: id, persist: true });
   }
 }

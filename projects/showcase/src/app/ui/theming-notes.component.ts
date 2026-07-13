@@ -7,7 +7,7 @@ export interface TokenRow {
 
 /**
  * Theming tab content: explains that the component is styled entirely with
- * `--cw-*` design tokens across the three themes, and lists the tokens it reads.
+ * `--cw-*` design tokens across all themes, and lists the tokens it reads.
  */
 @Component({
   selector: 'doc-theming',

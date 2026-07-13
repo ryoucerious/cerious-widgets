@@ -176,8 +176,7 @@ export class DemoProductsComponent implements AfterViewInit {
     noDataMessage: 'No products match your filters.'
   };
   readonly pluginOptions: PluginOptions = {
-    MultiSort: { enableMultiSort: true },
-    ColumnMenu: { enableColumnMenu: true }
+    MultiSort: { enableMultiSort: true }
   } as PluginOptions;
 
   readonly dialogVisible = signal(false);

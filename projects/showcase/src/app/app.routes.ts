@@ -41,6 +41,7 @@ export const routes: Routes = [
       { path: 'dialog', loadComponent: () => import('./pages/docs/dialog.doc').then(m => m.DialogDocComponent) },
 
       { path: 'plugins', loadComponent: () => import('./pages/docs/plugins.doc').then(m => m.PluginsDocComponent) },
+      { path: 'theming', loadComponent: () => import('./pages/docs/theming.doc').then(m => m.ThemingDocComponent) },
       { path: 'panel', loadComponent: () => import('./pages/docs/panel.doc').then(m => m.PanelDocComponent) },
       { path: 'toggle-button', loadComponent: () => import('./pages/docs/toggle-button.doc').then(m => m.ToggleButtonDocComponent) },
       { path: 'toolbar', loadComponent: () => import('./pages/docs/toolbar.doc').then(m => m.ToolbarDocComponent) },

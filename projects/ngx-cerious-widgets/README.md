@@ -4,7 +4,7 @@
 
 **(Pronounced: Serious)**
 
-**A seriously complete, enterprise-grade Angular component library** — ~85 standalone, signal-based, zoneless-safe components unified by a three-theme design-token system, accessible to WCAG 2.1 AA, and extensible end-to-end with a universal plugin architecture.
+**A seriously complete, enterprise-grade Angular component library** — ~85 standalone, signal-based, zoneless-safe components unified by a token-based theming engine (10 built-in themes plus your own brand colors), accessible to WCAG 2.1 AA, and extensible end-to-end with a universal plugin architecture.
 
 No heavy dependencies. MIT licensed. Built for real-world, data-intensive apps.
 
@@ -18,8 +18,8 @@ No heavy dependencies. MIT licensed. Built for real-world, data-intensive apps.
 ## ✨ Highlights
 
 - **~85 components** across Data, Form, Display, Navigation, Overlay & Utilities — from inputs, selects and a virtualized data grid to menus, dialogs, charts and a calendar.
-- **Three themes, zero rebuild** — Cerious Light, Frost (glassmorphism) and Dark, all driven by `--cw-*` CSS custom properties. Switch at runtime with a single `data-cw-theme` attribute.
-- **Accessible by default** — keyboard navigation, ARIA and focus management throughout; the whole library passes **axe-core WCAG 2.1 AA with 0 violations** across every component page in all three themes.
+- **Themeable to the core** — 10 built-in presets (light, frost, dark, midnight, sandstone, emerald, grape, contrast, flat, soft) that vary color *and* shape/elevation, plus a runtime engine to set your own primary/secondary, radius and typography. All driven by `--cw-*` tokens; switch live.
+- **Accessible by default** — keyboard navigation, ARIA and focus management throughout; the whole library passes **axe-core WCAG 2.1 AA with 0 violations** across every component page in every theme.
 - **Zoneless & signal-based** — every component is `standalone`, OnPush and built on Angular signals, safe under `provideExperimentalZonelessChangeDetection()`.
 - **Universal plugin system** — *every* component is a plugin host. Extend, observe or completely replace behaviour without forking. See [Plugins](#-plugins).
 - **A world-class data grid** — virtual scrolling, server-side mode, multi-sort, grouping, pinning, drag-and-drop columns, column menu, Excel export, save/restore views.
@@ -73,7 +73,7 @@ Browse every component — with live examples, an API table and theming notes fo
 
 ## 🎨 Theming
 
-All visuals are driven by `--cw-*` design tokens, so theming is a matter of setting CSS variables — no recompiling. Ship the three built-in themes or define your own.
+All visuals are driven by `--cw-*` design tokens, so theming is a matter of setting CSS variables — no recompiling. Ship the built-in presets or define your own.
 
 ```html
 <!-- Switch the whole app at runtime -->
@@ -88,6 +88,34 @@ All visuals are driven by `--cw-*` design tokens, so theming is a matter of sett
   /* …override any token */
 }
 ```
+
+### Custom themes & brand colors
+
+Beyond the static themes, a **runtime theming engine** lets you set your own brand colors and choose from extra curated presets — `light`, `frost`, `dark`, `midnight`, `sandstone`, `emerald`, `grape`, `contrast`. Pass a preset and/or your own `primary`/`secondary`; the engine derives the whole brand palette (hover/active states, AA-safe filled surfaces, focus ring, chips) while keeping the preset's tuned neutrals.
+
+```ts
+// app.config.ts — apply at bootstrap
+import { provideCeriousTheme } from 'ngx-cerious-widgets';
+
+export const appConfig = {
+  providers: [
+    provideCeriousTheme({ preset: 'dark', primary: '#e11d48', radius: '10px' })
+  ]
+};
+```
+
+```ts
+// …or change it live
+import { CwThemeService } from 'ngx-cerious-widgets';
+
+const theme = inject(CwThemeService);
+theme.apply({ preset: 'emerald' });      // switch preset
+theme.apply({ primary: '#0ea5e9' });     // re-brand on the current theme
+theme.registerPreset({ name: 'ocean', label: 'Ocean', base: 'dark', dark: true,
+                       seeds: { primary: '#06b6d4' } });
+```
+
+Themes can also be scoped to a region (`apply({ scope: el })`). Full guide: **[/components/theming](https://ryoucerious.github.io/cerious-widgets/components/theming)**.
 
 ---
 
@@ -145,7 +173,7 @@ The grid is a full-blown, enterprise data grid — not just a table:
 
 ## ♿ Accessibility
 
-Keyboard support, ARIA roles/attributes and focus management are built into every component. The library is verified with an axe-core harness across all component pages in Light, Frost and Dark — **0 WCAG 2.1 AA violations**. Color tokens meet AA contrast, including the filled/severity surfaces.
+Keyboard support, ARIA roles/attributes and focus management are built into every component. The library is verified with an axe-core harness across all component pages in every theme — **0 WCAG 2.1 AA violations**. Color tokens meet AA contrast, including the filled/severity surfaces.
 
 ---
 

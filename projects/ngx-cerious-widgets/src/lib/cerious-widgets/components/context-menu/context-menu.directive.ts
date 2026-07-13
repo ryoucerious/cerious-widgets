@@ -66,10 +66,20 @@ export class ContextMenuDirective implements OnDestroy {
     ref.instance.itemClick.subscribe(() => this.close());
     ref.changeDetectorRef.detectChanges();
 
-    this.overlayRef
-      .outsidePointerEvents()
-      .pipe(filter(e => e.type !== 'contextmenu'))
-      .subscribe(() => this.close());
+    // Defer the outside-click listener to the next tick: otherwise the
+    // pointerup/mouseup from *releasing* the right button that just opened the
+    // menu is caught as an "outside" event and closes it immediately (making it
+    // seem like you must hold the button down).
+    const ownerRef = this.overlayRef;
+    setTimeout(() => {
+      if (this.overlayRef !== ownerRef) {
+        return;
+      }
+      ownerRef
+        .outsidePointerEvents()
+        .pipe(filter(e => e.type !== 'contextmenu'))
+        .subscribe(() => this.close());
+    });
     this.overlayRef.keydownEvents().subscribe(e => {
       if (e.key === 'Escape') {
         this.close();

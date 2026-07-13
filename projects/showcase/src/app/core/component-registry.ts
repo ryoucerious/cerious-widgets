@@ -111,6 +111,7 @@ export const COMPONENTS: ComponentDoc[] = [
 
   // ---- Utilities ----
   { slug: 'plugins', name: 'Plugins', group: 'Utilities', icon: '🧩', summary: 'Extend or replace any component\'s behaviour with plugins' , ready: true },
+  { slug: 'theming', name: 'Theming', group: 'Utilities', icon: '🎨', summary: 'Design tokens, presets & runtime brand colours' , ready: true },
   { slug: 'animate-on-scroll', name: 'AnimateOnScroll', group: 'Utilities', icon: '✧', summary: 'Reveal-on-scroll directive' , ready: true },
   { slug: 'style-class', name: 'StyleClass', group: 'Utilities', icon: '❖', summary: 'Toggle classes on a target' , ready: true },
   { slug: 'deferred-content', name: 'DeferredContent', group: 'Utilities', icon: '⧖', summary: 'Lazy-render on scroll-in' , ready: true },

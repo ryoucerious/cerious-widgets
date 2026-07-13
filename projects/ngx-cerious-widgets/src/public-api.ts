@@ -13,6 +13,9 @@ export * from './lib/cerious-widgets/shared/interfaces/index';
 // Plugin system: generic plugin contract + the manager that wires plugins to a host API.
 // `providePluginHost` is the one-call helper any component uses to become extensible.
 export * from './lib/cerious-widgets/shared/plugin-host';
+// Theming: runtime theme engine — presets, brand-colour seeds, and the
+// `provideCeriousTheme()` / `CwThemeService` API for custom themes.
+export * from './lib/cerious-widgets/theme';
 // Templating: register named templates with `[cwTemplate]` and read them via the registry.
 export * from './lib/cerious-widgets/shared/directives/template-registrar.directive';
 export * from './lib/cerious-widgets/shared/services/index';
