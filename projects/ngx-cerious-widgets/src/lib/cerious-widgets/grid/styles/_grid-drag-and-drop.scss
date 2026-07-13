@@ -58,8 +58,8 @@
 /* Style for the placeholder (the space left behind while dragging) */
 .cdk-drag-placeholder {
     opacity: 0.6; /* Make it semi-transparent */
-    background-color: lighten($grid-header-background, 10%); /* Slightly lighter than the header background */
-    border: 1px dashed $grid-header-border; /* Match the column header border */
+    background-color: var(--cw-surface-raised); /* Tokenised surface */
+    border: 1px dashed var(--cw-border-strong); /* Match the column header border */
     transition: opacity 0.2s ease-in-out; /* Smooth transition for appearance */
 }
 

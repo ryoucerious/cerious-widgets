@@ -1,0 +1,13 @@
+import { chromium } from 'playwright';
+const b=await chromium.launch(); const p=await b.newPage();
+const logs=[]; p.on('console',m=>{ if(m.text().includes('[resizer]')) logs.push(m.text()); });
+await p.goto('http://localhost:4300/app/products',{waitUntil:'networkidle'}); await p.waitForTimeout(2000);
+const header = p.locator('cw-grid [role="columnheader"]', {hasText:'Category'}).first();
+const rb = await header.locator('.column-resizer').first().boundingBox();
+await p.mouse.move(rb.x+3, rb.y+3); await p.mouse.down();
+await p.mouse.move(rb.x+3+100, rb.y+3, {steps:6}); await p.mouse.up();
+await p.waitForTimeout(200);
+const endW = await header.evaluate(el=>Math.round(el.getBoundingClientRect().width));
+console.log('LOGS:', logs.join(' || '));
+console.log('end width:', endW);
+await b.close();

@@ -1,0 +1,64 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  background: var(--cw-surface);
+  font-family: var(--cw-font);
+  overflow: hidden;
+}
+
+.cw-data-view__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.cw-data-view__content--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--cw-dv-min, 14rem), 1fr));
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.cw-data-view__list--virtual {
+  overflow: hidden;
+  position: relative;
+
+  cerious-scroll {
+    display: block;
+    height: 100%;
+  }
+}
+
+// List-layout rows get a divider; grid cells don't.
+:host([data-layout='list']) .cw-data-view__content > .cw-data-view__item,
+.cw-data-view__list--virtual .cw-data-view__item {
+  border-bottom: 1px solid var(--cw-row-border);
+}
+:host([data-layout='list']) .cw-data-view__content > .cw-data-view__item:last-child {
+  border-bottom: none;
+}
+
+.cw-data-view__item {
+  box-sizing: border-box;
+  color: var(--cw-text);
+  font-size: 0.875rem;
+}
+
+:host([data-layout='grid']) .cw-data-view__item {
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  background: var(--cw-surface);
+}
+
+.cw-data-view__pager {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--cw-divider);
+}
+
+.cw-data-view__empty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--cw-text-muted);
+  font-size: 0.875rem;
+}

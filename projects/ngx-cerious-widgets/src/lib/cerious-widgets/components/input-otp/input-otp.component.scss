@@ -1,0 +1,31 @@
+:host {
+  display: inline-flex;
+  gap: 0.5rem;
+  font-family: var(--cw-font);
+}
+
+:host(.cw-input-otp--disabled) { opacity: 0.6; }
+
+.cw-input-otp__box {
+  width: 2.75rem;
+  height: 3rem;
+  box-sizing: border-box;
+  padding: 0;
+  text-align: center;
+  font-family: var(--cw-font);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--cw-text);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border-strong);
+  border-radius: var(--cw-radius-sm);
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+
+  &:focus {
+    border-color: var(--cw-accent);
+    box-shadow: var(--cw-focus-ring);
+  }
+
+  &:disabled { cursor: not-allowed; }
+}

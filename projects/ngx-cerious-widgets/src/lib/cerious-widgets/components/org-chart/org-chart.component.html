@@ -1,0 +1,32 @@
+<ng-template #nodeTpl let-node>
+  <li class="cw-org-chart__node">
+    <button
+      type="button"
+      class="cw-org-chart__card"
+      [class.cw-org-chart__card--selected]="isSelected(node)"
+      [attr.aria-pressed]="isSelected(node)"
+      (click)="select(node)"
+    >
+      @if (nodeTemplate(); as tpl) {
+        <ng-container [ngTemplateOutlet]="tpl.template" [ngTemplateOutletContext]="{ $implicit: node }" />
+      } @else {
+        <span class="cw-org-chart__label">{{ node.label }}</span>
+        @if (node.subtitle) { <span class="cw-org-chart__subtitle">{{ node.subtitle }}</span> }
+      }
+    </button>
+
+    @if (node.children?.length) {
+      <ul class="cw-org-chart__children">
+        @for (child of node.children; track $index) {
+          <ng-container [ngTemplateOutlet]="nodeTpl" [ngTemplateOutletContext]="{ $implicit: child }" />
+        }
+      </ul>
+    }
+  </li>
+</ng-template>
+
+@if (root(); as r) {
+  <ul class="cw-org-chart__root">
+    <ng-container [ngTemplateOutlet]="nodeTpl" [ngTemplateOutletContext]="{ $implicit: r }" />
+  </ul>
+}

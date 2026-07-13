@@ -1,0 +1,26 @@
+<ul class="cw-dock__list" role="menubar" (mouseleave)="hovered.set(-1)">
+  @for (item of items(); track $index; let i = $index) {
+    <li class="cw-dock__item-wrap" role="none" [style.zIndex]="zIndex(i)">
+      <button
+        type="button"
+        class="cw-dock__item"
+        role="menuitem"
+        [class.cw-dock__item--disabled]="item.disabled"
+        [style.transform]="'scale(' + scale(i) + ')'"
+        [attr.aria-label]="item.label"
+        [disabled]="item.disabled"
+        (mouseenter)="hovered.set(i)"
+        (focus)="hovered.set(i)"
+        (blur)="hovered.set(-1)"
+        (click)="activate(item)"
+      >
+        @if (item.icon) {
+          <i [class]="item.icon"></i>
+        } @else {
+          <span class="cw-dock__glyph">{{ item.label.charAt(0) }}</span>
+        }
+      </button>
+      <span class="cw-dock__tooltip" aria-hidden="true">{{ item.label }}</span>
+    </li>
+  }
+</ul>

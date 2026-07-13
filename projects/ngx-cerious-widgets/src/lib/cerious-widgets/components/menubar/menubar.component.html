@@ -1,0 +1,36 @@
+@for (item of items(); track $index) {
+  <button
+    #trigger
+    type="button"
+    class="cw-menubar__item"
+    role="menuitem"
+    [class.cw-menubar__item--open]="openItem() === item"
+    [attr.aria-haspopup]="item.items?.length ? 'menu' : null"
+    [attr.aria-expanded]="item.items?.length ? (openItem() === item) : null"
+    [disabled]="item.disabled"
+    (click)="onRootClick(item, trigger)"
+  >
+    @if (item.icon) { <i class="cw-menubar__icon" [class]="item.icon"></i> }
+    <span class="cw-menubar__label">{{ item.label }}</span>
+    @if (item.items?.length) {
+      <span class="cw-menubar__caret" aria-hidden="true"></span>
+    }
+  </button>
+}
+
+<ng-template #submenu>
+  <div class="cw-menubar__submenu" role="menu">
+    @for (sub of openSubItems(); track $index) {
+      <button
+        type="button"
+        class="cw-menubar__subitem"
+        role="menuitem"
+        [disabled]="sub.disabled"
+        (click)="activate(sub)"
+      >
+        @if (sub.icon) { <i class="cw-menubar__icon" [class]="sub.icon"></i> }
+        <span>{{ sub.label }}</span>
+      </button>
+    }
+  </div>
+</ng-template>

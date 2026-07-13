@@ -1,0 +1,24 @@
+<span class="cw-select__label" [class.cw-select__placeholder]="!selectedOption()">
+  {{ selectedOption() ? selectedOption()!.label : placeholder() }}
+</span>
+<span class="cw-select__chevron" [class.cw-select__chevron--open]="isOpen()" aria-hidden="true"></span>
+
+<ng-template #panel>
+  <ul class="cw-select__list" role="listbox" [id]="listId">
+    @for (opt of normalizedOptions(); track $index; let i = $index) {
+      <li class="cw-select__option"
+          role="option"
+          [id]="optionId(i)"
+          [attr.aria-selected]="isSelected(opt)"
+          [class.cw-select__option--active]="i === highlightedIndex()"
+          [class.cw-select__option--selected]="isSelected(opt)"
+          (click)="selectOption(opt); $event.stopPropagation()"
+          (mouseenter)="highlightedIndex.set(i)">
+        <span class="cw-select__option-label">{{ opt.label }}</span>
+        @if (isSelected(opt)) { <span class="cw-select__check" aria-hidden="true">✓</span> }
+      </li>
+    } @empty {
+      <li class="cw-select__empty">No options</li>
+    }
+  </ul>
+</ng-template>

@@ -23,7 +23,7 @@ import { IGridScrollerComponent } from '../interfaces/component-interfaces/grid-
 import { IGridColumnService } from '../interfaces/service-interfaces/grid-column.interface';
 import { IGridService } from '../interfaces/service-interfaces/grid.interface';
 import { PluginOptions } from '../interfaces/plugin-options';
-import { WidgetsConfig } from '../../shared/interfaces/widgets-config.interface';
+import { resolveGridConfig, WidgetsConfig } from '../../shared/interfaces/widgets-config.interface';
 
 // Plugins
 import { GridPlugin } from '../interfaces/grid-plugin';
@@ -31,6 +31,7 @@ import { GridPlugin } from '../interfaces/grid-plugin';
 // Services
 import { GridService } from '../services/grid.service';
 import { SignalHelperService } from '../../shared/services/signal-helper.services';
+import { PluginManagerService } from '../../shared/services/plugin-manager.service';
 
 // Components
 import { GridBodyComponent } from './grid-body/grid-body.component';
@@ -144,6 +145,7 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
     private injector: Injector,
     private iterableDiffers: IterableDiffers,
     private sh: SignalHelperService,
+    private pluginManager: PluginManagerService,
     @Inject(GRID_SERVICE) private gridService: IGridService,
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService,
     @Optional() @Inject(WIDGETS_CONFIG) public config: WidgetsConfig
@@ -151,12 +153,16 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
     super();
     this.iterableDiffer = this.iterableDiffers.find([]).create();
     this.gridApi = this.gridService.gridApi;
-    this.pluginInstances = (this.config?.plugins || []).map(pluginType => 
+
+    // Resolve the effective grid config (merges deprecated top-level keys with
+    // the per-component `grid` block).
+    const gridConfig = resolveGridConfig(this.config);
+    this.pluginInstances = (gridConfig.plugins || []).map(pluginType =>
       this.injector.get(pluginType)
     );
 
     if (this.config && !this.pluginOptions) {
-      this.pluginOptions = this.config.pluginOptions || {};
+      this.pluginOptions = gridConfig.pluginOptions || {};
     }
   }
 
@@ -182,14 +188,10 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
       this.resizeObserver = new ResizeObserver(() => this.gridService.resize());
       this.resizeObserver.observe(this.gridService.gridContainerElement);
 
-      // Attach mousemove/mouseup as native listeners (NOT Angular template
-      // bindings). In zoneless mode every template event binding schedules a
-      // change-detection pass, so a template (mousemove) binding would tick CD
-      // on every pixel of mouse movement — devastating to FPS just from hover.
-      // These handlers only do work when a column resize is active.
-      const el = this.gridService.gridContainerElement as HTMLElement;
-      el.addEventListener('mousemove', this.onMouseMoveNative, { passive: true });
-      el.addEventListener('mouseup', this.onMouseUpNative, { passive: true });
+      // Column-resize drag tracking is attached to `document` on mousedown (see
+      // GridService.initColumnResizing) and torn down on mouseup — so the drag
+      // continues even when the cursor leaves the grid, with zero listener/CD
+      // overhead while idle.
     }
 
     setTimeout(() => {
@@ -224,7 +226,9 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
   }
 
   override ngOnDestroy(): void {
-    this.plugins.forEach(p => p.onDestroy?.());
+    // Tear down every plugin the manager initialized for this grid (covers both
+    // `plugins` inputs and config-provided plugin instances).
+    this.pluginManager.destroyPlugins(this.gridApi);
 
     if (this.gridService.gridOptions.container) {
       this.gridService.gridOptions.container.removeEventListener('resize', () => this.resize());
@@ -235,35 +239,14 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
       this.resizeObserver.disconnect();
     }
 
-    const el = this.gridService.gridContainerElement as HTMLElement | undefined;
-    if (el) {
-      el.removeEventListener('mousemove', this.onMouseMoveNative);
-      el.removeEventListener('mouseup', this.onMouseUpNative);
-    }
   }
 
-  /**
-   * Handles the mouse move event and delegates it to the grid service.
-   *
-   * @param e - The mouse event triggered by the user's interaction.
-   */
+  /** Handles a mouse-move (delegates to the grid service). */
   onMouseMove(e: MouseEvent): void {
     this.gridService.onMouseMove(e);
   }
 
-  private onMouseMoveNative = (e: MouseEvent): void => {
-    this.gridService.onMouseMove(e);
-  };
-
-  private onMouseUpNative = (e: MouseEvent): void => {
-    this.gridService.onMouseUp(e);
-  };
-
-  /**
-   * Handles the mouse up event and delegates the event to the grid service.
-   *
-   * @param e - The mouse event triggered when the mouse button is released.
-   */
+  /** Handles a mouse-up (delegates to the grid service). */
   onMouseUp(e: MouseEvent): void {
     this.gridService.onMouseUp(e);
   }
@@ -289,7 +272,7 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
    */
   registerPlugins(): void {
     const allPlugins = [...(this.plugins || []), ...(this.pluginInstances || [])];
-    allPlugins.forEach(p => p.onInit(this.gridApi));
+    this.pluginManager.initPlugins(this.gridApi, allPlugins);
   }
 
   /**
@@ -302,7 +285,7 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
     if (!this.plugins.some(p => p === plugin)) {
       this.plugins.push(plugin);
     }
-    plugin.onInit(this.gridApi);
+    this.pluginManager.initPlugins(this.gridApi, [plugin]);
   }
 
   /**

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElementRef } from '@angular/core';
+import { Subject } from 'rxjs';
 import { GridRowColumnComponent } from './grid-row-column.component';
 import { ColumnDef } from '../../interfaces/column-def';
 import { GridRow } from '../../models/grid-row';
@@ -17,6 +18,8 @@ describe('GridRowColumnComponent', () => {
 
   beforeEach(() => {
     mockGridService = jasmine.createSpyObj('IGridService', ['templates', 'gridOptions']);
+    // onValueChange notifies edits through this subject.
+    (mockGridService as any).afterCellEdit = new Subject<void>();
     mockGridColumnService = jasmine.createSpyObj('IGridColumnService', ['getColumnWidth']);
 
     TestBed.configureTestingModule({
@@ -73,27 +76,29 @@ describe('GridRowColumnComponent', () => {
   });
 
   it('should format values based on column format', () => {
-    spyOn(component, 'getValue').and.returnValue(1234.56);
+    // formattedValue is a computed signal derived from column.field + gridRow,
+    // so drive it through the inputs rather than stubbing getValue().
+    component.gridRow = { row: { val: 1234.56 } } as GridRow;
 
-    component.column = { format: ColumnFormat.Currency } as ColumnDef;
+    component.column = { field: 'val', format: ColumnFormat.Currency } as ColumnDef;
     expect(component.getFormattedValue()).toBe('$1,234.56');
 
-    component.column = { format: ColumnFormat.Percentage } as ColumnDef;
+    component.column = { field: 'val', format: ColumnFormat.Percentage } as ColumnDef;
     expect(component.getFormattedValue()).toBe('1234.56%');
 
-    component.column = { format: ColumnFormat.Stars } as ColumnDef;
+    component.column = { field: 'val', format: ColumnFormat.Stars } as ColumnDef;
     expect(component.getFormattedValue()).toBe(1235);
 
-    component.column = { format: ColumnFormat.Date } as ColumnDef;
+    component.column = { field: 'val', format: ColumnFormat.Date } as ColumnDef;
     expect(component.getFormattedValue()).toBe(new Date(1234.56).toLocaleDateString());
 
-    component.column = { format: ColumnFormat.DateTime } as ColumnDef;
+    component.column = { field: 'val', format: ColumnFormat.DateTime } as ColumnDef;
     expect(component.getFormattedValue()).toBe(new Date(1234.56).toLocaleString());
 
-    component.column = { format: ColumnFormat.Time } as ColumnDef;
+    component.column = { field: 'val', format: ColumnFormat.Time } as ColumnDef;
     expect(component.getFormattedValue()).toBe(new Date(1234.56).toLocaleTimeString());
 
-    component.column = { format: undefined } as ColumnDef;
+    component.column = { field: 'val', format: undefined } as ColumnDef;
     expect(component.getFormattedValue()).toBe(1234.56);
   });
 

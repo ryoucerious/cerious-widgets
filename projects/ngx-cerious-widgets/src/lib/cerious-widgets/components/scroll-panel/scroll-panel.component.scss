@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  font-family: var(--cw-font);
+}
+
+.cw-scroll-panel__viewport {
+  overflow: auto;
+  box-sizing: border-box;
+
+  // Firefox
+  scrollbar-width: thin;
+  scrollbar-color: var(--cw-border-strong) transparent;
+
+  // WebKit
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--cw-border-strong);
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--cw-text-muted);
+  }
+}

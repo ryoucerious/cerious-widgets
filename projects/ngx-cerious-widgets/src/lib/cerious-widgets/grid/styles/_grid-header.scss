@@ -17,8 +17,8 @@
     }
 
     .group-by-title {
-        border-top: solid 1px rgb(221,221,221);
-        border-bottom: solid 1px rgb(221,221,221);
+        border-top: solid 1px var(--cw-divider);
+        border-bottom: solid 1px var(--cw-divider);
         padding: 4px 4px 4px 10px;
         position: relative;
     }
@@ -35,9 +35,9 @@
             overflow-x: hidden;
             position: relative;
             background: $grid-header-background;
-            border-right: $grid-header-border;
+            border-right: none;
             color: $grid-text-header-footer;
-            font-weight: 400;
+            font-weight: 600;
             z-index: 10;
             justify-content: space-between;
             align-items: center;
@@ -62,14 +62,22 @@
 
             .column-menu-button {
                 position: absolute;
-                top: 6px;
-                right: -26px;
-                
-                -webkit-transition: right .2s; /* Safari */ //<<< the compiler should be prefixing automatically
-                transition: right .2s;
+                // Centre the 10px-tall hamburger glyph (16px footprint, lines
+                // at 0-10px) on the header cell's vertical middle.
+                top: calc(50% - 5px);
+                // Sit fully inside the column, clear of the ~8px resize anchor at
+                // the right edge, so the glyph never overlaps or pokes through the
+                // column border. It fades in on hover (opacity) rather than
+                // sliding in from off-screen-right — the old slide made it look
+                // like the button was coming *through* the resize divider.
+                right: 0.75rem;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity .18s ease;
 
                 &.active {
-                    right: 0px;
+                    opacity: 1;
+                    visibility: visible;
                 }
             }
             
@@ -77,7 +85,13 @@
                 font-size: 0.9em; /* Adjust the size if needed */
             }
 
-            text-align: center;
+            text-align: left;
+            padding: 9px 0;
+
+            .cell-content-wrapper,
+            .column-content {
+                padding-left: 10px;
+            }
 
             &.padding-col {
                 padding: 0;
@@ -95,7 +109,7 @@
             &.nested-group {
                 display: flex;
                 flex-direction: column;
-                border-top: solid 1px grey !important;
+                border-top: solid 1px var(--cw-divider) !important;
             }
 
         }
@@ -103,7 +117,19 @@
         > .table-col:hover .column-menu-button,
         .column-content:hover ~ .column-menu-button,
         .column-menu-button:hover {
-            right: 0px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        // Don't reveal the column menu while the cursor is over the resize
+        // handle — it would otherwise sit next to the resizer and clutter the
+        // drag target. The resizer is nested inside <cw-grid-column-sizer> (not a
+        // sibling of the menu button), so match on the cell that :has() a hovered
+        // resizer. The extra compound also gives this a higher specificity than
+        // the reveal rules above, so it wins.
+        .table-col:has(.column-resizer:hover) .column-menu-button {
+            opacity: 0;
+            visibility: hidden;
         }
 
         .table-col:last-child {
@@ -111,11 +137,11 @@
         }
 
         .col-span {
-            border-bottom: solid 1px rgb(221,221,221);
+            border-bottom: solid 1px var(--cw-divider);
         }
 
         .sub-header-col {
-            border-top: solid 1px rgb(221,221,221);
+            border-top: solid 1px var(--cw-divider);
         }
 
         .group-header {
@@ -128,7 +154,7 @@
         width: 100%;
 
         .table-col {
-            border-top: solid 1px rgb(221,221,221);
+            border-top: solid 1px var(--cw-border);
 
             div {
                 display: inline-block;
@@ -151,7 +177,7 @@
                     content: ' ';
                     height: 16px;
                     width: 2px;
-                    background-color: #333;
+                    background-color: var(--cw-text);
                 }
                 .close:before {
                     transform: rotate(45deg);
@@ -167,13 +193,35 @@
         }
     }
 
+    // Rendered only for resizable columns. The grab strip is a wide, invisible
+    // hit area anchored to the column's right edge; the visible divider is drawn
+    // at that right edge (the true column boundary) so it never sits over the
+    // header text — even on narrow columns. The strip can extend left for an
+    // easy grab target without moving the line. Thickens to the accent on hover.
     .column-resizer {
         position: absolute;
         top: 0px;
         right: 0px;
         cursor: ew-resize;
-        width: 2px;
+        width: 8px;
         height: 100%;
+        z-index: 1;
+    }
+    .column-resizer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        border-right: 1px solid var(--cw-divider);
+        transition: border-color 0.12s ease;
+    }
+    .column-resizer:hover::after,
+    .column-resizer:focus-visible::after {
+        border-right: 2px solid var(--cw-primary);
+    }
+    .column-resizer:focus-visible {
+        outline: none;
     }
 }
 

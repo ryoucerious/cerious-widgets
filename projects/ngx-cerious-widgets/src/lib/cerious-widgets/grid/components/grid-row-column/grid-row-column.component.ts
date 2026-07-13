@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, Inject, Input, signal, ViewEncapsulation } from '@angular/core';
 import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
+import { InputTextDirective } from '../../../components/input-text/input-text.directive';
 
 import { ColumnFormat, ColumnType } from '../../enums';
 import { ColumnDef } from '../../interfaces/column-def';
@@ -42,7 +43,7 @@ function getCurrencyFormatter(locale = 'en-US', currency = 'USD'): Intl.NumberFo
   templateUrl: './grid-row-column.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule]
+  imports: [CommonModule, InputTextDirective]
 })
 export class GridRowColumnComponent extends ZonelessCompatibleComponent implements IGridRowColumnComponent {
 
@@ -57,7 +58,11 @@ export class GridRowColumnComponent extends ZonelessCompatibleComponent implemen
   set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
   get gridRow() { return this.gridRowSignal()!; }
 
-  @Input() refreshTick = 0;
+  readonly refreshTickSignal = signal(0);
+  @Input()
+  set refreshTick(value: number) { this.refreshTickSignal.set(value); }
+  get refreshTick() { return this.refreshTickSignal(); }
+
   @Input() classes: SectionClassConfig = {};
 
   ColumnType = ColumnType;
@@ -68,6 +73,11 @@ export class GridRowColumnComponent extends ZonelessCompatibleComponent implemen
   // scroll only `gridRow` flips per recycle, so width/alignment/mode are
   // served from cache and only `value` re-evaluates per cell.
   readonly width = computed(() => {
+    // `getColumnWidth` reads `col.width`, a plain (non-signal) property that is
+    // mutated in place during a live column-resize drag — so we depend on
+    // `refreshTickSignal` (bumped per pointermove by the grid body) to force a
+    // recompute. During scroll the tick is stable, so this stays memoized.
+    this.refreshTickSignal();
     const col = this.columnSignal();
     return col ? this.gridColumnService.getColumnWidth(col, this.gridService.gridOptions) : undefined;
   });

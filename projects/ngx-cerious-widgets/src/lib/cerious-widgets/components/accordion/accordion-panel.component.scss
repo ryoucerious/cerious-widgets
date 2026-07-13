@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  background: var(--cw-surface);
+  font-family: var(--cw-font);
+  overflow: hidden;
+}
+
+.cw-accordion-panel__header {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--cw-text);
+  cursor: pointer;
+
+  &:hover { background: var(--cw-surface-hover); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+  &:disabled { cursor: not-allowed; opacity: 0.55; }
+}
+
+:host(.cw-accordion-panel--expanded) .cw-accordion-panel__header .cw-accordion-panel__title {
+  color: var(--cw-accordion-active-fg, var(--cw-text));
+}
+
+// CSS chevron: points down when collapsed, up when expanded (like the mock).
+.cw-accordion-panel__chevron {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-right: 2px solid var(--cw-text-muted);
+  border-bottom: 2px solid var(--cw-text-muted);
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+  margin-top: -3px;
+}
+
+:host(.cw-accordion-panel--expanded) .cw-accordion-panel__chevron {
+  transform: rotate(-135deg);
+  margin-top: 3px;
+}
+
+.cw-accordion-panel__content {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--cw-divider);
+  font-size: 0.875rem;
+  color: var(--cw-text-secondary);
+}

@@ -11,6 +11,8 @@
     </cw-grid-header-feature-column>
 </ng-container>
 
+<!-- The row role lives on the <cw-grid-header-row> host; this drop-list wrapper
+     is a generic container so the columnheaders below resolve to a single row. -->
 <div class="cw-table-row column-headers-standard"
      cdkDropList
      [id]="dropId"
@@ -18,8 +20,7 @@
      [cdkDropListConnectedTo]="dropId"
      cdkDropListOrientation="horizontal"
      [ngClass]="classes.row"
-     (cdkDropListDropped)="drop($event)"
-     role="row">
+     (cdkDropListDropped)="drop($event)">
     <ng-container *ngFor="let column of gridRow.columnDefs">
         <ng-container *ngIf="shouldShowColumn(column)">
             <!-- Render group header if column has children -->

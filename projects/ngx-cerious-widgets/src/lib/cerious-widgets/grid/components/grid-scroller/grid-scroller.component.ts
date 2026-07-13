@@ -26,6 +26,7 @@ export class GridScrollerComponent extends ZonelessCompatibleComponent implement
   @ViewChild('scroller', { static: true }) scroller!: ElementRef;
 
   private afterScrollSub: Subscription | null = null;
+  private afterResizeSub: Subscription | null = null;
   private suppressEmit = false;
   private rafId: number | null = null;
   private pendingScrollLeft = 0;
@@ -88,6 +89,14 @@ export class GridScrollerComponent extends ZonelessCompatibleComponent implement
         el.scrollLeft = target;
       }
     });
+
+    // The horizontal scrollbar's height is bound to `getScrollHeight()`, which
+    // reads the service's `scrollbarHeight`. That's a plain field updated during
+    // `resize()`, so this OnPush component isn't marked dirty when it flips from
+    // 0 → visible on a resize — leaving the scrollbar invisible until an
+    // unrelated event (a click) happens to run CD here. Mark ourselves on every
+    // resize so `resize()`'s tick actually re-renders the spacer.
+    this.afterResizeSub = this.gridService.afterResize.subscribe(() => this.markForCheck());
   }
 
   override ngOnDestroy(): void {
@@ -98,6 +107,7 @@ export class GridScrollerComponent extends ZonelessCompatibleComponent implement
       this.rafId = null;
     }
     this.afterScrollSub?.unsubscribe();
+    this.afterResizeSub?.unsubscribe();
     super.ngOnDestroy();
   }
 

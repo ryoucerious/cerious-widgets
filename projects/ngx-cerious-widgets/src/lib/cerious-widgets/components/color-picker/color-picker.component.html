@@ -1,0 +1,45 @@
+<button
+  type="button"
+  class="cw-color-picker__trigger"
+  [attr.aria-expanded]="isOpen()"
+  aria-haspopup="dialog"
+  [disabled]="isDisabled()"
+  (click)="toggle()"
+>
+  <span class="cw-color-picker__swatch" [style.background]="value()"></span>
+  <span class="cw-color-picker__hex">{{ value() }}</span>
+</button>
+
+<ng-template #panel>
+  <div class="cw-color-picker__body" role="dialog" aria-label="Choose colour" (click)="$event.stopPropagation()">
+    <div class="cw-color-picker__row">
+      <input
+        type="color"
+        class="cw-color-picker__native"
+        [value]="value()"
+        aria-label="Pick colour"
+        (input)="onNativeInput($event)"
+      />
+      <input
+        type="text"
+        class="cw-color-picker__field"
+        [value]="value()"
+        aria-label="Hex value"
+        maxlength="7"
+        (input)="onHexInput($event)"
+      />
+    </div>
+    <div class="cw-color-picker__presets">
+      @for (preset of presets(); track preset) {
+        <button
+          type="button"
+          class="cw-color-picker__preset"
+          [class.cw-color-picker__preset--active]="preset.toLowerCase() === value()"
+          [style.background]="preset"
+          [attr.aria-label]="preset"
+          (click)="setColor(preset)"
+        ></button>
+      }
+    </div>
+  </div>
+</ng-template>

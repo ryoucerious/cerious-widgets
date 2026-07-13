@@ -1,0 +1,33 @@
+<button
+  type="button"
+  class="cw-image__thumb"
+  [class.cw-image__thumb--preview]="preview()"
+  [disabled]="!preview()"
+  [attr.aria-label]="preview() ? 'Preview image' : null"
+  (click)="open()"
+>
+  <img class="cw-image__img" [src]="src()" [alt]="alt()" [style.width]="width() || null" [style.height]="height() || null" />
+  @if (preview()) {
+    <span class="cw-image__hint" aria-hidden="true">
+      <svg viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6"/><path d="M13.5 13.5 17 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M9 6.5v5M6.5 9h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </span>
+  }
+</button>
+
+<ng-template #previewPanel>
+  <div class="cw-image__viewer" (click)="close()">
+    <div class="cw-image__toolbar" (click)="$event.stopPropagation()">
+      <button type="button" class="cw-image__tool" aria-label="Zoom out" (click)="zoomBy(-0.25, $event)">&minus;</button>
+      <button type="button" class="cw-image__tool" aria-label="Zoom in" (click)="zoomBy(0.25, $event)">+</button>
+      <button type="button" class="cw-image__tool" aria-label="Rotate" (click)="rotate($event)">⟳</button>
+      <button type="button" class="cw-image__tool" aria-label="Close" (click)="close()">✕</button>
+    </div>
+    <img
+      class="cw-image__full"
+      [src]="src()"
+      [alt]="alt()"
+      [style.transform]="'scale(' + zoom() + ') rotate(' + rotation() + 'deg)'"
+      (click)="$event.stopPropagation()"
+    />
+  </div>
+</ng-template>

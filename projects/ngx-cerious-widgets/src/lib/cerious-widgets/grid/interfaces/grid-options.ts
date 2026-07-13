@@ -70,6 +70,25 @@ export interface GridOptions {
     showPager?: boolean;
 
     /**
+     * Per-part configuration for the pager (built on the standalone Paginator).
+     * Each region defaults to shown; set `false` to hide it.
+     */
+    pager?: {
+      /** Rows-per-page select. */
+      showPageSize?: boolean;
+      /** "Showing x to y of n" summary. */
+      showSummary?: boolean;
+      /** First / last («, ») buttons. */
+      showFirstLast?: boolean;
+      /** Previous / next (‹, ›) buttons. */
+      showPrevNext?: boolean;
+      /** Numbered page buttons. */
+      showPageNumbers?: boolean;
+      /** Page-size choices; when set, the size select becomes interactive. */
+      pageSizeOptions?: number[];
+    };
+
+    /**
      * Whether the menu bar is displayed at the top of the grid.
      */
     showMenuBar?: boolean;

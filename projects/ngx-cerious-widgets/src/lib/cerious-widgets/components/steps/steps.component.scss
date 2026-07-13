@@ -1,0 +1,81 @@
+:host {
+  display: block;
+  font-family: var(--cw-font);
+}
+
+.cw-steps__list {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cw-steps__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+
+  &:last-child { flex: none; }
+}
+
+.cw-steps__item--clickable { cursor: pointer; }
+
+.cw-steps__marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 1px solid var(--cw-border-strong);
+  background: var(--cw-surface);
+  color: var(--cw-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.cw-steps__item--active .cw-steps__marker {
+  background: var(--cw-primary);
+  border-color: var(--cw-primary);
+  color: var(--cw-text-on-accent);
+}
+
+.cw-steps__item--done .cw-steps__marker {
+  background: var(--cw-success-bg);
+  border-color: var(--cw-success);
+  color: var(--cw-success-fg);
+}
+
+// CSS-drawn check for completed steps.
+.cw-steps__check {
+  width: 5px;
+  height: 9px;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-top: -2px;
+}
+
+.cw-steps__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--cw-text-muted);
+  white-space: nowrap;
+}
+
+.cw-steps__item--active .cw-steps__label { color: var(--cw-text); font-weight: 600; }
+.cw-steps__item--done .cw-steps__label { color: var(--cw-text); }
+
+.cw-steps__connector {
+  flex: 1;
+  height: 1px;
+  margin: 0 0.75rem;
+  background: var(--cw-border);
+}
+
+.cw-steps__item--done .cw-steps__connector { background: var(--cw-primary); }

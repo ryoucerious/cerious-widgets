@@ -1,0 +1,15 @@
+@for (star of starIndexes(); track star) {
+  <button
+    type="button"
+    class="cw-rating__star"
+    role="radio"
+    [class.cw-rating__star--filled]="star <= displayValue()"
+    [attr.aria-checked]="star === value()"
+    [attr.aria-label]="star + ' of ' + stars()"
+    [disabled]="isDisabled()"
+    [tabindex]="isInteractive() ? (star === (value() || 1) ? 0 : -1) : -1"
+    (click)="rate(star)"
+    (mouseenter)="onStarEnter(star)"
+    (blur)="onTouched()"
+  >★</button>
+}

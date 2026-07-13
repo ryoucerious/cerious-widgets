@@ -168,18 +168,33 @@ export class MultiSortPlugin implements GridPlugin {
     });
   }
 
+  /** Locale-/numeric-aware string comparison ('10' > '9', case-insensitive). */
+  private readonly collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
   private applySorting = (data: any[], sortState: SortState[]): any[] => {
     return [...data].sort((a, b) => {
       for (const sort of sortState) {
         const field = sort.column.field;
+        if (!field) { continue; }
         const direction = sort.direction === 'asc' ? 1 : -1;
-  
-        if (field) {
-          if (a[field] < b[field]) return -1 * direction;
-          if (a[field] > b[field]) return 1 * direction;
-        }
+        const av = a[field], bv = b[field];
+        const an = av == null, bn = bv == null;
+        if (an && bn) { continue; }          // equal on this column → next sort key
+        if (an) { return 1; }                // nulls last, regardless of direction
+        if (bn) { return -1; }
+        const cmp = this.compareValues(av, bv);
+        if (cmp !== 0) { return direction * cmp; }
       }
       return 0;
     });
+  }
+
+  /** Type-aware comparison of two non-null values (numbers/dates/booleans natively,
+   *  everything else via a numeric, case-insensitive collator). */
+  private compareValues(av: any, bv: any): number {
+    if (typeof av === 'number' && typeof bv === 'number') { return av - bv; }
+    if (av instanceof Date && bv instanceof Date) { return av.getTime() - bv.getTime(); }
+    if (typeof av === 'boolean' && typeof bv === 'boolean') { return av === bv ? 0 : av ? 1 : -1; }
+    return this.collator.compare(String(av), String(bv));
   }
 }

@@ -2,13 +2,129 @@
     font-size: 14px;
     line-height: 21px;
     width: 100%;
+    box-sizing: border-box;
     border-collapse: separate;
     border: solid 1px $grid-wrapper-border;
-    border-radius: $radius-primary;
+    border-radius: var(--cw-radius-lg);
     background: $grid-body-background;
+    box-shadow: var(--cw-shadow-md);
     overflow:hidden;
     cursor: default;
     color: $grid-text-dark;
+    font-family: var(--cw-font);
+
+    // Card gutter: inset the toolbar, table box and pager from the card border
+    // (the mockup insets the table ~8px from the card edge). The vertical
+    // gutter is not subtracted by the auto-height body calc, so a consumer
+    // using height:'auto' adds 2 * gutter-y to gridOptions.heightOffset.
+    padding: var(--cw-grid-gutter-y, 8px) var(--cw-grid-gutter-x, 8px);
+}
+
+// The table itself (header + rows) is enclosed in its own hairline-bordered,
+// rounded box inside the card — toolbar above and pager below sit outside it.
+// The header carries the top edge + top corners, the body the sides, bottom
+// edge and bottom corners; the body's own border-top is the header underline.
+.cw-grid .cw-table-head {
+    border: 1px solid var(--cw-divider);
+    border-bottom: none;
+    border-radius: var(--cw-radius-md) var(--cw-radius-md) 0 0;
+    overflow: hidden;
+}
+
+.cw-grid .cw-table-body {
+    border-left: 1px solid var(--cw-divider);
+    border-right: 1px solid var(--cw-divider);
+    border-radius: 0 0 var(--cw-radius-md) var(--cw-radius-md);
+}
+
+// Frost theme: the whole grid is one frosted-glass card. The card blurs the
+// gradient behind it; rows stay transparent so their translucency does not
+// stack into an opaque white. Pinned/feature columns keep a light tint so
+// horizontally-scrolled content stays masked.
+[data-cw-theme='frost'] {
+    .cw-grid {
+        // Heavy blur, mild saturation: enough for the gradient to glow through
+        // the glass without oversaturating the card interior (mockup interior
+        // stays milky, not cyan).
+        backdrop-filter: blur(22px) saturate(1.15);
+        -webkit-backdrop-filter: blur(22px) saturate(1.15);
+        // Frosted-glass edge: a bright white border, a crisp top light-line,
+        // a strong soft sheen down from the top, an inner white ring, and a
+        // broad inner glow — over the purple drop shadow. This is what makes
+        // the glass "pop".
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 1),
+            inset 0 8px 18px -6px rgba(255, 255, 255, 0.9),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+            inset 0 0 60px rgba(255, 255, 255, 0.3),
+            var(--cw-shadow-lg);
+    }
+
+    .cw-table-body {
+        background: transparent;
+    }
+
+    .cw-table-row,
+    .cw-table-row.odd {
+        background-color: transparent !important;
+    }
+
+    .cw-table-body .cw-table-row:not(.nested-grid):not(.filler-row):hover {
+        background-color: rgba(108, 99, 255, 0.10) !important;
+    }
+
+    .cw-table-row .table-col-pinned,
+    .cw-table-row .table-col-feature {
+        background-color: rgba(255, 255, 255, 0.25) !important;
+    }
+
+    // Pinned/feature cells overlay the columns that scroll *behind* them, and a
+    // translucent frost surface lets that content read through — the pinned data
+    // becomes illegible. Lay down an occluding frosted layer *behind the cell
+    // content but above the scrolling columns* via ::before, so the pin stays
+    // readable while the page gradient still frosts through (blur). Using a
+    // pseudo-element sidesteps the per-row background-color rules (odd/hover/
+    // filler) that would otherwise win the specificity fight on some rows.
+    .cw-table-row .table-col-pinned,
+    .cw-table-row .table-col-feature {
+        position: relative;
+    }
+    .cw-table-row .table-col-pinned::before,
+    .cw-table-row .table-col-feature::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        // Near-opaque so no ghost of the scrolling columns bleeds through the
+        // pinned data (readability wins for pinned cells); the faint remaining
+        // translucency + blur keeps a subtle frosted feel consistent with the
+        // rest of the theme.
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(16px) saturate(1.6);
+        -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    }
+
+    // Header cells: a white veil over the frosted card so the header band
+    // reads clearly brighter/whiter than the rows, like the mockup.
+    .cw-table-head .cw-table-row > .table-col,
+    .cw-table-head .cw-table-row > .group-header {
+        background: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    // Toolbar / footer / pager sit directly on the frosted card.
+    .cw-table-menu-bar,
+    .cw-table-footer,
+    .cw-table-pager {
+        background: transparent !important;
+    }
+
+    // Pager buttons: translucent lavender glass, not solid white. The active
+    // page keeps its primary-purple fill (higher specificity in _grid-pager).
+    .table-pager-btn {
+        background: rgba(255, 255, 255, 0.22) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
 }
 
 
@@ -59,52 +175,52 @@
     // Feature column backgrounds should match their row backgrounds
     .cw-table-body .cw-table-row {
         &.odd .table-col-feature {
-            background-color: $light-100;
+            background-color: var(--cw-surface);
         }
 
         &.group-by-row .table-col-feature {
-            background-color: #e2e2e2;
+            background-color: var(--cw-surface-raised);
 
             &.odd .table-col-feature {
-                background-color: #ededed;
+                background-color: var(--cw-surface-raised);
             }
         }
 
         &:not(.nested-grid):not(.filler-row):hover .table-col-feature {
-            background-color: rgb(200,210,218);
+            background-color: var(--cw-surface-hover);
         }
 
         &.filler-row .table-col-feature {
-            background-color: rgb(250,250,250);
+            background-color: var(--cw-surface-sunken);
         }
 
         &.group-by-footer-row .table-col-feature {
-            background: $light-100;
+            background: var(--cw-surface);
         }
 
         // Pinned column backgrounds should also match their row backgrounds
         &.odd .table-col-pinned {
-            background-color: $light-100 !important;
+            background-color: var(--cw-surface) !important;
         }
 
         &.group-by-row .table-col-pinned {
-            background-color: #e2e2e2 !important;
+            background-color: var(--cw-surface-raised) !important;
 
             &.odd .table-col-pinned {
-                background-color: #ededed !important;
+                background-color: var(--cw-surface-raised) !important;
             }
         }
 
         &:not(.nested-grid):not(.filler-row):hover .table-col-pinned {
-            background-color: rgb(200,210,218) !important;
+            background-color: var(--cw-surface-hover) !important;
         }
 
         &.filler-row .table-col-pinned {
-            background-color: rgb(250,250,250) !important;
+            background-color: var(--cw-surface-sunken) !important;
         }
 
         &.group-by-footer-row .table-col-pinned {
-            background: $light-100 !important;
+            background: var(--cw-surface) !important;
         }
 
         // Default background for pinned columns
@@ -114,10 +230,21 @@
     }
 
     input[type="text"] {
-        border: solid 1px $dark-100;
+        border: solid 1px var(--cw-border-strong);
+        border-radius: var(--cw-radius-sm);
+        background: var(--cw-surface);
+        color: var(--cw-text);
         outline: none;
-        padding: 4px;
+        padding: 5px 8px;
         width: 100%;
         font-size: 14px;
+        font-family: var(--cw-font);
+        transition: border-color .12s ease, box-shadow .12s ease;
+
+        &::placeholder { color: var(--cw-text-muted); }
+        &:focus {
+            border-color: var(--cw-accent);
+            box-shadow: var(--cw-focus-ring);
+        }
     }
 }

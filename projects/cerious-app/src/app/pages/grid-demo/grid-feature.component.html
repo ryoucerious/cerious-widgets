@@ -1,0 +1,16 @@
+<div class="grid-page">
+  <header class="grid-page__header">
+    <h1 class="grid-page__title">{{ title }}</h1>
+    @if (description) { <p class="grid-page__desc">{{ description }}</p> }
+  </header>
+
+  <div class="grid-page__grid">
+    @if (gridOptions) {
+      <cw-grid #grid [gridOptions]="gridOptions" [pluginOptions]="pluginOptions" [data]="data">
+        <ng-template #statusTemplate let-value="value">
+          <cw-tag [value]="value" [severity]="statusSeverity(value)" />
+        </ng-template>
+      </cw-grid>
+    }
+  </div>
+</div>

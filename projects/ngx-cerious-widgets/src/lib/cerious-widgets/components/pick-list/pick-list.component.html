@@ -1,0 +1,67 @@
+<ng-template #itemRow let-item>
+  <button
+    type="button"
+    role="option"
+    class="cw-pick-list__item"
+    [class.cw-pick-list__item--selected]="isHighlighted(item)"
+    [attr.aria-selected]="isHighlighted(item)"
+    [disabled]="isDisabled()"
+    (click)="toggleHighlight(item)"
+  >{{ item.label }}</button>
+</ng-template>
+
+<!-- Source list -->
+<div class="cw-pick-list__panel">
+  <div class="cw-pick-list__header">{{ sourceHeader() }}</div>
+  @if (sourceVirtual()) {
+    <div class="cw-pick-list__list cw-pick-list__list--virtual" [style.height]="listHeight()" role="listbox" [attr.aria-label]="sourceHeader()">
+      <cerious-scroll role="group" [items]="sourceItems()">
+        <ng-template ceriousScrollItem let-item>
+          <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
+        </ng-template>
+      </cerious-scroll>
+    </div>
+  } @else {
+    <div class="cw-pick-list__list" [style.max-height]="listHeight()" role="listbox" [attr.aria-label]="sourceHeader()">
+      @for (item of sourceItems(); track $index) {
+        <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
+      }
+    </div>
+  }
+</div>
+
+<!-- Transfer controls -->
+<div class="cw-pick-list__controls">
+  <button type="button" class="cw-pick-list__ctrl" aria-label="Move selected to target" [disabled]="!hasSourceSelection()" (click)="moveToTarget()">
+    <span class="cw-pick-list__ctrl-icon cw-pick-list__ctrl-icon--right"></span>
+  </button>
+  <button type="button" class="cw-pick-list__ctrl" aria-label="Move all to target" [disabled]="isDisabled() || !sourceItems().length" (click)="moveToTarget(true)">
+    <span class="cw-pick-list__ctrl-icon cw-pick-list__ctrl-icon--right-all"></span>
+  </button>
+  <button type="button" class="cw-pick-list__ctrl" aria-label="Move selected to source" [disabled]="!hasTargetSelection()" (click)="moveToSource()">
+    <span class="cw-pick-list__ctrl-icon cw-pick-list__ctrl-icon--left"></span>
+  </button>
+  <button type="button" class="cw-pick-list__ctrl" aria-label="Move all to source" [disabled]="isDisabled() || !targetItems().length" (click)="moveToSource(true)">
+    <span class="cw-pick-list__ctrl-icon cw-pick-list__ctrl-icon--left-all"></span>
+  </button>
+</div>
+
+<!-- Target list -->
+<div class="cw-pick-list__panel">
+  <div class="cw-pick-list__header">{{ targetHeader() }}</div>
+  @if (targetVirtual()) {
+    <div class="cw-pick-list__list cw-pick-list__list--virtual" [style.height]="listHeight()" role="listbox" [attr.aria-label]="targetHeader()">
+      <cerious-scroll role="group" [items]="targetItems()">
+        <ng-template ceriousScrollItem let-item>
+          <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
+        </ng-template>
+      </cerious-scroll>
+    </div>
+  } @else {
+    <div class="cw-pick-list__list" [style.max-height]="listHeight()" role="listbox" [attr.aria-label]="targetHeader()">
+      @for (item of targetItems(); track $index) {
+        <ng-container [ngTemplateOutlet]="itemRow" [ngTemplateOutletContext]="{ $implicit: item }" />
+      }
+    </div>
+  }
+</div>

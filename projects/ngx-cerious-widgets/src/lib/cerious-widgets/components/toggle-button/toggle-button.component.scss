@@ -1,0 +1,32 @@
+:host {
+  display: inline-flex;
+  font-family: var(--cw-font);
+}
+
+.cw-toggle-button__btn {
+  all: unset;
+  box-sizing: border-box;
+  padding: 0.4375rem 1rem;
+  border: 1px solid var(--cw-border-strong);
+  border-radius: var(--cw-radius-sm);
+  background: var(--cw-surface);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--cw-text);
+  cursor: pointer;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+
+  &:hover:not(:disabled):not(.cw-toggle-button__btn--on) {
+    background: var(--cw-surface-hover);
+  }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.cw-toggle-button__btn--on {
+  // AA-safe fill so the white on-state label meets 4.5:1 (frost/dark primary
+  // were 4.3/2.5 against white).
+  background: var(--cw-primary-fill, var(--cw-primary));
+  border-color: var(--cw-primary-fill, var(--cw-primary));
+  color: var(--cw-text-on-accent);
+}

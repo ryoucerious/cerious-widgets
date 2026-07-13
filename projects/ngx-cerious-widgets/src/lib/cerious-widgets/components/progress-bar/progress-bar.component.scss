@@ -1,0 +1,47 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  font-family: var(--cw-font);
+}
+
+.cw-progress-bar__track {
+  position: relative;
+  flex: 1;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--cw-neutral-bg);
+  overflow: hidden;
+}
+
+.cw-progress-bar__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cw-accent);
+  transition: width 0.25s ease;
+}
+
+.cw-progress-bar__label {
+  min-width: 2.75rem;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cw-text-muted);
+}
+
+// Indeterminate: an animated sweep across the track.
+:host([data-mode='indeterminate']) .cw-progress-bar__fill {
+  width: 35%;
+  animation: cw-progress-indeterminate 1.2s ease-in-out infinite;
+}
+
+@keyframes cw-progress-indeterminate {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(320%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-progress-bar__fill { transition: none; }
+  :host([data-mode='indeterminate']) .cw-progress-bar__fill { animation-duration: 2.4s; }
+}

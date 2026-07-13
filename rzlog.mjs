@@ -1,0 +1,15 @@
+import { chromium } from 'playwright';
+const b=await chromium.launch(); const p=await(await b.newContext({viewport:{width:1400,height:900}})).newPage();
+const logs=[]; p.on('console',m=>{ const t=m.text(); if(t.includes('[RZ]')) logs.push(t); });
+await p.goto('http://localhost:4300/components/grid',{waitUntil:'networkidle'}); await p.waitForTimeout(2500);
+const header = p.locator('cw-grid [role="columnheader"]', {hasText:'Name'}).first();
+const rb = await header.locator('.column-resizer').first().boundingBox();
+console.log('resizer box:', rb && {x:Math.round(rb.x),y:Math.round(rb.y),w:Math.round(rb.width)});
+await p.mouse.move(rb.x+rb.width/2, rb.y+rb.height/2); await p.mouse.down();
+await p.mouse.move(rb.x+rb.width/2+80, rb.y+rb.height/2, {steps:6});
+await p.mouse.up(); await p.waitForTimeout(300);
+const endW = await header.evaluate(el=>Math.round(el.getBoundingClientRect().width));
+console.log('LOGS ('+logs.length+'):');
+logs.slice(0,8).forEach(l=>console.log('  '+l));
+console.log('end width:', endW);
+await b.close();

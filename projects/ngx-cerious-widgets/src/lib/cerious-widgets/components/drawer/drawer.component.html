@@ -1,0 +1,13 @@
+<ng-template #panel>
+  <div class="cw-drawer__panel" role="dialog" aria-modal="true" [attr.aria-label]="header() || null" [attr.data-position]="position()" [style.width]="width()">
+    <div class="cw-drawer__header">
+      <span class="cw-drawer__title">{{ header() }}</span>
+      <button type="button" class="cw-drawer__close" aria-label="Close" (click)="close()">
+        <span class="cw-drawer__close-x" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="cw-drawer__body">
+      <ng-content />
+    </div>
+  </div>
+</ng-template>

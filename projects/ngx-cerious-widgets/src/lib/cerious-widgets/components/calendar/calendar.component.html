@@ -1,0 +1,43 @@
+<div class="cw-calendar__header">
+  <button type="button" class="cw-calendar__nav" (click)="prevMonth()" aria-label="Previous month">‹</button>
+  <div class="cw-calendar__title" aria-live="polite">{{ monthLabel() }}</div>
+  <button type="button" class="cw-calendar__today" (click)="goToday()">Today</button>
+  <button type="button" class="cw-calendar__nav" (click)="nextMonth()" aria-label="Next month">›</button>
+</div>
+
+<div class="cw-calendar__weekdays" aria-hidden="true">
+  @for (d of weekdayLabels(); track $index) {
+    <div class="cw-calendar__weekday">{{ d }}</div>
+  }
+</div>
+
+<div class="cw-calendar__grid" role="grid" [attr.aria-label]="monthLabel()" (keydown)="onKeydown($event)">
+  @for (week of weeks(); track $index) {
+    <div class="cw-calendar__week" role="row">
+      @for (cell of week; track cell.key) {
+        <div class="cw-calendar__cell" role="gridcell" [attr.aria-selected]="cell.isSelected">
+          <button type="button"
+                  class="cw-calendar__day"
+                  [class.cw-calendar__day--other]="!cell.inMonth"
+                  [class.cw-calendar__day--today]="cell.isToday"
+                  [class.cw-calendar__day--selected]="cell.isSelected"
+                  [attr.data-date]="cell.key"
+                  [attr.tabindex]="cell.isFocus ? 0 : -1"
+                  [attr.aria-label]="cell.aria"
+                  (click)="selectDate(cell.date)">
+            <span class="cw-calendar__daynum">{{ cell.day }}</span>
+            @if (cell.visible.length || cell.more) {
+              <span class="cw-calendar__events">
+                @for (e of cell.visible; track $index) {
+                  <span class="cw-calendar__event" [style.--_ev]="e.color || 'var(--cw-primary)'"
+                        [title]="e.title" (click)="onEventClick(e, $event)">{{ e.title }}</span>
+                }
+                @if (cell.more) { <span class="cw-calendar__more">+{{ cell.more }} more</span> }
+              </span>
+            }
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

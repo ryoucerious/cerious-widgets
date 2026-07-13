@@ -1,0 +1,30 @@
+@for (item of items(); track $index; let i = $index) {
+  @if (item.separator) {
+    <div class="cw-menu__separator" role="separator"></div>
+  } @else if (item.url && !item.disabled) {
+    <a
+      class="cw-menu__item"
+      role="menuitem"
+      [href]="item.url"
+      [class.cw-menu__item--active]="i === activeIndex()"
+      [class.cw-menu__item--danger]="item.danger"
+      (click)="activate(item)"
+    >
+      @if (item.icon) { <i class="cw-menu__icon" [class]="item.icon"></i> }
+      <span class="cw-menu__label">{{ item.label }}</span>
+    </a>
+  } @else {
+    <button
+      type="button"
+      class="cw-menu__item"
+      role="menuitem"
+      [class.cw-menu__item--active]="i === activeIndex()"
+      [class.cw-menu__item--danger]="item.danger"
+      [disabled]="item.disabled"
+      (click)="activate(item)"
+    >
+      @if (item.icon) { <i class="cw-menu__icon" [class]="item.icon"></i> }
+      <span class="cw-menu__label">{{ item.label }}</span>
+    </button>
+  }
+}

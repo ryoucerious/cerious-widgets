@@ -1,0 +1,111 @@
+// ============================================================================
+// Native form controls inside the grid (editable cells, filters).
+// Token-styled so they match the cerious-widgets look across all themes.
+// ============================================================================
+
+// The InputText directive class (`input[cwInput]` / `textarea[cwInput]`).
+// Global because directives carry no scoped stylesheet.
+.cw-input {
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--cw-font);
+  font-size: 0.875rem;
+  color: var(--cw-text);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border-strong);
+  border-radius: var(--cw-radius-sm);
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+
+  &::placeholder { color: var(--cw-text-muted); }
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--cw-accent);
+    box-shadow: var(--cw-focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// The Textarea directive (`textarea[cwTextarea]`). Vertical resize by default;
+// the directive manages height when `autoResize` is set.
+.cw-textarea {
+  display: block;
+  width: 100%;
+  min-height: 4.5rem;
+  resize: vertical;
+  line-height: 1.5;
+  font-family: var(--cw-font);
+}
+
+.cw-grid {
+  select,
+  input[type='number'],
+  input[type='search'],
+  input[type='email'],
+  input[type='date'],
+  textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px 8px;
+    font-family: var(--cw-font);
+    font-size: 14px;
+    color: var(--cw-text);
+    background: var(--cw-surface);
+    border: 1px solid var(--cw-border-strong);
+    border-radius: var(--cw-radius-sm);
+    outline: none;
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
+
+    &::placeholder { color: var(--cw-text-muted); }
+
+    &:hover { border-color: var(--cw-border-strong); }
+
+    &:focus,
+    &:focus-visible {
+      border-color: var(--cw-accent);
+      box-shadow: var(--cw-focus-ring);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  // Custom select: hide the native chevron, draw our own (mid-slate reads on
+  // both light and dark surfaces).
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 26px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+
+  // Checkboxes / radios adopt the brand colour and theme automatically.
+  input[type='checkbox'],
+  input[type='radio'] {
+    accent-color: var(--cw-primary);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  // Star rating: 5 stars, filled up to the value.
+  .cw-cell-stars {
+    display: inline-flex;
+    gap: 1px;
+    font-size: 15px;
+    line-height: 1;
+
+    .cw-star { color: var(--cw-border-strong); }
+    .cw-star--on { color: #f5a623; }
+  }
+}

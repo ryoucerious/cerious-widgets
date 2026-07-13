@@ -1,0 +1,59 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 18rem;
+  padding: 0.75rem;
+  background: #0f172a;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  font-family: 'SFMono-Regular', ui-monospace, 'Menlo', 'Consolas', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #e2e8f0;
+  cursor: text;
+}
+
+.cw-terminal__log {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
+}
+
+.cw-terminal__welcome {
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.cw-terminal__line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.cw-terminal__line--response { color: #cbd5e1; }
+
+.cw-terminal__prompt {
+  color: #2dd4bf;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.cw-terminal__input-row {
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.cw-terminal__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f1f5f9;
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: #2dd4bf;
+}

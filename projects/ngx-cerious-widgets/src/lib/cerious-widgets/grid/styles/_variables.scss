@@ -1,5 +1,10 @@
 // ============================
-// Base Colors
+// Base Colors (primitive palette)
+// ----------------------------
+// Kept as SCSS literals because the button mixins run colour functions
+// (lighten/transparentize) on them. Grid chrome below is driven by the design
+// tokens in `_tokens.scss` instead — override those (or add `.cw-dark`) to
+// re-skin at runtime.
 // ============================
 $light-100: #ffffff;
 $light-200: #fafbfb;
@@ -15,15 +20,15 @@ $dark-450: #2F353F;
 
 
 // ============================
-// Utility
+// Utility (tokenised)
 // ============================
-$default-font: 'Roboto', sans-serif;
-$radius-primary: .25rem;
+$default-font: var(--cw-font);
+$radius-primary: var(--cw-radius);
 
 $button-label-color: $light-100;
 
-$grid-text-header-footer: $dark-450;
-$grid-text-dark: $dark-450;
+$grid-text-header-footer: var(--cw-text);
+$grid-text-dark: var(--cw-text);
 
 
 // ============================
@@ -33,7 +38,7 @@ $grid-text-dark: $dark-450;
 $hamburger-line-length: 16px;
 $hamburger-line-thickness: 2px;
 $hamburger-footprint: 16px;
-$symbols-color: $dark-450;
+$symbols-color: var(--cw-text);
 
 
 // ============================
@@ -45,19 +50,22 @@ $active-glow: 0 0 0 0.2rem transparentize( #4ec3e0, .75);
 
 
 // ============================
-// Backgrounds
+// Backgrounds (tokenised)
 // ============================
-$grid-menubar-background: $light-400;
-$grid-header-background: $light-500;
-$grid-footer-background: $light-400;
-$grid-pager-background: $light-300;
-$grid-body-background: $light-200;
+// The grid is one clean card: header, toolbar, body, footer and pager all share
+// the card surface (the mockup header is the same colour as the rows). Sections
+// are separated by borders + the header's bold labels — not by a grey band.
+$grid-menubar-background: var(--cw-surface);
+$grid-header-background: var(--cw-surface);
+$grid-footer-background: var(--cw-surface);
+$grid-pager-background: var(--cw-surface);
+$grid-body-background: var(--cw-surface);
 
 // ============================
-// Lines and Borders
+// Lines and Borders (tokenised)
 // ============================
-$grid-wrapper-border: $light-400;
+$grid-wrapper-border: var(--cw-border);
 
-$grid-header-border: 1px solid $light-600;
+$grid-header-border: 1px solid var(--cw-divider);
 
-$grid-pinned-body-divider: 1px solid $dark-100;
+$grid-pinned-body-divider: 1px solid var(--cw-divider);

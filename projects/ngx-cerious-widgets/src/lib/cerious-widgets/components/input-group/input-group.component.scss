@@ -1,0 +1,42 @@
+:host {
+  display: inline-flex;
+  align-items: stretch;
+  font-family: var(--cw-font);
+}
+
+// Projected controls/addons seam together: flatten interior corners and
+// collapse the doubled borders. ::ng-deep reaches the projected children.
+:host ::ng-deep {
+  > * {
+    border-radius: 0;
+  }
+  > *:first-child {
+    border-top-left-radius: var(--cw-radius-sm);
+    border-bottom-left-radius: var(--cw-radius-sm);
+  }
+  > *:last-child {
+    border-top-right-radius: var(--cw-radius-sm);
+    border-bottom-right-radius: var(--cw-radius-sm);
+  }
+  > * + * {
+    margin-left: -1px;
+  }
+  // The focused control should sit above its neighbours so its ring shows.
+  > *:focus-within,
+  > *:focus {
+    position: relative;
+    z-index: 1;
+  }
+
+  // Static addons (text / icon).
+  [cwInputAddon] {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    background: var(--cw-surface-raised);
+    border: 1px solid var(--cw-border-strong);
+    color: var(--cw-text-secondary);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+}

@@ -2,8 +2,33 @@
 html, body {
     height: 100%;
     margin: 0;
-    padding: 10px;
+    padding: 0;
 }
 body {
     font-family: Arial, Helvetica, sans-serif;
+}
+
+// Frost theme: the demo preview/code are borderless glass panels (a subtle fill
+// + blur). Only the clickable overview cards keep a soft edge.
+[data-cw-theme='frost'] {
+    .demo-section__preview,
+    .code-block {
+        backdrop-filter: blur(14px) saturate(1.5);
+        -webkit-backdrop-filter: blur(14px) saturate(1.5);
+    }
+
+    .code-block { background: rgba(255, 255, 255, 0.20); }
+    .code-block__copy { background: rgba(255, 255, 255, 0.35); border-color: transparent; }
+
+    .overview__card {
+        backdrop-filter: blur(14px) saturate(1.5);
+        -webkit-backdrop-filter: blur(14px) saturate(1.5);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+// Demo popover menu item hover (overlay content is body-attached, so this
+// lives in global styles rather than a component stylesheet).
+.demo-menu-item:hover {
+    background: var(--cw-surface-raised);
 }

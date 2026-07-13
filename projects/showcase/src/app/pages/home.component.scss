@@ -1,0 +1,94 @@
+:host { display: block; }
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 3rem;
+  align-items: center;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem 3rem;
+}
+
+.hero__eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cw-primary);
+  margin-bottom: 1rem;
+}
+.hero__title {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--cw-text);
+}
+.hero__title span { color: var(--cw-primary); }
+.hero__lede {
+  margin: 1.25rem 0 0;
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: var(--cw-text-muted, var(--cw-text-secondary));
+  max-width: 40ch;
+}
+.hero__cta { display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap; }
+.hero__cta a { text-decoration: none; }
+
+.hero__stats {
+  display: flex;
+  gap: 2.25rem;
+  margin-top: 2.75rem;
+  flex-wrap: wrap;
+}
+.stat { display: flex; flex-direction: column; }
+.stat__num { font-size: 1.8rem; font-weight: 750; color: var(--cw-text); line-height: 1; }
+.stat__label { margin-top: 0.35rem; font-size: 0.85rem; color: var(--cw-text-muted, var(--cw-text-secondary)); }
+
+/* Live montage card */
+.hero__preview { display: flex; justify-content: center; }
+.montage {
+  width: 100%;
+  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-xl, 16px);
+  box-shadow: var(--cw-shadow-lg);
+}
+.montage__row { display: flex; align-items: center; gap: 0.75rem; }
+.montage__row--between { justify-content: space-between; }
+.montage__row--end { justify-content: flex-end; }
+.montage__meta { display: flex; align-items: center; gap: 0.5rem; margin-right: auto; color: var(--cw-text); }
+.montage__progress { display: flex; flex-direction: column; gap: 0.5rem; }
+.montage__progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--cw-text-muted, var(--cw-text-secondary)); }
+
+/* Highlights */
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.25rem;
+  max-width: 72rem;
+  margin: 1rem auto 5rem;
+  padding: 0 1.5rem;
+}
+.highlight {
+  padding: 1.5rem;
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-lg);
+}
+.highlight__icon { font-size: 1.5rem; }
+.highlight__title { margin: 0.75rem 0 0.4rem; font-size: 1.05rem; font-weight: 650; color: var(--cw-text); }
+.highlight__text { margin: 0; font-size: 0.925rem; line-height: 1.6; color: var(--cw-text-muted, var(--cw-text-secondary)); }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; padding-top: 3rem; }
+  .hero__preview { order: -1; }
+}

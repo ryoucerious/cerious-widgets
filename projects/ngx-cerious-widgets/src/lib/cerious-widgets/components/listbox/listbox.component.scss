@@ -1,0 +1,123 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  box-sizing: border-box;
+  min-width: 14rem;
+  padding: 0.375rem;
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  font-family: var(--cw-font);
+}
+
+:host(.cw-listbox--disabled) { opacity: 0.6; }
+
+.cw-listbox__filter {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.375rem 0.625rem;
+  font-family: var(--cw-font);
+  font-size: 0.8125rem;
+  color: var(--cw-text);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-sm);
+  outline: none;
+
+  &::placeholder { color: var(--cw-text-muted); }
+  &:focus { border-color: var(--cw-accent); box-shadow: var(--cw-focus-ring); }
+}
+
+.cw-listbox__list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+// Virtualized list: cerious-scroll owns scrolling inside a fixed viewport.
+.cw-listbox__list--virtual {
+  overflow: hidden;
+  position: relative;
+
+  cerious-scroll {
+    display: block;
+    height: 100%;
+  }
+
+  // The engine's item wrappers don't stretch their child, so make each row fill
+  // the width (unlike the non-virtual flex column, which stretches items).
+  cerious-scroll > * > * {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.cw-listbox__option {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  height: 34px;
+  padding: 0 0.625rem;
+  border-radius: var(--cw-radius-sm);
+  font-size: 0.875rem;
+  color: var(--cw-text);
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--cw-surface-hover); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+  &:disabled { cursor: not-allowed; }
+}
+
+// Single-select: accent-tinted selected row.
+.cw-listbox__option--selected {
+  background: color-mix(in srgb, var(--cw-accent) 12%, transparent);
+  color: var(--cw-accent-strong, var(--cw-accent));
+  font-weight: 600;
+}
+
+.cw-listbox__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  box-sizing: border-box;
+  border: 1px solid var(--cw-border-strong);
+  border-radius: var(--cw-radius-sm);
+  background: var(--cw-surface);
+}
+
+.cw-listbox__check {
+  width: 4px;
+  height: 7px;
+  border: solid var(--cw-text-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  margin-top: -2px;
+}
+
+.cw-listbox__option--selected .cw-listbox__box {
+  background: var(--cw-accent);
+  border-color: var(--cw-accent);
+}
+.cw-listbox__option--selected .cw-listbox__check {
+  transform: rotate(45deg) scale(1);
+}
+
+.cw-listbox__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cw-listbox__empty {
+  padding: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--cw-text-muted);
+  text-align: center;
+}

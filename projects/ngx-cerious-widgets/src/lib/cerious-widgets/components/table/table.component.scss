@@ -1,0 +1,72 @@
+:host {
+  display: block;
+  overflow-x: auto;
+  font-family: var(--cw-font);
+  // Baseline outer frame, matching the Grid's enclosing box (hairline border +
+  // rounded corners). `bordered` layers column dividers on top of this.
+  border: 1px solid var(--cw-divider);
+  border-radius: var(--cw-radius-md, var(--cw-radius));
+}
+
+.cw-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: var(--cw-text);
+  background: var(--cw-surface);
+}
+
+.cw-table th,
+.cw-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--cw-row-border, var(--cw-divider));
+  vertical-align: middle;
+}
+
+// Match the Grid's header: same surface as the body (not sunken), full-strength
+// text at weight 600, divider-coloured bottom rule.
+.cw-table thead th {
+  font-weight: 600;
+  color: var(--cw-text);
+  background: var(--cw-surface);
+  border-bottom: 1px solid var(--cw-divider);
+  white-space: nowrap;
+}
+
+.cw-table tbody tr:last-child td { border-bottom: none; }
+
+/* Sizes */
+.cw-table--small th, .cw-table--small td { padding: 5px 8px; font-size: 0.825rem; }
+.cw-table--large th, .cw-table--large td { padding: 13px 14px; }
+
+/* Variants */
+.cw-table--striped tbody tr:nth-child(even) { background: var(--cw-surface-sunken, var(--cw-surface-2)); }
+.cw-table--hoverable tbody tr:hover { background: var(--cw-surface-hover, var(--cw-surface-sunken)); }
+/* `bordered` adds vertical column dividers on top of the baseline outer frame. */
+.cw-table--bordered th, .cw-table--bordered td { border-right: 1px solid var(--cw-divider); }
+.cw-table--bordered th:last-child, .cw-table--bordered td:last-child { border-right: none; }
+
+/* Sortable headers */
+.cw-table__th--sortable { cursor: pointer; user-select: none; }
+.cw-table__th-label { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+// Match the Grid's sort affordance: a small ↑/↓ arrow that appears in the accent
+// colour when active. A faint ↕ hint shows on unsorted sortable columns.
+.cw-table__sort {
+  flex: none;
+  font-size: 0.9em;
+  line-height: 1;
+  opacity: 0;
+  color: var(--cw-text-muted, var(--cw-text-secondary));
+  transition: opacity 0.12s ease;
+
+  &[data-dir='asc'],
+  &[data-dir='desc'] { opacity: 1; color: var(--cw-primary); }
+}
+.cw-table__th--sortable:hover .cw-table__sort { opacity: 1; }
+
+.cw-table__empty-row td {
+  text-align: center;
+  padding: 2rem;
+  color: var(--cw-text-muted, var(--cw-text-secondary));
+}

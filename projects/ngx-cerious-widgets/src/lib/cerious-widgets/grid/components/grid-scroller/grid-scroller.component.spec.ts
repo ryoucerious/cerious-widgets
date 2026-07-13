@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElementRef } from '@angular/core';
+import { Subject } from 'rxjs';
 import { GridScrollerComponent } from './grid-scroller.component';
 import { GRID_SERVICE } from '../../tokens/grid-service.token';
 import { GRID_SCROLL_SERVICE } from '../../tokens/grid-scroll-services.token';
@@ -31,6 +32,11 @@ describe('GridScrollerComponent', () => {
     ]);
 
     mockGridScrollService = jasmine.createSpyObj('IGridScrollService', ['scrollDelta', 'scrollGrid']);
+    // The scroller subscribes to afterScroll in ngAfterViewInit to mirror
+    // external scroll-position updates back onto the element.
+    (mockGridScrollService as any).afterScroll = new Subject<void>();
+    // …and to afterResize to re-render the scrollbar height when the grid resizes.
+    (mockGridService as any).afterResize = new Subject<void>();
 
     TestBed.configureTestingModule({
       imports: [GridScrollerComponent],

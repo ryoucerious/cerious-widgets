@@ -71,7 +71,7 @@ export interface IGridService {
   applySorting(sortState: SortState[]): void;
   endColumnResizing(): void;
   getFeatureCount(): number;
-  initColumnResizing(column: ColumnDef, e: MouseEvent): void;
+  initColumnResizing(column: ColumnDef, e: MouseEvent, startWidth?: number): void;
   onMouseMove(e: MouseEvent): void;
   onMouseUp(e: MouseEvent): void;
   processDataset(): void;

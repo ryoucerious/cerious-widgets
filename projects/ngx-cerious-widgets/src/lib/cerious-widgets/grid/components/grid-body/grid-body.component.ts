@@ -149,21 +149,20 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
         this.markForCheck();
       }));
       // In-place row state changes (selection, column width drag) that don't
-      // alter row identity or count. Rebind the embedded view context + local CD
-      // for every visible row — much cheaper than a full re-render and works
-      // with the OnPush row components and the engine's view pool.
-      this.subscriptions.push(this.gridService.selectedRowsChange.subscribe(() => {
+      // alter row identity or count. Bumping `refreshTick` (bound to every
+      // `cw-grid-row`) changes the OnPush rows' input so they re-read their cell
+      // widths; `markForCheck()` schedules this body's view so that new tick is
+      // actually pushed (under zoneless a plain field mutation marks nothing).
+      // `refreshRenderedContent()` additionally repaints the virtual scroller's
+      // pooled views (no-op when virtual scrolling is off).
+      const refreshRows = () => {
         this.refreshTick++;
+        this.markForCheck();
         this.ceriousScroll?.refreshRenderedContent();
-      }));
-      this.subscriptions.push(this.gridService.afterColumnResize.subscribe(() => {
-        this.refreshTick++;
-        this.ceriousScroll?.refreshRenderedContent();
-      }));
-      this.subscriptions.push(this.gridService.afterCellEdit.subscribe(() => {
-        this.refreshTick++;
-        this.ceriousScroll?.refreshRenderedContent();
-      }));
+      };
+      this.subscriptions.push(this.gridService.selectedRowsChange.subscribe(refreshRows));
+      this.subscriptions.push(this.gridService.afterColumnResize.subscribe(refreshRows));
+      this.subscriptions.push(this.gridService.afterCellEdit.subscribe(refreshRows));
     } catch (error) {
       console.error('Error during initialization in GridBodyComponent:', error);
     }

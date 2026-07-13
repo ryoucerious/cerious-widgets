@@ -1,0 +1,19 @@
+<div class="cw-tabs__header" role="tablist" (keydown)="onKeydown($event)">
+  @for (tab of tabs(); track tab; let i = $index) {
+    <button
+      type="button"
+      role="tab"
+      class="cw-tabs__tab"
+      [class.cw-tabs__tab--active]="i === currentIndex()"
+      [attr.aria-selected]="i === currentIndex()"
+      [disabled]="tab.disabled()"
+      [tabindex]="i === currentIndex() ? 0 : -1"
+      (click)="select(i)"
+    >{{ tab.label() }}</button>
+  }
+</div>
+<div class="cw-tabs__body" role="tabpanel">
+  @if (activeTab(); as tab) {
+    <ng-container [ngTemplateOutlet]="tab.content()" />
+  }
+</div>

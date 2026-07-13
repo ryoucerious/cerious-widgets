@@ -17,27 +17,33 @@
         <!-- Editable fields based on column type -->
         <ng-container *ngSwitchCase="CellMode.Editable" [ngSwitch]="column.type || ColumnType.String">
             <input *ngSwitchCase="ColumnType.String"
+                   cwInput
                    type="text"
                    [value]="formattedValue()"
                    (input)="onValueChange($event)" />
             <input *ngSwitchCase="ColumnType.Number"
+                   cwInput
                    type="number"
                    [value]="value()"
                    (input)="onValueChange($event)" />
             <select *ngSwitchCase="ColumnType.Dropdown"
+                    class="cw-input cw-grid-edit-select"
                     [value]="value()"
                     (change)="onValueChange($event)">
                 <option *ngFor="let option of column.valueOptions; trackBy: dropdownTrackBy" [value]="option.id">{{option.value}}</option>
             </select>
             <input *ngSwitchCase="ColumnType.Date"
+                   cwInput
                    type="date"
                    [value]="value()"
                    (input)="onValueChange($event)" />
             <input *ngSwitchCase="ColumnType.DateTime"
+                   cwInput
                    type="datetime-local"
                    [value]="value()"
                    (input)="onValueChange($event)" />
             <input *ngSwitchCase="ColumnType.Time"
+                   cwInput
                    type="time"
                    [value]="value()"
                    (input)="onValueChange($event)" />
@@ -54,8 +60,10 @@
         <ng-container *ngSwitchCase="CellMode.Format" [ngSwitch]="column.format">
             <div *ngSwitchCase="ColumnFormat.Currency">{{ value() | currency }}</div>
             <div *ngSwitchCase="ColumnFormat.Percentage">{{ value() | percent }}</div>
-            <div *ngSwitchCase="ColumnFormat.Stars">
-                <span *ngFor="let star of getStars(value())">&#9733;</span>
+            <div *ngSwitchCase="ColumnFormat.Stars" class="cw-cell-stars">
+                <span *ngFor="let star of [1,2,3,4,5]"
+                      class="cw-star"
+                      [class.cw-star--on]="star <= value()">&#9733;</span>
             </div>
             <div *ngSwitchCase="ColumnFormat.Date">{{ value() | date:'shortDate' }}</div>
             <div *ngSwitchCase="ColumnFormat.DateTime">{{ value() | date:'short' }}</div>

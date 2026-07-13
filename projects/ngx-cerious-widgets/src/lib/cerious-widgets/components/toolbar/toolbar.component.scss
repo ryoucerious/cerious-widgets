@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  font-family: var(--cw-font);
+}
+
+.cw-toolbar__section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cw-toolbar__center {
+  flex: 1;
+  justify-content: center;
+}

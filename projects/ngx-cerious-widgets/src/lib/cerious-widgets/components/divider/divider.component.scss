@@ -1,0 +1,57 @@
+:host {
+  --_line: var(--cw-divider);
+  display: flex;
+  align-items: center;
+  font-family: var(--cw-font);
+  font-size: 0.8125rem;
+  color: var(--cw-text-muted);
+}
+
+:host([data-layout='horizontal']) {
+  width: 100%;
+  margin: 1rem 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid var(--_line);
+  }
+}
+
+:host([data-layout='horizontal'][data-type='dashed'])::before,
+:host([data-layout='horizontal'][data-type='dashed'])::after {
+  border-top-style: dashed;
+}
+
+// Label alignment: shrink one side's line.
+:host([data-layout='horizontal'][data-align='left'])::before  { flex: 0 0 1.25rem; }
+:host([data-layout='horizontal'][data-align='right'])::after  { flex: 0 0 1.25rem; }
+
+.cw-divider__content:not(:empty) {
+  padding: 0 0.75rem;
+  white-space: nowrap;
+}
+
+:host([data-layout='vertical']) {
+  flex-direction: column;
+  align-self: stretch;
+  width: auto;
+  margin: 0 1rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-left: 1px solid var(--_line);
+  }
+
+  .cw-divider__content:not(:empty) {
+    padding: 0.5rem 0;
+  }
+}
+
+:host([data-layout='vertical'][data-type='dashed'])::before,
+:host([data-layout='vertical'][data-type='dashed'])::after {
+  border-left-style: dashed;
+}

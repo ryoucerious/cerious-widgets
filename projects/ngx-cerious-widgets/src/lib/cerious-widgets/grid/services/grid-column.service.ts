@@ -284,7 +284,8 @@ export class GridColumnService implements IGridColumnService {
     scrollDelta: ScrollDelta,
   ): void {
     if (!gridHeader || !gridBody || !gridOptions || !scrollDelta) {
-      console.error("Invalid input: All parameters are required for updating pinned column positions.");
+      // A scroll-sync can fire before the header/body views are wired up during
+      // init; that's benign — no-op until everything is ready (no console noise).
       return;
     }
 

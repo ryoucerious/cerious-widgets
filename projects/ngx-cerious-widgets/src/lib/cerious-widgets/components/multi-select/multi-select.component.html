@@ -1,0 +1,78 @@
+<!-- Trigger -->
+<div class="cw-multi-select__chips">
+  @if (selectedOptions().length === 0) {
+    <span class="cw-multi-select__placeholder">{{ placeholder() }}</span>
+  }
+  @for (option of visibleChips(); track option.label) {
+    <span class="cw-multi-select__chip">
+      {{ option.label }}
+      <button type="button" class="cw-multi-select__chip-remove" [attr.aria-label]="'Remove ' + option.label" (click)="removeChip(option, $event)">
+        <span class="cw-multi-select__chip-x" aria-hidden="true"></span>
+      </button>
+    </span>
+  }
+  @if (overflowCount() > 0) {
+    <span class="cw-multi-select__chip cw-multi-select__chip--overflow">+{{ overflowCount() }}</span>
+  }
+</div>
+<span class="cw-multi-select__caret" aria-hidden="true"></span>
+
+<!-- Panel -->
+<ng-template #panel>
+  <div class="cw-multi-select__panel-inner" (keydown)="onPanelKeydown($event)">
+    @if (filterable()) {
+      <input
+        type="text"
+        class="cw-multi-select__filter"
+        placeholder="Search..."
+        [value]="filterTerm()"
+        (input)="onFilterInput($event)"
+        (click)="$event.stopPropagation()"
+      />
+    }
+
+    @if (filteredOptions().length > 0) {
+      <button type="button" class="cw-multi-select__all" (click)="toggleSelectAll($event)">
+        {{ allFilteredSelected() ? 'Clear all' : 'Select all' }}
+      </button>
+    }
+
+    <!-- Row renderer shared by the plain and virtualized lists -->
+    <ng-template #optionRow let-option>
+      <button
+        type="button"
+        class="cw-multi-select__option"
+        role="option"
+        [attr.aria-selected]="isSelected(option)"
+        [class.cw-multi-select__option--selected]="isSelected(option)"
+        (click)="toggleOption(option, $event)"
+      >
+        <span class="cw-multi-select__box" aria-hidden="true"><span class="cw-multi-select__check"></span></span>
+        @if (optionTemplate(); as tpl) {
+          <ng-container [ngTemplateOutlet]="tpl" [ngTemplateOutletContext]="{ $implicit: option, selected: isSelected(option) }" />
+        } @else {
+          <span class="cw-multi-select__label">{{ option.label }}</span>
+        }
+      </button>
+    </ng-template>
+
+    @if (filteredOptions().length === 0) {
+      <div class="cw-multi-select__empty">No results</div>
+    } @else if (useVirtual()) {
+      <!-- Large lists: virtualized with cerious-scroll -->
+      <div class="cw-multi-select__list cw-multi-select__list--virtual" role="listbox" aria-multiselectable="true">
+        <cerious-scroll [items]="filteredOptions()">
+          <ng-template ceriousScrollItem let-option>
+            <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option }" />
+          </ng-template>
+        </cerious-scroll>
+      </div>
+    } @else {
+      <div class="cw-multi-select__list" role="listbox" aria-multiselectable="true">
+        @for (option of filteredOptions(); track $index) {
+          <ng-container [ngTemplateOutlet]="optionRow" [ngTemplateOutletContext]="{ $implicit: option }" />
+        }
+      </div>
+    }
+  </div>
+</ng-template>

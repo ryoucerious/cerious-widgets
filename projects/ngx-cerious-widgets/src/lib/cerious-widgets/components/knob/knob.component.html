@@ -1,0 +1,27 @@
+<svg class="cw-knob__svg" [attr.width]="size()" [attr.height]="size()" [attr.viewBox]="'0 0 ' + size() + ' ' + size()">
+  <circle
+    class="cw-knob__track"
+    [attr.cx]="center()"
+    [attr.cy]="center()"
+    [attr.r]="radius()"
+    fill="none"
+    [attr.stroke-width]="strokeWidth()"
+    stroke-linecap="round"
+    [attr.stroke-dasharray]="trackDash()"
+    [attr.transform]="ringTransform()"
+  />
+  <circle
+    class="cw-knob__range"
+    [attr.cx]="center()"
+    [attr.cy]="center()"
+    [attr.r]="radius()"
+    fill="none"
+    [attr.stroke-width]="strokeWidth()"
+    stroke-linecap="round"
+    [attr.stroke-dasharray]="rangeDash()"
+    [attr.transform]="ringTransform()"
+  />
+</svg>
+@if (showValue()) {
+  <span class="cw-knob__value">{{ label() }}</span>
+}

@@ -1,6 +1,7 @@
-<div class="text-nowrap column-container" 
-     role="columnheader" 
-     [style.width]="getWidth()" 
+<!-- The columnheader role lives on the <cw-grid-header-column> host; this inner
+     container is generic so there's a single columnheader per column. -->
+<div class="text-nowrap column-container"
+     [style.width]="getWidth()"
      [attr.data-column-id]="column.id"
      [ngClass]="classes.cell"
      (mouseover)="$event.stopPropagation()">

@@ -1,0 +1,103 @@
+:host {
+  display: inline-flex;
+  font-family: var(--cw-font);
+}
+
+:host(.cw-color-picker--disabled) { opacity: 0.6; }
+
+.cw-color-picker__trigger {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  padding: 0.3125rem 0.625rem;
+  border: 1px solid var(--cw-border-strong);
+  border-radius: var(--cw-radius-sm);
+  background: var(--cw-surface);
+  cursor: pointer;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+
+  &:hover:not(:disabled) { border-color: var(--cw-accent); }
+  &:focus-visible { border-color: var(--cw-accent); box-shadow: var(--cw-focus-ring); }
+  &:disabled { cursor: not-allowed; }
+}
+
+.cw-color-picker__swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--cw-radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  flex: none;
+}
+
+.cw-color-picker__hex {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  color: var(--cw-text);
+}
+
+// --- Panel ---
+.cw-color-picker__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  width: 15rem;
+  padding: 0.25rem;
+  font-family: var(--cw-font);
+}
+
+.cw-color-picker__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cw-color-picker__native {
+  width: 40px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-sm);
+  background: var(--cw-surface);
+  cursor: pointer;
+}
+
+.cw-color-picker__field {
+  flex: 1;
+  box-sizing: border-box;
+  padding: 0.4375rem 0.625rem;
+  font-family: var(--cw-font);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  color: var(--cw-text);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-sm);
+  outline: none;
+
+  &:focus { border-color: var(--cw-accent); box-shadow: var(--cw-focus-ring); }
+}
+
+.cw-color-picker__presets {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+
+.cw-color-picker__preset {
+  all: unset;
+  aspect-ratio: 1;
+  border-radius: var(--cw-radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &:hover { transform: scale(1.12); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+}
+
+.cw-color-picker__preset--active {
+  box-shadow: 0 0 0 2px var(--cw-surface), 0 0 0 4px var(--cw-accent);
+}

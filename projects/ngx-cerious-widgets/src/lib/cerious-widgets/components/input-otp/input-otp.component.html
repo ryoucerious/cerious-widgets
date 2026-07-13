@@ -1,0 +1,16 @@
+@for (i of slots(); track i) {
+  <input
+    #box
+    class="cw-input-otp__box"
+    [type]="mask() ? 'password' : 'text'"
+    [attr.inputmode]="integerOnly() ? 'numeric' : 'text'"
+    maxlength="1"
+    autocomplete="one-time-code"
+    [value]="charAt(i)"
+    [disabled]="isDisabled()"
+    [attr.aria-label]="'Digit ' + (i + 1)"
+    (input)="onInput(i, $event)"
+    (keydown)="onKeydown(i, $event)"
+    (paste)="onPaste(i, $event)"
+  />
+}

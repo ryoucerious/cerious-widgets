@@ -1,4 +1,7 @@
-import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { ApplicationRef, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { DomPortal } from '@angular/cdk/portal';
+import { filter } from 'rxjs/operators';
 import { GridPlugin } from '../interfaces/grid-plugin';
 import { GridApi } from '../interfaces/grid-api';
 import { ColumnDef } from '../interfaces/column-def';
@@ -11,12 +14,17 @@ export class ColumnVisibilityPlugin implements GridPlugin {
   private visibilityButton!: HTMLButtonElement;
   private gridApi!: GridApi;
   private renderer: Renderer2;
-  private menuElement: HTMLElement | null = null;
+  /** The CDK overlay hosting the column-visibility panel (same popover surface as the library menus). */
+  private overlayRef: OverlayRef | null = null;
+  /** The panel content moved into the overlay via a DomPortal (removed on close). */
+  private visibilityMenu: HTMLElement | null = null;
   private pluginOptions: PluginOptions | PluginConfig = {};
 
   constructor(
     private templateRegistry: TemplateRegistryService,
-    private rendererFactory: RendererFactory2
+    private rendererFactory: RendererFactory2,
+    private overlay: Overlay,
+    private appRef: ApplicationRef
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
@@ -91,20 +99,8 @@ export class ColumnVisibilityPlugin implements GridPlugin {
       this.gridApi.resize();
     });
 
-    // Add event listeners for resize and scroll
-
-    this.gridApi.afterResize(() => {
-      if (this.menuElement) {
-        const buttonRect = this.visibilityButton.getBoundingClientRect();
-        const menuWidth = this.menuElement.offsetWidth;
-        this.renderer.setStyle(this.menuElement, 'top', `${buttonRect.bottom + 4}px`);
-        this.renderer.setStyle(this.menuElement, 'left', `${buttonRect.right - menuWidth}px`);
-      }
-    });
-
-    this.gridApi.afterScroll(() => {
-      this.closeMenuHandler();
-    }); 
+    // Close the panel on scroll (the CDK reposition strategy handles resize).
+    this.gridApi.afterScroll(() => this.closeMenu());
   }
 
   onDestroy(): void {
@@ -119,34 +115,12 @@ export class ColumnVisibilityPlugin implements GridPlugin {
    * @private
    */
    private closeMenu(): void {
-    if (this.menuElement) {
-      this.renderer.removeChild(document.body, this.menuElement);
-      this.menuElement = null; // Clear the reference
-      document.removeEventListener('click', this.closeMenuHandler);
-    }
+    this.overlayRef?.dispose();
+    this.overlayRef = null;
+    // DomPortal restores the content to its original parent on dispose; remove it.
+    this.visibilityMenu?.remove();
+    this.visibilityMenu = null;
   }
-
-  /**
-   * Handles the closing of the menu when a click event occurs outside the menu element
-   * and the visibility button. This ensures that the menu is closed when the user
-   * interacts with other parts of the UI.
-   *
-   * @param event - The mouse event triggered by the user's interaction.
-   */
-  private closeMenuHandler = (event?: Event): void => {
-    if (!event) {
-      this.closeMenu(); // Close the menu if no event is provided
-      return;
-    }
-    
-    if (
-      this.menuElement &&
-      !this.menuElement.contains(event.target as Node) &&
-      event.target !== this.visibilityButton
-    ) {
-      this.closeMenu();
-    }
-  };
 
   /**
    * Opens the menu for managing column visibility.
@@ -163,18 +137,18 @@ export class ColumnVisibilityPlugin implements GridPlugin {
    * @private
    */
   private openMenu(): void {
-    // Check if the menu already exists
-    if (this.menuElement) {
-      this.closeMenu(); // Close the existing menu
+    // Toggle: if already open, close.
+    if (this.overlayRef) {
+      this.closeMenu();
       return;
     }
-  
-    // Create the dropdown menu
+
+    // Build the panel content (a checkbox per column).
     const menu = this.renderer.createElement('div');
-    this.renderer.addClass(menu, 'cw-dropdown-menu');
+    this.renderer.addClass(menu, 'cw-grid-column-list');
     this.renderer.setAttribute(menu, 'role', 'menu');
     this.renderer.setAttribute(menu, 'aria-label', 'Column Visibility Options');
-  
+
     // Add a list of column definitions with checkboxes
     const columnList = this.renderer.createElement('ul');
     this.renderer.setAttribute(columnList, 'role', 'menu');
@@ -213,21 +187,38 @@ export class ColumnVisibilityPlugin implements GridPlugin {
       this.renderer.appendChild(columnList, listItem);
     });
     this.renderer.appendChild(menu, columnList);
-  
-    // Append the menu to the body
+
+    // DomPortal moves an existing node into the overlay, so the content must have
+    // a parent first.
     this.renderer.appendChild(document.body, menu);
-  
-    // Position the menu
-    const buttonRect = this.visibilityButton.getBoundingClientRect();
-    const menuWidth = menu.offsetWidth;
-    this.renderer.setStyle(menu, 'top', `${buttonRect.bottom + 4}px`);
-    this.renderer.setStyle(menu, 'left', `${buttonRect.right - menuWidth}px`);
-  
-    // Store the menu reference
-    this.menuElement = menu;
-  
-    // Add a global click listener to close the menu
-    document.addEventListener('click', this.closeMenuHandler);
+    this.visibilityMenu = menu;
+
+    // Host the panel in a CDK overlay with the shared `cw-overlay-panel` surface,
+    // anchored to the button — the same popover the library's menus use.
+    this.overlayRef = this.overlay.create({
+      positionStrategy: this.overlay
+        .position()
+        .flexibleConnectedTo(this.visibilityButton)
+        .withPush(false)
+        .withPositions([
+          { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 4 },
+          { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -4 }
+        ]),
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+      hasBackdrop: false,
+      panelClass: 'cw-overlay-panel'
+    });
+    this.overlayRef.attach(new DomPortal(menu));
+
+    this.overlayRef
+      .outsidePointerEvents()
+      .pipe(filter(event => !this.visibilityButton.contains(event.target as Node)))
+      .subscribe(() => this.closeMenu());
+    this.overlayRef.keydownEvents().subscribe(event => {
+      if (event.key === 'Escape') {
+        this.closeMenu();
+      }
+    });
   }
 
   /**
@@ -244,6 +235,12 @@ export class ColumnVisibilityPlugin implements GridPlugin {
     } else {
       this.gridApi.hideColumn(column.id);
     }
-    this.gridApi.resize(); // Resize the grid after toggling visibility
+    // `refresh()` re-renders the header + body for the new column set (resize
+    // alone only re-measures). The checkbox uses a native `change` listener that
+    // the zoneless scheduler can't see, so tick() to flush the render now instead
+    // of only on the next scroll/click.
+    this.gridApi.refresh();
+    this.gridApi.resize();
+    this.appRef.tick();
   }
 }

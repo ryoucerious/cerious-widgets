@@ -11,8 +11,8 @@
     // would make overflow-y compute to `auto` and produce a second native
     // vertical scrollbar alongside the engine's attached one.
     overflow: hidden;
-    border-top: solid 1px rgb(221,221,221);
-    border-bottom: solid 1px rgb(231,231,231);
+    border-top: solid 1px var(--cw-divider);
+    border-bottom: solid 1px var(--cw-divider);
     position: relative;
     z-index: 0;
     --cw-pin-offset: 0px;
@@ -55,19 +55,59 @@
     }
 
     .group-header {
-        font-weight: bold;
-        background-color: #f8f8f8 !important;
-        padding: 5px;
-        border-top: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        background-color: var(--cw-grid-group-bg) !important;
+        padding: 8px 12px;
+        border-top: 1px solid var(--cw-row-border);
+        border-bottom: 1px solid var(--cw-row-border);
         border-collapse: separate;
         text-align: left !important;
 
-        > button {
+        // Chevron toggle (▸ collapsed, ▾ expanded) — replaces the +/- button.
+        .group-header__toggle {
             all: unset;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
-            font-size: 20px;
-            font-weight: normal;
+        }
+
+        .group-header__chevron {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-right: 2px solid var(--cw-text-muted);
+            border-bottom: 2px solid var(--cw-text-muted);
+            transform: rotate(-45deg);
+            transition: transform 0.15s ease;
+        }
+        .group-header__chevron--open {
+            transform: rotate(45deg);
+        }
+
+        // Group value colour per theme (accent in light/frost, white in dark).
+        .group-header__label {
+            color: var(--cw-grid-group-fg, var(--cw-accent));
+            font-weight: 600;
+        }
+
+        // Row count as a small badge pill, tinted with the accent like the
+        // mockup (light-blue pill in the light theme, lavender in frost).
+        .group-header__count {
+            display: inline-flex;
+            align-items: center;
+            padding: 1px 8px;
+            border-radius: 999px;
+            background: var(--cw-info-bg);
+            color: var(--cw-info-fg);
+            font-size: 0.72rem;
+            font-weight: 600;
+            line-height: 1.4;
         }
     }
 
@@ -82,6 +122,7 @@
         display: table;
         border-collapse: separate;
         table-layout: fixed;
+        background-color: var(--cw-grid-row-bg);
 
         &.nested-grid {
             margin-top: 8px;
@@ -105,9 +146,10 @@
             vertical-align: middle;
             overflow-x: hidden;
             position: relative;
-            
+            border-bottom: 1px solid var(--cw-row-border);
+
             .cell-content-wrapper {
-                padding: 4px 8px;
+                padding: 9px 10px;
             }
 
             &.padding-col {
@@ -120,42 +162,42 @@
         }
 
         &.odd {
-            // alternating row color
-            background-color: white;
+            // clean, non-striped rows (separated by the cell bottom-border)
+            background-color: var(--cw-grid-row-bg);
         }
 
         &.group-by-row {
-            background-color: #e2e2e2;
+            background-color: var(--cw-surface-raised);
 
             &.odd {
-                background-color: #ededed;
+                background-color: var(--cw-surface-raised);
             }
         }
 
         &:not(.nested-grid):not(.filler-row):hover {
-            background-color: rgb(200,210,218);
+            background-color: var(--cw-surface-hover);
         }
 
         &.filler-row {
-            background-color: rgb(250,250,250);
+            background-color: var(--cw-surface-sunken);
             overflow: hidden;
         }
 
         &.group-by-footer-row {
-            background: rgb(255,255,255);
+            background: var(--cw-surface);
         }
     }
 
     > .table-col {
         text-align: center;
         padding: 8px;
-        border: 1px solid #ddd;
+        border: 1px solid var(--cw-border);
     }
     
     .group-header {
         position: relative;;
         font-weight: bold;
-        background-color: #f1f1f1;
+        background-color: var(--cw-surface-raised);
         text-align: center;
         vertical-align: middle; 
     }

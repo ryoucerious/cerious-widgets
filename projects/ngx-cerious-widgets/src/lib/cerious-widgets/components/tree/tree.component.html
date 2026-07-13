@@ -1,0 +1,41 @@
+<ng-template #row let-flat>
+  <div
+    class="cw-tree__node"
+    role="treeitem"
+    [attr.aria-level]="flat.depth + 1"
+    [attr.aria-expanded]="flat.hasChildren ? isExpanded(flat.node) : null"
+    [attr.aria-selected]="selectedKey() === flat.node.key"
+    [class.cw-tree__node--selected]="selectedKey() === flat.node.key"
+    [class.cw-tree__node--unselectable]="flat.node.selectable === false"
+    [style.padding-left]="indent(flat.depth)"
+    (click)="select(flat)"
+  >
+    @if (flat.hasChildren) {
+      <button type="button" class="cw-tree__toggle" [attr.aria-label]="isExpanded(flat.node) ? 'Collapse' : 'Expand'" (click)="toggle(flat, $event)">
+        <span class="cw-tree__chevron" [class.cw-tree__chevron--open]="isExpanded(flat.node)"></span>
+      </button>
+    } @else {
+      <span class="cw-tree__toggle cw-tree__toggle--leaf"></span>
+    }
+    @if (flat.node.icon) { <i class="cw-tree__icon" [class]="flat.node.icon"></i> }
+    <span class="cw-tree__label">{{ flat.node.label }}</span>
+  </div>
+</ng-template>
+
+@if (useVirtual()) {
+  <div class="cw-tree__list cw-tree__list--virtual" [style.height]="treeHeight()">
+    <!-- The scroll viewport is a `group` (a valid child of `tree`) that holds
+         the virtualized treeitems, so the tree structure stays valid. -->
+    <cerious-scroll role="group" [items]="flatNodes()">
+      <ng-template ceriousScrollItem let-flat>
+        <ng-container [ngTemplateOutlet]="row" [ngTemplateOutletContext]="{ $implicit: flat }" />
+      </ng-template>
+    </cerious-scroll>
+  </div>
+} @else {
+  <div class="cw-tree__list" [style.max-height]="treeHeight()">
+    @for (flat of flatNodes(); track flat.node.key) {
+      <ng-container [ngTemplateOutlet]="row" [ngTemplateOutletContext]="{ $implicit: flat }" />
+    }
+  </div>
+}

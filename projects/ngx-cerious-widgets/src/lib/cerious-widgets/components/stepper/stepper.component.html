@@ -1,0 +1,36 @@
+<ol class="cw-stepper__header">
+  @for (step of steps(); track $index; let i = $index; let last = $last) {
+    <li
+      class="cw-stepper__step"
+      [class.cw-stepper__step--done]="isDone(i)"
+      [class.cw-stepper__step--active]="i === current()"
+      [class.cw-stepper__step--clickable]="canActivate(i) && i !== current()"
+      [class.cw-stepper__step--disabled]="step.disabled()"
+      [attr.aria-current]="i === current() ? 'step' : null"
+      (click)="go(i)"
+    >
+      <span class="cw-stepper__marker" aria-hidden="true">
+        @if (isDone(i)) {
+          <span class="cw-stepper__check"></span>
+        } @else {
+          {{ i + 1 }}
+        }
+      </span>
+      <span class="cw-stepper__label">{{ step.label() }}</span>
+      @if (!last) { <span class="cw-stepper__connector"></span> }
+    </li>
+  }
+</ol>
+
+<div class="cw-stepper__content">
+  @if (activeTemplate(); as tpl) {
+    <ng-container [ngTemplateOutlet]="tpl" />
+  }
+</div>
+
+@if (showControls()) {
+  <div class="cw-stepper__controls">
+    <button type="button" class="cw-stepper__btn cw-stepper__btn--secondary" [disabled]="isFirst()" (click)="back()">Back</button>
+    <button type="button" class="cw-stepper__btn cw-stepper__btn--primary" [disabled]="isLast()" (click)="next()">Next</button>
+  </div>
+}

@@ -1,0 +1,60 @@
+<!-- Trigger -->
+@if (displayValue()) {
+  <span class="cw-date-picker__value">{{ displayValue() }}</span>
+} @else {
+  <span class="cw-date-picker__placeholder">{{ placeholder() }}</span>
+}
+<span class="cw-date-picker__icon" aria-hidden="true">
+  <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M2 6.5h12" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 1.5v3M10.5 1.5v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+</span>
+
+<!-- Panel -->
+<ng-template #panel>
+  <div class="cw-date-picker__calendar" role="dialog" aria-label="Choose date" (click)="$event.stopPropagation()">
+    <div class="cw-date-picker__header">
+      <button type="button" class="cw-date-picker__nav" aria-label="Previous month" (click)="navigateMonth(-1, $event)">
+        <span class="cw-date-picker__chevron cw-date-picker__chevron--left"></span>
+      </button>
+      <span class="cw-date-picker__title">{{ monthTitle() }}</span>
+      <button type="button" class="cw-date-picker__nav" aria-label="Next month" (click)="navigateMonth(1, $event)">
+        <span class="cw-date-picker__chevron cw-date-picker__chevron--right"></span>
+      </button>
+    </div>
+
+    <div class="cw-date-picker__weekdays" aria-hidden="true">
+      @for (day of weekdays(); track $index) {
+        <span class="cw-date-picker__weekday">{{ day }}</span>
+      }
+    </div>
+
+    <div class="cw-date-picker__grid" role="grid" (keydown)="onGridKeydown($event)">
+      @for (day of days(); track $index) {
+        <button
+          type="button"
+          class="cw-date-picker__day"
+          [class.cw-date-picker__day--outside]="day.outsideMonth"
+          [class.cw-date-picker__day--today]="day.today"
+          [class.cw-date-picker__day--selected]="isSelected(day)"
+          [attr.data-day]="dayKey(day.date)"
+          [attr.tabindex]="isFocusDay(day) ? 0 : -1"
+          [attr.aria-disabled]="day.disabled ? 'true' : null"
+          [attr.aria-label]="dayLabel(day)"
+          [attr.aria-selected]="isSelected(day)"
+          (click)="selectDay(day, $event)"
+        >
+          @if (dayTemplate(); as tpl) {
+            <ng-container [ngTemplateOutlet]="tpl" [ngTemplateOutletContext]="{ $implicit: day, selected: isSelected(day) }" />
+          } @else {
+            {{ day.date.getDate() }}
+          }
+        </button>
+      }
+    </div>
+
+    @if (clearable()) {
+      <div class="cw-date-picker__footer">
+        <button type="button" class="cw-date-picker__clear" (click)="clear($event)">Clear</button>
+      </div>
+    }
+  </div>
+</ng-template>

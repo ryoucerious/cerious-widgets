@@ -1,8 +1,6 @@
 <div #tableBody
      class="cw-table-body"
      [class.cw-table-body--no-virtual]="!useVirtualScroll"
-     role="grid"
-     aria-label="Data Grid"
      [ngClass]="classes.container"
      (click)="onClick($event)"
      (dblclick)="onDoubleClick($event)"
@@ -12,6 +10,8 @@
 
     <ng-container *ngIf="useVirtualScroll; else nonVirtual">
         <div class="cw-table-body__virtual-host"
+             role="rowgroup"
+             aria-label="Grid rows"
              ceriousScroll
              [ceriousScrollItems]="flattenedRows"
              [ceriousScrollItemTemplate]="rowTemplate"
@@ -21,7 +21,7 @@
     </ng-container>
 
     <ng-template #nonVirtual>
-        <div #nonVirtualContent class="cw-table-body__static-content">
+        <div #nonVirtualContent class="cw-table-body__static-content" role="rowgroup" aria-label="Grid rows">
             <ng-container *ngFor="let item of flattenedRows; let i = index; trackBy: trackByRow">
                 <ng-container *ngTemplateOutlet="rowTemplate; context: { $implicit: item, index: i }"></ng-container>
             </ng-container>
@@ -44,15 +44,15 @@
          [attr.aria-expanded]="expandedGroups[item.key]"
          [attr.aria-level]="item.depth"
          [style.minWidth]="rowMinWidth"
-         [style.paddingLeft.px]="item.depth * 20">
-        <button (click)="toggleGroupCollapse(item.key)"
+         [style.paddingLeft.px]="8 + item.depth * 20">
+        <button class="group-header__toggle"
+                (click)="toggleGroupCollapse(item.key)"
                 [attr.aria-label]="'Toggle group ' + item.key">
-            {{ expandedGroups[item.key] ? '-' : '+' }}
+            <span class="group-header__chevron"
+                  [class.group-header__chevron--open]="expandedGroups[item.key]"></span>
         </button>
-        &nbsp;
-        <span>{{ getGroupColumnLabel(item.depth - 1) }}: {{ item.key }}</span>
-        &nbsp;
-        <span>({{ item.rowCount }} {{ item.rowCount === 1 ? 'item' : 'items' }})</span>
+        <span class="group-header__label">{{ item.key }}</span>
+        <span class="group-header__count">{{ item.rowCount }}</span>
     </div>
 
     <!-- Data row -->

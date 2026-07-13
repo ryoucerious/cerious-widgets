@@ -1,0 +1,83 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  min-width: 12rem;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--cw-border-strong);
+  border-radius: var(--cw-radius);
+  background: var(--cw-surface);
+  color: var(--cw-text);
+  font-family: var(--cw-font);
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+:host(:focus-visible),
+:host(.cw-select--open) {
+  outline: none;
+  border-color: var(--cw-accent);
+  box-shadow: var(--cw-focus-ring);
+}
+
+:host(.cw-select--disabled) {
+  cursor: not-allowed;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.cw-select__label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cw-select__placeholder { color: var(--cw-text-muted); }
+
+// CSS-drawn caret (▾) — a rotated open corner. Crisper and better-aligned than
+// a unicode glyph, and consistent with the MultiSelect trigger caret.
+.cw-select__chevron {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: -2px;
+  border-right: 2px solid var(--cw-text-muted);
+  border-bottom: 2px solid var(--cw-text-muted);
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+.cw-select__chevron--open { transform: rotate(225deg); }
+
+// Panel list — rendered in the overlay, but scoped via the component's
+// view encapsulation (the TemplatePortal carries this component's marker).
+.cw-select__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.cw-select__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--cw-radius);
+  font-family: var(--cw-font);
+  font-size: 0.875rem;
+  color: var(--cw-text);
+  cursor: pointer;
+}
+
+.cw-select__option--active { background: var(--cw-surface-raised); }
+.cw-select__option--selected { color: var(--cw-accent); font-weight: 600; }
+.cw-select__check { color: var(--cw-accent); }
+.cw-select__empty { padding: 0.5rem 0.6rem; color: var(--cw-text-muted); font-size: 0.875rem; }
+

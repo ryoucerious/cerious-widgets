@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Inject, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-compatible.component';
 import { CommonModule } from '@angular/common';
+import { CwPageEvent, PaginatorComponent } from '../../../components/paginator/paginator.component';
 
 import { IGridPagerComponent } from '../../interfaces/component-interfaces/grid-pager.interface';
 
@@ -17,7 +18,7 @@ import { SectionClassConfig } from '../../interfaces/section-class-config-interf
   standalone: true,
   templateUrl: './grid-pager.component.html',
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule]
+  imports: [CommonModule, PaginatorComponent]
 })
 export class GridPagerComponent extends ZonelessCompatibleComponent implements IGridPagerComponent, AfterViewInit {
 
@@ -101,6 +102,19 @@ export class GridPagerComponent extends ZonelessCompatibleComponent implements I
       this.gridService.hasVerticalScrollbar,
       this.gridService.scrollbarWidth
     );
+  }
+
+  /**
+   * Bridge the standalone `<cw-paginator>` to the grid: its 0-based page maps to
+   * the grid's 1-based page selection.
+   */
+  onPaginatorChange(event: CwPageEvent): void {
+    // Apply a page-size change (when a pageSizeOptions select is enabled) before
+    // re-selecting the page so the grid re-pages with the new size.
+    if (event.pageSize !== this.gridService.gridOptions.pageSize) {
+      this.gridService.gridOptions.pageSize = event.pageSize;
+    }
+    this.gridPageClick(event.page + 1);
   }
 
 }

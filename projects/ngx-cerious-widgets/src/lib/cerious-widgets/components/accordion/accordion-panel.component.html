@@ -1,0 +1,15 @@
+<button
+  type="button"
+  class="cw-accordion-panel__header"
+  [attr.aria-expanded]="isExpanded()"
+  [disabled]="disabled()"
+  (click)="toggle()"
+>
+  <span class="cw-accordion-panel__title">{{ header() }}</span>
+  <span class="cw-accordion-panel__chevron" aria-hidden="true"></span>
+</button>
+@if (isExpanded()) {
+  <div class="cw-accordion-panel__content" role="region">
+    <ng-content />
+  </div>
+}

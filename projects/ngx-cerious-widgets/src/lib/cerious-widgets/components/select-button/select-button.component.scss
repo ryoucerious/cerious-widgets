@@ -1,0 +1,39 @@
+:host {
+  display: inline-flex;
+  box-sizing: border-box;
+  padding: 3px;
+  gap: 2px;
+  background: var(--cw-neutral-bg);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius);
+  font-family: var(--cw-font);
+}
+
+:host(.cw-select-button--disabled) {
+  opacity: 0.6;
+
+  .cw-select-button__option { cursor: not-allowed; }
+}
+
+.cw-select-button__option {
+  all: unset;
+  box-sizing: border-box;
+  padding: 0.3125rem 0.875rem;
+  border-radius: calc(var(--cw-radius) - 3px);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  // Readable foreground for the neutral track the options sit on (muted text
+  // only hit 4.23:1 here — below WCAG AA). --cw-neutral-fg is theme-aware.
+  color: var(--cw-neutral-fg);
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+
+  &:hover:not(:disabled) { color: var(--cw-text); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+}
+
+.cw-select-button__option--selected {
+  background: var(--cw-surface);
+  color: var(--cw-text);
+  box-shadow: var(--cw-shadow-sm);
+}

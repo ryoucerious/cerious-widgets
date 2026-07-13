@@ -1,0 +1,84 @@
+:host {
+  display: inline-flex;
+  font-family: var(--cw-font);
+}
+
+.cw-dock__list {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  list-style: none;
+  background: color-mix(in srgb, var(--cw-surface-raised) 88%, transparent);
+  border: 1px solid var(--cw-border);
+  border-radius: var(--cw-radius-lg);
+  box-shadow: var(--cw-shadow-md);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+:host([data-position='top']) .cw-dock__list { align-items: flex-start; }
+:host([data-position='left']) .cw-dock__list,
+:host([data-position='right']) .cw-dock__list { flex-direction: column; }
+:host([data-position='left']) .cw-dock__list { align-items: flex-start; }
+:host([data-position='right']) .cw-dock__list { align-items: flex-end; }
+
+.cw-dock__item-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cw-dock__item {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  box-sizing: border-box;
+  border-radius: var(--cw-radius);
+  background: var(--cw-surface);
+  border: 1px solid var(--cw-border);
+  color: var(--cw-accent);
+  cursor: pointer;
+  transform-origin: bottom center;
+  transition: transform 0.12s ease, background-color 0.12s ease;
+
+  &:hover:not(:disabled) { background: var(--cw-surface-hover); }
+  &:focus-visible { box-shadow: var(--cw-focus-ring); }
+}
+
+.cw-dock__item--disabled { opacity: 0.4; cursor: not-allowed; }
+
+:host([data-position='top']) .cw-dock__item { transform-origin: top center; }
+:host([data-position='left']) .cw-dock__item { transform-origin: center left; }
+:host([data-position='right']) .cw-dock__item { transform-origin: center right; }
+
+.cw-dock__glyph {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.cw-dock__tooltip {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  padding: 0.1875rem 0.5rem;
+  border-radius: var(--cw-radius-sm);
+  background: #1e293b;
+  color: #f1f5f9;
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.cw-dock__item-wrap:hover .cw-dock__tooltip {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}

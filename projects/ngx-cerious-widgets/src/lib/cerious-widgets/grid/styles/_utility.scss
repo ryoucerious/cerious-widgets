@@ -7,3 +7,39 @@
 .m-0 { margin: 0 !important; }
 
 .text-nowrap { white-space: nowrap !important; }
+
+// ---------------------------------------------------------------------------
+// Scroll-triggered animation utilities (used by the `cwAnimateOnScroll`
+// directive, applied when the host enters the viewport). Elements start hidden
+// and settle into place; opt out via `prefers-reduced-motion`.
+// ---------------------------------------------------------------------------
+.cw-animate-on-scroll { opacity: 0; }
+.cw-animate-on-scroll.cw-animate-enter,
+.cw-animate-on-scroll.cw-fade-in,
+.cw-animate-on-scroll.cw-fade-in-up { opacity: 1; }
+
+.cw-animate-enter { animation: cw-fade-in-up 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
+.cw-fade-in { animation: cw-fade-in 0.6s ease both; }
+.cw-fade-in-up { animation: cw-fade-in-up 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
+.cw-zoom-in { animation: cw-zoom-in 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
+
+@keyframes cw-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes cw-fade-in-up {
+  from { opacity: 0; transform: translateY(1.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes cw-zoom-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-animate-on-scroll { opacity: 1; }
+  .cw-animate-enter,
+  .cw-fade-in,
+  .cw-fade-in-up,
+  .cw-zoom-in { animation: none; }
+}

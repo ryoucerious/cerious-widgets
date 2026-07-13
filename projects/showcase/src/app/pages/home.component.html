@@ -1,0 +1,56 @@
+<section class="hero">
+  <div class="hero__copy">
+    <span class="hero__eyebrow">Angular component library</span>
+    <h1 class="hero__title">Build <span>cerious</span> interfaces, fast.</h1>
+    <p class="hero__lede">
+      A comprehensive suite of {{ total }} standalone Angular components — inputs, overlays, menus,
+      a virtualized data grid and more — unified by a token-based theming engine with curated presets and custom brand colors.
+    </p>
+    <div class="hero__cta">
+      <a routerLink="/components"><button cwButton size="large">Explore components</button></a>
+      <a routerLink="/components/grid"><button cwButton size="large" severity="secondary" variant="outlined">See the Grid</button></a>
+    </div>
+    <div class="hero__stats">
+      <div class="stat"><span class="stat__num">{{ total }}</span><span class="stat__label">Components</span></div>
+      <div class="stat"><span class="stat__num">{{ groupCount }}</span><span class="stat__label">Categories</span></div>
+      <div class="stat"><span class="stat__num">3</span><span class="stat__label">Themes</span></div>
+      <div class="stat"><span class="stat__num">{{ virtualCount }}</span><span class="stat__label">Virtualized</span></div>
+    </div>
+  </div>
+
+  <div class="hero__preview" aria-hidden="true">
+    <div class="montage">
+      <div class="montage__row">
+        <cw-avatar label="AL" />
+        <div class="montage__meta">
+          <strong>Ada Lovelace</strong>
+          <cw-tag value="Pro" severity="success" />
+        </div>
+        <cw-badge [value]="3" severity="danger" />
+      </div>
+      <cw-rating [(ngModel)]="ratingModel" />
+      <div class="montage__row montage__row--between">
+        <span>Notifications</span>
+        <cw-toggle-switch [(ngModel)]="notificationsModel" />
+      </div>
+      <div class="montage__progress">
+        <div class="montage__progress-label"><span>Upload</span><span>{{ progress() }}%</span></div>
+        <cw-progress-bar [value]="progress()" />
+      </div>
+      <div class="montage__row montage__row--end">
+        <button cwButton severity="secondary" variant="text">Cancel</button>
+        <button cwButton>Save changes</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="highlights">
+  @for (h of highlights; track h.title) {
+    <div class="highlight">
+      <div class="highlight__icon">{{ h.icon }}</div>
+      <h3 class="highlight__title">{{ h.title }}</h3>
+      <p class="highlight__text">{{ h.text }}</p>
+    </div>
+  }
+</section>

@@ -1,20 +1,25 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { filter } from 'rxjs/operators';
 import { GridPlugin } from '../interfaces/grid-plugin';
 import { GridApi } from '../interfaces/grid-api';
 import { ColumnDef } from '../interfaces/column-def';
 import { MenuOption } from '../models/menu-option';
 import { PluginOptions } from '../interfaces';
 import { PluginConfig } from '../../shared/interfaces/plugin-config.interface';
+import { CwMenuItem, MenuComponent } from '../../components/menu/menu.component';
 
 @Injectable()
 export class ColumnMenuPlugin implements GridPlugin {
-  private menuButton!: HTMLButtonElement;
   private gridApi!: GridApi;
   private renderer: Renderer2;
-  private menuElement: HTMLElement | null = null;
+  /** The overlay hosting the shared `cw-menu`, and the header button that opened it. */
+  private overlayRef: OverlayRef | null = null;
+  private activeButton: HTMLElement | null = null;
   private pluginOptions: PluginOptions | PluginConfig = {};
 
-  constructor(private rendererFactory: RendererFactory2) {
+  constructor(private rendererFactory: RendererFactory2, private overlay: Overlay) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
@@ -79,13 +84,10 @@ export class ColumnMenuPlugin implements GridPlugin {
   }
 
   /**
-   * Cleans up resources when the plugin is destroyed.
-   * 
-   * This method removes the menu button element from the DOM (if it exists)
-   * and ensures the menu is closed to prevent memory leaks or unintended behavior.
+   * Cleans up resources when the plugin is destroyed by disposing the overlay
+   * (the per-column header buttons are removed with their headers).
    */
   onDestroy(): void {
-    this.menuButton?.remove();
     this.closeMenu();
   }
 
@@ -100,10 +102,10 @@ export class ColumnMenuPlugin implements GridPlugin {
    * @private
    */
   private closeMenu(): void {
-    if (this.menuElement) {
-      this.renderer.removeChild(document.body, this.menuElement);
-      this.menuElement = null; // Clear the reference
-    }
+    this.overlayRef?.dispose();
+    this.overlayRef = null;
+    this.activeButton?.classList.remove('active');
+    this.activeButton = null;
   }
 
   /**
@@ -143,71 +145,46 @@ export class ColumnMenuPlugin implements GridPlugin {
    * A global click listener is added to handle this behavior.
    */
   private openMenu(column: ColumnDef, menuButton: HTMLElement, options: MenuOption[]): void {
-    // Close the existing menu if it exists
+    // Close any open menu first.
     this.closeMenu();
 
-    setTimeout(() => {
-      // Create the dropdown menu
-      const menu = this.renderer.createElement('div');
-      this.renderer.addClass(menu, 'cw-dropdown-menu');
-      this.renderer.setAttribute(menu, 'role', 'menu');
-      this.renderer.setAttribute(menu, 'aria-label', `Options for column ${column.label || column.field}`);
+    // Reuse the shared `cw-menu` (the same popover the library's menus use),
+    // hosted in a CDK overlay anchored to the header button. The grid's
+    // MenuOption callbacks become the menu items' `command`s.
+    const items: CwMenuItem[] = options.map(option => ({
+      label: option.label,
+      command: () => option.callback(option, column)
+    }));
 
-      // Add menu options
-      const menuOptions = this.renderer.createElement('ul');
-      this.renderer.setAttribute(menuOptions, 'role', 'menu');
-      options.forEach((option) => {
-        const listItem = this.renderer.createElement('li');
-        this.renderer.setStyle(listItem, 'cursor', 'pointer');
-        this.renderer.setStyle(listItem, 'padding', '6px');
-        this.renderer.setAttribute(listItem, 'role', 'menuitem');
-        this.renderer.setAttribute(listItem, 'aria-label', option.label);
+    this.overlayRef = this.overlay.create({
+      positionStrategy: this.overlay
+        .position()
+        .flexibleConnectedTo(menuButton)
+        .withPush(false)
+        .withPositions([
+          { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 4 },
+          { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -4 }
+        ]),
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+      hasBackdrop: false,
+      panelClass: 'cw-overlay-panel'
+    });
+    this.activeButton = menuButton;
 
-        // Add the label text
-        const labelText = this.renderer.createText(option.label);
-        this.renderer.appendChild(listItem, labelText);
+    const ref = this.overlayRef.attach(new ComponentPortal(MenuComponent));
+    ref.setInput('items', items);
+    ref.instance.itemClick.subscribe(() => this.closeMenu());
+    ref.changeDetectorRef.detectChanges();
 
-        // Add click listener for the option
-        this.renderer.listen(listItem, 'click', () => {
-          option.callback(option, column); // Trigger the callback
-          this.closeMenu(); // Close the menu after the option is clicked
-          menuButton.classList.remove('active'); // Remove active class for styling
-        });
-
-        // Append the list item to the menu options
-        this.renderer.appendChild(menuOptions, listItem);
-      });
-
-      // Append the menu options to the menu
-      this.renderer.appendChild(menu, menuOptions);
-
-      // Append the menu to the body
-      this.renderer.appendChild(document.body, menu);
-
-      // Position the menu
-      const buttonRect = menuButton.getBoundingClientRect();
-      const menuWidth = menu.offsetWidth;
-      this.renderer.setStyle(menu, 'top', `${buttonRect.bottom + 4}px`);
-      this.renderer.setStyle(menu, 'left', `${buttonRect.right - menuWidth}px`);
-
-      // Store the menu reference
-      this.menuElement = menu;
-
-      // Add a global click listener to close the menu
-      const closeHandler = (event: MouseEvent) => {
-        if (
-          this.menuElement &&
-          !this.menuElement.contains(event.target as Node) &&
-          event.target !== menuButton
-        ) {
-          menuButton.classList.remove('active'); // Remove active class
-          this.closeMenu();
-          document.removeEventListener('click', closeHandler);
-        }
-      };
-
-      // Add the click listener
-      document.addEventListener('click', closeHandler);
+    // Close on an outside click (but not on the button that toggles it) or Escape.
+    this.overlayRef
+      .outsidePointerEvents()
+      .pipe(filter(event => !menuButton.contains(event.target as Node)))
+      .subscribe(() => this.closeMenu());
+    this.overlayRef.keydownEvents().subscribe(event => {
+      if (event.key === 'Escape') {
+        this.closeMenu();
+      }
     });
   }
 

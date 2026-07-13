@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  font-family: var(--cw-font);
+  font-size: 0.875rem;
+}
+
+.cw-breadcrumb__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cw-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.cw-breadcrumb__link {
+  color: var(--cw-primary);
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover { text-decoration: underline; }
+  &:focus-visible { border-radius: var(--cw-radius-sm); box-shadow: var(--cw-focus-ring); outline: none; }
+}
+
+.cw-breadcrumb__current {
+  color: var(--cw-text-muted);
+  font-weight: 500;
+
+  &[aria-current='page'] { color: var(--cw-text); }
+}
+
+// CSS chevron separator (›), no icon dependency.
+.cw-breadcrumb__separator {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-right: 1.5px solid var(--cw-text-muted);
+  border-bottom: 1.5px solid var(--cw-text-muted);
+  transform: rotate(-45deg);
+  opacity: 0.7;
+}
