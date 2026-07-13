@@ -13,7 +13,9 @@ import {
 } from '@angular/core';
 import { filter } from 'rxjs/operators';
 
-export type CwPopoverPlacement = 'bottom' | 'top' | 'left' | 'right';
+export type CwPopoverPlacement =
+  | 'bottom' | 'top' | 'left' | 'right'
+  | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
 
 /**
  * Anchored overlay primitive: opens a floating panel of templated content
@@ -116,28 +118,38 @@ export class PopoverDirective implements OnDestroy {
   /** Primary connected position for a placement plus its flipped fallback. */
   private positionsFor(placement: CwPopoverPlacement): ConnectedPosition[] {
     const gap = 4;
+    // Each placement lists its primary position first, then vertical-flip and
+    // horizontal-align fallbacks so a trigger near a viewport edge stays on-screen
+    // (CDK picks the first position that fits). `-start`/`-end` pin the panel's
+    // left/right edge to the trigger (e.g. a top-right bell → `bottom-end`).
+    const belowStart: ConnectedPosition = { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: gap };
+    const belowEnd: ConnectedPosition = { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: gap };
+    const aboveStart: ConnectedPosition = { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -gap };
+    const aboveEnd: ConnectedPosition = { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -gap };
     switch (placement) {
       case 'top':
-        return [
-          { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -gap },
-          { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: gap }
-        ];
+      case 'top-start':
+        return [aboveStart, aboveEnd, belowStart, belowEnd];
+      case 'top-end':
+        return [aboveEnd, aboveStart, belowEnd, belowStart];
+      case 'bottom-end':
+        return [belowEnd, belowStart, aboveEnd, aboveStart];
       case 'left':
         return [
           { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top', offsetX: -gap },
+          { originX: 'start', originY: 'bottom', overlayX: 'end', overlayY: 'bottom', offsetX: -gap },
           { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top', offsetX: gap }
         ];
       case 'right':
         return [
           { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top', offsetX: gap },
+          { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'bottom', offsetX: gap },
           { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top', offsetX: -gap }
         ];
       case 'bottom':
+      case 'bottom-start':
       default:
-        return [
-          { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: gap },
-          { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -gap }
-        ];
+        return [belowStart, belowEnd, aboveStart, aboveEnd];
     }
   }
 }

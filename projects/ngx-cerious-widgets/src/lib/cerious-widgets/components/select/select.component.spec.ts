@@ -91,4 +91,48 @@ describe('SelectComponent', () => {
     expect(host.select.isOpen()).toBeFalse();
     expect(host.value).toBeNull();
   });
+
+  it('handles empty options without crashing on arrow keys', () => {
+    host.options = [];
+    fixture.detectChanges();
+    const el = selectEl();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // open
+    fixture.detectChanges();
+    expect(host.select.isOpen()).toBeTrue();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    fixture.detectChanges();
+    expect(host.select.highlightedIndex()).toBe(-1); // not NaN
+    expect(containerEl.querySelector('.cw-select__empty')).toBeTruthy();
+  });
+
+  it('jumps to a matching option on type-ahead', () => {
+    const el = selectEl();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // open
+    fixture.detectChanges();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'T' })); // -> "Two"
+    fixture.detectChanges();
+    expect(host.select.highlightedIndex()).toBe(1);
+  });
+
+  it('supports Home and End keys', () => {
+    const el = selectEl();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // open, highlight 0
+    fixture.detectChanges();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
+    fixture.detectChanges();
+    expect(host.select.highlightedIndex()).toBe(2);
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
+    fixture.detectChanges();
+    expect(host.select.highlightedIndex()).toBe(0);
+  });
+
+  it('points aria-activedescendant at the active option', () => {
+    const el = selectEl();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' })); // open, highlight 0
+    fixture.detectChanges();
+    const activeDescendant = el.getAttribute('aria-activedescendant');
+    const activeOption = containerEl.querySelector('.cw-select__option--active');
+    expect(activeDescendant).toBeTruthy();
+    expect(activeOption?.id).toBe(activeDescendant!);
+  });
 });

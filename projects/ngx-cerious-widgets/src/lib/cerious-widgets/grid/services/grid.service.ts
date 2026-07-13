@@ -1,4 +1,4 @@
-import { ElementRef, Inject, Injectable, NgZone, QueryList, TemplateRef } from '@angular/core';
+import { ApplicationRef, ElementRef, Inject, Injectable, NgZone, QueryList, TemplateRef } from '@angular/core';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { GRID_COLUMN_SERVICE } from '../tokens/grid-column-service.token';
 import { GRID_SCROLL_SERVICE } from '../tokens/grid-scroll-services.token';
@@ -97,7 +97,8 @@ export class GridService implements IGridService {
   constructor(
     @Inject(GRID_COLUMN_SERVICE) private gridColumnService: IGridColumnService,
     @Inject(GRID_SCROLL_SERVICE) private gridScrollService: IGridScrollService,
-    private zone: NgZone
+    private zone: NgZone,
+    private appRef: ApplicationRef
   ) {
     this.gridApi = this.buildGridApi();
     this.setOS();
@@ -255,11 +256,22 @@ export class GridService implements IGridService {
    * @param column - The column definition object representing the column to be resized.
    * @param e - The mouse event that triggered the column resizing.
    */
-  initColumnResizing(column: ColumnDef, e: MouseEvent) {
+  initColumnResizing(column: ColumnDef, e: MouseEvent, startWidth?: number) {
     this.isColumnResizing = true;
     this.resizingColumn = column;
-    this.mouseX = e.pageX;
+    // Anchor the drag to a FIXED start position + the column's true rendered
+    // width, so `newWidth = startWidth + totalDelta` tracks the cursor 1:1 (no
+    // drift from per-frame commits, no initial snap).
+    this.resizeStartX = e.pageX;
+    if (startWidth && startWidth > 0) {
+      this.resizeStartWidth = startWidth;
+    } else {
+      const cell = this.gridContainerElement?.querySelector<HTMLElement>(`[data-column-id="${column.id}"]`);
+      this.resizeStartWidth = cell ? Math.round(cell.getBoundingClientRect().width) : (parseInt(column.width ?? '0', 10) || 100);
+    }
   }
+  private resizeStartX = 0;
+  private resizeStartWidth = 0;
 
   /**
    * Handles the mouse move event and triggers the column resizing logic.
@@ -499,9 +511,15 @@ export class GridService implements IGridService {
           setTimeout(() => {
             this.zone.run(() => {
               this.updateScrollBars();
-              this.updateGridHeight();    
-              this.grid.gridResize.next(true);        
+              this.updateGridHeight();
+              this.grid.gridResize.next(true);
               this.afterResize.next(true);
+              // Under zoneless CD, `zone.run` schedules nothing and this method
+              // is driven by a ResizeObserver / window-resize callback that runs
+              // outside Angular — so the scrollbar-state and height mutations
+              // above won't render until some later event ticks. Flush now so the
+              // horizontal scrollbar appears the moment the grid gets narrower.
+              try { this.appRef.tick(); } catch { /* tick already in progress */ }
               resolve(null);
           });
           }, 0);
@@ -522,35 +540,24 @@ export class GridService implements IGridService {
    * @param e - The MouseEvent triggered during the column resizing operation.
    */
   resizeColumn = (e: MouseEvent) => {
-    if (this.isColumnResizing && this.resizingColumn) {
-      // Capture latest target width on every mousemove pixel, but commit it to
-      // the column model + emit afterColumnResize only once per animation frame.\n
-      // Without this:
-      //   1. Mousemove is wired via native addEventListener (zoneless mode), so
-      //      it fires many times between frames; the footer reads aggregated
-      //      column widths via getters and produces ExpressionChangedAfterIt-
-      //      HasBeenCheckedError (NG0100) when the width mutates mid-tick.
-      //   2. Calling refreshRenderedContent on every pixel makes drag jittery.
-      const newWidth = parseInt(this.resizingColumn.width ? this.resizingColumn.width : '0', 0) + (e.pageX - this.mouseX);
-      if (newWidth >= 40) {
-        this._pendingResizeWidth = newWidth;
-        if (this._pendingResizeFrame == null) {
-          this._pendingResizeFrame = requestAnimationFrame(() => {
-            this._pendingResizeFrame = null;
-            if (this.resizingColumn && this._pendingResizeWidth != null) {
-              this.resizingColumn.width = this._pendingResizeWidth + 'px';
-              this.afterColumnResize.next(this.resizingColumn);
-            }
-          });
-        }
-      }
-      this.mouseX = e.pageX;
-    } else {
-      this.endColumnResizing();
+    if (!this.isColumnResizing || !this.resizingColumn) {
+      return;
+    }
+    // Width tracks the cursor 1:1 from the fixed drag start (no drift). This is
+    // driven by the resizer's captured `(pointermove)` template binding, so
+    // Angular runs change detection after it and re-renders — no manual tick.
+    const newWidth = this.resizeStartWidth + (e.pageX - this.resizeStartX);
+    if (newWidth >= 40) {
+      // Clear any responsive width so the explicit resize wins in getColumnWidth().
+      this.resizingColumn.dynamicWidth = undefined;
+      this.resizingColumn.width = newWidth + 'px';
+      // Recompute the row's min-width (sum of column widths) — the rows are
+      // `table-layout: fixed`, so without this the row can't grow and the column
+      // gets capped at its old share.
+      this.setRowMinWidth();
+      this.afterColumnResize.next(this.resizingColumn);
     }
   }
-  private _pendingResizeFrame: number | null = null;
-  private _pendingResizeWidth: number | null = null;
 
   /**
    * Requests data for the grid, either using a provided request or a default request configuration.

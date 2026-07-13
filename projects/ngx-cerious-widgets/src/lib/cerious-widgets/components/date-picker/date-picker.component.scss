@@ -117,9 +117,9 @@
   cursor: pointer;
   text-align: center;
 
-  &:hover:not(:disabled) { background: var(--cw-surface-hover); }
+  &:hover:not([aria-disabled='true']) { background: var(--cw-surface-hover); }
   &:focus-visible { box-shadow: var(--cw-focus-ring); }
-  &:disabled { opacity: 0.35; cursor: not-allowed; }
+  &[aria-disabled='true'] { opacity: 0.35; cursor: not-allowed; }
 }
 
 .cw-date-picker__day--outside { color: var(--cw-text-muted); opacity: 0.6; }

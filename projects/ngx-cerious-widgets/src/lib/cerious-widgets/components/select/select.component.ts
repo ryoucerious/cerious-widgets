@@ -24,6 +24,9 @@ interface CwOption {
   value: unknown;
 }
 
+/** Process-wide counter for unique listbox/option ids (aria-activedescendant). */
+let selectSeq = 0;
+
 /**
  * A single-select dropdown, built on the overlay foundation.
  *
@@ -46,6 +49,8 @@ interface CwOption {
     'tabindex': '0',
     'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'isOpen()',
+    '[attr.aria-controls]': 'isOpen() ? listId : null',
+    '[attr.aria-activedescendant]': 'activeDescendant()',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
     '[class.cw-select--open]': 'isOpen()',
     '[class.cw-select--disabled]': 'isDisabled()',
@@ -79,6 +84,17 @@ export class SelectComponent implements ControlValueAccessor, OnDestroy {
   readonly highlightedIndex = signal(-1);
   private readonly value = signal<unknown>(null);
   private readonly cvaDisabled = signal(false);
+
+  /** Stable ids so the combobox can point aria-activedescendant at the active option. */
+  private readonly uid = ++selectSeq;
+  readonly listId = `cw-select-list-${this.uid}`;
+  optionId(i: number): string { return `cw-select-${this.uid}-opt-${i}`; }
+  readonly activeDescendant = computed(() =>
+    this.isOpen() && this.highlightedIndex() >= 0 ? this.optionId(this.highlightedIndex()) : null);
+
+  /** Type-ahead buffer (typing letters jumps to a matching option). */
+  private typeBuffer = '';
+  private typeTimer?: ReturnType<typeof setTimeout>;
 
   readonly isDisabled = computed(() => this.disabledInput() || this.cvaDisabled());
 
@@ -138,9 +154,10 @@ export class SelectComponent implements ControlValueAccessor, OnDestroy {
 
     this.overlayRef.attach(new TemplatePortal(this.panelTemplate, this.viewContainerRef));
     this.isOpen.set(true);
-    // Highlight the selected option, or the first one.
+    // Highlight the selected option, or the first one — but -1 when there are none.
+    const count = this.normalizedOptions().length;
     const selectedIndex = this.normalizedOptions().findIndex(o => o.value === this.value());
-    this.highlightedIndex.set(selectedIndex >= 0 ? selectedIndex : 0);
+    this.highlightedIndex.set(selectedIndex >= 0 ? selectedIndex : (count ? 0 : -1));
 
     this.overlayRef
       .outsidePointerEvents()
@@ -171,8 +188,18 @@ export class SelectComponent implements ControlValueAccessor, OnDestroy {
     }
     const count = this.normalizedOptions().length;
 
+    // Type-ahead: a printable character (no modifiers, not Space) jumps to the
+    // first option starting with the typed prefix — opening the panel if needed.
+    if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      if (!this.isOpen()) {
+        this.open();
+      }
+      this.typeAhead(event.key);
+      return;
+    }
+
     if (!this.isOpen()) {
-      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         this.open();
       }
@@ -182,11 +209,19 @@ export class SelectComponent implements ControlValueAccessor, OnDestroy {
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        this.highlightedIndex.set((this.highlightedIndex() + 1) % count);
+        if (count) { this.highlightedIndex.set((Math.max(0, this.highlightedIndex()) + 1) % count); }
         break;
       case 'ArrowUp':
         event.preventDefault();
-        this.highlightedIndex.set((this.highlightedIndex() - 1 + count) % count);
+        if (count) { this.highlightedIndex.set((this.highlightedIndex() - 1 + count) % count); }
+        break;
+      case 'Home':
+        event.preventDefault();
+        if (count) { this.highlightedIndex.set(0); }
+        break;
+      case 'End':
+        event.preventDefault();
+        if (count) { this.highlightedIndex.set(count - 1); }
         break;
       case 'Enter':
       case ' ': {
@@ -200,6 +235,7 @@ export class SelectComponent implements ControlValueAccessor, OnDestroy {
       case 'Escape':
         event.preventDefault();
         this.close();
+        this.host.nativeElement.focus();
         break;
       case 'Tab':
         this.close();
@@ -207,7 +243,18 @@ export class SelectComponent implements ControlValueAccessor, OnDestroy {
     }
   }
 
+  private typeAhead(char: string): void {
+    clearTimeout(this.typeTimer);
+    this.typeBuffer += char.toLowerCase();
+    this.typeTimer = setTimeout(() => (this.typeBuffer = ''), 500);
+    const idx = this.normalizedOptions().findIndex(o => o.label.toLowerCase().startsWith(this.typeBuffer));
+    if (idx >= 0) {
+      this.highlightedIndex.set(idx);
+    }
+  }
+
   ngOnDestroy(): void {
+    clearTimeout(this.typeTimer);
     this.close();
   }
 

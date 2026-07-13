@@ -94,6 +94,9 @@ export class TableComponent<T extends Record<string, unknown> = Record<string, u
 
   readonly sort = this.sortState.asReadonly();
 
+  /** Locale-/numeric-aware string comparison ('10' > '9', case-insensitive). */
+  private readonly collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
   /** Rows in display order (sorted client-side when a sort is active). */
   readonly rows = computed<readonly T[]>(() => {
     const sort = this.sortState();
@@ -102,13 +105,24 @@ export class TableComponent<T extends Record<string, unknown> = Record<string, u
       return data;
     }
     const { field, order } = sort;
-    return [...data].sort((a, b) => {
-      const av = a[field] as unknown, bv = b[field] as unknown;
-      if (av == null) return 1;
-      if (bv == null) return -1;
-      return av < bv ? -order : av > bv ? order : 0;
-    });
+    return [...data].sort((a, b) => this.compare(a[field], b[field], order));
   });
+
+  /** Type-aware comparison: numbers/dates/booleans natively, everything else
+   *  via a numeric, case-insensitive collator. Nullish values always sort last,
+   *  independent of the sort direction. */
+  private compare(av: unknown, bv: unknown, order: 1 | -1): number {
+    const an = av == null, bn = bv == null;
+    if (an && bn) { return 0; }
+    if (an) { return 1; }   // nulls last in both directions
+    if (bn) { return -1; }
+    let cmp: number;
+    if (typeof av === 'number' && typeof bv === 'number') { cmp = av - bv; }
+    else if (av instanceof Date && bv instanceof Date) { cmp = av.getTime() - bv.getTime(); }
+    else if (typeof av === 'boolean' && typeof bv === 'boolean') { cmp = av === bv ? 0 : av ? 1 : -1; }
+    else { cmp = this.collator.compare(String(av), String(bv)); }
+    return order * cmp;
+  }
 
   templateFor(field: string): TemplateRef<unknown> | undefined {
     return this.columnTemplates().find(t => t.field() === field)?.template;

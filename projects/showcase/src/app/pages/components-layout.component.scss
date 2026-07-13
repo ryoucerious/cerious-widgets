@@ -4,8 +4,8 @@
   display: grid;
   grid-template-columns: 16rem 1fr;
   align-items: start;
-  max-width: 84rem;
-  margin: 0 auto;
+  // Full width so the sidebar sits flush-left like the demo admin shell, rather
+  // than centring the whole layout (which pushed the panel in from the edge).
 }
 
 .docs__sidebar {
@@ -16,6 +16,9 @@
   overflow-y: auto;
   padding: 1.25rem 0.75rem 2rem;
   border-right: 1px solid var(--cw-border);
+  // Solid surface pane like the demo admin sidebar, so content doesn't read
+  // through it (esp. under Frost) as the page scrolls past.
+  background: var(--cw-surface);
 }
 
 .docs__search { padding: 0 0.5rem 0.75rem; }
@@ -55,6 +58,17 @@
 .docs__link:hover { background: var(--cw-surface-hover, var(--cw-surface-sunken)); }
 .docs__link--active { background: var(--cw-surface-hover, var(--cw-surface-sunken)); color: var(--cw-primary); font-weight: 600; }
 .docs__link--soon .docs__link-name { color: var(--cw-text-muted, var(--cw-text-secondary)); }
+.docs__link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--cw-text-muted, var(--cw-text-secondary));
+}
+.docs__link-icon app-icon { width: 18px; height: 18px; display: block; }
+.docs__link--active .docs__link-icon { color: var(--cw-primary); }
 .docs__link-name { flex: 1; }
 .docs__soon {
   font-size: 0.65rem;

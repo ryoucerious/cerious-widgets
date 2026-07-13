@@ -35,6 +35,8 @@ describe('GridScrollerComponent', () => {
     // The scroller subscribes to afterScroll in ngAfterViewInit to mirror
     // external scroll-position updates back onto the element.
     (mockGridScrollService as any).afterScroll = new Subject<void>();
+    // …and to afterResize to re-render the scrollbar height when the grid resizes.
+    (mockGridService as any).afterResize = new Subject<void>();
 
     TestBed.configureTestingModule({
       imports: [GridScrollerComponent],

@@ -59,6 +59,12 @@ export class FloatLabelComponent implements AfterContentInit {
   ngAfterContentInit(): void {
     this.linkLabel();
     this.refreshFilled();
+    // A projected `[(ngModel)]` often writes the control's initial value *after*
+    // this hook (during the parent's first change-detection pass), so the value
+    // read above can still be empty — leaving the label unfloated on top of the
+    // pre-filled control. Re-check once the microtask queue drains; the `filled`
+    // signal write schedules change detection under zoneless.
+    queueMicrotask(() => this.refreshFilled());
   }
 
   /** Associate the label with the projected control, assigning an id if it lacks one. */

@@ -4,10 +4,11 @@
 <span class="cw-select__chevron" [class.cw-select__chevron--open]="isOpen()" aria-hidden="true"></span>
 
 <ng-template #panel>
-  <ul class="cw-select__list" role="listbox">
+  <ul class="cw-select__list" role="listbox" [id]="listId">
     @for (opt of normalizedOptions(); track $index; let i = $index) {
       <li class="cw-select__option"
           role="option"
+          [id]="optionId(i)"
           [attr.aria-selected]="isSelected(opt)"
           [class.cw-select__option--active]="i === highlightedIndex()"
           [class.cw-select__option--selected]="isSelected(opt)"

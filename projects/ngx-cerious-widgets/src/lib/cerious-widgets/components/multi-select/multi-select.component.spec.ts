@@ -124,6 +124,44 @@ describe('MultiSelectComponent', () => {
     expect(rows).toBeLessThan(100);
   });
 
+  it('selects and clears all filtered options via the Select-all control', () => {
+    const emitted: unknown[][] = [];
+    component.registerOnChange(v => emitted.push(v));
+    (fixture.nativeElement as HTMLElement).click();
+    fixture.detectChanges();
+
+    const selectAll = () => overlayContainer.getContainerElement().querySelector('.cw-multi-select__all') as HTMLButtonElement;
+    expect(selectAll().textContent!.trim()).toBe('Select all');
+    selectAll().click();
+    fixture.detectChanges();
+    expect(component.selectedOptions().map(o => o.value)).toEqual(['ny', 'ld', 'tk']);
+    expect(component.allFilteredSelected()).toBeTrue();
+
+    expect(selectAll().textContent!.trim()).toBe('Clear all');
+    selectAll().click();
+    fixture.detectChanges();
+    expect(component.selectedOptions().length).toBe(0);
+  });
+
+  it('select-all only affects the filtered subset', () => {
+    (fixture.nativeElement as HTMLElement).click();
+    fixture.detectChanges();
+    const filter = panel()!.querySelector('.cw-multi-select__filter') as HTMLInputElement;
+    filter.value = 'lon';
+    filter.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    (overlayContainer.getContainerElement().querySelector('.cw-multi-select__all') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(component.selectedOptions().map(o => o.value)).toEqual(['ld']);
+  });
+
+  it('coerces a non-array written value to an empty array', () => {
+    component.writeValue(null);
+    expect(component.selectedOptions()).toEqual([]);
+    component.writeValue('nope' as unknown);
+    expect(component.selectedOptions()).toEqual([]);
+  });
+
   it('wires plugins through the manager with the typed API', () => {
     const plugin = TestBed.inject(RecordingPlugin);
     expect(plugin.events).toContain('init');

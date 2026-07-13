@@ -27,7 +27,7 @@
       }
     </div>
 
-    <div class="cw-date-picker__grid" role="grid">
+    <div class="cw-date-picker__grid" role="grid" (keydown)="onGridKeydown($event)">
       @for (day of days(); track $index) {
         <button
           type="button"
@@ -35,7 +35,10 @@
           [class.cw-date-picker__day--outside]="day.outsideMonth"
           [class.cw-date-picker__day--today]="day.today"
           [class.cw-date-picker__day--selected]="isSelected(day)"
-          [disabled]="day.disabled"
+          [attr.data-day]="dayKey(day.date)"
+          [attr.tabindex]="isFocusDay(day) ? 0 : -1"
+          [attr.aria-disabled]="day.disabled ? 'true' : null"
+          [attr.aria-label]="dayLabel(day)"
           [attr.aria-selected]="isSelected(day)"
           (click)="selectDay(day, $event)"
         >

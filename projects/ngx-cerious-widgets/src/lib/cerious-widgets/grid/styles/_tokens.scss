@@ -181,6 +181,15 @@
   --cw-info:       #6c63ff;
   --cw-info-bg:    rgba(108, 99, 255, 0.12);
   --cw-info-fg:    #4f46e5;
+
+  // Translucent severity washes so alerts, tags and toasts read as frosted
+  // glass in Frost mode. Without these, success/warn/danger fall back to the
+  // opaque light-theme --cw-*-bg (e.g. #f0fdf4), which hides the backdrop blur
+  // and makes the surface look like a solid block. Derived from the accent
+  // colours at the same low alpha as --cw-info-bg / --cw-neutral-bg.
+  --cw-success-bg: rgba(22, 163, 74, 0.14);
+  --cw-warn-bg:    rgba(217, 119, 6, 0.14);
+  --cw-danger-bg:  rgba(220, 38, 38, 0.14);
 }
 
 // ============================================================================

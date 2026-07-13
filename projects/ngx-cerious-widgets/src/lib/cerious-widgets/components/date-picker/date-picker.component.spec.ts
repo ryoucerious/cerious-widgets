@@ -90,10 +90,48 @@ describe('DatePickerComponent', () => {
     fixture.detectChanges();
 
     const day5 = dayButtons().find(b => b.textContent!.trim() === '5' && !b.classList.contains('cw-date-picker__day--outside'))!;
-    expect(day5.disabled).toBeTrue();
+    expect(day5.getAttribute('aria-disabled')).toBe('true');
 
     (calendar()!.querySelector('[aria-label="Next month"]') as HTMLButtonElement).click();
     fixture.detectChanges();
+    expect(calendar()!.querySelector('.cw-date-picker__title')!.textContent).toContain('August');
+  });
+
+  it('does not select a disabled (out-of-range) day on click', () => {
+    const emitted: (Date | null)[] = [];
+    component.registerOnChange(v => emitted.push(v));
+    component.writeValue(new Date(2026, 6, 15));
+    fixture.componentRef.setInput('min', new Date(2026, 6, 10));
+    fixture.detectChanges();
+    (fixture.nativeElement as HTMLElement).click();
+    fixture.detectChanges();
+    const day5 = dayButtons().find(b => b.textContent!.trim() === '5' && !b.classList.contains('cw-date-picker__day--outside'))!;
+    day5.click();
+    fixture.detectChanges();
+    expect(emitted.length).toBe(0);
+  });
+
+  it('navigates the grid with arrow keys', () => {
+    component.writeValue(new Date(2026, 6, 2));
+    fixture.detectChanges();
+    (fixture.nativeElement as HTMLElement).click();
+    fixture.detectChanges();
+    const grid = calendar()!.querySelector('.cw-date-picker__grid') as HTMLElement;
+    grid.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    expect(component.focusDate().getDate()).toBe(3);
+    grid.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    expect(component.focusDate().getDate()).toBe(10); // +7 days
+  });
+
+  it('PageDown advances the focused month', () => {
+    component.writeValue(new Date(2026, 6, 15));
+    fixture.detectChanges();
+    (fixture.nativeElement as HTMLElement).click();
+    fixture.detectChanges();
+    const grid = calendar()!.querySelector('.cw-date-picker__grid') as HTMLElement;
+    grid.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', bubbles: true }));
+    fixture.detectChanges();
+    expect(component.focusDate().getMonth()).toBe(7);
     expect(calendar()!.querySelector('.cw-date-picker__title')!.textContent).toContain('August');
   });
 

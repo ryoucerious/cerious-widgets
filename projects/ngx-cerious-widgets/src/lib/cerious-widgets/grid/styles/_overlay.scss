@@ -133,6 +133,28 @@
   .cw-drawer__header {
     background: transparent;
   }
+
+  // Toasts (cw-alert items) are rendered fixed, outside the grid scope, and by
+  // default only carry the severity tint (e.g. --cw-info-bg is a 12%-opacity
+  // wash) with no blur — so in frost they read as nearly see-through. Give them
+  // the exact same frosted-glass recipe as the popovers/menus: the frost
+  // `--cw-surface` (~0.38 white) as the base, blurred, with the light severity
+  // tint composited on top for colour — so their transparency matches the other
+  // overlays instead of being a solid block.
+  // Identical recipe to `.cw-overlay-panel` (the notifications popover) so a
+  // toast reads as the same frosted glass: the neutral `--cw-surface` base with
+  // no extra tint layer (an added wash pushed the opacity above the popover's
+  // and made toasts look like solid cards). Severity is conveyed by the alert's
+  // icon/accent, exactly like the coloured tags in the notifications list.
+  .cw-toast__item {
+    backdrop-filter: blur(16px) saturate(1.6);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.75),
+      var(--cw-shadow-lg);
+    background: var(--cw-surface) !important;
+  }
 }
 
 @keyframes cw-overlay-in {

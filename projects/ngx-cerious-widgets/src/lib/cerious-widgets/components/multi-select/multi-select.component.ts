@@ -130,6 +130,12 @@ export class MultiSelectComponent implements ControlValueAccessor, AfterViewInit
   readonly visibleChips = computed(() => this.selectedOptions().slice(0, this.maxChips()));
   readonly overflowCount = computed(() => Math.max(0, this.selectedOptions().length - this.maxChips()));
 
+  /** True when every currently-filtered option is selected (drives Select-all/Clear). */
+  readonly allFilteredSelected = computed(() => {
+    const filtered = this.filteredOptions();
+    return filtered.length > 0 && filtered.every(o => this.value().includes(o.value));
+  });
+
   private overlayRef?: OverlayRef;
   private pluginInstances: MultiSelectPlugin[] = [];
 
@@ -199,6 +205,24 @@ export class MultiSelectComponent implements ControlValueAccessor, AfterViewInit
     this.toggleOption(option);
   }
 
+  /** Select or clear every currently-filtered option in one action. */
+  toggleSelectAll(event?: Event): void {
+    event?.stopPropagation();
+    const filtered = this.filteredOptions().map(o => o.value);
+    const current = this.value();
+    let next: unknown[];
+    if (this.allFilteredSelected()) {
+      next = current.filter(v => !filtered.includes(v));
+    } else {
+      const set = new Set(current);
+      filtered.forEach(v => set.add(v));
+      next = Array.from(set);
+    }
+    this.value.set(next);
+    this.onChange([...next]);
+    this.onTouched();
+  }
+
   toggle(): void {
     this.isOpen() ? this.close() : this.open();
   }
@@ -227,6 +251,21 @@ export class MultiSelectComponent implements ControlValueAccessor, AfterViewInit
       .subscribe(() => this.close());
     this.pluginInstances.forEach(p => p.onOpen?.());
     this.nudgeVirtualRender();
+    this.focusInitial();
+  }
+
+  /**
+   * Move focus into the panel on open (the filter box, else the first option),
+   * so arrow-key navigation works immediately instead of being stuck on the host.
+   */
+  private focusInitial(): void {
+    requestAnimationFrame(() => {
+      const panel = this.overlayRef?.overlayElement;
+      if (!panel) { return; }
+      const input = panel.querySelector<HTMLInputElement>('.cw-multi-select__filter');
+      if (input) { input.focus(); return; }
+      panel.querySelector<HTMLButtonElement>('.cw-multi-select__option')?.focus();
+    });
   }
 
   /**
@@ -275,7 +314,7 @@ export class MultiSelectComponent implements ControlValueAccessor, AfterViewInit
       this.host.nativeElement.focus();
       return;
     }
-    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') {
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
       return;
     }
     event.preventDefault();
@@ -284,8 +323,17 @@ export class MultiSelectComponent implements ControlValueAccessor, AfterViewInit
       return;
     }
     const rows = Array.from(panel.querySelectorAll<HTMLButtonElement>('.cw-multi-select__option'));
+    if (!rows.length) {
+      return;
+    }
     const current = rows.indexOf(document.activeElement as HTMLButtonElement);
-    const next = event.key === 'ArrowDown' ? Math.min(current + 1, rows.length - 1) : Math.max(current - 1, 0);
+    let next: number;
+    switch (event.key) {
+      case 'ArrowDown': next = Math.min(current + 1, rows.length - 1); break;
+      case 'ArrowUp': next = current <= 0 ? 0 : current - 1; break;
+      case 'Home': next = 0; break;
+      default: next = rows.length - 1; break; // End
+    }
     rows[next]?.focus();
   }
 

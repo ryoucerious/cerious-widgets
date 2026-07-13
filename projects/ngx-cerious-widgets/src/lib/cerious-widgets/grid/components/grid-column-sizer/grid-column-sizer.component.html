@@ -8,6 +8,8 @@
      [attr.aria-valuemin]="40"
      [attr.aria-valuemax]="800"
      [attr.aria-valuetext]="widthPx + ' pixels'"
-     (mousedown)="onMouseDown($event)"
-     (mouseup)="onMouseUp($event)">
+     (pointerdown)="onPointerDown($event)"
+     (pointermove)="onPointerMove($event)"
+     (pointerup)="onPointerUp($event)"
+     (click)="onClick($event)">
 </div>

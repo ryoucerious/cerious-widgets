@@ -69,9 +69,15 @@ export class GridScrollService implements IGridScrollService {
       // scroll event was a measurable cost on long scroll bursts.
       if (this.cachedBodyEl !== gridBodyElement) {
         this.cachedBodyEl = gridBodyElement;
-        this.cachedContentEl = gridBodyElement.querySelector(
+        // Virtual grids translate the cerious-scroll engine content element;
+        // non-virtual grids (enableVirtualScroll: false) have no engine, so fall
+        // back to the static content wrapper. Without this fallback, dragging the
+        // horizontal scrollbar on a non-virtual grid moved nothing.
+        this.cachedContentEl = (gridBodyElement.querySelector(
           "[data-cerious-scroll-content]"
-        ) as HTMLElement | null;
+        ) ?? gridBodyElement.querySelector(
+          ".cw-table-body__static-content"
+        )) as HTMLElement | null;
       }
       const contentElement = this.cachedContentEl;
 

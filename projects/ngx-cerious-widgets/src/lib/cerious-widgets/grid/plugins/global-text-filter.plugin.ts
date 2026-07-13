@@ -122,7 +122,9 @@ export class GlobalTextFilterPlugin implements GridPlugin {
                     return false; // Skip filtering if the column or filter is invalid
                 }
             
-                const cellValue = row[column.field ?? '']?.toString().toLowerCase(); // Use `field` to access the data
+                // Coerce nullish cells to '' — otherwise `undefined.includes(...)` throws
+                // when a filterable column has empty cells.
+                const cellValue = (row[column.field ?? ''] ?? '').toString().toLowerCase(); // Use `field` to access the data
                 const filterValue = filter.value.toString().toLowerCase();
             
                 // Apply filter logic based on the filter type

@@ -36,7 +36,7 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
             <span class="admin__nav-icon" aria-hidden="true">☺</span> Customers
           </a>
           <a routerLink="calendar" routerLinkActive="is-active" class="admin__nav-link">
-            <span class="admin__nav-icon" aria-hidden="true">📅</span> Calendar
+            <span class="admin__nav-icon" aria-hidden="true">⊞</span> Calendar
           </a>
         </nav>
 
@@ -59,8 +59,8 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
       <section class="admin__main">
         <header class="admin__topbar">
           <div class="admin__topbar-spacer"></div>
-          <button type="button" class="icon-btn" cwTooltip="Notifications"
-                  [cwPopover]="notifPanel" cwPopoverPlacement="bottom" aria-label="Notifications">
+          <button type="button" class="icon-btn" cwTooltip="Notifications" cwTooltipPosition="bottom"
+                  [cwPopover]="notifPanel" cwPopoverPlacement="bottom-end" aria-label="Notifications">
             <span aria-hidden="true">🔔</span>
             @if (unread()) { <cw-badge [value]="unread()" severity="danger" /> }
           </button>
@@ -98,7 +98,14 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
   `,
   styles: [`
     .admin { display: grid; grid-template-columns: 232px 1fr; min-height: calc(100vh - 61px); background: var(--cw-surface-sunken, var(--cw-surface)); }
-    .admin__sidebar { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.25rem 0.85rem; border-right: 1px solid var(--cw-border); background: var(--cw-surface); }
+    .admin__sidebar {
+      display: flex; flex-direction: column; gap: 0.5rem; padding: 1.25rem 0.85rem;
+      border-right: 1px solid var(--cw-border); background: var(--cw-surface);
+      /* Pin the sidebar (incl. the account footer) below the topbar while the
+         main content scrolls. */
+      position: sticky; top: 3.75rem; align-self: start;
+      height: calc(100vh - 3.75rem); overflow-y: auto;
+    }
     .admin__brand { font-weight: 700; font-size: 1.05rem; padding: 0.25rem 0.6rem 0.75rem; color: var(--cw-text); }
     .admin__brand span { color: var(--cw-primary); }
     .admin__nav { display: flex; flex-direction: column; gap: 0.15rem; }
@@ -135,7 +142,10 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
 
     @media (max-width: 720px) {
       .admin { grid-template-columns: 1fr; }
-      .admin__sidebar { flex-direction: row; align-items: center; flex-wrap: wrap; }
+      .admin__sidebar {
+        flex-direction: row; align-items: center; flex-wrap: wrap;
+        position: static; height: auto; overflow: visible;
+      }
       .admin__spacer { display: none; }
     }
   `]

@@ -133,6 +133,25 @@
   &:focus { border-color: var(--cw-accent); box-shadow: var(--cw-focus-ring); }
 }
 
+.cw-multi-select__all {
+  display: block;
+  width: 100%;
+  margin: 0.25rem 0;
+  padding: 0.3rem 0.5rem;
+  font-family: var(--cw-font);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: left;
+  color: var(--cw-primary);
+  background: transparent;
+  border: none;
+  border-radius: var(--cw-radius-sm);
+  cursor: pointer;
+
+  &:hover { background: var(--cw-surface-hover, var(--cw-surface-sunken)); }
+  &:focus-visible { outline: none; box-shadow: var(--cw-focus-ring); }
+}
+
 .cw-multi-select__list {
   display: flex;
   flex-direction: column;

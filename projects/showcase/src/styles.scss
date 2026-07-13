@@ -26,7 +26,13 @@ a { color: inherit; }
    as frosted panels rather than flat fills. */
 [data-cw-theme='frost'] {
   .topbar { background: rgba(255, 255, 255, 0.35); }
-  .card,
+  // NOTE: `.card` is deliberately excluded from backdrop-filter. The component
+  // gallery renders ~80 cards at once, and ~80 simultaneous backdrop-filter
+  // layers make the GPU compositor repaint the whole window every frame during a
+  // resize — the entire browser (URL bar included) flickers. The cards sit on the
+  // smooth page gradient, so their translucent `--cw-surface` fill already reads
+  // as frosted glass without the per-card blur. Keep the blur only on the sparse
+  // surfaces that appear a few at a time on doc pages.
   .highlight,
   .montage,
   .doc-section__preview,
@@ -35,3 +41,7 @@ a { color: inherit; }
     -webkit-backdrop-filter: blur(14px) saturate(1.4);
   }
 }
+
+/* Let a grid `headerTemplate` toolbar span the full menu-bar width, so its
+   content can right-align a group (e.g. filters) beside the built-in plugin bar. */
+.cw-table-menu-bar .table-menu-bar-left { flex: 1 1 auto; min-width: 0; }

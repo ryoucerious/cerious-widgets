@@ -35,7 +35,13 @@
   box-shadow: var(--cw-shadow-md, var(--cw-shadow-sm));
   transform: translateY(-1px);
 }
-.card__icon { font-size: 1.35rem; line-height: 1; color: var(--cw-primary); }
+.card__icon {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  color: var(--cw-primary);
+}
+.card__icon app-icon { width: 100%; height: 100%; }
 .card__name {
   display: flex; align-items: center; gap: 0.4rem;
   font-size: 1rem; font-weight: 650; color: var(--cw-text);

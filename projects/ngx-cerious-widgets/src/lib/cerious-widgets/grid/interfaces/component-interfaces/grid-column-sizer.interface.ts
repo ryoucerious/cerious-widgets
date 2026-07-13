@@ -3,7 +3,9 @@ import { ColumnDef } from "../column-def";
 
 export interface IGridColumnSizerComponent {
   column: ColumnDef;
-  onMouseDown: (event: MouseEvent) => void;
-  onMouseUp: (event: MouseEvent) => void;
+  onPointerDown: (event: PointerEvent) => void;
+  onPointerMove: (event: PointerEvent) => void;
+  onPointerUp: (event: PointerEvent) => void;
+  onClick: (event: MouseEvent) => void;
   el: ElementRef;
 }

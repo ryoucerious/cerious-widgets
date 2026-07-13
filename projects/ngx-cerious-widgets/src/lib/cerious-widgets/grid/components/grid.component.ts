@@ -188,14 +188,10 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
       this.resizeObserver = new ResizeObserver(() => this.gridService.resize());
       this.resizeObserver.observe(this.gridService.gridContainerElement);
 
-      // Attach mousemove/mouseup as native listeners (NOT Angular template
-      // bindings). In zoneless mode every template event binding schedules a
-      // change-detection pass, so a template (mousemove) binding would tick CD
-      // on every pixel of mouse movement — devastating to FPS just from hover.
-      // These handlers only do work when a column resize is active.
-      const el = this.gridService.gridContainerElement as HTMLElement;
-      el.addEventListener('mousemove', this.onMouseMoveNative, { passive: true });
-      el.addEventListener('mouseup', this.onMouseUpNative, { passive: true });
+      // Column-resize drag tracking is attached to `document` on mousedown (see
+      // GridService.initColumnResizing) and torn down on mouseup — so the drag
+      // continues even when the cursor leaves the grid, with zero listener/CD
+      // overhead while idle.
     }
 
     setTimeout(() => {
@@ -243,35 +239,14 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
       this.resizeObserver.disconnect();
     }
 
-    const el = this.gridService.gridContainerElement as HTMLElement | undefined;
-    if (el) {
-      el.removeEventListener('mousemove', this.onMouseMoveNative);
-      el.removeEventListener('mouseup', this.onMouseUpNative);
-    }
   }
 
-  /**
-   * Handles the mouse move event and delegates it to the grid service.
-   *
-   * @param e - The mouse event triggered by the user's interaction.
-   */
+  /** Handles a mouse-move (delegates to the grid service). */
   onMouseMove(e: MouseEvent): void {
     this.gridService.onMouseMove(e);
   }
 
-  private onMouseMoveNative = (e: MouseEvent): void => {
-    this.gridService.onMouseMove(e);
-  };
-
-  private onMouseUpNative = (e: MouseEvent): void => {
-    this.gridService.onMouseUp(e);
-  };
-
-  /**
-   * Handles the mouse up event and delegates the event to the grid service.
-   *
-   * @param e - The mouse event triggered when the mouse button is released.
-   */
+  /** Handles a mouse-up (delegates to the grid service). */
   onMouseUp(e: MouseEvent): void {
     this.gridService.onMouseUp(e);
   }

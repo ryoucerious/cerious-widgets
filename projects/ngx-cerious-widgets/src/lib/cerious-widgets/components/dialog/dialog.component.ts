@@ -51,6 +51,8 @@ export class DialogComponent implements OnDestroy {
 
   /** The dialog title. */
   readonly header = input<string>('');
+  /** Accessible name when there is no visible `header` (headerless dialogs). */
+  readonly ariaLabel = input<string>('');
   /** Show / hide the dialog (two-way: `[(visible)]`). */
   readonly visible = input(false, { transform: booleanAttribute });
   /** Panel width (any CSS length). */

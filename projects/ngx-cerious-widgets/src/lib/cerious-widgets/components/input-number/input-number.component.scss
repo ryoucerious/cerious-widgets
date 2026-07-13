@@ -25,6 +25,9 @@
   outline: none;
   background: transparent;
   min-width: 0;
+  /* 4.5rem is the default basis; flex-grow lets the field fill a stretched host
+     (e.g. width:100% in a form) instead of leaving a gap after the + button. */
+  flex: 1 1 4.5rem;
   width: 4.5rem;
   padding: 0 0.625rem;
   font-family: var(--cw-font);

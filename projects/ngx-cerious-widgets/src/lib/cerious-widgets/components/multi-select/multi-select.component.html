@@ -31,6 +31,12 @@
       />
     }
 
+    @if (filteredOptions().length > 0) {
+      <button type="button" class="cw-multi-select__all" (click)="toggleSelectAll($event)">
+        {{ allFilteredSelected() ? 'Clear all' : 'Select all' }}
+      </button>
+    }
+
     <!-- Row renderer shared by the plain and virtualized lists -->
     <ng-template #optionRow let-option>
       <button

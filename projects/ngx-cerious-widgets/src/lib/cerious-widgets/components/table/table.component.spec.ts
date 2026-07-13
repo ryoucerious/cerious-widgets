@@ -79,6 +79,47 @@ describe('TableComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.cw-table__empty-row').textContent).toContain('Nothing here');
   });
+
+  it('sorts strings case-insensitively and numeric-strings numerically', () => {
+    fixture.componentRef.setInput('columns', [{ field: 'code', header: 'Code', sortable: true }]);
+    fixture.componentRef.setInput('value', [{ code: 'item10' }, { code: 'Item2' }, { code: 'item1' }]);
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('th') as HTMLElement).click();
+    fixture.detectChanges();
+    // numeric-aware + case-insensitive: 1, 2, 10 (not lexicographic "10, 2, 1" or case-split)
+    expect(cellsInColumn(0)).toEqual(['item1', 'Item2', 'item10']);
+  });
+
+  it('keeps null values last in both sort directions', () => {
+    fixture.componentRef.setInput('columns', [{ field: 'age', header: 'Age', sortable: true }]);
+    fixture.componentRef.setInput('value', [{ age: 30 }, { age: null }, { age: 10 }]);
+    fixture.detectChanges();
+    const th = fixture.nativeElement.querySelector('th') as HTMLElement;
+    th.click(); fixture.detectChanges();              // asc
+    expect(cellsInColumn(0)).toEqual(['10', '30', '']);
+    th.click(); fixture.detectChanges();              // desc — null still last
+    expect(cellsInColumn(0)).toEqual(['30', '10', '']);
+  });
+
+  it('sorts Date values chronologically', () => {
+    fixture.componentRef.setInput('columns', [{ field: 'd', header: 'D', sortable: true }]);
+    fixture.componentRef.setInput('value', [
+      { d: new Date(2024, 0, 5) }, { d: new Date(2024, 0, 1) }, { d: new Date(2024, 0, 3) }
+    ]);
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('th') as HTMLElement).click();
+    fixture.detectChanges();
+    const days = (component.rows() as any[]).map(r => r.d.getDate());
+    expect(days).toEqual([1, 3, 5]);
+  });
+
+  it('sorts via the keyboard (Enter on a sortable header)', () => {
+    const ageHeader: HTMLElement = fixture.nativeElement.querySelectorAll('th')[1];
+    expect(ageHeader.getAttribute('tabindex')).toBe('0');
+    ageHeader.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+    expect(cellsInColumn(0)).toEqual(['Linus', 'Ada', 'Grace']);
+  });
 });
 
 @Component({

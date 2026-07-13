@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { componentsByGroup } from '../core/component-registry';
+import { IconComponent } from '../ui/icon.component';
 
 /**
  * The docs shell: a filterable, grouped component sidebar beside a router outlet
@@ -10,7 +11,7 @@ import { componentsByGroup } from '../core/component-registry';
   selector: 'app-components-layout',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, IconComponent],
   template: `
     <div class="docs">
       <aside class="docs__sidebar">
@@ -35,6 +36,7 @@ import { componentsByGroup } from '../core/component-registry';
                   [routerLink]="['/components', item.slug]"
                   routerLinkActive="docs__link--active"
                 >
+                  <span class="docs__link-icon" aria-hidden="true"><app-icon [name]="item.slug" /></span>
                   <span class="docs__link-name">{{ item.name }}</span>
                   @if (!item.ready) { <span class="docs__soon">soon</span> }
                 </a>

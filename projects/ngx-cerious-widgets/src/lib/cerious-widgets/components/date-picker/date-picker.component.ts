@@ -108,6 +108,8 @@ export class DatePickerComponent implements ControlValueAccessor, AfterViewInit,
   private readonly cvaDisabled = signal(false);
   /** First day of the month currently shown in the panel. */
   readonly viewDate = signal<Date>(startOfMonth(new Date()));
+  /** The roving-focus day within the grid (keyboard navigation). */
+  readonly focusDate = signal<Date>(new Date());
 
   readonly isDisabled = computed(() => this.disabledInput() || this.cvaDisabled());
 
@@ -208,6 +210,13 @@ export class DatePickerComponent implements ControlValueAccessor, AfterViewInit,
     return !!selected && sameDay(day.date, selected);
   }
 
+  /** Roving-focus helpers for the grid. */
+  isFocusDay(day: CwCalendarDay): boolean { return sameDay(day.date, this.focusDate()); }
+  dayKey(date: Date): string { return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`; }
+  dayLabel(day: CwCalendarDay): string {
+    return day.date.toLocaleDateString(this.effectiveLocale(), { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
   selectDay(day: CwCalendarDay, event?: Event): void {
     event?.stopPropagation();
     if (day.disabled) {
@@ -248,6 +257,7 @@ export class DatePickerComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
     this.viewDate.set(startOfMonth(this.value() ?? new Date()));
+    this.focusDate.set(this.value() ?? new Date());
     this.overlayRef = this.overlay.create({
       positionStrategy: this.overlay
         .position()
@@ -265,6 +275,52 @@ export class DatePickerComponent implements ControlValueAccessor, AfterViewInit,
       .pipe(filter(event => !this.host.nativeElement.contains(event.target as Node)))
       .subscribe(() => this.close());
     this.pluginInstances.forEach(p => p.onOpen?.());
+    this.focusGridCell();
+  }
+
+  /** Move focus onto the roving-focus day cell (after the panel has rendered). */
+  private focusGridCell(): void {
+    const key = this.dayKey(this.focusDate());
+    requestAnimationFrame(() => {
+      this.overlayRef?.overlayElement.querySelector<HTMLButtonElement>(`[data-day="${key}"]`)?.focus();
+    });
+  }
+
+  /** Arrow / Home / End / PageUp / PageDown navigation of the calendar grid. */
+  onGridKeydown(event: KeyboardEvent): void {
+    const deltas: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+    if (event.key in deltas) {
+      event.preventDefault();
+      this.moveFocus(addDays(this.focusDate(), deltas[event.key]));
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      const f = this.focusDate();
+      this.moveFocus(addDays(f, -((f.getDay() - this.firstDayOfWeek() + 7) % 7)));
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      const f = this.focusDate();
+      this.moveFocus(addDays(f, 6 - ((f.getDay() - this.firstDayOfWeek() + 7) % 7)));
+    } else if (event.key === 'PageUp') {
+      event.preventDefault();
+      const f = this.focusDate();
+      this.moveFocus(new Date(f.getFullYear(), f.getMonth() - 1, f.getDate()));
+    } else if (event.key === 'PageDown') {
+      event.preventDefault();
+      const f = this.focusDate();
+      this.moveFocus(new Date(f.getFullYear(), f.getMonth() + 1, f.getDate()));
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      this.close();
+      this.host.nativeElement.focus();
+    }
+  }
+
+  private moveFocus(date: Date): void {
+    this.focusDate.set(date);
+    if (date.getMonth() !== this.viewDate().getMonth() || date.getFullYear() !== this.viewDate().getFullYear()) {
+      this.navigateTo(date.getMonth(), date.getFullYear());
+    }
+    this.focusGridCell();
   }
 
   close(): void {
@@ -311,6 +367,9 @@ export class DatePickerComponent implements ControlValueAccessor, AfterViewInit,
 
 function startOfMonth(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+function addDays(date: Date, n: number): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + n);
 }
 function startOfDay(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());

@@ -13,8 +13,11 @@
           [style.width]="col.width"
           [style.text-align]="col.align || 'left'"
           [class.cw-table__th--sortable]="col.sortable"
+          [attr.tabindex]="col.sortable ? 0 : null"
           [attr.aria-sort]="sortIndicator(col) === 'asc' ? 'ascending' : sortIndicator(col) === 'desc' ? 'descending' : (col.sortable ? 'none' : null)"
           (click)="toggleSort(col)"
+          (keydown.enter)="toggleSort(col)"
+          (keydown.space)="col.sortable && $event.preventDefault(); toggleSort(col)"
         >
           <span class="cw-table__th-label">
             {{ col.header }}

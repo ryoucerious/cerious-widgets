@@ -58,7 +58,11 @@ export class GridRowColumnComponent extends ZonelessCompatibleComponent implemen
   set gridRow(value: GridRow) { this.gridRowSignal.set(value); }
   get gridRow() { return this.gridRowSignal()!; }
 
-  @Input() refreshTick = 0;
+  readonly refreshTickSignal = signal(0);
+  @Input()
+  set refreshTick(value: number) { this.refreshTickSignal.set(value); }
+  get refreshTick() { return this.refreshTickSignal(); }
+
   @Input() classes: SectionClassConfig = {};
 
   ColumnType = ColumnType;
@@ -69,6 +73,11 @@ export class GridRowColumnComponent extends ZonelessCompatibleComponent implemen
   // scroll only `gridRow` flips per recycle, so width/alignment/mode are
   // served from cache and only `value` re-evaluates per cell.
   readonly width = computed(() => {
+    // `getColumnWidth` reads `col.width`, a plain (non-signal) property that is
+    // mutated in place during a live column-resize drag — so we depend on
+    // `refreshTickSignal` (bumped per pointermove by the grid body) to force a
+    // recompute. During scroll the tick is stable, so this stays memoized.
+    this.refreshTickSignal();
     const col = this.columnSignal();
     return col ? this.gridColumnService.getColumnWidth(col, this.gridService.gridOptions) : undefined;
   });

@@ -79,6 +79,32 @@
         background-color: rgba(255, 255, 255, 0.25) !important;
     }
 
+    // Pinned/feature cells overlay the columns that scroll *behind* them, and a
+    // translucent frost surface lets that content read through — the pinned data
+    // becomes illegible. Lay down an occluding frosted layer *behind the cell
+    // content but above the scrolling columns* via ::before, so the pin stays
+    // readable while the page gradient still frosts through (blur). Using a
+    // pseudo-element sidesteps the per-row background-color rules (odd/hover/
+    // filler) that would otherwise win the specificity fight on some rows.
+    .cw-table-row .table-col-pinned,
+    .cw-table-row .table-col-feature {
+        position: relative;
+    }
+    .cw-table-row .table-col-pinned::before,
+    .cw-table-row .table-col-feature::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        // Near-opaque so no ghost of the scrolling columns bleeds through the
+        // pinned data (readability wins for pinned cells); the faint remaining
+        // translucency + blur keeps a subtle frosted feel consistent with the
+        // rest of the theme.
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(16px) saturate(1.6);
+        -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    }
+
     // Header cells: a white veil over the frosted card so the header band
     // reads clearly brighter/whiter than the rows, like the mockup.
     .cw-table-head .cw-table-row > .table-col,

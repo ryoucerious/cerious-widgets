@@ -65,13 +65,19 @@
                 // Centre the 10px-tall hamburger glyph (16px footprint, lines
                 // at 0-10px) on the header cell's vertical middle.
                 top: calc(50% - 5px);
-                right: -26px;
-                
-                -webkit-transition: right .2s; /* Safari */ //<<< the compiler should be prefixing automatically
-                transition: right .2s;
+                // Sit fully inside the column, clear of the ~8px resize anchor at
+                // the right edge, so the glyph never overlaps or pokes through the
+                // column border. It fades in on hover (opacity) rather than
+                // sliding in from off-screen-right — the old slide made it look
+                // like the button was coming *through* the resize divider.
+                right: 0.75rem;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity .18s ease;
 
                 &.active {
-                    right: 0px;
+                    opacity: 1;
+                    visibility: visible;
                 }
             }
             
@@ -111,7 +117,19 @@
         > .table-col:hover .column-menu-button,
         .column-content:hover ~ .column-menu-button,
         .column-menu-button:hover {
-            right: 0px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        // Don't reveal the column menu while the cursor is over the resize
+        // handle — it would otherwise sit next to the resizer and clutter the
+        // drag target. The resizer is nested inside <cw-grid-column-sizer> (not a
+        // sibling of the menu button), so match on the cell that :has() a hovered
+        // resizer. The extra compound also gives this a higher specificity than
+        // the reveal rules above, so it wins.
+        .table-col:has(.column-resizer:hover) .column-menu-button {
+            opacity: 0;
+            visibility: hidden;
         }
 
         .table-col:last-child {
@@ -175,23 +193,38 @@
         }
     }
 
-    // Rendered only for resizable columns. A visible divider at the column's
-    // right edge marks the grab point (same style as the pinned-column border);
-    // it thickens to the accent on hover so it's clear you can drag it.
+    // Rendered only for resizable columns. The grab strip sits flush to the
+    // column's right edge (the cell clips overflow-x, so it can't straddle), but
+    // the visible divider is drawn down the *centre* of the strip instead of at
+    // its right edge. That way the ew-resize cursor's hotspot lines up with the
+    // line you aim at — before, the line was at the edge while the 6px hit area
+    // extended left, so the cursor always sat offset to the left of the divider.
+    // The line thickens to the accent on hover.
     .column-resizer {
         position: absolute;
         top: 0px;
         right: 0px;
         cursor: ew-resize;
-        width: 6px;
+        width: 8px;
         height: 100%;
+        z-index: 1;
+    }
+    .column-resizer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
         border-right: 1px solid var(--cw-divider);
         transition: border-color 0.12s ease;
     }
-    .column-resizer:hover,
+    .column-resizer:hover::after,
+    .column-resizer:focus-visible::after {
+        border-right: 2px solid var(--cw-primary);
+    }
     .column-resizer:focus-visible {
         outline: none;
-        border-right: 2px solid var(--cw-primary);
     }
 }
 
