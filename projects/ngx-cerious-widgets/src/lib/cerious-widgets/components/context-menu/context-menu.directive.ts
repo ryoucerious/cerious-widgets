@@ -1,6 +1,14 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Directive, inject, input, OnDestroy } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { filter } from 'rxjs/operators';
 import { CwMenuItem, MenuComponent } from '../menu/menu.component';
 
@@ -18,6 +26,15 @@ import { CwMenuItem, MenuComponent } from '../menu/menu.component';
   host: { '(contextmenu)': 'open($event)' }
 })
 export class ContextMenuDirective implements OnDestroy {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ contextMenu: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('contextMenu', this.api);
+  }
+
   private readonly overlay = inject(Overlay);
 
   /** The menu entries to show. */

@@ -1,4 +1,15 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A bordered content panel with a header. Set `toggleable` for a collapsible
@@ -37,6 +48,15 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input, output, si
   host: { 'class': 'cw-panel' }
 })
 export class PanelComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ panel: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('panel', this.api);
+  }
+
   /** The header label. */
   readonly header = input<string>('');
   /** Allow collapsing the body from the header. */

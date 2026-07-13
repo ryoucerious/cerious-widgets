@@ -3,6 +3,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   inject,
   input,
   OnDestroy,
@@ -10,6 +11,8 @@ import {
   signal,
   ViewContainerRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A tiered-menu entry; `items` makes it a submenu parent. */
 export interface CwTieredMenuItem {
@@ -45,6 +48,15 @@ export interface CwTieredMenuItem {
   host: { 'class': 'cw-tiered-menu', 'role': 'menu' }
 })
 export class TieredMenuComponent implements OnDestroy {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ tieredMenu: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('tieredMenu', this.api);
+  }
+
   private readonly overlay = inject(Overlay);
   private readonly viewContainerRef = inject(ViewContainerRef);
 

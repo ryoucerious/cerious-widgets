@@ -1,4 +1,14 @@
-import { booleanAttribute, Directive, ElementRef, inject, input, NgZone, OnInit } from '@angular/core';
+import {
+  booleanAttribute,
+  Directive,
+  ElementRef,
+  inject,
+  input,
+  NgZone,
+  OnInit
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Adds a material-style ripple that expands from the click point. Apply to any
@@ -14,6 +24,15 @@ import { booleanAttribute, Directive, ElementRef, inject, input, NgZone, OnInit 
   host: { 'class': 'cw-ripple-host' }
 })
 export class RippleDirective implements OnInit {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ ripple: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('ripple', this.api);
+  }
+
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly zone = inject(NgZone);
 

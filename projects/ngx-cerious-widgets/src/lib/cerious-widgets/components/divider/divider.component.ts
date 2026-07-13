@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** Divider orientation. */
 export type CwDividerLayout = 'horizontal' | 'vertical';
@@ -34,6 +42,15 @@ export type CwDividerAlign = 'left' | 'center' | 'right';
   }
 })
 export class DividerComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ divider: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('divider', this.api);
+  }
+
   /** Orientation: horizontal (default) or vertical. */
   readonly layout = input<CwDividerLayout>('horizontal');
   /** Line style: solid (default) or dashed. */

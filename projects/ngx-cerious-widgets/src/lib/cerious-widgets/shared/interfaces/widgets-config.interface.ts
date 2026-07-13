@@ -41,6 +41,21 @@ export interface WidgetsConfig {
     /** DatePicker component configuration. */
     datePicker?: ComponentConfig<DatePickerPlugin>;
 
+    /**
+     * Any other component's block, keyed by its plugin namespace (its selector
+     * without the `cw-` prefix, e.g. `select`, `tree`, `accordion`). Every
+     * cerious-widgets component reads its block generically via
+     * {@link resolveComponentConfig}, so custom plugins can be registered for any
+     * of them without a dedicated typed key here.
+     */
+    [namespace: string]:
+        | ComponentConfig<any>
+        | Type<GridPlugin>[]
+        | { [key: string]: () => Promise<any> }
+        | { [name: string]: TemplateRef<any> | undefined }
+        | PluginOptions
+        | undefined;
+
     /** @deprecated Use `grid.plugins`. */
     plugins?: Type<GridPlugin>[];
     /** @deprecated Use `grid.lazyPlugins`. */
@@ -76,6 +91,26 @@ export function resolveMultiSelectConfig(config?: WidgetsConfig): ComponentConfi
  */
 export function resolveDatePickerConfig(config?: WidgetsConfig): ComponentConfig<DatePickerPlugin> {
     return config?.datePicker ?? {};
+}
+
+/**
+ * Resolves an arbitrary component's configuration block by namespace. This is
+ * the generic path every plugin-enabled component uses (via the plugin host);
+ * the typed `grid`/`multiSelect`/`datePicker` resolvers above are thin wrappers
+ * kept for their extra behaviour (deprecated-alias merging on the grid).
+ *
+ * @param config - The root widgets configuration, if provided.
+ * @param namespace - The component's plugin namespace (e.g. `select`).
+ * @returns The component's config block, or an empty object when unset.
+ */
+export function resolveComponentConfig(
+    config: WidgetsConfig | undefined,
+    namespace: string
+): ComponentConfig {
+    const block = config?.[namespace];
+    return block && typeof block === 'object' && !Array.isArray(block)
+        ? (block as ComponentConfig)
+        : {};
 }
 
 export function resolveGridConfig(config?: WidgetsConfig): ComponentConfig<GridPlugin> {

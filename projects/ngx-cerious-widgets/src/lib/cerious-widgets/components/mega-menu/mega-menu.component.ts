@@ -3,6 +3,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   inject,
   input,
   output,
@@ -11,6 +12,8 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A leaf link inside a mega-menu column. */
 export interface CwMegaMenuLink {
@@ -56,6 +59,15 @@ export interface CwMegaMenuItem {
   host: { 'class': 'cw-mega-menu', 'role': 'menubar' }
 })
 export class MegaMenuComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ megaMenu: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('megaMenu', this.api);
+  }
+
   private readonly overlay = inject(Overlay);
   private readonly viewContainerRef = inject(ViewContainerRef);
 

@@ -4,6 +4,7 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   inject,
   input,
   OnDestroy,
@@ -12,6 +13,8 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * An image with an optional full-screen preview: click to open it centred on
@@ -33,6 +36,15 @@ import {
   host: { 'class': 'cw-image' }
 })
 export class ImageComponent implements OnDestroy {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ image: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('image', this.api);
+  }
+
   private readonly overlay = inject(Overlay);
   private readonly viewContainerRef = inject(ViewContainerRef);
 

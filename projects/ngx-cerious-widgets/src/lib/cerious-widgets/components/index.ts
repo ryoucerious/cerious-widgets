@@ -10,6 +10,7 @@ export * from './chip/chip.component';
 export * from './divider/divider.component';
 export * from './overlay/popover.directive';
 export * from './select/select.component';
+export * from './select/select.api';
 export * from './checkbox/checkbox.component';
 export * from './radio-button/radio-button.component';
 export * from './toggle-switch/toggle-switch.component';

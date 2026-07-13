@@ -1,4 +1,15 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A compact element for an input, attribute or filter value — like a Tag but
@@ -23,6 +34,15 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input, output, si
   }
 })
 export class ChipComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ chip: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('chip', this.api);
+  }
+
   /** The chip text. */
   readonly label = input<string>('');
   /** Optional leading image URL (rendered as a small round avatar). */

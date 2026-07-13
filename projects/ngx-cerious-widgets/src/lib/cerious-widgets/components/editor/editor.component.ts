@@ -4,10 +4,13 @@ import {
   Component,
   ElementRef,
   forwardRef,
+  inject,
   input,
   signal,
   ViewChild
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 /** A toolbar command. */
@@ -43,6 +46,15 @@ interface CwEditorTool {
   ]
 })
 export class EditorComponent implements ControlValueAccessor {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ editor: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('editor', this.api);
+  }
+
   @ViewChild('area', { static: true }) private area!: ElementRef<HTMLElement>;
 
   /** Placeholder shown while empty. */

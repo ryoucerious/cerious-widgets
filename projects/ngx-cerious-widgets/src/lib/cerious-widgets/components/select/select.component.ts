@@ -17,6 +17,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { filter } from 'rxjs/operators';
+import { providePluginHost } from '../../shared/plugin-host';
+import { SelectApi } from './select.api';
 
 /** A normalized option: display label + underlying value. */
 interface CwOption {
@@ -111,6 +113,23 @@ export class SelectComponent implements ControlValueAccessor, OnDestroy {
   private overlayRef?: OverlayRef;
   onChange: (value: unknown) => void = () => {};
   onTouched: () => void = () => {};
+
+  /** Stable public API handed to {@link SelectPlugin}s. */
+  readonly api: SelectApi = {
+    getValue: () => this.value(),
+    setValue: (value: unknown) => { this.value.set(value); this.onChange(value); },
+    getOptions: () => this.options(),
+    open: () => this.open(),
+    close: () => this.close(),
+    isOpen: () => this.isOpen(),
+    getHost: () => this.host.nativeElement
+  };
+
+  constructor() {
+    // Makes the Select extensible: consumers register plugins via
+    // `WidgetsConfig` (`{ select: { plugins: [...] } }`).
+    providePluginHost('select', this.api);
+  }
 
   // --- ControlValueAccessor ---
   writeValue(value: unknown): void {

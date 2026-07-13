@@ -16,6 +16,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 import { filter } from 'rxjs/operators';
 
 const DEFAULT_PRESETS = [
@@ -68,6 +70,18 @@ export class ColorPickerComponent implements ControlValueAccessor, OnDestroy {
 
   private overlayRef?: OverlayRef;
   onChange: (value: string) => void = () => {};
+
+  /** Public API handed to plugins (`{ colorPicker: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi<string> = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.value(),
+    setValue: (value: string) => { this.value.set(value); this.onChange(value); },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('colorPicker', this.api);
+  }
   onTouched: () => void = () => {};
 
   // --- ControlValueAccessor ---

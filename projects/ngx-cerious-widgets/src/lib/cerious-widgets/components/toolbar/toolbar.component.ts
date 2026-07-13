@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A horizontal action bar with start / center / end slots
@@ -24,4 +31,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './toolbar.component.scss',
   host: { 'class': 'cw-toolbar', 'role': 'toolbar' }
 })
-export class ToolbarComponent {}
+export class ToolbarComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ toolbar: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('toolbar', this.api);
+  }
+}

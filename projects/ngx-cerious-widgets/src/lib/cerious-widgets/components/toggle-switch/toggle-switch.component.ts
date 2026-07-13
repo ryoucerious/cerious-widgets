@@ -3,11 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
+  inject,
   input,
   signal
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * An on/off switch over a real (visually hidden) native checkbox, so focus,
@@ -47,6 +51,20 @@ export class ToggleSwitchComponent implements ControlValueAccessor {
 
   onChange: (value: boolean) => void = () => {};
   onTouched: () => void = () => {};
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ toggleSwitch: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi<boolean> = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.checked(),
+    setValue: (value: boolean) => { this.checked.set(!!value); this.onChange(!!value); },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('toggleSwitch', this.api);
+  }
 
   // --- ControlValueAccessor ---
   writeValue(value: unknown): void {

@@ -1,4 +1,14 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, inject, input, signal } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** Process-wide counter for generating unique control ids. */
 let iftaLabelSeq = 0;
@@ -27,6 +37,13 @@ let iftaLabelSeq = 0;
   host: { 'class': 'cw-ifta-label' }
 })
 export class IftaLabelComponent implements AfterContentInit {
+  /** Public API handed to plugins (`{ iftaLabel: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('iftaLabel', this.api);
+  }
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** The label text. */

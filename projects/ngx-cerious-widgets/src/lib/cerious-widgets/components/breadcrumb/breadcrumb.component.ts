@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** One breadcrumb entry; items with a `url` render as links. */
 export interface CwBreadcrumbItem {
@@ -32,6 +40,15 @@ export interface CwBreadcrumbItem {
   }
 })
 export class BreadcrumbComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ breadcrumb: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('breadcrumb', this.api);
+  }
+
   /** The trail, in order; the last item is the current page. */
   readonly items = input<readonly CwBreadcrumbItem[]>([]);
 }

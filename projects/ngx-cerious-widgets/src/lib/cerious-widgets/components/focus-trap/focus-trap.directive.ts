@@ -7,6 +7,8 @@ import {
   inject,
   input
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 const FOCUSABLE =
   'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),' +
@@ -27,6 +29,13 @@ const FOCUSABLE =
   standalone: true
 })
 export class FocusTrapDirective implements AfterViewInit {
+  /** Public API handed to plugins (`{ focusTrap: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('focusTrap', this.api);
+  }
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** Disable the trap without removing the directive. */

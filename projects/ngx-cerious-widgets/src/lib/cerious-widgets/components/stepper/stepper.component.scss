@@ -41,8 +41,9 @@
 }
 
 .cw-stepper__step--active .cw-stepper__marker {
-  background: var(--cw-primary);
-  border-color: var(--cw-primary);
+  // AA-safe fill so the white step number/label meets 4.5:1 (esp. dark teal).
+  background: var(--cw-primary-fill, var(--cw-primary));
+  border-color: var(--cw-primary-fill, var(--cw-primary));
   color: var(--cw-text-on-accent);
 }
 
@@ -106,7 +107,7 @@
 }
 
 .cw-stepper__btn--primary {
-  background: var(--cw-primary);
+  background: var(--cw-primary-fill, var(--cw-primary));
   color: var(--cw-text-on-accent);
 
   &:hover:not(:disabled) { background: var(--cw-primary-hover); }

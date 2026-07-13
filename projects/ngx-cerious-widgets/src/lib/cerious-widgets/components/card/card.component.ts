@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A content card: token surface, hairline border, soft shadow. Title and
@@ -32,6 +40,15 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   host: { 'class': 'cw-card' }
 })
 export class CardComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ card: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('card', this.api);
+  }
+
   /** The card heading. */
   readonly title = input<string>('');
   /** Muted line under the title. */

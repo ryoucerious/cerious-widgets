@@ -3,11 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   inject,
   input,
   output,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A collapsible panel: a header button that toggles its projected content.
@@ -93,6 +96,14 @@ export class AccordionComponent {
   readonly multiple = input(false, { transform: booleanAttribute });
 
   private readonly panels = new Set<AccordionPanelComponent>();
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ accordion: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('accordion', this.api);
+  }
 
   registerPanel(panel: AccordionPanelComponent): void {
     this.panels.add(panel);

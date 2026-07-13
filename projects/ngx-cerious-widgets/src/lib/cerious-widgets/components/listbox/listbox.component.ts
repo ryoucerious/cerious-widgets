@@ -4,13 +4,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
+  inject,
   input,
   numberAttribute,
   signal,
   viewChildren
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 import { CeriousScrollComponent, CeriousScrollDirective, CeriousScrollItemTemplateDirective } from '@ceriousdevtech/ngx-cerious-scroll';
 
 /** A normalized option: display label + underlying value. */
@@ -99,6 +103,23 @@ export class ListboxComponent implements ControlValueAccessor {
   readonly useVirtual = computed(() => this.filteredOptions().length >= this.virtualThreshold());
 
   onChange: (value: unknown) => void = () => {};
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ listbox: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.value(),
+    setValue: (value: unknown) => {
+      this.value.set(this.multiple() ? (Array.isArray(value) ? [...value] : []) : value);
+      this.onChange(this.value());
+    },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('listbox', this.api);
+  }
   onTouched: () => void = () => {};
 
   // --- ControlValueAccessor ---

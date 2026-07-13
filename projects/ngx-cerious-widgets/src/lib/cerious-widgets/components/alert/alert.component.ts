@@ -1,4 +1,15 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { CwSeverity } from '../severity';
 
 /**
@@ -26,6 +37,15 @@ import { CwSeverity } from '../severity';
   }
 })
 export class AlertComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ alert: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('alert', this.api);
+  }
+
   /** Intent colour and icon. */
   readonly severity = input<CwSeverity>('info');
   /** Show a ✕ button that dismisses the alert. */

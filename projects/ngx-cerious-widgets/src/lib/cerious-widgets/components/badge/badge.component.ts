@@ -1,4 +1,13 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { CwSeverity } from '../severity';
 
 export type CwBadgeSize = 'small' | 'normal' | 'large';
@@ -27,6 +36,15 @@ export type CwBadgeSize = 'small' | 'normal' | 'large';
   }
 })
 export class BadgeComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ badge: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('badge', this.api);
+  }
+
   /** The text/number to display. Ignored when `dot` is set. */
   readonly value = input<string | number>('');
   /** Intent colour. */

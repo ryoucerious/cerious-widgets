@@ -1,5 +1,4 @@
 import { Injectable, Injector } from '@angular/core';
-import { GridApi } from '../../grid/interfaces/grid-api';
 import { PluginConfig } from '../interfaces/plugin-config.interface';
 import { WidgetPlugin } from '../interfaces/widget-plugin.interface';
 
@@ -111,13 +110,13 @@ export class PluginManagerService {
    * Dynamically loads and initializes a single lazy plugin by key.
    *
    * @param pluginKey - The key identifying the plugin to load.
-   * @param gridApi - The host API passed to the plugin for initialization.
+   * @param hostApi - The host API passed to the plugin for initialization.
    * @param config - Optional configuration object for the plugin.
    * @param namespace - The component namespace to look the key up in.
    */
   async loadPlugin(
     pluginKey: string,
-    gridApi: GridApi,
+    hostApi: object,
     config?: PluginConfig,
     namespace: string = DEFAULT_NAMESPACE
   ): Promise<void> {
@@ -134,7 +133,7 @@ export class PluginManagerService {
         });
 
         const pluginInstance: any = pluginInjector.get(PluginClass);
-        this.initPlugins(gridApi, [pluginInstance], config);
+        this.initPlugins(hostApi, [pluginInstance], config);
       } else {
         console.error(`Plugin with key "${pluginKey}" not found.`);
       }
@@ -146,14 +145,14 @@ export class PluginManagerService {
    * arguments when the export is a class.
    *
    * @param pluginKey - The key identifying the plugin to load.
-   * @param gridApi - The host API passed to the plugin's `onInit`.
+   * @param hostApi - The host API passed to the plugin's `onInit`.
    * @param args - Optional constructor arguments when the export is a class.
    * @param config - Optional configuration object for the plugin.
    * @param namespace - The component namespace to look the key up in.
    */
   async loadPluginWithArgs(
     pluginKey: string,
-    gridApi: GridApi,
+    hostApi: object,
     args: any[] = [],
     config?: PluginConfig,
     namespace: string = DEFAULT_NAMESPACE
@@ -172,7 +171,7 @@ export class PluginManagerService {
       const isClass = typeof pluginExport === 'function';
       const pluginInstance = isClass ? new pluginExport(...args) : pluginExport;
 
-      this.initPlugins(gridApi, [pluginInstance], config);
+      this.initPlugins(hostApi, [pluginInstance], config);
     });
   }
 
@@ -181,20 +180,20 @@ export class PluginManagerService {
    * initializes each of them against the provided host API.
    *
    * @param plugins - Map of plugin key to a loader returning the plugin class.
-   * @param gridApi - The host API used to initialize the plugins.
+   * @param hostApi - The host API used to initialize the plugins.
    * @param config - Optional configuration object for the plugins.
    * @param namespace - The component namespace to register/load under.
    */
   async registerPlugins(
     plugins: { [key: string]: () => Promise<any> },
-    gridApi: GridApi,
+    hostApi: object,
     config?: PluginConfig,
     namespace: string = DEFAULT_NAMESPACE
   ): Promise<void> {
     this.registerLazyPlugins(plugins, namespace);
 
     for (const key of Object.keys(plugins)) {
-      await this.loadPluginWithArgs(key, gridApi, [], config, namespace);
+      await this.loadPluginWithArgs(key, hostApi, [], config, namespace);
     }
   }
 }

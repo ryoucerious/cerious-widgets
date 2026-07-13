@@ -14,7 +14,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
           The block below only renders when scrolled into view.
           Loaded: <strong>{{ loaded() ? 'yes' : 'not yet' }}</strong>
         </p>
-        <div class="scroller">
+        <div class="scroller" tabindex="0" role="region" aria-label="Scrollable demo">
           <div class="spacer">↓ scroll down ↓</div>
           <cw-deferred-content (loaded)="loaded.set(true)">
             <div class="heavy">

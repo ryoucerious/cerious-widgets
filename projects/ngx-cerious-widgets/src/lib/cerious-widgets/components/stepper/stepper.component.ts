@@ -6,12 +6,26 @@ import {
   computed,
   contentChildren,
   Directive,
+  ElementRef,
   inject,
   input,
   output,
   signal,
   TemplateRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
+import { WidgetPlugin } from '../../shared/interfaces/widget-plugin.interface';
+
+/** Public API the Stepper exposes to its plugins. */
+export interface StepperApi extends CwWidgetApi {
+  /** The index of the active step. */
+  getActiveIndex(): number;
+  /** Activate a step by index (respects the linear restriction). */
+  setActiveIndex(index: number): void;
+}
+/** Plugin contract for the Stepper (`{ stepper: { plugins: [...] } }`). */
+export type StepperPlugin = WidgetPlugin<StepperApi>;
 
 /**
  * One step of a {@link StepperComponent}. Its projected content is shown when
@@ -72,6 +86,19 @@ export class StepperComponent {
   readonly activeTemplate = computed(() => this.steps()[this.current()]?.template ?? null);
   readonly isFirst = computed(() => this.current() === 0);
   readonly isLast = computed(() => this.current() === this.steps().length - 1);
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins. */
+  readonly api: StepperApi = {
+    getHost: () => this.host.nativeElement,
+    getActiveIndex: () => this.current(),
+    setActiveIndex: (index: number) => this.go(index)
+  };
+
+  constructor() {
+    providePluginHost('stepper', this.api);
+  }
 
   isDone(index: number): boolean {
     return index < this.current();

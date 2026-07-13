@@ -3,11 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
+  inject,
   input,
   signal
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A radio button over a real (visually hidden) native input. Bind every radio
@@ -54,6 +58,20 @@ export class RadioButtonComponent implements ControlValueAccessor {
 
   onChange: (value: unknown) => void = () => {};
   onTouched: () => void = () => {};
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ radioButton: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.model(),
+    setValue: (value: unknown) => { this.model.set(value); this.onChange(value); },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('radioButton', this.api);
+  }
 
   // --- ControlValueAccessor ---
   writeValue(value: unknown): void {

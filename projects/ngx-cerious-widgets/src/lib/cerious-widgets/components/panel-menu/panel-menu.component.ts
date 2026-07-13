@@ -1,5 +1,15 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A panel-menu entry; `items` makes it an expandable group. */
 export interface CwPanelMenuItem {
@@ -40,6 +50,15 @@ export interface CwPanelMenuItem {
   host: { 'class': 'cw-panel-menu', 'role': 'tree' }
 })
 export class PanelMenuComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ panelMenu: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('panelMenu', this.api);
+  }
+
   /** The top-level menu entries. */
   readonly items = input<readonly CwPanelMenuItem[]>([]);
 

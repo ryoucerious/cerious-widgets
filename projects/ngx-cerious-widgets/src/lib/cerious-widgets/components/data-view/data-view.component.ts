@@ -6,12 +6,15 @@ import {
   computed,
   contentChild,
   Directive,
+  ElementRef,
   inject,
   input,
   numberAttribute,
   signal,
   TemplateRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { CeriousScrollComponent, CeriousScrollItemTemplateDirective } from '@ceriousdevtech/ngx-cerious-scroll';
 import { PaginatorComponent, CwPageEvent } from '../paginator/paginator.component';
 
@@ -52,6 +55,15 @@ export type CwDataViewLayout = 'list' | 'grid';
   }
 })
 export class DataViewComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ dataView: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('dataView', this.api);
+  }
+
   readonly itemTemplate = contentChild(DataViewItemDirective);
 
   /** The full collection. */

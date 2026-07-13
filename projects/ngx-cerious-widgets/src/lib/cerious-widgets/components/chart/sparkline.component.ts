@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A tiny inline trend line (sparkline) for KPI cards and table cells. Pure SVG,
@@ -24,12 +33,21 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
   host: { 'class': 'cw-sparkline' }
 })
 export class SparklineComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ sparkline: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('sparkline', this.api);
+  }
+
   /** The values to plot. */
   readonly data = input<readonly number[]>([]);
   /** Line + fill colour (any CSS colour). */
   readonly color = input<string>('var(--cw-primary)');
   /** Accessible name (empty renders a decorative chart). */
-  readonly ariaLabel = input<string>('');
+  readonly ariaLabel = input<string>('Sparkline');
 
   private readonly pts = computed(() => {
     const d = this.data();

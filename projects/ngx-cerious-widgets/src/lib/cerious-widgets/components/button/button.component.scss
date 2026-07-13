@@ -1,6 +1,10 @@
 :host {
-  // Per-button accent, switched by severity below.
+  // Per-button accent, switched by severity below. `--_accent` is the brand
+  // colour used for outlined/text variants (as text/border on a light surface);
+  // `--_fill` is the AA-safe darker shade used only for the *filled* background,
+  // so white text meets WCAG AA 4.5:1 without shifting the accent everywhere.
   --_accent: var(--cw-accent);
+  --_fill: var(--cw-accent-fill, var(--cw-accent));
   --_on-accent: var(--cw-text-on-accent);
 
   display: inline-flex;
@@ -22,17 +26,17 @@
   transition: background-color 0.12s ease, border-color 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
 }
 
-// --- Severity → accent ---
-:host([data-severity='secondary']) { --_accent: var(--cw-slate-500); }
-:host([data-severity='success'])   { --_accent: var(--cw-success); }
-:host([data-severity='warn'])      { --_accent: var(--cw-warn); }
-:host([data-severity='danger'])    { --_accent: var(--cw-danger); }
+// --- Severity → accent (+ AA-safe fill) ---
+:host([data-severity='secondary']) { --_accent: var(--cw-text-secondary); --_fill: var(--cw-slate-600, var(--cw-slate-500)); }
+:host([data-severity='success'])   { --_accent: var(--cw-success); --_fill: var(--cw-success-fill, var(--cw-success)); }
+:host([data-severity='warn'])      { --_accent: var(--cw-warn);    --_fill: var(--cw-warn-fill, var(--cw-warn)); }
+:host([data-severity='danger'])    { --_accent: var(--cw-danger);  --_fill: var(--cw-danger-fill, var(--cw-danger)); }
 
 // --- Variant: filled (default) ---
 :host {
-  background: var(--_accent);
+  background: var(--_fill);
   color: var(--_on-accent);
-  border-color: var(--_accent);
+  border-color: var(--_fill);
 }
 :host(:hover) { filter: brightness(0.94); }
 

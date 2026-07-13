@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, input, numberAttribute } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  numberAttribute
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** One coloured segment of the meter. */
 export interface CwMeterItem {
@@ -29,6 +39,15 @@ export interface CwMeterItem {
   host: { 'class': 'cw-meter-group' }
 })
 export class MeterGroupComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ meterGroup: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('meterGroup', this.api);
+  }
+
   private static readonly PALETTE = ['#3b82f6', '#22c55e', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6'];
 
   /** The segments. */

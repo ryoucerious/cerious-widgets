@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A dock item. */
 export interface CwDockItem {
@@ -34,6 +44,15 @@ export type CwDockPosition = 'bottom' | 'top' | 'left' | 'right';
   }
 })
 export class DockComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ dock: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('dock', this.api);
+  }
+
   /** The dock items. */
   readonly items = input<readonly CwDockItem[]>([]);
   /** Which edge the dock sits on (affects layout + magnify direction). */

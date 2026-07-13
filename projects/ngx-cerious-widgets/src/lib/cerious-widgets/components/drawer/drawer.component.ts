@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  ElementRef,
   inject,
   input,
   OnDestroy,
@@ -15,6 +16,8 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** Which edge the drawer slides in from. */
 export type CwDrawerPosition = 'left' | 'right';
@@ -38,6 +41,11 @@ export type CwDrawerPosition = 'left' | 'right';
   host: { 'class': 'cw-drawer' }
 })
 export class DrawerComponent implements OnDestroy {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ drawer: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
   private readonly overlay = inject(Overlay);
   private readonly viewContainerRef = inject(ViewContainerRef);
 
@@ -59,6 +67,7 @@ export class DrawerComponent implements OnDestroy {
   private overlayRef?: OverlayRef;
 
   constructor() {
+    providePluginHost('drawer', this.api);
     effect(() => {
       const shouldShow = this.visible();
       untracked(() => {

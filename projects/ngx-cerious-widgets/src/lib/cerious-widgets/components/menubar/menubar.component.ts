@@ -12,6 +12,8 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A menubar entry; `items` makes it a dropdown parent. */
 export interface CwMenubarItem {
@@ -47,6 +49,15 @@ export interface CwMenubarItem {
   host: { 'class': 'cw-menubar', 'role': 'menubar' }
 })
 export class MenubarComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ menubar: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('menubar', this.api);
+  }
+
   private readonly overlay = inject(Overlay);
   private readonly viewContainerRef = inject(ViewContainerRef);
 

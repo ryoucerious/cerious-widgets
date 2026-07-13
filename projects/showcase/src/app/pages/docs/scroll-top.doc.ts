@@ -10,7 +10,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
   template: `
     <doc-page slug="scroll-top"><doc-tab label="Features">
       <doc-section title="Scroll the box" description="Scroll down inside the box — the button appears fixed at the bottom-right of the screen and returns the box to the top." [code]="code">
-        <div #box style="width: 100%; max-width: 24rem; height: 14rem; overflow: auto; border: 1px solid var(--cw-border); border-radius: var(--cw-radius); padding: 1rem;">
+        <div #box tabindex="0" role="region" aria-label="Scrollable demo content" style="width: 100%; max-width: 24rem; height: 14rem; overflow: auto; border: 1px solid var(--cw-border); border-radius: var(--cw-radius); padding: 1rem;">
           @for (row of rows; track row) {
             <p style="margin: 0 0 0.75rem;">Line {{ row }} — scroll down to reveal the button.</p>
           }

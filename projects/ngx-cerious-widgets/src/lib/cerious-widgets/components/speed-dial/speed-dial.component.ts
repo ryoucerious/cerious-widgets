@@ -11,6 +11,8 @@ import {
   output,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A SpeedDial action. */
 export interface CwSpeedDialItem {
@@ -44,6 +46,13 @@ export type CwSpeedDialDirection = 'up' | 'down' | 'left' | 'right';
   }
 })
 export class SpeedDialComponent {
+  /** Public API handed to plugins (`{ speedDial: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('speedDial', this.api);
+  }
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** The actions. */

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { CwSeverity } from '../severity';
 
 /** One event on the timeline. */
@@ -34,6 +42,15 @@ export interface CwTimelineEvent {
   host: { 'class': 'cw-timeline' }
 })
 export class TimelineComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ timeline: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('timeline', this.api);
+  }
+
   /** The events, in order. */
   readonly events = input<readonly CwTimelineEvent[]>([]);
   /** Show the opposite-side labels column. */

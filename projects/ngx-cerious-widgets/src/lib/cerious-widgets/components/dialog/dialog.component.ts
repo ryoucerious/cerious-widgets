@@ -6,6 +6,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  ElementRef,
   inject,
   input,
   OnDestroy,
@@ -16,6 +17,8 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A modal dialog: a centred, focus-trapped card over a backdrop. Control it
@@ -44,6 +47,11 @@ import {
   host: { 'class': 'cw-dialog' }
 })
 export class DialogComponent implements OnDestroy {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ dialog: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
   private readonly overlay = inject(Overlay);
   private readonly viewContainerRef = inject(ViewContainerRef);
 
@@ -71,6 +79,7 @@ export class DialogComponent implements OnDestroy {
   private overlayRef?: OverlayRef;
 
   constructor() {
+    providePluginHost('dialog', this.api);
     // The `visible` input resets user intent; the effect syncs the overlay.
     effect(() => {
       const shouldShow = this.visible();

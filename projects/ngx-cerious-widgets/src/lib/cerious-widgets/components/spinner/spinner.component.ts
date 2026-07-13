@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * An indeterminate loading spinner.
@@ -24,6 +32,15 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   }
 })
 export class SpinnerComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ spinner: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('spinner', this.api);
+  }
+
   /** Diameter as any CSS length (e.g. '2rem', '32px'). */
   readonly size = input<string>('2rem');
   /** Ring thickness in pixels. */

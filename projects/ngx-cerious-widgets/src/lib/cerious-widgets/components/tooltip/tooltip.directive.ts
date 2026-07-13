@@ -10,6 +10,8 @@ import {
   OnDestroy,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** Tooltip placement relative to its host. */
 export type CwTooltipPosition = 'top' | 'bottom' | 'left' | 'right';
@@ -53,6 +55,13 @@ export class TooltipComponent {
   }
 })
 export class TooltipDirective implements OnDestroy {
+  /** Public API handed to plugins (`{ tooltip: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('tooltip', this.api);
+  }
+
   private readonly overlay = inject(Overlay);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 

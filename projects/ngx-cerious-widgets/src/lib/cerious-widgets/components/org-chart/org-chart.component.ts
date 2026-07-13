@@ -4,12 +4,15 @@ import {
   Component,
   contentChild,
   Directive,
+  ElementRef,
   inject,
   input,
   output,
   signal,
   TemplateRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A node in the org chart. */
 export interface CwOrgNode {
@@ -50,6 +53,15 @@ export class OrgNodeDirective {
   host: { 'class': 'cw-org-chart' }
 })
 export class OrgChartComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ orgChart: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('orgChart', this.api);
+  }
+
   readonly nodeTemplate = contentChild(OrgNodeDirective);
 
   /** The root node of the hierarchy. */

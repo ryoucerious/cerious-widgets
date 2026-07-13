@@ -10,6 +10,8 @@ import {
   output,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Defers rendering of its projected content until it scrolls into the viewport,
@@ -33,6 +35,13 @@ import {
   host: { 'class': 'cw-deferred-content' }
 })
 export class DeferredContentComponent implements OnInit {
+  /** Public API handed to plugins (`{ deferredContent: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('deferredContent', this.api);
+  }
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly destroyRef = inject(DestroyRef);
 

@@ -3,11 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
+  inject,
   input,
   signal
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 
 /** Mask placeholders: `9` = digit, `a` = letter, `*` = alphanumeric. */
 const TOKENS: Record<string, RegExp> = {
@@ -73,6 +77,23 @@ export class InputMaskComponent implements ControlValueAccessor {
   );
 
   onChange: (value: string) => void = () => {};
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ inputMask: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi<string> = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.display(),
+    setValue: (value: string) => {
+      this.display.set(this.applyMask(value == null ? '' : String(value)));
+      this.onChange(this.display());
+    },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('inputMask', this.api);
+  }
   onTouched: () => void = () => {};
 
   // --- ControlValueAccessor ---

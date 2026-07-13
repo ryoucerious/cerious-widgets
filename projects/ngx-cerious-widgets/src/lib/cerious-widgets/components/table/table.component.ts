@@ -6,12 +6,15 @@ import {
   computed,
   contentChildren,
   Directive,
+  ElementRef,
   inject,
   input,
   output,
   signal,
   TemplateRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A column definition for {@link TableComponent}. */
 export interface CwTableColumn {
@@ -69,6 +72,15 @@ export class TableColumnDirective {
   host: { 'class': 'cw-table-host' }
 })
 export class TableComponent<T extends Record<string, unknown> = Record<string, unknown>> {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ table: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('table', this.api);
+  }
+
   /** Column definitions. */
   readonly columns = input<readonly CwTableColumn[]>([]);
   /** Row data. */

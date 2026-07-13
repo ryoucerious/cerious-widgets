@@ -32,4 +32,16 @@ describe('IftaLabelComponent', () => {
 
     expect(fixture.nativeElement.querySelector('.cw-ifta-label__label').textContent.trim()).toBe('Full name');
   });
+
+  it('associates the label with the projected control via for/id', async () => {
+    await TestBed.configureTestingModule({ imports: [HostComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+    const wrapper = fixture.nativeElement.querySelector('cw-ifta-label') as HTMLElement;
+    const label = wrapper.querySelector('.cw-ifta-label__label') as HTMLLabelElement;
+    const input = wrapper.querySelector('.field') as HTMLInputElement;
+
+    expect(input.id).toBeTruthy();
+    expect(label.getAttribute('for')).toBe(input.id);
+  });
 });

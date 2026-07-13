@@ -1,4 +1,13 @@
-import { Directive, ElementRef, HostListener, inject, input, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  inject,
+  input,
+  Renderer2
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Declaratively toggles a CSS class on a target element when the host is
@@ -20,6 +29,13 @@ import { Directive, ElementRef, HostListener, inject, input, Renderer2 } from '@
   standalone: true
 })
 export class StyleClassDirective {
+  /** Public API handed to plugins (`{ styleClass: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('styleClass', this.api);
+  }
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly renderer = inject(Renderer2);
 

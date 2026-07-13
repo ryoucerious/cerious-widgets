@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Seams together addons and a control into one bordered group: prefix/suffix
@@ -22,4 +29,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './input-group.component.scss',
   host: { 'class': 'cw-input-group', 'role': 'group' }
 })
-export class InputGroupComponent {}
+export class InputGroupComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ inputGroup: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('inputGroup', this.api);
+  }
+}

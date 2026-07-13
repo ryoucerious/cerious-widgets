@@ -1,4 +1,15 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Click-to-edit: shows a compact display until activated, then reveals the
@@ -36,6 +47,15 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input, output, si
   host: { 'class': 'cw-inplace' }
 })
 export class InplaceComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ inplace: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('inplace', this.api);
+  }
+
   /** Prevent activation. */
   readonly disabled = input(false, { transform: booleanAttribute });
   /** Show a close (✕) button in editor mode. */

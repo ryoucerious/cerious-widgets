@@ -119,9 +119,38 @@ export class SplitterComponent {
     }
     const pos = this.layout() === 'horizontal' ? event.clientX : event.clientY;
     const deltaPct = ((pos - this.drag.startPos) / this.drag.total) * 100;
+    this.applyDelta(this.drag.index, this.drag.a, this.drag.b, deltaPct);
+  }
+
+  /**
+   * Keyboard resizing for the focusable gutter: arrow keys nudge the split by a
+   * fixed step (in the gutter's own axis), Home/End jump to the min/max. Makes
+   * the `role="separator"` genuinely operable, not just focusable.
+   */
+  onGutterKeydown(index: number, event: KeyboardEvent): void {
+    const horizontal = this.layout() === 'horizontal';
+    const step = 5;
+    let delta = 0;
+    switch (event.key) {
+      case 'ArrowLeft':  delta = horizontal ? -step : 0; break;
+      case 'ArrowRight': delta = horizontal ?  step : 0; break;
+      case 'ArrowUp':    delta = horizontal ? 0 : -step; break;
+      case 'ArrowDown':  delta = horizontal ? 0 :  step; break;
+      case 'Home':       delta = -100; break;
+      case 'End':        delta =  100; break;
+      default: return;
+    }
+    event.preventDefault();
+    const sizes = this.sizes();
+    this.applyDelta(index, sizes[index], sizes[index + 1], delta);
+    this.resizeEnd.emit(this.sizes());
+  }
+
+  /** Shift `deltaPct` from panel `index+1` into panel `index`, clamped to minSize. */
+  private applyDelta(index: number, baseA: number, baseB: number, deltaPct: number): void {
     const min = this.minSize();
-    let a = this.drag.a + deltaPct;
-    let b = this.drag.b - deltaPct;
+    let a = baseA + deltaPct;
+    let b = baseB - deltaPct;
     // Clamp so neither panel drops below the minimum.
     if (a < min) {
       b -= min - a;
@@ -132,12 +161,17 @@ export class SplitterComponent {
       b = min;
     }
     const next = [...this.sizes()];
-    next[this.drag.index] = a;
-    next[this.drag.index + 1] = b;
+    next[index] = a;
+    next[index + 1] = b;
     this.userSizes.set(next);
   }
 
   size(index: number): string {
     return `${this.sizes()[index]}%`;
+  }
+
+  /** `aria-valuenow` for the gutter — the size (%) of the panel it precedes. */
+  valueNow(index: number): number {
+    return Math.round(this.sizes()[index]);
   }
 }

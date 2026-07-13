@@ -66,8 +66,11 @@
   // Text
   --cw-text:           #0f172a;
   --cw-text-primary:   #0f172a;
-  --cw-text-secondary: #64748b;
-  --cw-text-muted:     #64748b;
+  // slate-500 (#64748b) fell just below AA (4.2:1) on tinted surfaces like the
+  // neutral track (#eef2f7); nudged darker so muted/secondary text stays legible
+  // everywhere while still reading as de-emphasised.
+  --cw-text-secondary: #576475;
+  --cw-text-muted:     #576475;
   --cw-text-on-accent: #ffffff;
 
   // Neutral fill (badges/tags/tracks)
@@ -77,7 +80,7 @@
 
   // Chip pill (accent-tinted per the mock: blue / lavender / teal)
   --cw-chip-bg: rgba(59, 130, 246, 0.14);
-  --cw-chip-fg: #2563eb;
+  --cw-chip-fg: #1d4ed8; // blue-700: 5.7:1 on the chip tint (blue-600 was 4.42, below AA)
 
   // Accordion open-header label (plain text; frost tints it accent)
   --cw-accordion-active-fg: var(--cw-text);
@@ -116,6 +119,20 @@
   --cw-danger:     #dc2626;
   --cw-danger-bg:  #fef2f2;
   --cw-danger-fg:  #b91c1c;
+
+  // Solid FILL variants — the accent colours above are tuned as accents/text and
+  // are too light for white text on a filled surface (fail WCAG AA 4.5:1). These
+  // are AA-safe darker shades for filled buttons/tags/badges. Semantic and dark
+  // enough for any theme, so defined once here and inherited (themes only need to
+  // override --cw-accent-fill for their brand hue). See a11y audit.
+  --cw-success-fill: #15803d; // 5.0:1 on white
+  --cw-warn-fill:    #b45309; // 5.0:1
+  --cw-danger-fill:  #c81e1e; // 5.7:1
+  --cw-accent-fill:  var(--cw-accent);  // light brand #2563eb already ~5.2:1
+  --cw-primary-fill: var(--cw-primary); // light primary #2563eb already ~5.2:1
+  // Accent text sitting on a soft accent-tinted surface (selected menu/listbox
+  // rows). Plain --cw-accent hit ~4.35:1 on the 12% tint; this is AA-safe.
+  --cw-accent-strong: #1d4ed8;
 }
 
 // ============================================================================
@@ -127,6 +144,9 @@
   --cw-primary-active: #4f46e5;
   --cw-accent:         #6c63ff;
   --cw-accent-alt:     #a855f7;
+  --cw-accent-fill:    #5b52e8; // AA-safe filled brand (white text 5.5:1)
+  --cw-primary-fill:   #5b52e8; // AA-safe filled brand (white text 5.5:1)
+  --cw-accent-strong:  #5348d6; // accent text on soft tint (AA)
 
   // Milky glass: high enough alpha that the card interior reads near-white
   // with a gentle lavender tint (mockup rows sample ~rgb(240, 232, 249)),
@@ -206,6 +226,9 @@
   --cw-primary-active: #0d9488;
   --cw-accent:         #3b8df8;
   --cw-accent-alt:     #2dd4bf;
+  --cw-accent-fill:    #1f6fd6; // AA-safe filled brand (white text 4.9:1)
+  --cw-primary-fill:   #0f766e; // AA-safe filled teal primary (white text 5.5:1; #14b8a6 was 2.5)
+  --cw-accent-strong:  #5fa4fb; // accent text on soft tint over dark (AA)
 
   // Deep desaturated navies sampled from the mockup: page #0d1825, card
   // #141e2a, data rows #121c28, group rows #16202b (lighter than data rows).
@@ -257,7 +280,7 @@
   --cw-warn:       #f59e0b;
   --cw-warn-bg:    #3a2c10;
   --cw-warn-fg:    #fbbf24;
-  --cw-danger:     #ef4444;
+  --cw-danger:     #f87171; // red-400: readable as danger text/accent on dark surfaces (#ef4444 was 4.47); fills use --cw-danger-fill
   --cw-danger-bg:  #3a1a1a;
   --cw-danger-fg:  #f87171;
 }

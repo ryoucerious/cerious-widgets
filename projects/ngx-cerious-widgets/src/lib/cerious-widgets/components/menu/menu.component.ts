@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  output
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** One menu entry; set `separator` for a divider line instead of an item. */
 export interface CwMenuItem {
@@ -34,6 +43,15 @@ export interface CwMenuItem {
   host: { 'class': 'cw-menu', 'role': 'menu' }
 })
 export class MenuComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ menu: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('menu', this.api);
+  }
+
   /** The menu entries, in order. */
   readonly items = input<readonly CwMenuItem[]>([]);
   /** Index of the item to highlight as active (e.g. current route). */

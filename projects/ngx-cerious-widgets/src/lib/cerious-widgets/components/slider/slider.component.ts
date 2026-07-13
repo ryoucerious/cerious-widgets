@@ -3,11 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
+  inject,
   input,
   numberAttribute,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 /**
@@ -76,6 +80,20 @@ export class SliderComponent implements ControlValueAccessor {
 
   onChange: (value: number) => void = () => {};
   onTouched: () => void = () => {};
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ slider: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi<number> = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.value(),
+    setValue: (value: number) => { this.value.set(value); this.onChange(value); },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('slider', this.api);
+  }
 
   // --- ControlValueAccessor ---
   writeValue(value: unknown): void {

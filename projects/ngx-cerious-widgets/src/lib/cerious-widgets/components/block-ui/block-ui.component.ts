@@ -1,4 +1,13 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { SpinnerComponent } from '../spinner/spinner.component';
 
 /**
@@ -33,6 +42,15 @@ import { SpinnerComponent } from '../spinner/spinner.component';
   host: { 'class': 'cw-block-ui' }
 })
 export class BlockUiComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ blockUi: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('blockUi', this.api);
+  }
+
   /** Block (overlay) the content. */
   readonly blocked = input(false, { transform: booleanAttribute });
   /** Show a spinner in the centre of the mask. */

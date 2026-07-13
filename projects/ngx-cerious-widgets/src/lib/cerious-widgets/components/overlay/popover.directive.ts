@@ -11,6 +11,8 @@ import {
   TemplateRef,
   ViewContainerRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { filter } from 'rxjs/operators';
 
 export type CwPopoverPlacement =
@@ -37,6 +39,13 @@ export type CwPopoverPlacement =
   host: { '(click)': 'toggle()' }
 })
 export class PopoverDirective implements OnDestroy {
+  /** Public API handed to plugins (`{ popover: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('popover', this.api);
+  }
+
   private readonly overlay = inject(Overlay);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly viewContainerRef = inject(ViewContainerRef);

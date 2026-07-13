@@ -3,11 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
+  inject,
   input,
   signal
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 
 /** Strength buckets for the meter. */
 type CwPasswordStrength = 'weak' | 'medium' | 'strong';
@@ -75,6 +79,20 @@ export class PasswordComponent implements ControlValueAccessor {
   });
 
   onChange: (value: string) => void = () => {};
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ password: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi<string> = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.value(),
+    setValue: (value: string) => { this.value.set(value ?? ''); this.onChange(value ?? ''); },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('password', this.api);
+  }
   onTouched: () => void = () => {};
 
   // --- ControlValueAccessor ---

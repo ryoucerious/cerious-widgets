@@ -1,4 +1,6 @@
-import { Directive } from '@angular/core';
+import { Directive, ElementRef, inject } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Token-styles a native text input (or textarea) — border, focus ring,
@@ -14,4 +16,13 @@ import { Directive } from '@angular/core';
   standalone: true,
   host: { 'class': 'cw-input' }
 })
-export class InputTextDirective {}
+export class InputTextDirective {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ inputText: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('inputText', this.api);
+  }
+}

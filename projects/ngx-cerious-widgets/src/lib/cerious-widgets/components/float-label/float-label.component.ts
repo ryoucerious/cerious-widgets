@@ -8,6 +8,8 @@ import {
   input,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** Process-wide counter for generating unique control ids. */
 let floatLabelSeq = 0;
@@ -43,6 +45,13 @@ let floatLabelSeq = 0;
   }
 })
 export class FloatLabelComponent implements AfterContentInit {
+  /** Public API handed to plugins (`{ floatLabel: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('floatLabel', this.api);
+  }
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** The label text. */

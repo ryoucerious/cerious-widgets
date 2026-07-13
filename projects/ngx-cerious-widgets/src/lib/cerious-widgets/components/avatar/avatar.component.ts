@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 export type CwAvatarSize = 'small' | 'normal' | 'large';
 export type CwAvatarShape = 'circle' | 'square';
@@ -34,6 +42,15 @@ export type CwAvatarShape = 'circle' | 'square';
   }
 })
 export class AvatarComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ avatar: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('avatar', this.api);
+  }
+
   /** Initials or short text shown when no image is provided. */
   readonly label = input<string>('');
   /** Image URL; takes precedence over label and icon. */

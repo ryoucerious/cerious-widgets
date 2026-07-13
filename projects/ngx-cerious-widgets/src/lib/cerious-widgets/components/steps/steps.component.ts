@@ -3,11 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   numberAttribute,
   output,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** One step in the sequence. */
 export interface CwStepItem {
@@ -35,6 +39,15 @@ export interface CwStepItem {
   host: { 'class': 'cw-steps' }
 })
 export class StepsComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ steps: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('steps', this.api);
+  }
+
   /** The steps, in order. */
   readonly items = input<readonly CwStepItem[]>([]);
   /** Zero-based index of the current step. */

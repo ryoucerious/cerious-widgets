@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { AlertComponent } from '../alert/alert.component';
 import { CwToastService } from './toast.service';
 
@@ -34,6 +42,15 @@ export type CwToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'botto
   }
 })
 export class ToastComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ toast: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('toast', this.api);
+  }
+
   readonly service = inject(CwToastService);
 
   /** Which screen corner the stack anchors to. */

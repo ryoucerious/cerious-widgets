@@ -1,4 +1,14 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 export type CwProgressMode = 'determinate' | 'indeterminate';
 
@@ -36,6 +46,15 @@ export type CwProgressMode = 'determinate' | 'indeterminate';
   }
 })
 export class ProgressBarComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ progressBar: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('progressBar', this.api);
+  }
+
   /** Completion percentage (0–100), used in determinate mode. */
   readonly value = input<number>(0);
   /** Determinate (tracks `value`) or indeterminate (animated). */

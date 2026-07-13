@@ -11,7 +11,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="animate-on-scroll"><doc-tab label="Features">
       <doc-section title="Scroll down to reveal" [code]="code">
         <p style="color: var(--cw-text-muted);">Scroll within the panel — each card animates in on entry.</p>
-        <div class="scroller">
+        <div class="scroller" tabindex="0" role="region" aria-label="Scrollable demo">
           <div class="spacer">↓ keep scrolling ↓</div>
           @for (card of cards; track card) {
             <div class="reveal-card" cwAnimateOnScroll enterClass="cw-fade-in-up" [threshold]="0.4">

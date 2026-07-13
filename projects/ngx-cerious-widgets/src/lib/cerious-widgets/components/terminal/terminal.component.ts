@@ -2,11 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  inject,
   input,
   output,
   signal,
   ViewChild
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** One line in the terminal log. */
 export interface CwTerminalLine {
@@ -33,6 +36,15 @@ export interface CwTerminalLine {
   host: { 'class': 'cw-terminal', '(click)': 'focusInput()' }
 })
 export class TerminalComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ terminal: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('terminal', this.api);
+  }
+
   @ViewChild('input', { static: true }) private inputEl!: ElementRef<HTMLInputElement>;
   @ViewChild('log', { static: true }) private logEl!: ElementRef<HTMLElement>;
 

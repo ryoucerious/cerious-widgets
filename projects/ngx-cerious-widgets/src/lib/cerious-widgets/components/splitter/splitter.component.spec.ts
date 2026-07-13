@@ -60,4 +60,31 @@ describe('SplitterComponent', () => {
     fixture.detectChanges();
     expect((fixture.nativeElement.querySelector('cw-splitter') as HTMLElement).getAttribute('data-layout')).toBe('vertical');
   });
+
+  it('exposes the required separator ARIA value attributes', () => {
+    const g = gutter();
+    expect(g.getAttribute('role')).toBe('separator');
+    expect(g.getAttribute('aria-valuenow')).toBe('30');
+    expect(g.getAttribute('aria-valuemin')).toBe('10');
+    expect(g.getAttribute('aria-valuemax')).toBe('90');
+    expect(g.getAttribute('aria-label')).toBe('Resize panel 1');
+  });
+
+  it('resizes with the arrow keys and clamps to minSize', () => {
+    gutter().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    fixture.detectChanges();
+    // 30 - 5 = 25%
+    expect(parseFloat(panels()[0].style.flexBasis)).toBeCloseTo(25, 1);
+    expect(gutter().getAttribute('aria-valuenow')).toBe('25');
+    expect(fixture.componentInstance.last.length).toBe(2);
+  });
+
+  it('Home/End jump the split to the min/max', () => {
+    gutter().dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+    fixture.detectChanges();
+    expect(parseFloat(panels()[0].style.flexBasis)).toBeCloseTo(10, 1);
+    gutter().dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+    fixture.detectChanges();
+    expect(parseFloat(panels()[0].style.flexBasis)).toBeCloseTo(90, 1);
+  });
 });

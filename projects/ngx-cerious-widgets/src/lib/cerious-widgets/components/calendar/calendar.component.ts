@@ -1,6 +1,16 @@
 import {
-  ChangeDetectionStrategy, Component, ElementRef, computed, inject, input, numberAttribute, output, signal
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  numberAttribute,
+  output,
+  signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** An event shown on the calendar. */
 export interface CwCalendarEvent {
@@ -51,6 +61,13 @@ const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart
   host: { 'class': 'cw-calendar' }
 })
 export class CalendarComponent {
+  /** Public API handed to plugins (`{ calendar: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('calendar', this.api);
+  }
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** Initial month to display (any day within it). Defaults to today. */

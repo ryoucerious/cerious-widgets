@@ -15,9 +15,11 @@ import {
   signal,
   TemplateRef,
   ViewChild,
-  ViewContainerRef,
-  viewChildren
+  viewChildren,
+  ViewContainerRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CeriousScrollComponent, CeriousScrollDirective, CeriousScrollItemTemplateDirective } from '@ceriousdevtech/ngx-cerious-scroll';
 import { filter } from 'rxjs/operators';
@@ -56,6 +58,13 @@ interface CwOption {
   ]
 })
 export class AutoCompleteComponent implements ControlValueAccessor, OnDestroy {
+  /** Public API handed to plugins (`{ autocomplete: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('autocomplete', this.api);
+  }
+
   private readonly overlay = inject(Overlay);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly viewContainerRef = inject(ViewContainerRef);

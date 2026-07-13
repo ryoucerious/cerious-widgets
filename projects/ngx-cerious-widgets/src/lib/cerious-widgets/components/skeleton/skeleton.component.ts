@@ -1,4 +1,14 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 export type CwSkeletonShape = 'rect' | 'circle';
 
@@ -29,6 +39,15 @@ export type CwSkeletonShape = 'rect' | 'circle';
   }
 })
 export class SkeletonComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ skeleton: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('skeleton', this.api);
+  }
+
   /** Any CSS width (e.g. '100%', '12rem'). */
   readonly width = input<string>('100%');
   /** Any CSS height (e.g. '1rem'). */

@@ -1,4 +1,13 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { CwSeverity } from '../severity';
 
 /**
@@ -24,6 +33,15 @@ import { CwSeverity } from '../severity';
   }
 })
 export class TagComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ tag: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('tag', this.api);
+  }
+
   /** The tag label. */
   readonly value = input<string>('');
   /** Intent colour. */

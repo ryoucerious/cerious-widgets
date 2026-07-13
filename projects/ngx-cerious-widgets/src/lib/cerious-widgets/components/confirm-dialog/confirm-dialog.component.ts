@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { ButtonComponent } from '../button/button.component';
 import { DialogComponent } from '../dialog/dialog.component';
 import { CwConfirmService } from './confirm.service';
@@ -36,6 +44,15 @@ import { CwConfirmService } from './confirm.service';
   host: { 'class': 'cw-confirm-dialog' }
 })
 export class ConfirmDialogComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ confirmDialog: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('confirmDialog', this.api);
+  }
+
   readonly service = inject(CwConfirmService);
   readonly request = this.service.request;
   readonly isVisible = computed(() => this.request() !== null);

@@ -5,12 +5,27 @@ import {
   Component,
   computed,
   contentChildren,
+  ElementRef,
+  inject,
   input,
   output,
   signal,
   TemplateRef,
   viewChild
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
+import { WidgetPlugin } from '../../shared/interfaces/widget-plugin.interface';
+
+/** Public API the Tabs exposes to its plugins. */
+export interface TabsApi extends CwWidgetApi {
+  /** The index of the active tab. */
+  getActiveIndex(): number;
+  /** Activate a tab by index. */
+  setActiveIndex(index: number): void;
+}
+/** Plugin contract for the Tabs (`{ tabs: { plugins: [...] } }`). */
+export type TabsPlugin = WidgetPlugin<TabsApi>;
 
 /**
  * One tab inside `cw-tabs`: a label plus lazily-rendered projected content
@@ -64,6 +79,19 @@ export class TabsComponent {
   private readonly userIndex = signal<number | undefined>(undefined);
   readonly currentIndex = computed(() => this.userIndex() ?? this.activeIndex());
   readonly activeTab = computed(() => this.tabs()[this.currentIndex()]);
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins. */
+  readonly api: TabsApi = {
+    getHost: () => this.host.nativeElement,
+    getActiveIndex: () => this.currentIndex(),
+    setActiveIndex: (index: number) => this.select(index)
+  };
+
+  constructor() {
+    providePluginHost('tabs', this.api);
+  }
 
   select(index: number): void {
     if (index === this.currentIndex() || this.tabs()[index]?.disabled()) {

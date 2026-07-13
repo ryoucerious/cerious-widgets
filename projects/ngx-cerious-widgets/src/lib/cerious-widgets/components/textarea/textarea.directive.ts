@@ -8,6 +8,8 @@ import {
   input,
   numberAttribute
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Token-styles a native `<textarea>` (via the shared `.cw-input` class) and,
@@ -23,6 +25,13 @@ import {
 })
 export class TextareaDirective implements AfterViewInit {
   private readonly el = inject<ElementRef<HTMLTextAreaElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ textarea: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.el.nativeElement };
+
+  constructor() {
+    providePluginHost('textarea', this.api);
+  }
 
   /** Grow the textarea to fit its content. */
   readonly autoResize = input(false, { transform: booleanAttribute });

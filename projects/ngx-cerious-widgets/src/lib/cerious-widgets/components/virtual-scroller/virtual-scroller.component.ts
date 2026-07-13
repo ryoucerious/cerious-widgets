@@ -4,11 +4,14 @@ import {
   Component,
   contentChild,
   Directive,
+  ElementRef,
   inject,
   input,
   TemplateRef,
   viewChild
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { CeriousScrollComponent, CeriousScrollDirective, CeriousScrollItemTemplateDirective } from '@ceriousdevtech/ngx-cerious-scroll';
 
 /**
@@ -52,6 +55,15 @@ export class VirtualScrollerItemDirective {
   host: { 'class': 'cw-virtual-scroller', '[style.height]': 'scrollHeight()' }
 })
 export class VirtualScrollerComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ virtualScroller: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('virtualScroller', this.api);
+  }
+
   readonly itemTemplate = contentChild(VirtualScrollerItemDirective);
   /** The underlying scroll directive, exposed for imperative control. */
   readonly scroller = viewChild(CeriousScrollDirective);

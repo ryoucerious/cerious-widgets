@@ -4,12 +4,15 @@ import {
   Component,
   DestroyRef,
   effect,
+  ElementRef,
   inject,
   input,
   NgZone,
   numberAttribute,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A floating "back to top" button that appears after the page (or a target
@@ -36,6 +39,11 @@ import {
   host: { 'class': 'cw-scroll-top' }
 })
 export class ScrollTopComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ scrollTop: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
   private readonly zone = inject(NgZone);
 
   /** Element to watch/scroll; defaults to the window. */
@@ -50,6 +58,7 @@ export class ScrollTopComponent {
   private detach: (() => void) | null = null;
 
   constructor() {
+    providePluginHost('scrollTop', this.api);
     // (Re)bind the scroll listener whenever the target changes.
     effect(() => {
       const el = this.target();

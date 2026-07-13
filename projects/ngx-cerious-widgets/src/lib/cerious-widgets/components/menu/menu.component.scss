@@ -30,7 +30,7 @@
 // Active item: accent-tinted pill, like the mock's menu.
 .cw-menu__item--active {
   background: color-mix(in srgb, var(--cw-accent) 12%, transparent);
-  color: var(--cw-accent);
+  color: var(--cw-accent-strong, var(--cw-accent));
 }
 
 .cw-menu__item--danger {

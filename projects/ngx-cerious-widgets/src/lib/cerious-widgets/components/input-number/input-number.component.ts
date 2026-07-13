@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
   inject,
   input,
@@ -10,6 +11,8 @@ import {
   signal
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 import { CW_LOCALE } from '../../shared/tokens/locale.token';
 
 /**
@@ -100,6 +103,20 @@ export class InputNumberComponent implements ControlValueAccessor {
   });
 
   onChange: (value: number | null) => void = () => {};
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ inputNumber: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi<number | null> = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.value(),
+    setValue: (value: number | null) => { this.value.set(value); this.onChange(value); },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('inputNumber', this.api);
+  }
   onTouched: () => void = () => {};
 
   // --- ControlValueAccessor ---

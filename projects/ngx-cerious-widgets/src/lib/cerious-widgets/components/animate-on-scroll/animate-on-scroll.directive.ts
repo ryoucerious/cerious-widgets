@@ -10,6 +10,8 @@ import {
   output,
   Renderer2
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Applies an animation/visibility class when the host scrolls into view, driven
@@ -24,6 +26,13 @@ import {
   host: { 'class': 'cw-animate-on-scroll' }
 })
 export class AnimateOnScrollDirective implements OnInit {
+  /** Public API handed to plugins (`{ animateOnScroll: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('animateOnScroll', this.api);
+  }
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly renderer = inject(Renderer2);
   private readonly destroyRef = inject(DestroyRef);

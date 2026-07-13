@@ -4,12 +4,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
+  inject,
   input,
   numberAttribute,
   signal,
   viewChildren
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CeriousScrollComponent, CeriousScrollDirective, CeriousScrollItemTemplateDirective } from '@ceriousdevtech/ngx-cerious-scroll';
 
@@ -46,6 +50,15 @@ interface CwOrderItem {
   ]
 })
 export class OrderListComponent implements ControlValueAccessor {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ orderList: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('orderList', this.api);
+  }
+
   private readonly scrollDirs = viewChildren(CeriousScrollDirective);
 
   /** The items — objects, or primitives for a simple list. */

@@ -24,7 +24,9 @@
 }
 
 .cw-toggle-button__btn--on {
-  background: var(--cw-primary);
-  border-color: var(--cw-primary);
+  // AA-safe fill so the white on-state label meets 4.5:1 (frost/dark primary
+  // were 4.3/2.5 against white).
+  background: var(--cw-primary-fill, var(--cw-primary));
+  border-color: var(--cw-primary-fill, var(--cw-primary));
   color: var(--cw-text-on-accent);
 }

@@ -8,6 +8,7 @@ import {
   DestroyRef,
   Directive,
   effect,
+  ElementRef,
   inject,
   input,
   NgZone,
@@ -16,6 +17,8 @@ import {
   signal,
   TemplateRef
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * Marks a carousel slide: `<ng-template cwCarouselItem>…</ng-template>`.
@@ -48,6 +51,11 @@ export class CarouselItemDirective {
   host: { 'class': 'cw-carousel', 'role': 'region', 'aria-roledescription': 'carousel' }
 })
 export class CarouselComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ carousel: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
   private readonly zone = inject(NgZone);
 
   readonly slides = contentChildren(CarouselItemDirective);
@@ -82,6 +90,7 @@ export class CarouselComponent {
   private timer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
+    providePluginHost('carousel', this.api);
     // Restart the autoplay timer whenever the interval or slide count changes.
     // The interval callback writes signals as a deferred task (not synchronously
     // inside the effect), so there is no signal-write-in-effect violation.

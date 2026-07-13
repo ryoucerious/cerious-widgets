@@ -4,12 +4,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   numberAttribute,
   output,
   signal,
   viewChildren
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
+import { WidgetPlugin } from '../../shared/interfaces/widget-plugin.interface';
 import { CeriousScrollComponent, CeriousScrollDirective, CeriousScrollItemTemplateDirective } from '@ceriousdevtech/ngx-cerious-scroll';
 
 /** A tree node; `children` makes it a branch. */
@@ -43,6 +48,18 @@ interface CwFlatNode {
  * @example
  * <cw-tree [nodes]="fileTree" (nodeSelect)="open($event)" />
  */
+/** Public API the Tree exposes to its plugins. */
+export interface TreeApi extends CwWidgetApi {
+  /** The key of the selected node, if any. */
+  getSelectedKey(): string | null;
+  /** Select a node by key. */
+  setSelectedKey(key: string | null): void;
+  /** The root nodes. */
+  getNodes(): readonly CwTreeNode[];
+}
+/** Plugin contract for the Tree (`{ tree: { plugins: [...] } }`). */
+export type TreePlugin = WidgetPlugin<TreeApi>;
+
 @Component({
   selector: 'cw-tree',
   standalone: true,
@@ -68,6 +85,20 @@ export class TreeComponent {
   readonly nodeSelect = output<CwTreeNode>();
   /** Emitted when a node expands or collapses. */
   readonly nodeToggle = output<CwTreeNode>();
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins. */
+  readonly api: TreeApi = {
+    getHost: () => this.host.nativeElement,
+    getSelectedKey: () => this.selectedKey(),
+    setSelectedKey: (key: string | null) => this.selectedKey.set(key),
+    getNodes: () => this.nodes()
+  };
+
+  constructor() {
+    providePluginHost('tree', this.api);
+  }
 
   /** Keys of the currently expanded nodes (seeded from `expanded` flags). */
   private readonly expandedKeys = signal<Set<string> | null>(null);

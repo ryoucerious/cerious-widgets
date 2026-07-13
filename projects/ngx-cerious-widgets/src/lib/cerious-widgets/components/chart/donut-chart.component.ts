@@ -1,4 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, input, numberAttribute, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  numberAttribute,
+  output,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { CwDonutSegment } from './chart.types';
 
 /**
@@ -43,6 +55,15 @@ import { CwDonutSegment } from './chart.types';
   host: { 'class': 'cw-donut-chart' }
 })
 export class DonutChartComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ donutChart: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('donutChart', this.api);
+  }
+
   /** The slices. */
   readonly segments = input<readonly CwDonutSegment[]>([]);
   /** Large text shown in the centre (e.g. a total). Overridden while hovering a slice. */

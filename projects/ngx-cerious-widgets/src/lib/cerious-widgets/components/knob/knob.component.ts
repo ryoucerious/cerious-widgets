@@ -11,6 +11,8 @@ import {
   signal
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A circular dial input: drag around the arc or use the arrow keys to set a
@@ -91,6 +93,18 @@ export class KnobComponent implements ControlValueAccessor {
   readonly label = computed(() => this.valueTemplate().replace('{value}', String(this.clamp(this.value()))));
 
   onChange: (value: number) => void = () => {};
+
+  /** Public API handed to plugins (`{ knob: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi<number> = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.value(),
+    setValue: (value: number) => this.commit(this.clamp(value)),
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('knob', this.api);
+  }
   onTouched: () => void = () => {};
 
   // --- ControlValueAccessor ---

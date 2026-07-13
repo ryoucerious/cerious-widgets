@@ -3,11 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   numberAttribute,
   output,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** Emitted on every page / page-size change. */
 export interface CwPageEvent {
@@ -36,6 +40,15 @@ export interface CwPageEvent {
   host: { 'class': 'cw-paginator' }
 })
 export class PaginatorComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ paginator: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('paginator', this.api);
+  }
+
   /** Total number of rows being paged. */
   readonly totalRecords = input(0, { transform: numberAttribute });
   /** Initial rows per page. */

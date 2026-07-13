@@ -3,11 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   numberAttribute,
   output,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 
 /** A galleria image. */
 export interface CwGalleriaImage {
@@ -35,6 +39,15 @@ export interface CwGalleriaImage {
   host: { 'class': 'cw-galleria', 'role': 'region', 'aria-roledescription': 'gallery' }
 })
 export class GalleriaComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ galleria: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('galleria', this.api);
+  }
+
   /** The images. */
   readonly images = input<readonly CwGalleriaImage[]>([]);
   /** Initially active image index. */

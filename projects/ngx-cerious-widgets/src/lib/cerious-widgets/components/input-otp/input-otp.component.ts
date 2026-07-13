@@ -5,12 +5,15 @@ import {
   computed,
   ElementRef,
   forwardRef,
+  inject,
   input,
   numberAttribute,
   signal,
   viewChildren
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwFormControlApi } from '../../shared/interfaces/widget-api.interface';
 
 /**
  * A segmented one-time-code input: one box per character, with auto-advance,
@@ -59,6 +62,24 @@ export class InputOtpComponent implements ControlValueAccessor {
   readonly slots = computed(() => Array.from({ length: this.length() }, (_, i) => i));
 
   onChange: (value: string) => void = () => {};
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ inputOtp: { plugins: [...] } }`). */
+  readonly api: CwFormControlApi<string> = {
+    getHost: () => this.host.nativeElement,
+    getValue: () => this.chars().join(''),
+    setValue: (value: string) => {
+      const text = (value ?? '').slice(0, this.length()).split('');
+      this.chars.set(text);
+      this.onChange(text.join(''));
+    },
+    isDisabled: () => this.isDisabled()
+  };
+
+  constructor() {
+    providePluginHost('inputOtp', this.api);
+  }
   onTouched: () => void = () => {};
 
   // --- ControlValueAccessor ---

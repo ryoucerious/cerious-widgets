@@ -193,13 +193,11 @@
         }
     }
 
-    // Rendered only for resizable columns. The grab strip sits flush to the
-    // column's right edge (the cell clips overflow-x, so it can't straddle), but
-    // the visible divider is drawn down the *centre* of the strip instead of at
-    // its right edge. That way the ew-resize cursor's hotspot lines up with the
-    // line you aim at — before, the line was at the edge while the 6px hit area
-    // extended left, so the cursor always sat offset to the left of the divider.
-    // The line thickens to the accent on hover.
+    // Rendered only for resizable columns. The grab strip is a wide, invisible
+    // hit area anchored to the column's right edge; the visible divider is drawn
+    // at that right edge (the true column boundary) so it never sits over the
+    // header text — even on narrow columns. The strip can extend left for an
+    // easy grab target without moving the line. Thickens to the accent on hover.
     .column-resizer {
         position: absolute;
         top: 0px;
@@ -214,8 +212,7 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
+        right: 0;
         border-right: 1px solid var(--cw-divider);
         transition: border-color 0.12s ease;
     }

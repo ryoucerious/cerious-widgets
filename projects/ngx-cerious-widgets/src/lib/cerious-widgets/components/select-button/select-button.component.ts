@@ -3,10 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
+  inject,
   input,
   signal
 } from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 /** A normalized option: display label + underlying value. */
@@ -52,6 +56,15 @@ interface CwOption {
   ]
 })
 export class SelectButtonComponent implements ControlValueAccessor {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ selectButton: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('selectButton', this.api);
+  }
+
   /** The choices — objects, or primitives for a simple list. */
   readonly options = input<readonly unknown[]>([]);
   /** Property name to read an option's display label from (for object options). */

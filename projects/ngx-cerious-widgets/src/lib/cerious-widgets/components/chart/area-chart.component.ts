@@ -1,4 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal
+} from '@angular/core';
+import { providePluginHost } from '../../shared/plugin-host';
+import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
 import { CwChartSeries } from './chart.types';
 
 /** Process-wide counter for unique gradient ids. */
@@ -105,6 +116,15 @@ export interface CwChartPointEvent {
   host: { 'class': 'cw-area-chart' }
 })
 export class AreaChartComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Public API handed to plugins (`{ areaChart: { plugins: [...] } }`). */
+  readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
+
+  constructor() {
+    providePluginHost('areaChart', this.api);
+  }
+
   /** One or more data series to overlay. */
   readonly series = input<readonly CwChartSeries[]>([]);
   /** X-axis labels, aligned to each data point. */
