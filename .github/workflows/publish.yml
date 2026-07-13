@@ -10,8 +10,8 @@ on:
         required: false
 
 permissions:
-  contents: read
-  id-token: write
+  contents: write   # create the git tag + GitHub Release on a dispatched publish
+  id-token: write   # npm provenance
 
 jobs:
   publish:
@@ -58,3 +58,20 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --provenance --access public
+
+      # When you cut a release straight from the Actions tab (workflow_dispatch),
+      # also stamp a matching git tag + GitHub Release. Skipped when triggered by
+      # a release you created in the UI — that release already exists.
+      - name: Tag and create GitHub Release
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="v${{ steps.ver.outputs.version }}"
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "Tag $VERSION already exists — skipping tag/release creation."
+            exit 0
+          fi
+          git tag "$VERSION"
+          git push origin "$VERSION"
+          gh release create "$VERSION" --title "$VERSION" --generate-notes

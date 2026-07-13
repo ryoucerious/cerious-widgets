@@ -1,0 +1,67 @@
+name: Deploy showcase to GitHub Pages
+
+# Builds the library + showcase demo/docs app and publishes it to GitHub Pages
+# on every push to main. Runs automatically; also triggerable from the Actions
+# tab (workflow_dispatch).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least-privilege token: read the repo, write the Pages deployment.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; a newer push supersedes an in-flight one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        # Mirrors publish.yml — the lockfile is regenerated to avoid drift.
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --no-audit --no-fund
+
+      - name: Build library
+        run: npx ng build ngx-cerious-widgets --configuration production
+
+      - name: Build showcase
+        # base-href must match the project-page path (https://<user>.github.io/cerious-widgets/).
+        run: npx ng build showcase --configuration production --base-href /cerious-widgets/
+
+      - name: SPA fallback + bypass Jekyll
+        # 404.html = index.html so deep links / client-side routes resolve on Pages;
+        # .nojekyll stops Pages from stripping files that start with an underscore.
+        run: |
+          cp dist/showcase/browser/index.html dist/showcase/browser/404.html
+          touch dist/showcase/browser/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/showcase/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

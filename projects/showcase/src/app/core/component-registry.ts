@@ -52,6 +52,7 @@ export const COMPONENTS: ComponentDoc[] = [
   { slug: 'checkbox', name: 'Checkbox', group: 'Form', icon: '✓', summary: 'Boolean checkbox' , ready: true },
   { slug: 'radio-button', name: 'RadioButton', group: 'Form', icon: '◉', summary: 'Single choice in a group' , ready: true },
   { slug: 'toggle-switch', name: 'ToggleSwitch', group: 'Form', icon: '⇄', summary: 'On/off switch' , ready: true },
+  { slug: 'toggle-button', name: 'ToggleButton', group: 'Form', icon: '⊞', summary: 'Two-state on/off button' , ready: true },
   { slug: 'select-button', name: 'SelectButton', group: 'Form', icon: '⊟', summary: 'Segmented choice buttons' , ready: true },
   { slug: 'slider', name: 'Slider', group: 'Form', icon: '⇥', summary: 'Numeric range slider' , ready: true },
   { slug: 'rating', name: 'Rating', group: 'Form', icon: '★', summary: 'Star rating input' , ready: true },
@@ -64,7 +65,9 @@ export const COMPONENTS: ComponentDoc[] = [
   { slug: 'tag', name: 'Tag', group: 'Display', icon: '🏷', summary: 'Labelled pill' , ready: true },
   { slug: 'chip', name: 'Chip', group: 'Display', icon: '⬭', summary: 'Removable value pill' , ready: true },
   { slug: 'avatar', name: 'Avatar', group: 'Display', icon: '👤', summary: 'User / entity representation' , ready: true },
-  { slug: 'card', name: 'Card', group: 'Display', icon: '▭', summary: 'Card, panel & toolbar surfaces' , ready: true },
+  { slug: 'card', name: 'Card', group: 'Display', icon: '▭', summary: 'Card surface with header & footer slots' , ready: true },
+  { slug: 'panel', name: 'Panel', group: 'Display', icon: '▤', summary: 'Bordered panel with optional collapsible body' , ready: true },
+  { slug: 'toolbar', name: 'Toolbar', group: 'Display', icon: '⊨', summary: 'Action bar with start / center / end slots' , ready: true },
   { slug: 'timeline', name: 'Timeline', group: 'Data', icon: '⏱', summary: 'Event sequence with markers' , ready: true },
   { slug: 'org-chart', name: 'OrgChart', group: 'Display', icon: '🌳', summary: 'Top-down hierarchy of node cards', ready: true },
   { slug: 'data-view', name: 'DataView', group: 'Data', icon: '▤', summary: 'List / grid of items (virtualized)', virtualized: true , ready: true },
@@ -107,6 +110,7 @@ export const COMPONENTS: ComponentDoc[] = [
   { slug: 'speed-dial', name: 'SpeedDial', group: 'Overlay', icon: '✦', summary: 'Radial action button' , ready: true },
 
   // ---- Utilities ----
+  { slug: 'plugins', name: 'Plugins', group: 'Utilities', icon: '🧩', summary: 'Extend or replace any component\'s behaviour with plugins' , ready: true },
   { slug: 'animate-on-scroll', name: 'AnimateOnScroll', group: 'Utilities', icon: '✧', summary: 'Reveal-on-scroll directive' , ready: true },
   { slug: 'style-class', name: 'StyleClass', group: 'Utilities', icon: '❖', summary: 'Toggle classes on a target' , ready: true },
   { slug: 'deferred-content', name: 'DeferredContent', group: 'Utilities', icon: '⧖', summary: 'Lazy-render on scroll-in' , ready: true },

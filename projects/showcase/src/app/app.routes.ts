@@ -40,6 +40,10 @@ export const routes: Routes = [
       { path: 'stepper', loadComponent: () => import('./pages/docs/stepper.doc').then(m => m.StepperDocComponent) },
       { path: 'dialog', loadComponent: () => import('./pages/docs/dialog.doc').then(m => m.DialogDocComponent) },
 
+      { path: 'plugins', loadComponent: () => import('./pages/docs/plugins.doc').then(m => m.PluginsDocComponent) },
+      { path: 'panel', loadComponent: () => import('./pages/docs/panel.doc').then(m => m.PanelDocComponent) },
+      { path: 'toggle-button', loadComponent: () => import('./pages/docs/toggle-button.doc').then(m => m.ToggleButtonDocComponent) },
+      { path: 'toolbar', loadComponent: () => import('./pages/docs/toolbar.doc').then(m => m.ToolbarDocComponent) },
       { path: 'accordion', loadComponent: () => import('./pages/docs/accordion.doc').then(m => m.AccordionDocComponent) },
       { path: 'alert', loadComponent: () => import('./pages/docs/alert.doc').then(m => m.AlertDocComponent) },
       { path: 'animate-on-scroll', loadComponent: () => import('./pages/docs/animate-on-scroll.doc').then(m => m.AnimateOnScrollDocComponent) },
