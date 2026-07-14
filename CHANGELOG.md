@@ -44,6 +44,17 @@ All notable changes to this project will be documented in this file.
 - Moved `@angular/cdk` and `@ceriousdevtech/ngx-cerious-scroll` from `peerDependencies` to `dependencies` so consumers no longer have to install them manually. Added `allowedNonPeerDependencies` to `ng-package.json` to satisfy ng-packagr.
 - Removed direct `@ceriousdevtech/cerious-scroll` dependency; it is now pulled in transitively through `@ceriousdevtech/ngx-cerious-scroll`.
 
+## [1.1.1] - 2026-07-14
+### Fixed
+- **Grid renders no rows under a production build.** Under zoneless change detection the grid populated its row model in `ngOnInit` before the body view existed, and prod (unlike dev) has no second verification pass to flush the deferred render, so the grid appeared empty. The grid now explicitly renders and runs change detection after the view initializes.
+- **Area chart axis text scaled up on wide cards.** The SVG used `preserveAspectRatio="none"` with a fixed viewBox, stretching the coordinate system (and its axis labels/strokes) with the container. The chart now tracks its real pixel width so it renders at 1:1, keeping text and strokes at their true size and the plot height constant.
+- **Input group rounded its outer corners on the wrong side.** Projected `cwButton` / `cwInput` controls set their own `:host` border-radius at equal specificity, so seam rounding depended on stylesheet load order; the seam rules now take precedence deterministically.
+- **Context menu closed on right-button release on macOS.** Replaced the CDK outside-pointer handling with a capture-phase `pointerdown` listener so the menu stays open until the next click outside it.
+- **Knob value now tracks the pointer accurately** (removed a stray angle offset).
+
+### Changed
+- Showcase: replaced emoji glyphs with the shared line-icon set, sorted the theme switcher alphabetically (Frost default), and cleaned up copy.
+
 ## [1.1.0] - 2026-07-13
 This release grows Cerious Widgets from "a grid + a few components" into a **complete, enterprise-grade component suite** (~85 standalone, signal-based, zoneless-safe components) with a universal plugin architecture and a verified WCAG 2.1 AA accessibility baseline.
 
