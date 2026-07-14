@@ -139,9 +139,23 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
         this.ceriousScroll?.render();
       }));
       this.subscriptions.push(this.gridService.afterGroupBy.subscribe(() => {
+        // The group tree was rebuilt. Drop the cached expanded-row snapshots,
+        // they reference the previous tree's group objects, so keeping them makes
+        // flattenData re-render stale subgroups (e.g. removing an inner grouping
+        // level would leave its old subgroups showing). flattenData then reads
+        // fresh rows straight from the new groupByData.
+        this.expandedGroupData = {};
+        // Grouping replaces the entire row set (group headers + rows). Rebuild
+        // the flat list, force it into the DOM synchronously, then re-measure the
+        // virtual scroller so it repaints against the new items. Without the
+        // explicit scroller render the body keeps its stale pooled viewport under
+        // zoneless and only corrects on the next scroll/click, and because the
+        // menu's Group By runs from a manual (non-Angular) listener, nothing else
+        // schedules that work.
         setTimeout(() => {
           this.flattenData();
-          this.markForCheck();
+          this.detectChanges();
+          this.ceriousScroll?.render();
         });
       }));
       this.subscriptions.push(this.gridService.afterRender.subscribe(() => {
@@ -404,7 +418,10 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
 
       setTimeout(() => {
         this.flattenData();
-        this.markForCheck();
+        this.detectChanges();
+        // Row count changed; re-measure the virtual scroller so the content
+        // height and pooled views update immediately.
+        this.ceriousScroll?.render();
       });
     } catch (error) {
       console.error(`Error toggling group collapse for groupKey "${groupKey}":`, error);
@@ -469,6 +486,21 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
     return this.rows.find(r => r.id === rowId);
   }
 
+  /**
+   * Total number of leaf (data) rows under a group, recursing through any
+   * subgroups. Used for the group-header count so a parent group shows its full
+   * row total (e.g. 40) rather than its number of subgroups (e.g. 3).
+   */
+  private countLeafRows(group: any): number {
+    const rows = group?.rows;
+    if (!Array.isArray(rows)) { return 0; }
+    // A subgroup node carries a `key`; a leaf GridRow does not.
+    if (rows.length > 0 && rows[0]?.key) {
+      return rows.reduce((sum: number, sub: any) => sum + this.countLeafRows(sub), 0);
+    }
+    return rows.length;
+  }
+
   private flattenData(): void {
     const rows: any[] = [];
 
@@ -479,7 +511,7 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
           isGroup: true,
           key: group.key,
           depth,
-          rowCount: group.rows.length,
+          rowCount: this.countLeafRows(group),
         });
 
         // If the group is expanded, process its rows or subgroups

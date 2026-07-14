@@ -3,6 +3,7 @@ import { ZonelessCompatibleComponent } from '../../../components/base/zoneless-c
 import { CommonModule } from '@angular/common';
 
 import { GridHeaderRowComponent } from '../grid-header-row/grid-header-row.component';
+import { ChipComponent } from '../../../components/chip/chip.component';
 
 import { GridOptions } from '../../interfaces/grid-options';
 import { ColumnDef, IGridScrollService } from '../../interfaces';
@@ -20,7 +21,7 @@ import { SectionClassConfig } from '../../interfaces/section-class-config-interf
   standalone: true,
   templateUrl: './grid-header.component.html',
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, GridHeaderRowComponent]
+  imports: [CommonModule, GridHeaderRowComponent, ChipComponent]
 })
 export class GridHeaderComponent extends ZonelessCompatibleComponent implements IGridHeaderComponent {
   

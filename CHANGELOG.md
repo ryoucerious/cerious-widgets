@@ -44,20 +44,6 @@ All notable changes to this project will be documented in this file.
 - Moved `@angular/cdk` and `@ceriousdevtech/ngx-cerious-scroll` from `peerDependencies` to `dependencies` so consumers no longer have to install them manually. Added `allowedNonPeerDependencies` to `ng-package.json` to satisfy ng-packagr.
 - Removed direct `@ceriousdevtech/cerious-scroll` dependency; it is now pulled in transitively through `@ceriousdevtech/ngx-cerious-scroll`.
 
-## [1.2.0] - 2026-07-14
-### Added
-- **Zero-config styling, no stylesheet import required.** The library now injects its structural stylesheet (design tokens, CDK-overlay theming, virtual-scrollbar and directive-applied form-control styles, and the grid chrome) at bootstrap, so consumers no longer have to add `grid-styles-generated.scss` to their `angular.json` `styles` array. Module apps get it from `CeriousWidgetsModule.forRoot(...)`; standalone apps call `provideCeriousTheme()` once. A new `CwThemeService.ensureGlobalStyles()` performs the one-time injection via an internal `ViewEncapsulation.None` host, and the runtime theming engine layers `--cw-*` overrides on top. The manual stylesheet import still works and is deduped.
-
-### Fixed
-- **Grid renders no rows under a production build.** Under zoneless change detection the grid populated its row model in `ngOnInit` before the body view existed, and prod (unlike dev) has no second verification pass to flush the deferred render, so the grid appeared empty. The grid now explicitly renders and runs change detection after the view initializes.
-- **Area chart axis text scaled up on wide cards.** The SVG used `preserveAspectRatio="none"` with a fixed viewBox, stretching the coordinate system (and its axis labels/strokes) with the container. The chart now tracks its real pixel width so it renders at 1:1, keeping text and strokes at their true size and the plot height constant.
-- **Input group rounded its outer corners on the wrong side.** Projected `cwButton` / `cwInput` controls set their own `:host` border-radius at equal specificity, so seam rounding depended on stylesheet load order; the seam rules now take precedence deterministically.
-- **Context menu closed on right-button release on macOS.** Replaced the CDK outside-pointer handling with a capture-phase `pointerdown` listener so the menu stays open until the next click outside it.
-- **Knob value now tracks the pointer accurately** (removed a stray angle offset).
-
-### Changed
-- Showcase: replaced emoji glyphs with the shared line-icon set, sorted the theme switcher alphabetically (Frost default), and cleaned up copy.
-
 ## [1.1.0] - 2026-07-13
 This release grows Cerious Widgets from "a grid + a few components" into a **complete, enterprise-grade component suite** (~85 standalone, signal-based, zoneless-safe components) with a universal plugin architecture and a verified WCAG 2.1 AA accessibility baseline.
 
@@ -86,3 +72,30 @@ This release grows Cerious Widgets from "a grid + a few components" into a **com
 ### Notes
 - Fully backward compatible, plugins are opt-in and existing usage is unchanged.
 - The full component catalog is documented (live examples, API tables, theming) with a dedicated **Plugins** guide.
+
+## [1.2.0] - 2026-07-14
+### Added
+- **Zero-config styling, no stylesheet import required.** The library now injects its structural stylesheet (design tokens, CDK-overlay theming, virtual-scrollbar and directive-applied form-control styles, and the grid chrome) at bootstrap, so consumers no longer have to add `grid-styles-generated.scss` to their `angular.json` `styles` array. Module apps get it from `CeriousWidgetsModule.forRoot(...)`; standalone apps call `provideCeriousTheme()` once. A new `CwThemeService.ensureGlobalStyles()` performs the one-time injection via an internal `ViewEncapsulation.None` host, and the runtime theming engine layers `--cw-*` overrides on top. The manual stylesheet import still works and is deduped.
+
+### Fixed
+- **Grid renders no rows under a production build.** Under zoneless change detection the grid populated its row model in `ngOnInit` before the body view existed, and prod (unlike dev) has no second verification pass to flush the deferred render, so the grid appeared empty. The grid now explicitly renders and runs change detection after the view initializes.
+- **Area chart axis text scaled up on wide cards.** The SVG used `preserveAspectRatio="none"` with a fixed viewBox, stretching the coordinate system (and its axis labels/strokes) with the container. The chart now tracks its real pixel width so it renders at 1:1, keeping text and strokes at their true size and the plot height constant.
+- **Input group rounded its outer corners on the wrong side.** Projected `cwButton` / `cwInput` controls set their own `:host` border-radius at equal specificity, so seam rounding depended on stylesheet load order; the seam rules now take precedence deterministically.
+- **Context menu closed on right-button release on macOS.** Replaced the CDK outside-pointer handling with a capture-phase `pointerdown` listener so the menu stays open until the next click outside it.
+- **Knob value now tracks the pointer accurately** (removed a stray angle offset).
+
+### Changed
+- Showcase: replaced emoji glyphs with the shared line-icon set, sorted the theme switcher alphabetically (Frost default), and cleaned up copy.
+
+## [1.2.1] - 2026-07-14
+### Fixed
+- **Grouping did not repaint after a group/ungroup.** The grid body rebuilt the grouped row model but never asked the virtual scroller to re-render, so the body kept stale (flat) rows until the next scroll/click. It now flushes change detection and re-renders the scroller when the group tree changes.
+- **Removing an inner grouping level left its subgroups behind.** The body cached expanded-group rows and preferred that stale cache over the freshly rebuilt group tree; the cache is now cleared whenever grouping changes, so ungrouping (e.g. removing Status while keeping Category) collapses back to the correct single level.
+- **Group-header totals counted subgroups instead of rows.** A parent group now shows its total number of leaf rows (recursing through subgroups) rather than its number of subgroups.
+
+### Changed
+- **Group-by indicator restyled** to use the shared `cw-chip` component: each grouped column is a removable, theme-aware pill separated by a real chevron (replacing the plain-text `✕` / `>`).
+
+### Accessibility
+- **Column menu is now keyboard-reachable.** The header menu button is a focusable control (`role="button"`, `tabindex`, `aria-haspopup`/`aria-expanded`, labelled) that opens on Enter/Space/ArrowDown, moves focus into the menu, returns focus on Escape/selection, and reveals itself on keyboard focus, previously it was mouse-hover only.
+- **Columns can be resized from the keyboard.** The resize handle (`role="separator"` with `aria-valuenow`) now responds to Arrow keys (Shift for a larger step) and Home/End, so keyboard users can adjust column width, not just pointer users.

@@ -207,32 +207,31 @@
     position: relative;
     background: $grid-header-background;
     border-right: $grid-header-border;
-    color: $grid-text-header-footer;  
-    border-top: $grid-header-border; 
+    border-top: $grid-header-border;
+    color: $grid-text-header-footer;
 
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
     padding: 6px 20px;
 
-    .title {
+    .cw-groupby__title {
         font-weight: 600;
+        font-size: 0.8125rem;
+        color: var(--cw-text-secondary, #{$grid-text-header-footer});
+        margin-right: 2px;
     }
 
-    .remove-button {
-        all: unset; // Remove all default button styles
-        cursor: pointer; // Add a pointer cursor for interactivity
-        margin-left: 4px; // Add spacing between the label and the button
-        visibility: hidden; // Hide the button by default
+    // Grouped-column chips reuse the shared cw-chip component; just tune sizing.
+    .cw-groupby__chip {
+        font-size: 0.8125rem;
     }
 
-    .separator {
-        margin: 0;
-        margin-left: 2px;
-        margin-right: 22px;
-    }
-
-    &:hover {
-        .remove-button {
-            visibility: visible; // Show the button on hover
-        }
+    // Real chevron separating each grouping level.
+    .cw-groupby__chevron {
+        flex: none;
+        color: var(--cw-text-muted, var(--cw-text-secondary));
     }
 }
 

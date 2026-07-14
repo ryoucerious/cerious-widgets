@@ -101,11 +101,17 @@ export class ColumnMenuPlugin implements GridPlugin {
    * 
    * @private
    */
-  private closeMenu(): void {
+  private closeMenu(returnFocus = false): void {
     this.overlayRef?.dispose();
     this.overlayRef = null;
-    this.activeButton?.classList.remove('active');
+    const button = this.activeButton;
+    button?.classList.remove('active');
+    button?.setAttribute('aria-expanded', 'false');
     this.activeButton = null;
+    // When the menu is dismissed via the keyboard (Escape or selecting an item),
+    // send focus back to the header's menu button so keyboard users are not
+    // dropped at the top of the document.
+    if (returnFocus) { button?.focus(); }
   }
 
   /**
@@ -173,8 +179,13 @@ export class ColumnMenuPlugin implements GridPlugin {
 
     const ref = this.overlayRef.attach(new ComponentPortal(MenuComponent));
     ref.setInput('items', items);
-    ref.instance.itemClick.subscribe(() => this.closeMenu());
+    ref.instance.itemClick.subscribe(() => this.closeMenu(true));
     ref.changeDetectorRef.detectChanges();
+
+    // Move focus into the menu so keyboard users land on the first item and can
+    // navigate/activate it immediately (the items are real role="menuitem" buttons).
+    const firstItem = this.overlayRef.overlayElement.querySelector<HTMLElement>('.cw-menu__item');
+    firstItem?.focus();
 
     // Close on an outside click (but not on the button that toggles it) or Escape.
     this.overlayRef
@@ -183,7 +194,7 @@ export class ColumnMenuPlugin implements GridPlugin {
       .subscribe(() => this.closeMenu());
     this.overlayRef.keydownEvents().subscribe(event => {
       if (event.key === 'Escape') {
-        this.closeMenu();
+        this.closeMenu(true);
       }
     });
   }
@@ -247,6 +258,15 @@ export class ColumnMenuPlugin implements GridPlugin {
       this.renderer.setStyle(menuButton, 'padding', '0px');
       this.renderer.setStyle(menuButton, 'cursor', 'pointer');
 
+      // Keyboard/AT access: the button is a real, focusable control so keyboard
+      // users can Tab to it and open the column menu (Enter/Space/ArrowDown).
+      // It reveals itself on focus via CSS (`:focus-visible` / cell `:focus-within`).
+      this.renderer.setAttribute(menuButton, 'role', 'button');
+      this.renderer.setAttribute(menuButton, 'tabindex', '0');
+      this.renderer.setAttribute(menuButton, 'aria-haspopup', 'menu');
+      this.renderer.setAttribute(menuButton, 'aria-expanded', 'false');
+      this.renderer.setAttribute(menuButton, 'aria-label', `Column options for ${column.label || column.field}`);
+
       // Define the menu options
       const columnMenuOptions: MenuOption[] = [];
 
@@ -270,18 +290,35 @@ export class ColumnMenuPlugin implements GridPlugin {
         );
       }
 
-      // Add click event listener to open or close the menu for this column
+      // Open or close the menu for this column. `aria-expanded` and the `active`
+      // class mirror the open state (the latter also keeps the button visible).
+      const toggleMenu = () => {
+        if (menuButton.classList.contains('active')) {
+          this.closeMenu();
+        } else {
+          this.openMenu(column, menuButton, columnMenuOptions);
+          menuButton.classList.add('active');
+          menuButton.setAttribute('aria-expanded', 'true');
+        }
+      };
+
       this.renderer.listen(menuButton, 'click', (event: MouseEvent) => {
         event.stopPropagation(); // Prevent event bubbling
+        toggleMenu();
+      });
 
-        if (menuButton.classList.contains('active')) {
-          // If the menu is already open, close it
-          this.closeMenu();
-          menuButton.classList.remove('active'); // Remove active class for styling
-        } else {
-          // If the menu is not open, open it
-          this.openMenu(column, menuButton, columnMenuOptions);
-          menuButton.classList.add('active'); // Add active class for styling
+      // Keyboard activation: Enter/Space toggle; ArrowDown opens (matching the
+      // native `aria-haspopup` menu-button pattern).
+      this.renderer.listen(menuButton, 'keydown', (event: KeyboardEvent) => {
+        const key = event.key;
+        if (key === 'Enter' || key === ' ' || key === 'Spacebar') {
+          event.preventDefault();
+          event.stopPropagation();
+          toggleMenu();
+        } else if (key === 'ArrowDown' && !menuButton.classList.contains('active')) {
+          event.preventDefault();
+          event.stopPropagation();
+          toggleMenu();
         }
       });
 

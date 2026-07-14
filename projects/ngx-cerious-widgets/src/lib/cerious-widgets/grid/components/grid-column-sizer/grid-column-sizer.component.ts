@@ -34,6 +34,10 @@ export class GridColumnSizerComponent extends ZonelessCompatibleComponent implem
     super();
   }
 
+  /** aria-valuemin / aria-valuemax bounds (kept in sync with the template). */
+  private static readonly MIN_WIDTH = 40;
+  private static readonly MAX_WIDTH = 800;
+
   onPointerDown(e: PointerEvent) {
     e.preventDefault();
     e.stopPropagation();
@@ -44,15 +48,48 @@ export class GridColumnSizerComponent extends ZonelessCompatibleComponent implem
     // track the cursor when it "gets ahead" of the handle.
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
 
-    // Anchor the drag to the column's exact current width so there's no snap:
-    // prefer the declared `column.width` (what the grid actually applies), and
-    // fall back to measuring the header cell.
+    this.gridService.initColumnResizing(this.column, e, this.getStartWidth());
+  }
+
+  /**
+   * Keyboard resizing for the focused handle (WCAG: the `role="separator"` handle
+   * advertises `aria-valuenow`, so it must be adjustable from the keyboard, not
+   * just the pointer). Left/Right nudge the width (Shift for a larger step);
+   * Home/End jump to the min/max.
+   */
+  onKeyDown(e: KeyboardEvent) {
+    const step = e.shiftKey ? 40 : 10;
+    const current = this.getStartWidth() ?? this.widthPx;
+    let target: number;
+    switch (e.key) {
+      case 'ArrowLeft':  target = current - step; break;
+      case 'ArrowRight': target = current + step; break;
+      case 'Home':       target = GridColumnSizerComponent.MIN_WIDTH; break;
+      case 'End':        target = GridColumnSizerComponent.MAX_WIDTH; break;
+      default: return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+
+    target = Math.max(GridColumnSizerComponent.MIN_WIDTH, Math.min(GridColumnSizerComponent.MAX_WIDTH, target));
+
+    // Reuse the pointer resize pipeline with a synthesized 1-D delta: anchor at
+    // the current width (pageX 0) then "move" by (target - current).
+    this.gridService.initColumnResizing(this.column, { pageX: 0 } as MouseEvent, current);
+    this.gridService.resizeColumn({ pageX: target - current } as MouseEvent);
+    this.gridService.endColumnResizing();
+  }
+
+  /**
+   * The column's exact current width in px: prefer the declared `column.width`
+   * (what the grid applies), else measure the header cell. Shared by pointer and
+   * keyboard resizing so neither snaps on the first move.
+   */
+  private getStartWidth(): number | undefined {
     const declared = parseInt(this.column?.width ?? '', 10);
+    if (Number.isFinite(declared) && declared > 0) { return declared; }
     const cell = (this.el.nativeElement as HTMLElement).closest('[role="columnheader"]') as HTMLElement | null;
-    const startWidth = Number.isFinite(declared) && declared > 0
-      ? declared
-      : (cell ? Math.round(cell.getBoundingClientRect().width) : undefined);
-    this.gridService.initColumnResizing(this.column, e, startWidth);
+    return cell ? Math.round(cell.getBoundingClientRect().width) : undefined;
   }
 
   onPointerMove(e: PointerEvent) {

@@ -72,15 +72,31 @@
                 // like the button was coming *through* the resize divider.
                 right: 0.75rem;
                 opacity: 0;
-                visibility: hidden;
+                // Invisible by default but still keyboard-focusable: unlike
+                // `visibility:hidden`/`display:none`, `opacity:0` keeps the button
+                // in the tab order so keyboard users can reach the column menu.
+                // `pointer-events:none` stops the invisible button from catching
+                // stray mouse clicks until it is revealed (on hover/focus/active).
+                pointer-events: none;
                 transition: opacity .18s ease;
 
                 &.active {
                     opacity: 1;
-                    visibility: visible;
+                    pointer-events: auto;
+                }
+
+                // Keyboard focus reveals the button (and draws a focus ring).
+                // Defined here, in the same nesting as the opacity:0 default, so
+                // it reliably wins the specificity tie.
+                &:focus-visible {
+                    opacity: 1;
+                    pointer-events: auto;
+                    outline: 2px solid var(--cw-primary, currentColor);
+                    outline-offset: 2px;
+                    border-radius: 2px;
                 }
             }
-            
+
             .sort-indicator {
                 font-size: 0.9em; /* Adjust the size if needed */
             }
@@ -118,7 +134,7 @@
         .column-content:hover ~ .column-menu-button,
         .column-menu-button:hover {
             opacity: 1;
-            visibility: visible;
+            pointer-events: auto;
         }
 
         // Don't reveal the column menu while the cursor is over the resize
@@ -129,7 +145,7 @@
         // the reveal rules above, so it wins.
         .table-col:has(.column-resizer:hover) .column-menu-button {
             opacity: 0;
-            visibility: hidden;
+            pointer-events: none;
         }
 
         .table-col:last-child {
