@@ -15,7 +15,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
           @if (selected()) { <p class="hint">Selected: <strong>{{ selected() }}</strong></p> }
         </doc-section>
 
-        <doc-section title="5,000 nodes — virtualized"
+        <doc-section title="5,000 nodes, virtualized"
           description="The visible (expanded) nodes are flattened and rendered through ngx-cerious-scroll, so large trees scroll smoothly."
           [code]="virtualCode">
           <cw-tree [nodes]="bigTree" treeHeight="280px" />
@@ -61,7 +61,7 @@ files: CwTreeNode[] = [
     { key: 'app', label: 'app.component.ts' }
   ] }
 ];`;
-  virtualCode = `// 5,000 nodes — visible nodes flattened + virtualized with ngx-cerious-scroll
+  virtualCode = `// 5,000 nodes, visible nodes flattened + virtualized with ngx-cerious-scroll
 <cw-tree [nodes]="bigTree" treeHeight="280px" />`;
 
   props = [

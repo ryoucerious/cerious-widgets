@@ -12,7 +12,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="select-button"><doc-tab label="Features">
       <doc-section title="SelectButton" [code]="selectCode">
         <cw-select-button [options]="['Low', 'Medium', 'High']" [(ngModel)]="priority" />
-        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Priority: {{ priority ?? '—' }}</span>
+        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Priority: {{ priority ?? ', ' }}</span>
       </doc-section>
 
       <doc-section title="ToggleButton" [code]="toggleCode">
@@ -24,7 +24,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
 })
 export class SelectButtonDocComponent {
   readonly apiProps = [
-    { name: "options", type: "readonly unknown[]", default: "[]", description: "The choices — objects, or primitives for a simple list." },
+    { name: "options", type: "readonly unknown[]", default: "[]", description: "The choices, objects, or primitives for a simple list." },
     { name: "optionLabel", type: "string", default: "'label'", description: "Property name to read an option's display label from (for object options)." },
     { name: "optionValue", type: "string", default: "'value'", description: "Property name to read an option's value from (for object options)." },
     { name: "disabled", type: "boolean", default: "false", description: "Disable the control (also settable via forms `setDisabledState`)." }

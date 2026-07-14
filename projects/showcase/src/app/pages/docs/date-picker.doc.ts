@@ -13,7 +13,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
       <doc-tab label="Features">
         <doc-section title="Basic" description="Click to open a calendar; select a day to set the value." [code]="basicCode">
           <cw-date-picker [(ngModel)]="created" aria-label="Created date" />
-          <p class="hint">Value: {{ created ? created.toDateString() : '—' }}</p>
+          <p class="hint">Value: {{ created ? created.toDateString() : ', ' }}</p>
         </doc-section>
 
         <doc-section title="Min & max range" description="Days outside the range are disabled." [code]="rangeCode">

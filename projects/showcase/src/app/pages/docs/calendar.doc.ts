@@ -13,7 +13,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
         <doc-section title="Month view with events" description="Navigate months, click a day to select it, or click an event. Keyboard: arrows to move, Home/End for week edges, PageUp/PageDown for months." [code]="code">
           <div style="width: 100%;">
             <cw-calendar [events]="events" (dateSelect)="picked.set($event)" (eventClick)="lastEvent.set($event.title)" />
-            <p class="hint">Selected: {{ picked() ? picked()!.toDateString() : '—' }}@if (lastEvent()) { · Last event: {{ lastEvent() }} }</p>
+            <p class="hint">Selected: {{ picked() ? picked()!.toDateString() : ', ' }}@if (lastEvent()) { · Last event: {{ lastEvent() }} }</p>
           </div>
         </doc-section>
 

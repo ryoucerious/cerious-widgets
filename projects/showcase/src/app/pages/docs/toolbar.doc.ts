@@ -36,9 +36,9 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
 })
 export class ToolbarDocComponent {
   readonly apiProps = [
-    { name: '[cwToolbarStart]', type: 'content slot', default: '—', description: 'Content aligned to the start (left).' },
-    { name: '[cwToolbarCenter]', type: 'content slot', default: '—', description: 'Content aligned to the centre.' },
-    { name: '[cwToolbarEnd]', type: 'content slot', default: '—', description: 'Content aligned to the end (right).' }
+    { name: '[cwToolbarStart]', type: 'content slot', default: ', ', description: 'Content aligned to the start (left).' },
+    { name: '[cwToolbarCenter]', type: 'content slot', default: ', ', description: 'Content aligned to the centre.' },
+    { name: '[cwToolbarEnd]', type: 'content slot', default: ', ', description: 'Content aligned to the end (right).' }
   ];
   readonly apiEvents = [];
   readonly themeTokens = [

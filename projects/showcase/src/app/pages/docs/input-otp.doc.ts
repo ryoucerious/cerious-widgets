@@ -12,7 +12,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="input-otp"><doc-tab label="Features">
       <doc-section title="6-digit code" [code]="basicCode">
         <cw-input-otp [length]="6" integerOnly [(ngModel)]="code" />
-        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Code: {{ code || '—' }}</span>
+        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Code: {{ code || ', ' }}</span>
       </doc-section>
 
       <doc-section title="Masked PIN" [code]="maskedCode">

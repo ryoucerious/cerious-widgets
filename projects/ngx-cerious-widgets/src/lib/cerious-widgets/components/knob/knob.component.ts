@@ -156,9 +156,12 @@ export class KnobComponent implements ControlValueAccessor {
     const rect = this.host.nativeElement.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    // Angle from the positive x-axis, clockwise, with 0 at the top.
+    // Screen angle from the centre: 0° at 3 o'clock, increasing clockwise (y is
+    // down). The arc starts at `startAngle` (135°, bottom-left) and sweeps
+    // clockwise, so the pointer's position along the arc is simply how far past
+    // the start it is. (A stray +90° here made the value lag the pointer.)
     let angle = (Math.atan2(event.clientY - cy, event.clientX - cx) * 180) / Math.PI;
-    angle = (angle - this.startAngle + 360 + 90) % 360; // normalise into the arc's frame
+    angle = (angle - this.startAngle + 360) % 360; // normalise into the arc's frame
     // Map only the sweep region; clamp the dead zone at the bottom.
     const fraction = Math.min(Math.max(angle / this.sweep, 0), 1);
     const next = this.min() + fraction * (this.max() - this.min());

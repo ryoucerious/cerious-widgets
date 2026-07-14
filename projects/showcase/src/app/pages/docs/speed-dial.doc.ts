@@ -45,7 +45,7 @@ export class SpeedDialDocComponent {
     { token: "--cw-shadow-sm", description: "Subtle elevation shadow." }
   ];
 
-  readonly last = signal('—');
+  readonly last = signal(', ');
 
   items: CwSpeedDialItem[] = [
     { label: 'New', command: () => this.last.set('New') },

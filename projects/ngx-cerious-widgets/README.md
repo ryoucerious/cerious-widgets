@@ -4,7 +4,7 @@
 
 **(Pronounced: Serious)**
 
-**A seriously complete, enterprise-grade Angular component library** — ~85 standalone, signal-based, zoneless-safe components unified by a token-based theming engine (10 built-in themes plus your own brand colors), accessible to WCAG 2.1 AA, and extensible end-to-end with a universal plugin architecture.
+**A seriously complete, enterprise-grade Angular component library**, ~85 standalone, signal-based, zoneless-safe components unified by a token-based theming engine (10 built-in themes plus your own brand colors), accessible to WCAG 2.1 AA, and extensible end-to-end with a universal plugin architecture.
 
 No heavy dependencies. MIT licensed. Built for real-world, data-intensive apps.
 
@@ -17,12 +17,12 @@ No heavy dependencies. MIT licensed. Built for real-world, data-intensive apps.
 
 ## ✨ Highlights
 
-- **~85 components** across Data, Form, Display, Navigation, Overlay & Utilities — from inputs, selects and a virtualized data grid to menus, dialogs, charts and a calendar.
-- **Themeable to the core** — 10 built-in presets (light, frost, dark, midnight, sandstone, emerald, grape, contrast, flat, soft) that vary color *and* shape/elevation, plus a runtime engine to set your own primary/secondary, radius and typography. All driven by `--cw-*` tokens; switch live.
-- **Accessible by default** — keyboard navigation, ARIA and focus management throughout; the whole library passes **axe-core WCAG 2.1 AA with 0 violations** across every component page in every theme.
-- **Zoneless & signal-based** — every component is `standalone`, OnPush and built on Angular signals, safe under `provideExperimentalZonelessChangeDetection()`.
-- **Universal plugin system** — *every* component is a plugin host. Extend, observe or completely replace behaviour without forking. See [Plugins](#-plugins).
-- **A world-class data grid** — virtual scrolling, server-side mode, multi-sort, grouping, pinning, drag-and-drop columns, column menu, Excel export, save/restore views.
+- **~85 components** across Data, Form, Display, Navigation, Overlay & Utilities, from inputs, selects and a virtualized data grid to menus, dialogs, charts and a calendar.
+- **Themeable to the core**, 10 built-in presets (light, frost, dark, midnight, sandstone, emerald, grape, contrast, flat, soft) that vary color *and* shape/elevation, plus a runtime engine to set your own primary/secondary, radius and typography. All driven by `--cw-*` tokens; switch live.
+- **Accessible by default**, keyboard navigation, ARIA and focus management throughout; the whole library passes **axe-core WCAG 2.1 AA with 0 violations** across every component page in every theme.
+- **Zoneless & signal-based**, every component is `standalone`, OnPush and built on Angular signals, safe under `provideExperimentalZonelessChangeDetection()`.
+- **Universal plugin system**, *every* component is a plugin host. Extend, observe or completely replace behaviour without forking. See [Plugins](#-plugins).
+- **A world-class data grid**, virtual scrolling, server-side mode, multi-sort, grouping, pinning, drag-and-drop columns, column menu, Excel export, save/restore views.
 
 ---
 
@@ -40,7 +40,7 @@ Add the stylesheet to `angular.json`:
 ]
 ```
 
-The components are **standalone** — import just what you use:
+The components are **standalone**, import just what you use:
 
 ```ts
 import { SelectComponent, DialogComponent } from 'ngx-cerious-widgets';
@@ -67,13 +67,13 @@ Prefer a module? `CeriousWidgetsModule.forRoot({ /* config */ })` still works an
 <cw-grid [data]="rows" [gridOptions]="gridOptions" (rowClick)="onRowClick($event)" />
 ```
 
-Browse every component — with live examples, an API table and theming notes for each — in the [documentation site](https://ryoucerious.github.io/cerious-widgets/).
+Browse every component, with live examples, an API table and theming notes for each, in the [documentation site](https://ryoucerious.github.io/cerious-widgets/).
 
 ---
 
 ## 🎨 Theming
 
-All visuals are driven by `--cw-*` design tokens, so theming is a matter of setting CSS variables — no recompiling. Ship the built-in presets or define your own.
+All visuals are driven by `--cw-*` design tokens, so theming is a matter of setting CSS variables, no recompiling. Ship the built-in presets or define your own.
 
 ```html
 <!-- Switch the whole app at runtime -->
@@ -91,10 +91,10 @@ All visuals are driven by `--cw-*` design tokens, so theming is a matter of sett
 
 ### Custom themes & brand colors
 
-Beyond the static themes, a **runtime theming engine** lets you set your own brand colors and choose from extra curated presets — `light`, `frost`, `dark`, `midnight`, `sandstone`, `emerald`, `grape`, `contrast`. Pass a preset and/or your own `primary`/`secondary`; the engine derives the whole brand palette (hover/active states, AA-safe filled surfaces, focus ring, chips) while keeping the preset's tuned neutrals.
+Beyond the static themes, a **runtime theming engine** lets you set your own brand colors and choose from extra curated presets, `light`, `frost`, `dark`, `midnight`, `sandstone`, `emerald`, `grape`, `contrast`. Pass a preset and/or your own `primary`/`secondary`; the engine derives the whole brand palette (hover/active states, AA-safe filled surfaces, focus ring, chips) while keeping the preset's tuned neutrals.
 
 ```ts
-// app.config.ts — apply at bootstrap
+// app.config.ts, apply at bootstrap
 import { provideCeriousTheme } from 'ngx-cerious-widgets';
 
 export const appConfig = {
@@ -152,13 +152,13 @@ Full guide: **[/components/plugins](https://ryoucerious.github.io/cerious-widget
 
 ## ▦ The data grid
 
-The grid is a full-blown, enterprise data grid — not just a table:
+The grid is a full-blown, enterprise data grid, not just a table:
 
-- **Performance** — virtual scrolling (render 1M+ rows), pagination, server-side mode (paging / filtering / virtual scroll).
-- **Layout** — column resizing & pinning, drag-and-drop reordering, grouped headers, group-by with a drag-to-group UI, nested rows (any Angular template).
-- **Data** — multi-column sorting (Ctrl/Meta-click), text/number/select/date filtering.
-- **Customization** — cell/header/row templates; directive-based plugin templates.
-- **Extensibility** — pluggable architecture, save & restore views, one-line Excel export.
+- **Performance**, virtual scrolling (render 1M+ rows), pagination, server-side mode (paging / filtering / virtual scroll).
+- **Layout**, column resizing & pinning, drag-and-drop reordering, grouped headers, group-by with a drag-to-group UI, nested rows (any Angular template).
+- **Data**, multi-column sorting (Ctrl/Meta-click), text/number/select/date filtering.
+- **Customization**, cell/header/row templates; directive-based plugin templates.
+- **Extensibility**, pluggable architecture, save & restore views, one-line Excel export.
 
 ```html
 <cw-grid
@@ -173,7 +173,7 @@ The grid is a full-blown, enterprise data grid — not just a table:
 
 ## ♿ Accessibility
 
-Keyboard support, ARIA roles/attributes and focus management are built into every component. The library is verified with an axe-core harness across all component pages in every theme — **0 WCAG 2.1 AA violations**. Color tokens meet AA contrast, including the filled/severity surfaces.
+Keyboard support, ARIA roles/attributes and focus management are built into every component. The library is verified with an axe-core harness across all component pages in every theme, **0 WCAG 2.1 AA violations**. Color tokens meet AA contrast, including the filled/severity surfaces.
 
 ---
 
@@ -185,12 +185,12 @@ Ideas, plugins and PRs are welcome. Head to the [issues page](https://github.com
 
 ## 📝 License
 
-MIT — free for personal and commercial projects.
+MIT, free for personal and commercial projects.
 
 ---
 
 ## 🧠 Built with purpose
 
-Cerious Widgets was built by a developer who's spent nearly two decades in enterprise front-end development. If you've ever been frustrated by restrictive licensing or boxed in by rigid components — **this is for you**.
+Cerious Widgets was built by a developer who's spent nearly two decades in enterprise front-end development. If you've ever been frustrated by restrictive licensing or boxed in by rigid components, **this is for you**.
 
 https://ryoucerious.github.io/cerious-widgets/

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.10] - 2025-06-11
 ### Added
-- Support for Angular **standalone components** — the grid can now be used without importing a shared module.
+- Support for Angular **standalone components**, the grid can now be used without importing a shared module.
 - Integrated **Angular Signals** for improved reactive performance in change detection and data binding.
 
 ### Changed
@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 ## [1.0.16] - 2026-06-01
 ### Added
 - **CeriousScroll is now the core virtual scroller** for the grid body. The in-house viewport implementation has been replaced with [`@ceriousdevtech/cerious-scroll`](https://www.npmjs.com/package/@ceriousdevtech/cerious-scroll) (via `@ceriousdevtech/ngx-cerious-scroll`), bringing O(1)-memory virtualization, an attached native scrollbar, and unified momentum/touch handling.
-- New `enableVirtualScroll` grid option (defaults to `true`). Set to `false` to render all rows in a standard scrollable container — useful for small datasets, printing, or full-page exports.
+- New `enableVirtualScroll` grid option (defaults to `true`). Set to `false` to render all rows in a standard scrollable container, useful for small datasets, printing, or full-page exports.
 - Mobile horizontal scrolling support: the touch controller now performs axis detection on touchstart and forwards horizontal-dominant gestures to the grid's native horizontal scroller while preserving vertical momentum.
 
 ### Changed
@@ -48,27 +48,27 @@ All notable changes to this project will be documented in this file.
 This release grows Cerious Widgets from "a grid + a few components" into a **complete, enterprise-grade component suite** (~85 standalone, signal-based, zoneless-safe components) with a universal plugin architecture and a verified WCAG 2.1 AA accessibility baseline.
 
 ### Added
-- **Runtime theming engine + brand colors.** A new `provideCeriousTheme()` / `CwThemeService` API lets consumers set their own `primary`/`secondary` (plus `radius`/`font`) and choose from curated presets that vary **colour _and_ shape/elevation** — `light`, `frost`, `dark`, **`cerious`** (the Cerious DevTech brand), **`midnight`**, **`sandstone`**, **`emerald`**, **`grape`**, **`contrast`**, **`flat`** (no elevation, square corners) and **`soft`** (large radius, diffuse shadows). The engine derives the full brand palette (hover/active, AA-safe filled surfaces, focus ring, chips, `text-on-accent`) from a base mode's tuned neutrals, so re-branding never breaks contrast. Themes apply to `<html>` or a scoped element (regional theming), custom presets can be registered, and dependency-free color utilities (`toneScale`, `aaFill`, `contrast`, `readableOn`, …) are exported. The static Light/Frost/Dark stylesheet remains the zero-JS baseline.
-- **Universal plugin system — every component is now extensible.** A one-call helper, `providePluginHost(namespace, api)`, makes any component a plugin host; a plugin implements `WidgetPlugin<TApi>` and is registered declaratively per component via `CeriousWidgetsModule.forRoot({ select: { plugins: [...] }, ... })`. New public API surfaces: `CwWidgetApi` (`getHost`), `CwFormControlApi<T>` (`getValue`/`setValue`/`isDisabled`), and bespoke contracts (`SelectApi`, `TabsApi`, `StepperApi`, `TreeApi`, …). The `PluginManagerService` is now component-agnostic and `WidgetsConfig` accepts a block for any component namespace.
-- **Chart components** — `cw-area-chart`, `cw-donut-chart` and `cw-sparkline`: dependency-free, pure-SVG, interactive (`pointClick` / `segmentClick`) and accessible (`role="img"` with sensible default labels).
-- **Calendar component** — `cw-calendar`, a month-view event calendar with full keyboard grid navigation, configurable week start, and `dateSelect` / `eventClick` / `monthChange` outputs.
+- **Runtime theming engine + brand colors.** A new `provideCeriousTheme()` / `CwThemeService` API lets consumers set their own `primary`/`secondary` (plus `radius`/`font`) and choose from curated presets that vary **colour _and_ shape/elevation**, `light`, `frost`, `dark`, **`cerious`** (the Cerious DevTech brand), **`midnight`**, **`sandstone`**, **`emerald`**, **`grape`**, **`contrast`**, **`flat`** (no elevation, square corners) and **`soft`** (large radius, diffuse shadows). The engine derives the full brand palette (hover/active, AA-safe filled surfaces, focus ring, chips, `text-on-accent`) from a base mode's tuned neutrals, so re-branding never breaks contrast. Themes apply to `<html>` or a scoped element (regional theming), custom presets can be registered, and dependency-free color utilities (`toneScale`, `aaFill`, `contrast`, `readableOn`, …) are exported. The static Light/Frost/Dark stylesheet remains the zero-JS baseline.
+- **Universal plugin system, every component is now extensible.** A one-call helper, `providePluginHost(namespace, api)`, makes any component a plugin host; a plugin implements `WidgetPlugin<TApi>` and is registered declaratively per component via `CeriousWidgetsModule.forRoot({ select: { plugins: [...] }, ... })`. New public API surfaces: `CwWidgetApi` (`getHost`), `CwFormControlApi<T>` (`getValue`/`setValue`/`isDisabled`), and bespoke contracts (`SelectApi`, `TabsApi`, `StepperApi`, `TreeApi`, …). The `PluginManagerService` is now component-agnostic and `WidgetsConfig` accepts a block for any component namespace.
+- **Chart components**, `cw-area-chart`, `cw-donut-chart` and `cw-sparkline`: dependency-free, pure-SVG, interactive (`pointClick` / `segmentClick`) and accessible (`role="img"` with sensible default labels).
+- **Calendar component**, `cw-calendar`, a month-view event calendar with full keyboard grid navigation, configurable week start, and `dateSelect` / `eventClick` / `monthChange` outputs.
 - **Keyboard resizing for the Splitter** (arrow keys + Home/End) and the required `separator` ARIA value attributes.
-- **AA-safe fill design tokens** — `--cw-success-fill`, `--cw-warn-fill`, `--cw-danger-fill`, `--cw-primary-fill`, `--cw-accent-fill` (for white-on-fill surfaces) and `--cw-accent-strong` (accent text on soft tints).
+- **AA-safe fill design tokens**, `--cw-success-fill`, `--cw-warn-fill`, `--cw-danger-fill`, `--cw-primary-fill`, `--cw-accent-fill` (for white-on-fill surfaces) and `--cw-accent-strong` (accent text on soft tints).
 - **ScrollPanel** viewport is now keyboard-focusable with an `ariaLabel` input.
 
 ### Changed
 - **Accessibility: the entire library is now axe-clean at WCAG 2.1 AA** across every component in Light, Frost and Dark. Filled brand/severity surfaces were darkened to meet 4.5:1 with white text (via the new `-fill` tokens) without changing their accent/text colours; muted and selected-item text contrast were nudged to pass on tinted surfaces.
-- **Grid column resizer overhaul** — drag now uses pointer capture, so a column resizes no matter where the cursor moves (not just while it's over the handle); the body updates live during the drag; resizing no longer triggers a column sort; and the divider sits exactly on the column boundary instead of overlapping header text.
-- **Grid sorting is now type-aware** — numeric/date/boolean comparison with locale collation for strings, and nulls always sorted last (both directions), in both the Table and the grid MultiSort plugin.
+- **Grid column resizer overhaul**, drag now uses pointer capture, so a column resizes no matter where the cursor moves (not just while it's over the handle); the body updates live during the drag; resizing no longer triggers a column sort; and the divider sits exactly on the column boundary instead of overlapping header text.
+- **Grid sorting is now type-aware**, numeric/date/boolean comparison with locale collation for strings, and nulls always sorted last (both directions), in both the Table and the grid MultiSort plugin.
 - **Depth/edge-case hardening** across Select, MultiSelect, DatePicker, Dialog, Table and Grid: fuller keyboard support (type-ahead, Home/End, roving focus), ARIA (`aria-activedescendant`, labelled dialogs), and empty/null-input safety.
 
 ### Fixed
-- ContextMenu (`[cwContextMenu]`): the menu no longer closes the instant you release the right mouse button — the outside-click listener is armed after the opening click, so it opens on a normal right-click.
+- ContextMenu (`[cwContextMenu]`): the menu no longer closes the instant you release the right mouse button, the outside-click listener is armed after the opening click, so it opens on a normal right-click.
 - Grid: the horizontal scrollbar now appears and tracks correctly under zoneless change detection (previously it needed a click), and dragging it scrolls the body; a crash when global-text-filtering rows with null cells is resolved.
 - Frost theme: toasts now read as frosted glass matching the other overlays; pinned grid columns no longer show the scrolling columns bleeding through; and a whole-window resize flicker (caused by many simultaneous `backdrop-filter` layers) is gone.
 - `FloatLabel` / `IftaLabel`: the label no longer overlaps a pre-filled value on load, and clears nested controls (e.g. inside `cw-input-mask`).
 - `InputNumber` field width with steppers; additional popover placements (`*-start` / `*-end`) with edge-safe fallbacks.
 
 ### Notes
-- Fully backward compatible — plugins are opt-in and existing usage is unchanged.
+- Fully backward compatible, plugins are opt-in and existing usage is unchanged.
 - The full component catalog is documented (live examples, API tables, theming) with a dedicated **Plugins** guide.

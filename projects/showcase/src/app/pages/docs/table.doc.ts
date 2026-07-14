@@ -109,11 +109,11 @@ cols = [
     { name: 'rowClick', type: 'T', description: 'Emitted with the row when a row is clicked.' }
   ];
   columnProps = [
-    { name: 'field', type: 'string', default: '—', description: 'Data property to read (and the sort key).' },
-    { name: 'header', type: 'string', default: '—', description: 'Header label.' },
+    { name: 'field', type: 'string', default: ', ', description: 'Data property to read (and the sort key).' },
+    { name: 'header', type: 'string', default: ', ', description: 'Header label.' },
     { name: 'sortable', type: 'boolean', default: 'false', description: 'Enable click-to-sort on the column.' },
     { name: 'align', type: `'left' | 'center' | 'right'`, default: `'left'`, description: 'Cell text alignment.' },
-    { name: 'width', type: 'string', default: '—', description: 'Fixed column width.' }
+    { name: 'width', type: 'string', default: ', ', description: 'Fixed column width.' }
   ];
   tokens = [
     { token: '--cw-surface / --cw-surface-sunken', description: 'Table & header / striped-row backgrounds.' },

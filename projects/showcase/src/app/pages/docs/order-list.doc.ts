@@ -15,7 +15,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
         <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Order: {{ ordered.join(', ') }}</span>
       </doc-section>
 
-      <doc-section title="300 items — virtualized" [code]="virtualCode">
+      <doc-section title="300 items, virtualized" [code]="virtualCode">
         <cw-order-list [options]="many" header="Items" [(ngModel)]="manyOrder" />
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>
@@ -23,11 +23,11 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
 })
 export class OrderListDocComponent {
   readonly apiProps = [
-    { name: "options", type: "readonly unknown[]", default: "[]", description: "The items — objects, or primitives for a simple list." },
+    { name: "options", type: "readonly unknown[]", default: "[]", description: "The items, objects, or primitives for a simple list." },
     { name: "optionLabel", type: "string", default: "'label'", description: "Property name to read an item's display label from (for object items)." },
     { name: "optionValue", type: "string", default: "'value'", description: "Property name to read an item's value from (for object items)." },
     { name: "header", type: "string", default: "''", description: "Optional heading above the list." },
-    { name: "listHeight", type: "string", default: "'280px'", description: "List height (any CSS length) — the virtualized viewport size." },
+    { name: "listHeight", type: "string", default: "'280px'", description: "List height (any CSS length), the virtualized viewport size." },
     { name: "virtualThreshold", type: "number", default: "100", description: "Virtualize the list (cerious-scroll) at or above this item count." },
     { name: "disabled", type: "boolean", default: "false", description: "Disable the control (also settable via forms `setDisabledState`)." }
   ];
@@ -52,6 +52,6 @@ export class OrderListDocComponent {
   manyOrder = [...this.many];
 
   basicCode = `<cw-order-list [options]="tasks" header="Tasks" [(ngModel)]="ordered" />`;
-  virtualCode = `// 300 items — virtualized with ngx-cerious-scroll
+  virtualCode = `// 300 items, virtualized with ngx-cerious-scroll
 <cw-order-list [options]="many" [(ngModel)]="order" />`;
 }

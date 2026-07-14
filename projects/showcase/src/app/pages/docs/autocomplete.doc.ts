@@ -13,14 +13,14 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
       <doc-tab label="Features">
         <doc-section title="Basic" description="A typeahead input that filters options as you type." [code]="basicCode">
           <cw-autocomplete [options]="countries" [(ngModel)]="country" placeholder="Search countries" style="min-width: 18rem;" />
-          <p class="hint">Value: {{ country ?? '—' }}</p>
+          <p class="hint">Value: {{ country ?? ', ' }}</p>
         </doc-section>
 
         <doc-section title="Minimum length" description="Wait for a few characters before showing suggestions." [code]="minCode">
           <cw-autocomplete [options]="countries" [(ngModel)]="country2" [minLength]="2" placeholder="Type 2+ letters" style="min-width: 18rem;" />
         </doc-section>
 
-        <doc-section title="10,000 options — virtualized"
+        <doc-section title="10,000 options, virtualized"
           description="The suggestions panel renders through ngx-cerious-scroll, so huge pools stay smooth."
           [code]="virtualCode">
           <cw-autocomplete [options]="many" [(ngModel)]="item" placeholder="Search 10,000 items" style="min-width: 18rem;" />
@@ -47,7 +47,7 @@ export class AutoCompleteDocComponent {
 
   basicCode = `<cw-autocomplete [options]="countries" [(ngModel)]="country" placeholder="Search countries" />`;
   minCode = `<cw-autocomplete [options]="countries" [(ngModel)]="country" [minLength]="2" />`;
-  virtualCode = `// 10,000 options — the suggestions panel is virtualized with ngx-cerious-scroll
+  virtualCode = `// 10,000 options, the suggestions panel is virtualized with ngx-cerious-scroll
 <cw-autocomplete [options]="many" [(ngModel)]="item" />`;
 
   props = [

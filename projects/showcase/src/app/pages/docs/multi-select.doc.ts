@@ -13,10 +13,10 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
       <doc-tab label="Features">
         <doc-section title="Basic" description="Bind an array with ngModel; selections render as chips with a filter box." [code]="basicCode">
           <cw-multi-select [options]="cities" [(ngModel)]="selected" placeholder="Select cities" style="min-width: 18rem;" aria-label="Cities" />
-          <p class="hint">Selected: {{ selected.length ? selected.join(', ') : '—' }}</p>
+          <p class="hint">Selected: {{ selected.length ? selected.join(', ') : ', ' }}</p>
         </doc-section>
 
-        <doc-section title="10,000 options — virtualized"
+        <doc-section title="10,000 options, virtualized"
           description="Above virtualThreshold the panel renders through ngx-cerious-scroll, so only the visible rows exist in the DOM."
           [code]="virtualCode">
           <cw-multi-select [options]="many" [(ngModel)]="manySelected" placeholder="Search 10,000 items" style="min-width: 18rem;" aria-label="Search items" />
@@ -45,7 +45,7 @@ export class MultiSelectDocComponent {
   readonly many = Array.from({ length: 10000 }, (_, i) => `Item ${i + 1}`);
 
   basicCode = `<cw-multi-select [options]="cities" [(ngModel)]="selected" placeholder="Select cities" />`;
-  virtualCode = `// 10,000 options — the panel list is virtualized with ngx-cerious-scroll
+  virtualCode = `// 10,000 options, the panel list is virtualized with ngx-cerious-scroll
 <cw-multi-select [options]="many" [(ngModel)]="selected" />`;
   chipCode = `<cw-multi-select [options]="cities" [(ngModel)]="selected" [maxChips]="2" />`;
 

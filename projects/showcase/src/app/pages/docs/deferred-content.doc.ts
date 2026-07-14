@@ -19,7 +19,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
           <cw-deferred-content (loaded)="loaded.set(true)">
             <div class="heavy">
               <h3 style="margin: 0 0 0.5rem;">Rendered on demand 🎉</h3>
-              <p style="margin: 0;">Imagine an expensive chart or map here — it stayed out of the DOM until now.</p>
+              <p style="margin: 0;">Imagine an expensive chart or map here, it stayed out of the DOM until now.</p>
             </div>
           </cw-deferred-content>
         </div>
@@ -52,7 +52,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
 })
 export class DeferredContentDocComponent {
   readonly apiProps = [
-    { name: "threshold", type: "number", default: "0", description: "Fraction of the host visible before it renders (0–1)." }
+    { name: "threshold", type: "number", default: "0", description: "Fraction of the host visible before it renders (0-1)." }
   ];
   readonly apiEvents = [
     { name: "loaded", type: "void", description: "Emitted once, when the content is first rendered." }

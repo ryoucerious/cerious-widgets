@@ -15,7 +15,7 @@ import { findComponent } from '../core/component-registry';
       <h1 class="soon__title">{{ doc()?.name || 'Component' }}</h1>
       <p class="soon__summary">{{ doc()?.summary }}</p>
       <p class="soon__note">
-        A full documentation page for this component is on the way — with live examples, its API
+        A full documentation page for this component is on the way, with live examples, its API
         reference and theming notes. In the meantime, explore the
         <a routerLink="/components">component gallery</a>.
       </p>

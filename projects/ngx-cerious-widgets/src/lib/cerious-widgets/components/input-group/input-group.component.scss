@@ -6,17 +6,21 @@
 
 // Projected controls/addons seam together: flatten interior corners and
 // collapse the doubled borders. ::ng-deep reaches the projected children.
+// The radii use !important because projected controls (`cwButton`, `cwInput`)
+// set their own `:host` border-radius at equal specificity; without it the
+// winner depends on stylesheet load order and the outer corners can round on
+// the wrong (interior) side.
 :host ::ng-deep {
   > * {
-    border-radius: 0;
+    border-radius: 0 !important;
   }
   > *:first-child {
-    border-top-left-radius: var(--cw-radius-sm);
-    border-bottom-left-radius: var(--cw-radius-sm);
+    border-top-left-radius: var(--cw-radius-sm) !important;
+    border-bottom-left-radius: var(--cw-radius-sm) !important;
   }
   > *:last-child {
-    border-top-right-radius: var(--cw-radius-sm);
-    border-bottom-right-radius: var(--cw-radius-sm);
+    border-top-right-radius: var(--cw-radius-sm) !important;
+    border-bottom-right-radius: var(--cw-radius-sm) !important;
   }
   > * + * {
     margin-left: -1px;

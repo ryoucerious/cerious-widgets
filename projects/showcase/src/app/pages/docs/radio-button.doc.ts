@@ -14,7 +14,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
         <cw-radio-button name="size" value="sm" label="Small" [(ngModel)]="size" />
         <cw-radio-button name="size" value="md" label="Medium" [(ngModel)]="size" />
         <cw-radio-button name="size" value="lg" label="Large" [(ngModel)]="size" />
-        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Selected: {{ size ?? '—' }}</span>
+        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Selected: {{ size ?? ', ' }}</span>
       </doc-section>
 
       <doc-section title="Disabled" [code]="disabledCode">
@@ -27,7 +27,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
 export class RadioButtonDocComponent {
   readonly apiProps = [
     { name: "value", type: "unknown", default: "undefined", description: "This radio's own value; selected when the bound model equals it." },
-    { name: "name", type: "string", default: "''", description: "Native group name — radios sharing a name form a keyboard group." },
+    { name: "name", type: "string", default: "''", description: "Native group name, radios sharing a name form a keyboard group." },
     { name: "label", type: "string", default: "''", description: "Text label rendered after the control (projected content also renders)." },
     { name: "disabled", type: "boolean", default: "false", description: "Disable the control (also settable via forms `setDisabledState`)." }
   ];

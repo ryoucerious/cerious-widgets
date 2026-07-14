@@ -26,7 +26,7 @@ export interface ApiRow {
               <tr>
                 <td><code>{{ row.name }}</code></td>
                 <td><code class="doc-api__type">{{ row.type }}</code></td>
-                <td>{{ row.default || '—' }}</td>
+                <td>{{ row.default || '-' }}</td>
                 <td>{{ row.description }}</td>
               </tr>
             }

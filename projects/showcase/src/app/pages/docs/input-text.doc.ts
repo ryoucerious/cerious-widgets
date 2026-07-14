@@ -12,7 +12,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="input-text"><doc-tab label="Features">
       <doc-section title="Basic" [code]="basicCode">
         <input cwInput placeholder="Enter text..." [(ngModel)]="name" />
-        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Value: {{ name || '—' }}</span>
+        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Value: {{ name || ', ' }}</span>
       </doc-section>
 
       <doc-section title="Textarea & disabled" [code]="moreCode">

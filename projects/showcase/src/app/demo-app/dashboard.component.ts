@@ -8,6 +8,7 @@ import {
   TagComponent, TimelineComponent
 } from 'ngx-cerious-widgets';
 import { Order, orderSeverity, seedOrders } from './demo-data';
+import { IconComponent } from '../ui/icon.component';
 
 interface Kpi { label: string; value: string; delta: string; up: boolean; icon: string; tint: string; spark: number[]; }
 interface Seller { name: string; sold: number; percent: number; color: string; }
@@ -19,7 +20,7 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
   imports: [
     FormsModule, CurrencyPipe, CardComponent, TableComponent, TableColumnDirective, TagComponent,
     AvatarComponent, ButtonComponent, BreadcrumbComponent, TimelineComponent, ProgressBarComponent,
-    SelectButtonComponent, AreaChartComponent, DonutChartComponent, SparklineComponent
+    SelectButtonComponent, AreaChartComponent, DonutChartComponent, SparklineComponent, IconComponent
   ],
   template: `
     <cw-breadcrumb [items]="crumbs" />
@@ -27,7 +28,7 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
     <header class="page-head">
       <div>
         <h1 class="page-head__title">Dashboard</h1>
-        <p class="page-head__sub">Welcome back, Jane — here's what's happening today.</p>
+        <p class="page-head__sub">Welcome back, Jane. Here's what's happening today.</p>
       </div>
       <div class="page-head__tools">
         <cw-select-button [options]="ranges" [ngModel]="range()" (ngModelChange)="range.set($event)" />
@@ -40,7 +41,7 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
       @for (k of kpis; track k.label) {
         <div class="kpi">
           <div class="kpi__top">
-            <span class="kpi__icon" [style.background]="k.tint + '22'" [style.color]="k.tint">{{ k.icon }}</span>
+            <span class="kpi__icon" [style.background]="k.tint + '22'" [style.color]="k.tint"><app-icon [name]="k.icon" /></span>
             <span class="kpi__delta" [class.kpi__delta--down]="!k.up">{{ k.up ? '▲' : '▼' }} {{ k.delta }}</span>
           </div>
           <div class="kpi__value">{{ k.value }}</div>
@@ -121,7 +122,8 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
     .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
     .kpi { background: var(--cw-surface); border: 1px solid var(--cw-border); border-radius: var(--cw-radius-md, var(--cw-radius)); padding: 1.1rem 1.2rem 0.6rem; box-shadow: var(--cw-shadow-sm, 0 1px 2px rgba(0,0,0,0.04)); }
     .kpi__top { display: flex; align-items: center; justify-content: space-between; }
-    .kpi__icon { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 10px; font-size: 1.15rem; }
+    .kpi__icon { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 10px; }
+    .kpi__icon app-icon { width: 20px; height: 20px; display: block; }
     .kpi__delta { font-size: 0.8rem; font-weight: 600; color: var(--cw-success, #16a34a); }
     .kpi__delta--down { color: var(--cw-danger, #dc2626); }
     .kpi__value { font-size: 1.7rem; font-weight: 700; color: var(--cw-text); margin-top: 0.6rem; line-height: 1.1; }
@@ -161,9 +163,9 @@ export class DemoDashboardComponent {
   readonly range = signal('12m');
 
   readonly kpis: Kpi[] = [
-    { label: 'Revenue', value: '$84,120', delta: '12.5%', up: true, icon: '💰', tint: '#6c63ff', spark: [12, 18, 15, 22, 20, 28, 26, 34] },
-    { label: 'Orders', value: '1,204', delta: '3.2%', up: true, icon: '🧾', tint: '#22c55e', spark: [30, 28, 33, 31, 36, 34, 40, 44] },
-    { label: 'Customers', value: '3,847', delta: '8.1%', up: true, icon: '👥', tint: '#f59e0b', spark: [10, 14, 13, 19, 22, 21, 27, 30] },
+    { label: 'Revenue', value: '$84,120', delta: '12.5%', up: true, icon: 'dollar', tint: '#6c63ff', spark: [12, 18, 15, 22, 20, 28, 26, 34] },
+    { label: 'Orders', value: '1,204', delta: '3.2%', up: true, icon: 'receipt', tint: '#22c55e', spark: [30, 28, 33, 31, 36, 34, 40, 44] },
+    { label: 'Customers', value: '3,847', delta: '8.1%', up: true, icon: 'users', tint: '#f59e0b', spark: [10, 14, 13, 19, 22, 21, 27, 30] },
     { label: 'Refund rate', value: '2.4%', delta: '0.5%', up: false, icon: '↩️', tint: '#ec4899', spark: [8, 7, 9, 6, 7, 5, 6, 4] }
   ];
 

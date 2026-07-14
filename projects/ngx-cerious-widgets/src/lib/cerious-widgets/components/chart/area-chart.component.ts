@@ -1,7 +1,9 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -39,9 +41,9 @@ export interface CwChartPointEvent {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="cw-area-chart__plot"
+    <div #plot class="cw-area-chart__plot"
          (mousemove)="onMove($event)" (mouseleave)="hoverIndex.set(null)" (click)="onClick()">
-      <svg [attr.viewBox]="'0 0 ' + W + ' ' + H" preserveAspectRatio="none"
+      <svg [attr.viewBox]="'0 0 ' + W() + ' ' + H" preserveAspectRatio="none"
            class="cw-area-chart__svg" role="img" [attr.aria-label]="ariaLabel()">
         <defs>
           @for (s of geom(); track s.name) {
@@ -54,7 +56,7 @@ export interface CwChartPointEvent {
 
         @if (showGrid()) {
           @for (g of gridlines(); track g.y) {
-            <line [attr.x1]="padL" [attr.x2]="W - padR" [attr.y1]="g.y" [attr.y2]="g.y"
+            <line [attr.x1]="padL" [attr.x2]="W() - padR" [attr.y1]="g.y" [attr.y2]="g.y"
                   stroke="var(--cw-divider)" stroke-width="1" />
             <text [attr.x]="padL - 8" [attr.y]="g.y + 4" text-anchor="end" class="cw-area-chart__axis">{{ g.label }}</text>
           }
@@ -121,8 +123,26 @@ export class AreaChartComponent {
   /** Public API handed to plugins (`{ areaChart: { plugins: [...] } }`). */
   readonly api: CwWidgetApi = { getHost: () => this.host.nativeElement };
 
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor() {
     providePluginHost('areaChart', this.api);
+
+    // Track the element's real pixel width so the SVG renders at 1:1 scale
+    // (see W). ResizeObserver only runs in the browser; SSR keeps the default.
+    afterNextRender(() => {
+      const el = this.host.nativeElement;
+      const measure = () => {
+        const w = Math.round(el.clientWidth);
+        if (w > 0) { this.W.set(w); }
+      };
+      measure();
+      if (typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver(measure);
+        ro.observe(el);
+        this.destroyRef.onDestroy(() => ro.disconnect());
+      }
+    });
   }
 
   /** One or more data series to overlay. */
@@ -141,7 +161,15 @@ export class AreaChartComponent {
   /** Emitted when a data point (x-position) is clicked. */
   readonly pointClick = output<CwChartPointEvent>();
 
-  readonly W = 640; readonly H = 260;
+  /**
+   * Viewport width in SVG user units, kept in sync with the element's real
+   * pixel width so `preserveAspectRatio="none"` scales the coordinate system
+   * 1:1 (with a fixed `H`, height resolves to a constant `H`px). This keeps
+   * axis-label text and strokes at their true on-screen size instead of being
+   * stretched with the chart on wide cards. Defaults to 640 pre-measurement.
+   */
+  readonly W = signal(640);
+  readonly H = 260;
   readonly padL = 40; readonly padR = 16; readonly padT = 16; readonly padB = 26;
 
   protected readonly hoverIndex = signal<number | null>(null);
@@ -164,13 +192,13 @@ export class AreaChartComponent {
   readonly xLabels = computed(() => {
     const labels = this.labels();
     const n = labels.length;
-    const innerW = this.W - this.padL - this.padR;
+    const innerW = this.W() - this.padL - this.padR;
     return labels.map((label, i) => ({ i, label, x: this.padL + (n > 1 ? (innerW / (n - 1)) * i : 0) }));
   });
 
   readonly geom = computed(() => {
     const { min, max } = this.bounds();
-    const innerW = this.W - this.padL - this.padR;
+    const innerW = this.W() - this.padL - this.padR;
     const innerH = this.H - this.padT - this.padB;
     return this.series().map(s => {
       const n = s.data.length;
@@ -195,7 +223,7 @@ export class AreaChartComponent {
     return {
       i,
       x: g[0].points[i].x,
-      leftPct: Math.min(90, Math.max(10, (g[0].points[i].x / this.W) * 100)),
+      leftPct: Math.min(90, Math.max(10, (g[0].points[i].x / this.W()) * 100)),
       label: this.labels()[i] ?? '',
       values: this.series().map(s => ({ name: s.name, color: s.color, value: s.data[i] }))
     };
@@ -208,7 +236,7 @@ export class AreaChartComponent {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     if (!rect.width) { return; }
     const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-    const vbX = ratio * this.W;
+    const vbX = ratio * this.W();
     let best = 0, bd = Infinity;
     pts.forEach((p, i) => { const d = Math.abs(p.x - vbX); if (d < bd) { bd = d; best = i; } });
     this.hoverIndex.set(best);

@@ -99,14 +99,14 @@ cols = withCol(columns(), 'id', c => c.pinned = true);
   }" />` },
     { id: 'editing', label: 'Editing', title: 'Inline cell editing', blurb: 'Mark columns editable and double-click a cell to edit it in place. Edits flow back into your data array; hook the grid API for validation or persistence.', code: `cols = withCol(columns(), 'price', c => c.editable = true);
 <cw-grid [data]="data" [gridOptions]="{ columnDefs: cols }" />` },
-    { id: 'templates', label: 'Cell templates', title: 'Custom cell rendering', blurb: 'Point a column at a named <ng-template> (declared inside <cw-grid>) to render its cells however you like — here the status column becomes a coloured Tag. Templates receive the cell value and row.', code: `{ id: 'status', field: 'status', cellTemplate: 'statusTemplate' }
+    { id: 'templates', label: 'Cell templates', title: 'Custom cell rendering', blurb: 'Point a column at a named <ng-template> (declared inside <cw-grid>) to render its cells however you like, here the status column becomes a coloured Tag. Templates receive the cell value and row.', code: `{ id: 'status', field: 'status', cellTemplate: 'statusTemplate' }
 
 <cw-grid [data]="data" [gridOptions]="options">
   <ng-template #statusTemplate let-value="value">
     <cw-tag [value]="value" [severity]="statusSeverity(value)" />
   </ng-template>
 </cw-grid>` },
-    { id: 'grouped-headers', label: 'Grouped headers', title: 'Grouped (multi-row) headers', blurb: 'Give a column def `children` and it becomes a header group spanning them — the header renders as multiple rows, with the parent label above its child columns. Nest as deep as you like.', code: `columnDefs = [
+    { id: 'grouped-headers', label: 'Grouped headers', title: 'Grouped (multi-row) headers', blurb: 'Give a column def `children` and it becomes a header group spanning them, the header renders as multiple rows, with the parent label above its child columns. Nest as deep as you like.', code: `columnDefs = [
   { id: 'id', field: 'id', label: 'ID' },
   { id: 'product', label: 'Product', children: [
     { id: 'name', field: 'name', label: 'Name' },
@@ -117,13 +117,13 @@ cols = withCol(columns(), 'id', c => c.pinned = true);
     { id: 'stock', field: 'stock', label: 'In stock' }
   ] }
 ];` },
-    { id: 'formatters', label: 'Formatters', title: 'Built-in value formatters', blurb: 'Set a column `format` to render values without a custom template: currency, a 0–1 percentage, a star rating, or localized date / datetime / time.', code: `columnDefs = [
+    { id: 'formatters', label: 'Formatters', title: 'Built-in value formatters', blurb: 'Set a column `format` to render values without a custom template: currency, a 0-1 percentage, a star rating, or localized date / datetime / time.', code: `columnDefs = [
   { id: 'price',  field: 'price',  label: 'Price',      format: 'currency' },
   { id: 'rating', field: 'rating', label: 'Rating',     format: 'stars' },
   { id: 'progress', field: 'progress', label: 'Fulfilment', format: 'percentage' },
   { id: 'date',   field: 'date',   label: 'Created',    format: 'date' }
 ];` },
-    { id: 'footer', label: 'Footer', title: 'Footer / aggregate row', blurb: 'Turn on showFooter and point columns at a footerCellTemplate to render a summary row — e.g. column totals. The template receives the column; compute the aggregate from your own data.', code: `columnDefs = [
+    { id: 'footer', label: 'Footer', title: 'Footer / aggregate row', blurb: 'Turn on showFooter and point columns at a footerCellTemplate to render a summary row, e.g. column totals. The template receives the column; compute the aggregate from your own data.', code: `columnDefs = [
   { id: 'name',  field: 'name',  label: 'Name',  footerCellTemplate: 'footerLabel' },
   { id: 'price', field: 'price', label: 'Price', footerCellTemplate: 'footerPrice' },
   { id: 'stock', field: 'stock', label: 'Stock', footerCellTemplate: 'footerStock' }
@@ -136,7 +136,7 @@ cols = withCol(columns(), 'id', c => c.pinned = true);
 </cw-grid>` },
     { id: 'resize', label: 'Resize & reorder', title: 'Resize & reorder columns', blurb: 'Columns marked `resizable` can be dragged wider or narrower by their right edge; columns marked `draggable` can be dragged by their header to reorder. Both are per-column, and combine with every other feature.', code: `{ id: 'name', field: 'name', label: 'Name', resizable: true, draggable: true }
 // drag a header to reorder · drag its right border to resize` },
-    { id: 'pagination', label: 'Pagination', title: 'Paged grid', blurb: 'Prefer pages over infinite scroll? Turn on the pager and set a page size. The pager is built on the standalone Paginator, and every part — the rows-per-page select, the summary, the first/last and prev/next buttons, the page numbers — is configurable via gridOptions.pager. The page buttons align to the right. (Pagination and virtual scroll are mutually exclusive.)', code: `<cw-grid [data]="data" [gridOptions]="{
+    { id: 'pagination', label: 'Pagination', title: 'Paged grid', blurb: 'Prefer pages over infinite scroll? Turn on the pager and set a page size. The pager is built on the standalone Paginator, and every part, the rows-per-page select, the summary, the first/last and prev/next buttons, the page numbers, is configurable via gridOptions.pager. The page buttons align to the right. (Pagination and virtual scroll are mutually exclusive.)', code: `<cw-grid [data]="data" [gridOptions]="{
   showPager: true,
   pageSize: 12,
   enableVirtualScroll: false,
@@ -154,7 +154,7 @@ cols = withCol(columns(), 'id', c => c.pinned = true);
 
 // main.ts
 CeriousWidgetsModule.forRoot({ plugins: [ExportToExcelPlugin] })` },
-    { id: 'virtual', label: 'Virtual scroll', title: '100,000 rows, virtualized', blurb: 'The body renders through ngx-cerious-scroll, so only the ~20 visible rows exist in the DOM at any time — scrolling a hundred thousand rows stays smooth. Bound the viewport height via bodyClasses (or a full-height container).', code: `<cw-grid [data]="bigData"
+    { id: 'virtual', label: 'Virtual scroll', title: '100,000 rows, virtualized', blurb: 'The body renders through ngx-cerious-scroll, so only the ~20 visible rows exist in the DOM at any time, scrolling a hundred thousand rows stays smooth. Bound the viewport height via bodyClasses (or a full-height container).', code: `<cw-grid [data]="bigData"
   [gridOptions]="{ enableVirtualScroll: true }"
   [bodyClasses]="{ container: 'my-grid-body' }" />
 
@@ -170,7 +170,7 @@ CeriousWidgetsModule.forRoot({ plugins: [ExportToExcelPlugin] })` },
     { name: 'SaveGridState', registered: 'SaveGridStatePlugin', purpose: 'Persists column order/width/sort/filter state (e.g. to localStorage) and restores it.', config: `SaveGridState: { enableSaveGridState: true }` }
   ];
 
-  registerCode = `// Register the grid plugins you need — once, at bootstrap.
+  registerCode = `// Register the grid plugins you need, once, at bootstrap.
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(
@@ -309,10 +309,10 @@ bootstrapApplication(AppComponent, {
   // ---- API tab data ----
   gridProps = [
     { name: 'data', type: 'T[]', default: 'null', description: 'Row data array.' },
-    { name: 'gridOptions', type: 'GridOptions', default: '—', description: 'Column defs + behaviour (see the GridOptions table).' },
+    { name: 'gridOptions', type: 'GridOptions', default: ', ', description: 'Column defs + behaviour (see the GridOptions table).' },
     { name: 'pluginOptions', type: 'PluginOptions', default: '{}', description: 'Per-plugin configuration (see the Plugins tab).' },
     { name: 'plugins', type: 'GridPlugin[]', default: '[]', description: 'Instance-level plugins (in addition to those registered via forRoot).' },
-    { name: 'gridContainerClasses / menuBarClasses / headerClasses / bodyClasses / footerClasses / pagerClasses', type: 'SectionClassConfig', default: '{}', description: 'CSS classes for each grid section ({ container, row, cell }) — e.g. to bound the virtual-scroll viewport height.' }
+    { name: 'gridContainerClasses / menuBarClasses / headerClasses / bodyClasses / footerClasses / pagerClasses', type: 'SectionClassConfig', default: '{}', description: 'CSS classes for each grid section ({ container, row, cell }), e.g. to bound the virtual-scroll viewport height.' }
   ];
   gridEvents = [
     { name: 'dataChange', type: 'T[]', description: 'Emitted when the row data changes (e.g. after an inline edit).' },
@@ -334,12 +334,12 @@ bootstrapApplication(AppComponent, {
     { name: 'gridApi.selectPage(n)', type: 'void', description: 'Go to page n (1-based).' }
   ];
   optionProps = [
-    { name: 'columnDefs', type: 'ColumnDef[]', default: '[]', description: 'Column definitions (required — see the ColumnDef table).' },
+    { name: 'columnDefs', type: 'ColumnDef[]', default: '[]', description: 'Column definitions (required, see the ColumnDef table).' },
     { name: 'enableVirtualScroll', type: 'boolean', default: 'false', description: 'Virtualize the body via ngx-cerious-scroll (huge datasets).' },
     { name: 'showMenuBar', type: 'boolean', default: 'false', description: 'Show the toolbar that hosts plugin actions (filter, export, visibility…).' },
     { name: 'showPager', type: 'boolean', default: 'false', description: 'Show the pager (built on the Paginator component).' },
-    { name: 'pageSize', type: 'number', default: '—', description: 'Rows per page when paginating.' },
-    { name: 'pager', type: '{ showPageSize?, showSummary?, showFirstLast?, showPrevNext?, showPageNumbers?, pageSizeOptions? }', default: '—', description: 'Per-part pager configuration.' },
+    { name: 'pageSize', type: 'number', default: ', ', description: 'Rows per page when paginating.' },
+    { name: 'pager', type: '{ showPageSize?, showSummary?, showFirstLast?, showPrevNext?, showPageNumbers?, pageSizeOptions? }', default: ', ', description: 'Per-part pager configuration.' },
     { name: 'showFooter', type: 'boolean', default: 'false', description: 'Show the footer/aggregate row (via footerCellTemplate).' },
     { name: 'enableMultiselect / enableSingleselect', type: 'boolean', default: 'false', description: 'Row selection with a checkbox column (multi) or single-row select.' },
     { name: 'enableGroupBy', type: 'boolean', default: 'false', description: 'Allow row grouping (with the ColumnMenu plugin).' },
@@ -347,22 +347,22 @@ bootstrapApplication(AppComponent, {
     { name: 'enableColumnVisibility', type: 'boolean', default: 'false', description: 'Enable the show/hide-columns panel (with the ColumnVisibility plugin).' },
     { name: 'height / maxHeight', type: 'string', default: `'auto'`, description: `Grid height. 'auto' fills the container (heightOffset trims it); a fixed length is used as-is.` },
     { name: 'heightOffset', type: 'number', default: '0', description: 'Px subtracted from an auto height (for surrounding chrome).' },
-    { name: 'columnWidth / featureColumnWidth', type: 'string', default: '—', description: 'Default column width; width of the checkbox/feature column.' },
-    { name: 'headerTemplate / nestedRowTemplate', type: 'string', default: '—', description: 'Named templates for a custom header and for nested (detail) rows.' },
+    { name: 'columnWidth / featureColumnWidth', type: 'string', default: ', ', description: 'Default column width; width of the checkbox/feature column.' },
+    { name: 'headerTemplate / nestedRowTemplate', type: 'string', default: ', ', description: 'Named templates for a custom header and for nested (detail) rows.' },
     { name: 'noDataMessage', type: 'string', default: `'No records'`, description: 'Empty-state text.' }
   ];
   columnProps = [
-    { name: 'id', type: 'string', default: '—', description: 'Unique column id (required).' },
-    { name: 'field', type: 'string', default: '—', description: 'Data property to read for the cell value.' },
-    { name: 'label', type: 'string', default: '—', description: 'Header text (required).' },
-    { name: 'type', type: 'ColumnType', default: 'String', description: 'String | Number | Date | DateTime | Time | Boolean | Dropdown — drives default formatting & the inline editor.' },
-    { name: 'format', type: 'ColumnFormat', default: '—', description: `'currency' | 'stars' | 'percentage' | 'date' | 'datetime' | 'time' — built-in value formatter.` },
+    { name: 'id', type: 'string', default: ', ', description: 'Unique column id (required).' },
+    { name: 'field', type: 'string', default: ', ', description: 'Data property to read for the cell value.' },
+    { name: 'label', type: 'string', default: ', ', description: 'Header text (required).' },
+    { name: 'type', type: 'ColumnType', default: 'String', description: 'String | Number | Date | DateTime | Time | Boolean | Dropdown, drives default formatting & the inline editor.' },
+    { name: 'format', type: 'ColumnFormat', default: ', ', description: `'currency' | 'stars' | 'percentage' | 'date' | 'datetime' | 'time', built-in value formatter.` },
     { name: 'sortable / filterable / groupable / pinnable / resizable / draggable', type: 'boolean', default: 'false', description: 'Per-column capabilities.' },
     { name: 'editable', type: 'boolean', default: 'false', description: 'Allow inline editing of this column.' },
-    { name: 'valueOptions', type: '{ id, value }[]', default: '—', description: 'Options for a Dropdown-type editable column.' },
-    { name: 'cellTemplate / headerCellTemplate / footerCellTemplate', type: 'string', default: '—', description: 'Names of <ng-template>s (inside <cw-grid>) that render the cell / header / footer.' },
-    { name: 'children', type: 'ColumnDef[]', default: '—', description: 'Child columns → a grouped (multi-row) header.' },
-    { name: 'width / pinned / visible / alignment', type: 'string / boolean / boolean / string', default: '—', description: 'Fixed width; starts pinned; starts hidden; text alignment.' }
+    { name: 'valueOptions', type: '{ id, value }[]', default: ', ', description: 'Options for a Dropdown-type editable column.' },
+    { name: 'cellTemplate / headerCellTemplate / footerCellTemplate', type: 'string', default: ', ', description: 'Names of <ng-template>s (inside <cw-grid>) that render the cell / header / footer.' },
+    { name: 'children', type: 'ColumnDef[]', default: ', ', description: 'Child columns → a grouped (multi-row) header.' },
+    { name: 'width / pinned / visible / alignment', type: 'string / boolean / boolean / string', default: ', ', description: 'Fixed width; starts pinned; starts hidden; text alignment.' }
   ];
   themeTokens = [
     { token: '--cw-surface', description: 'Grid card, header and row background.' },

@@ -29,11 +29,11 @@ interface Product { name: string; category: string; price: number; }
         </div>
       </doc-section>
 
-      <doc-section title="1,000 items — virtualized list" [code]="virtualCode">
+      <doc-section title="1,000 items, virtualized list" [code]="virtualCode">
         <div style="width: 100%; max-width: 40rem;">
           <cw-data-view [value]="many" layout="list" listHeight="320px">
             <ng-template cwDataViewItem let-item>
-              <div style="padding: 0.625rem 1rem;">{{ item.name }} — <span style="color: var(--cw-text-muted);">{{ item.category }}</span></div>
+              <div style="padding: 0.625rem 1rem;">{{ item.name }}, <span style="color: var(--cw-text-muted);">{{ item.category }}</span></div>
             </ng-template>
           </cw-data-view>
         </div>
@@ -82,6 +82,6 @@ export class DataViewDocComponent {
   basicCode = `<cw-data-view [value]="products" layout="grid" [rows]="6">
   <ng-template cwDataViewItem let-item>{{ item.name }}</ng-template>
 </cw-data-view>`;
-  virtualCode = `// 1,000 items — the list is virtualized with ngx-cerious-scroll
+  virtualCode = `// 1,000 items, the list is virtualized with ngx-cerious-scroll
 <cw-data-view [value]="many" layout="list" listHeight="320px">…</cw-data-view>`;
 }

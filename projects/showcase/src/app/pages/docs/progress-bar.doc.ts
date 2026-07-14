@@ -31,7 +31,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
 })
 export class ProgressBarDocComponent {
   readonly apiProps = [
-    { name: "value", type: "number", default: "0", description: "Completion percentage (0–100), used in determinate mode." },
+    { name: "value", type: "number", default: "0", description: "Completion percentage (0-100), used in determinate mode." },
     { name: "mode", type: "CwProgressMode", default: "'determinate'", description: "Determinate (tracks `value`) or indeterminate (animated)." },
     { name: "showValue", type: "boolean", default: "false", description: "Show the numeric percentage beside the bar." }
   ];

@@ -12,7 +12,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
       <doc-section title="Toggle a panel" [code]="code">
         <button cwButton [cwStyleClass]="'@next'" toggleClass="is-open">Toggle panel</button>
         <div class="collapsible">
-          <p style="margin: 0;">I'm toggled purely by the <code>cwStyleClass</code> directive — no <code>*ngIf</code>, no signal.</p>
+          <p style="margin: 0;">I'm toggled purely by the <code>cwStyleClass</code> directive, no <code>*ngIf</code>, no signal.</p>
         </div>
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>
@@ -35,7 +35,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
 })
 export class StyleClassDocComponent {
   readonly apiProps = [
-    { name: "cwStyleClass", type: "string", default: "—", description: "Target selector or relative keyword (see class docs)." },
+    { name: "cwStyleClass", type: "string", default: ", ", description: "Target selector or relative keyword (see class docs)." },
     { name: "toggleClass", type: "string", default: "''", description: "Class to toggle on the resolved target." },
     { name: "enterClass", type: "string", default: "''", description: "Class to add on click (paired with `leaveClass` for one-way transitions)." },
     { name: "leaveClass", type: "string", default: "''", description: "Class to add on a second click / when leaving." }

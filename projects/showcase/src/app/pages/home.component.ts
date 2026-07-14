@@ -11,13 +11,15 @@ import {
   ToggleSwitchComponent
 } from 'ngx-cerious-widgets';
 import { COMPONENTS, GROUP_ORDER, TOTAL_COMPONENTS } from '../core/component-registry';
+import { IconComponent } from '../ui/icon.component';
+import { CW_PRESETS } from 'ngx-cerious-widgets';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    RouterLink, FormsModule,
+    RouterLink, FormsModule, IconComponent,
     ButtonComponent, TagComponent, BadgeComponent, RatingComponent,
     ToggleSwitchComponent, ProgressBarComponent, AvatarComponent
   ],
@@ -28,6 +30,7 @@ export class HomeComponent {
   readonly total = TOTAL_COMPONENTS;
   readonly groupCount = GROUP_ORDER.length;
   readonly virtualCount = COMPONENTS.filter(c => c.virtualized).length;
+  readonly themeCount = CW_PRESETS.length;
 
   // Live montage state. ngModel-bound fields are plain (two-way needs a settable
   // member, not a signal getter); progress is display-only.
@@ -36,9 +39,9 @@ export class HomeComponent {
   readonly progress = signal(72);
 
   readonly highlights = [
-    { icon: '🧩', title: `${TOTAL_COMPONENTS}+ components`, text: 'A full, comprehensive catalog — from inputs and overlays to a virtualized data grid.' },
-    { icon: '🎨', title: 'Themeable to the core', text: 'Curated presets that vary color, shape & elevation — plus a runtime engine to set your own brand colors, all from --cw-* tokens.' },
-    { icon: '⚡', title: 'Signals & OnPush', text: 'Every component is standalone, zoneless-safe and built on modern Angular signal inputs.' },
-    { icon: '♾️', title: 'Virtual scrolling built in', text: `${COMPONENTS.filter(c => c.virtualized).length} data components virtualize huge lists via ngx-cerious-scroll.` }
+    { icon: 'feat-components', title: `${TOTAL_COMPONENTS}+ components`, text: 'A full, comprehensive catalog, from inputs and overlays to a virtualized data grid.' },
+    { icon: 'feat-theme', title: 'Themeable to the core', text: 'Curated presets that vary color, shape & elevation, plus a runtime engine to set your own brand colors, all from --cw-* tokens.' },
+    { icon: 'feat-bolt', title: 'Signals & OnPush', text: 'Every component is standalone, zoneless-safe and built on modern Angular signal inputs.' },
+    { icon: 'virtual-scroller', title: 'Virtual scrolling built in', text: `${COMPONENTS.filter(c => c.virtualized).length} data components virtualize huge lists via ngx-cerious-scroll.` }
   ];
 }

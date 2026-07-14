@@ -84,7 +84,8 @@
   border: 1px solid var(--cw-border);
   border-radius: var(--cw-radius-lg);
 }
-.highlight__icon { font-size: 1.5rem; }
+.highlight__icon { color: var(--cw-primary); }
+.highlight__icon app-icon { display: block; width: 28px; height: 28px; }
 .highlight__title { margin: 0.75rem 0 0.4rem; font-size: 1.05rem; font-weight: 650; color: var(--cw-text); }
 .highlight__text { margin: 0; font-size: 0.925rem; line-height: 1.6; color: var(--cw-text-muted, var(--cw-text-secondary)); }
 

@@ -14,11 +14,11 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
         <button cwButton severity="secondary" variant="outlined" (click)="right.set(true)">Open right</button>
 
         <cw-drawer header="Navigation" position="left" [visible]="left()" (visibleChange)="left.set($event)">
-          A drawer sliding from the left — good for navigation.
+          A drawer sliding from the left, good for navigation.
         </cw-drawer>
 
         <cw-drawer header="Filters" position="right" [visible]="right()" (visibleChange)="right.set($event)">
-          A drawer sliding from the right — good for filters and detail panes.
+          A drawer sliding from the right, good for filters and detail panes.
         </cw-drawer>
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>

@@ -7,6 +7,7 @@ import {
   InputTextDirective, PluginOptions, RowEvent, SelectButtonComponent, SelectComponent, TagComponent
 } from 'ngx-cerious-widgets';
 import { CATEGORIES, PRODUCT_STATUSES, Product, productSeverity, seedProducts } from './demo-data';
+import { IconComponent } from '../ui/icon.component';
 
 @Component({
   selector: 'app-demo-products',
@@ -14,7 +15,8 @@ import { CATEGORIES, PRODUCT_STATUSES, Product, productSeverity, seedProducts } 
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     FormsModule, CurrencyPipe, GridComponent, TagComponent, ButtonComponent, DialogComponent,
-    SelectComponent, SelectButtonComponent, InputNumberComponent, InputTextDirective, DrawerComponent, DividerComponent
+    SelectComponent, SelectButtonComponent, InputNumberComponent, InputTextDirective, DrawerComponent, DividerComponent,
+    IconComponent
   ],
   template: `
     <header class="page-head">
@@ -51,8 +53,8 @@ import { CATEGORIES, PRODUCT_STATUSES, Product, productSeverity, seedProducts } 
           </ng-template>
           <ng-template #actionsTpl let-row="row">
             <div style="display:flex; gap:0.15rem;">
-              <button cwButton size="small" variant="text" (click)="openEdit(row); $event.stopPropagation()" aria-label="Edit">✎</button>
-              <button cwButton size="small" variant="text" severity="danger" (click)="remove(row); $event.stopPropagation()" aria-label="Delete">🗑</button>
+              <button cwButton size="small" variant="text" (click)="openEdit(row); $event.stopPropagation()" aria-label="Edit"><app-icon name="edit" style="width:16px;height:16px;display:block"></app-icon></button>
+              <button cwButton size="small" variant="text" severity="danger" (click)="remove(row); $event.stopPropagation()" aria-label="Delete"><app-icon name="trash" style="width:16px;height:16px;display:block"></app-icon></button>
             </div>
           </ng-template>
         </cw-grid>

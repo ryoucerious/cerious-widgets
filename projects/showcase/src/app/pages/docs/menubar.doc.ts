@@ -36,7 +36,7 @@ export class MenubarDocComponent {
     { token: "--cw-focus-ring", description: "Keyboard focus outline." }
   ];
 
-  readonly last = signal('—');
+  readonly last = signal(', ');
 
   items: CwMenubarItem[] = [
     { label: 'File', items: [

@@ -15,7 +15,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
         <span style="margin-left: 0.75rem; color: var(--cw-text-muted);">state: {{ following }}</span>
       </doc-section>
 
-      <doc-section title="Icons or symbols" description="Labels are plain strings — use any text or symbol." [code]="iconCode">
+      <doc-section title="Icons or symbols" description="Labels are plain strings, use any text or symbol." [code]="iconCode">
         <cw-toggle-button onLabel="🔔 On" offLabel="🔕 Off" [(ngModel)]="notify" />
       </doc-section>
 

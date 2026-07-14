@@ -13,7 +13,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
         <cw-tabs style="width: 100%; max-width: 32rem;">
           <cw-tab label="Overview">The grid ships with sorting, grouping, pinning and virtual scroll.</cw-tab>
           <cw-tab label="Installation">npm install ngx-cerious-widgets</cw-tab>
-          <cw-tab label="Theming">Themeable via --cw-* tokens — curated presets plus your own brand colors.</cw-tab>
+          <cw-tab label="Theming">Themeable via --cw-* tokens, curated presets plus your own brand colors.</cw-tab>
         </cw-tabs>
       </doc-section>
 

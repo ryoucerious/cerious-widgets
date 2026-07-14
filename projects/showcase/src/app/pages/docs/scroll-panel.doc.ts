@@ -13,7 +13,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
         <cw-scroll-panel height="14rem" style="width: 100%; max-width: 26rem; border: 1px solid var(--cw-border); border-radius: var(--cw-radius);">
           <div style="padding: 1rem;">
             @for (line of lines; track line) {
-              <p style="margin: 0 0 0.75rem;">Line {{ line }} — this content scrolls within the panel.</p>
+              <p style="margin: 0 0 0.75rem;">Line {{ line }}, this content scrolls within the panel.</p>
             }
           </div>
         </cw-scroll-panel>

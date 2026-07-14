@@ -43,7 +43,7 @@ export class TieredMenuDocComponent {
     { token: "--cw-font", description: "Font family." }
   ];
 
-  readonly last = signal('—');
+  readonly last = signal(', ');
 
   items: CwTieredMenuItem[] = [
     { label: 'File', items: [

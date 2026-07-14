@@ -197,7 +197,16 @@ export class GridComponent extends ZonelessCompatibleComponent implements IGridC
     setTimeout(() => {
       this.gridService.processTemplates(this.templateRefs);
       this.gridColumnService.processGridDefs(this.gridService.gridOptions, this.gridService.gridDataset);
-      this.gridService.resize();
+      // Full render (not just resize): `setData`/`render` first ran in ngOnInit,
+      // before the header/body child components existed to receive `afterRender`.
+      // Now that the view is initialized, render so those components paint the
+      // already-populated columns and rows. Without this, prod builds (which lack
+      // dev mode's extra change-detection pass) show an empty grid.
+      this.gridService.render();
+      // Force a synchronous paint of the freshly-populated columns/rows. Prod
+      // builds omit dev mode's extra change-detection pass, so without this the
+      // grid renders empty even though its state is correct.
+      this.changeDetector.detectChanges();
       
       setTimeout(() => {
         this.registerPlugins();

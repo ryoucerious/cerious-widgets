@@ -10,7 +10,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
   template: `
     <doc-page slug="animate-on-scroll"><doc-tab label="Features">
       <doc-section title="Scroll down to reveal" [code]="code">
-        <p style="color: var(--cw-text-muted);">Scroll within the panel — each card animates in on entry.</p>
+        <p style="color: var(--cw-text-muted);">Scroll within the panel, each card animates in on entry.</p>
         <div class="scroller" tabindex="0" role="region" aria-label="Scrollable demo">
           <div class="spacer">↓ keep scrolling ↓</div>
           @for (card of cards; track card) {
@@ -53,7 +53,7 @@ export class AnimateOnScrollDocComponent {
   readonly apiProps = [
     { name: "enterClass", type: "string", default: "'cw-animate-enter'", description: "Class added while the host is intersecting the viewport." },
     { name: "leaveClass", type: "string", default: "''", description: "Class added while the host is *not* intersecting (when not `once`)." },
-    { name: "threshold", type: "number", default: "0.15", description: "Fraction of the host that must be visible to trigger (0–1)." },
+    { name: "threshold", type: "number", default: "0.15", description: "Fraction of the host that must be visible to trigger (0-1)." },
     { name: "once", type: "boolean", default: "true", description: "Fire only the first time it enters, then stop observing." }
   ];
   readonly apiEvents = [

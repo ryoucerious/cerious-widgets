@@ -15,7 +15,7 @@ import { ApiTableComponent, CodeBlockComponent, DocPageComponent, DocSectionComp
     <doc-page slug="plugins"><doc-tab label="Overview">
       <doc-section
         title="Every component is extensible"
-        description="Each cerious-widgets component is a plugin host. A plugin is a small class that receives the component's public API on init and can read state, drive it, decorate the DOM, or completely change its behaviour — without touching library source. Plugins are registered declaratively per component via CeriousWidgetsModule.forRoot({ … }).">
+        description="Each cerious-widgets component is a plugin host. A plugin is a small class that receives the component's public API on init and can read state, drive it, decorate the DOM, or completely change its behaviour, without touching library source. Plugins are registered declaratively per component via CeriousWidgetsModule.forRoot({ … }).">
       </doc-section>
 
       <doc-section
@@ -32,7 +32,7 @@ import { ApiTableComponent, CodeBlockComponent, DocPageComponent, DocSectionComp
     </doc-tab><doc-tab label="Write a plugin">
       <doc-section
         title="A complete example"
-        description="This Select plugin opens the panel on double-click and logs every change through the public API. It never reaches into component internals — only the SelectApi contract.">
+        description="This Select plugin opens the panel on double-click and logs every change through the public API. It never reaches into component internals, only the SelectApi contract.">
         <doc-code [code]="exampleCode" />
       </doc-section>
 
@@ -44,7 +44,7 @@ import { ApiTableComponent, CodeBlockComponent, DocPageComponent, DocSectionComp
 
       <doc-section
         title="Author your own host"
-        description="Building a custom component? Make it plugin-extensible in one line with providePluginHost(namespace, api) — the same helper every built-in component uses.">
+        description="Building a custom component? Make it plugin-extensible in one line with providePluginHost(namespace, api), the same helper every built-in component uses.">
         <doc-code [code]="hostCode" />
       </doc-section>
     </doc-tab><doc-tab label="Component APIs">
@@ -63,7 +63,7 @@ export class PluginsDocComponent {
     { name: 'SelectApi', type: 'getValue / setValue / getOptions / open / close / isOpen / getHost', default: 'select', description: 'Richer bespoke contract for the Select.' },
     { name: 'TabsApi / StepperApi', type: 'getActiveIndex / setActiveIndex / getHost', default: 'tabs, stepper', description: 'Navigation containers.' },
     { name: 'TreeApi', type: 'getSelectedKey / setSelectedKey / getNodes / getHost', default: 'tree', description: 'Selection tree.' },
-    { name: 'GridApi', type: 'setData / refresh / applySorting / events / …', default: 'grid', description: 'The most extensive API — the grid ships 7 first-party plugins.' }
+    { name: 'GridApi', type: 'setData / refresh / applySorting / events / …', default: 'grid', description: 'The most extensive API, the grid ships 7 first-party plugins.' }
   ];
 
   contractCode = `import { WidgetPlugin } from 'ngx-cerious-widgets';

@@ -13,7 +13,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
       <doc-tab label="Features">
         <doc-section title="Basic" description="Bind with ngModel. Keyboard: ↑ ↓ to move, Enter to select, Esc to close." [code]="basicCode">
           <cw-select [options]="cities" [(ngModel)]="city" optionLabel="name" optionValue="code" placeholder="Select a city" aria-label="City" />
-          <p class="hint">Value: {{ city ?? '—' }}</p>
+          <p class="hint">Value: {{ city ?? ', ' }}</p>
         </doc-section>
 
         <doc-section title="Primitive options" description="Options may be plain strings or numbers." [code]="primitiveCode">

@@ -11,7 +11,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="terminal"><doc-tab label="Features">
       <doc-section title="Try it" description="Type a command (try: help, date, echo hi, clear) and press Enter." [code]="code">
         <div style="width: 100%; max-width: 34rem;">
-          <cw-terminal prompt="cerious $" welcome="Welcome — type 'help' to get started." [handler]="run" />
+          <cw-terminal prompt="cerious $" welcome="Welcome, type 'help' to get started." [handler]="run" />
         </div>
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>

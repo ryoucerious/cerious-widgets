@@ -16,7 +16,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
               <ng-template cwStep label="Cart"><p>Review the items in your cart before continuing.</p></ng-template>
               <ng-template cwStep label="Shipping"><p>Enter your delivery address and preferred method.</p></ng-template>
               <ng-template cwStep label="Payment"><p>Provide your payment details securely.</p></ng-template>
-              <ng-template cwStep label="Confirm"><p>All set — place your order!</p></ng-template>
+              <ng-template cwStep label="Confirm"><p>All set, place your order!</p></ng-template>
             </cw-stepper>
             <p class="hint">Active step: {{ active() + 1 }} of 4</p>
           </div>

@@ -46,7 +46,7 @@ export class PaginatorDocComponent {
     { token: "--cw-radius-sm", description: "Small corner radius." }
   ];
 
-  readonly lastEvent = signal('—');
+  readonly lastEvent = signal(', ');
 
   onPage(event: CwPageEvent): void {
     this.lastEvent.set(`page ${event.page + 1}, size ${event.pageSize}`);

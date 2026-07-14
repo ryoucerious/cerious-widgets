@@ -54,7 +54,7 @@ export class ChartDocComponent {
     this.readout.set(`${e.label}: ` + e.values.map(v => `${v.name} ${v.value}`).join(' · '));
   }
   onSlice(s: CwDonutSegment): void {
-    this.sliceReadout.set(`${s.label} — ${s.value}`);
+    this.sliceReadout.set(`${s.label}, ${s.value}`);
   }
 
   readonly labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];

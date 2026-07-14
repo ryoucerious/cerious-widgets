@@ -15,8 +15,8 @@ export interface TokenRow {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <p class="doc-theming__intro">
-      Every cerious-widgets component is styled with <code>--cw-*</code> CSS custom properties — a
-      three-layer token system (primitive → semantic → per-theme). Switch the theme in the top bar to
+      Every cerious-widgets component is styled with <code>--cw-*</code> CSS custom properties: a
+      three-layer token system (primitive, semantic, per-theme). Switch the theme in the top bar to
       preview <strong>Cerious Light</strong>, <strong>Frost</strong> (glassmorphism) and
       <strong>Dark</strong>. Override any token in your own stylesheet to re-skin without touching markup.
     </p>

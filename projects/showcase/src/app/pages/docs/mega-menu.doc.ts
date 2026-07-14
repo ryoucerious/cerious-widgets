@@ -36,7 +36,7 @@ export class MegaMenuDocComponent {
     { token: "--cw-radius-sm", description: "Small corner radius." }
   ];
 
-  readonly last = signal('—');
+  readonly last = signal(', ');
   private cmd = (label: string) => ({ label, command: () => this.last.set(label) });
 
   items: CwMegaMenuItem[] = [

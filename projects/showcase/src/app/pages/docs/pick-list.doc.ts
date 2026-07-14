@@ -12,10 +12,10 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="pick-list"><doc-tab label="Features">
       <doc-section title="Basic" [code]="basicCode">
         <cw-pick-list [options]="roles" sourceHeader="Available roles" targetHeader="Assigned" [(ngModel)]="assigned" />
-        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Assigned: {{ assigned.join(', ') || '—' }}</span>
+        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Assigned: {{ assigned.join(', ') || ', ' }}</span>
       </doc-section>
 
-      <doc-section title="500 items — virtualized" [code]="virtualCode">
+      <doc-section title="500 items, virtualized" [code]="virtualCode">
         <cw-pick-list [options]="many" [(ngModel)]="manyTarget" />
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>
@@ -23,12 +23,12 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
 })
 export class PickListDocComponent {
   readonly apiProps = [
-    { name: "options", type: "readonly unknown[]", default: "[]", description: "The full pool of items — objects, or primitives for a simple list." },
+    { name: "options", type: "readonly unknown[]", default: "[]", description: "The full pool of items, objects, or primitives for a simple list." },
     { name: "optionLabel", type: "string", default: "'label'", description: "Property name to read an item's display label from (for object items)." },
     { name: "optionValue", type: "string", default: "'value'", description: "Property name to read an item's value from (for object items)." },
     { name: "sourceHeader", type: "string", default: "'Available'", description: "Heading over the source (available) list." },
     { name: "targetHeader", type: "string", default: "'Selected'", description: "Heading over the target (selected) list." },
-    { name: "listHeight", type: "string", default: "'260px'", description: "List height (any CSS length) — the virtualized viewport size." },
+    { name: "listHeight", type: "string", default: "'260px'", description: "List height (any CSS length), the virtualized viewport size." },
     { name: "virtualThreshold", type: "number", default: "100", description: "Virtualize each list (cerious-scroll) at or above this item count." },
     { name: "disabled", type: "boolean", default: "false", description: "Disable the control (also settable via forms `setDisabledState`)." }
   ];
@@ -53,6 +53,6 @@ export class PickListDocComponent {
   manyTarget: string[] = [];
 
   basicCode = `<cw-pick-list [options]="roles" [(ngModel)]="assigned" />`;
-  virtualCode = `// 500 items — each list is virtualized with ngx-cerious-scroll
+  virtualCode = `// 500 items, each list is virtualized with ngx-cerious-scroll
 <cw-pick-list [options]="many" [(ngModel)]="target" />`;
 }

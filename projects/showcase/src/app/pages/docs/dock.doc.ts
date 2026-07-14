@@ -38,7 +38,7 @@ export class DockDocComponent {
     { token: "--cw-radius-lg", description: "Large corner radius." }
   ];
 
-  readonly last = signal('—');
+  readonly last = signal(', ');
 
   items: CwDockItem[] = [
     { label: 'Files', command: () => this.last.set('Files') },

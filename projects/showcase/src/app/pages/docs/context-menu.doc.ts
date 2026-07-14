@@ -32,7 +32,7 @@ export class ContextMenuDocComponent {
 
   ];
 
-  readonly last = signal('—');
+  readonly last = signal(', ');
 
   items: CwMenuItem[] = [
     { label: 'Rename', command: () => this.last.set('Rename') },

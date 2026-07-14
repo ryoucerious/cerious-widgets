@@ -17,7 +17,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
           <button cwButton severity="secondary" variant="outlined">Cancel</button>
           <button cwButton>Confirm</button>
         </div>
-        <button cwButton variant="text" style="margin-top: 0.75rem;">Outside — Tab never reaches me</button>
+        <button cwButton variant="text" style="margin-top: 0.75rem;">Outside, Tab never reaches me</button>
       </doc-section>
     </doc-tab><doc-tab label="API"><doc-api [props]="apiProps" [events]="apiEvents" /></doc-tab><doc-tab label="Theming"><doc-theming [tokens]="themeTokens" /></doc-tab></doc-page>
   `,

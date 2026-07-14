@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { providePluginHost } from '../../shared/plugin-host';
 import { CwWidgetApi } from '../../shared/interfaces/widget-api.interface';
-import { filter } from 'rxjs/operators';
 import { CwMenuItem, MenuComponent } from '../menu/menu.component';
 
 /**
@@ -42,6 +41,20 @@ export class ContextMenuDirective implements OnDestroy {
 
   private overlayRef?: OverlayRef;
 
+  /**
+   * Dismiss on the *next* pointer press outside the menu. We deliberately listen
+   * for `pointerdown` (a fresh press), not the release of the right-click that
+   * opened the menu — CDK's `outsidePointerEvents` fires on that release on some
+   * platforms (notably macOS), which made the menu vanish the instant the button
+   * came up. The opening press already happened before this listener existed, so
+   * it can only ever fire on a subsequent interaction.
+   */
+  private readonly onDocPointerDown = (e: PointerEvent): void => {
+    if (this.overlayRef && !this.overlayRef.overlayElement.contains(e.target as Node)) {
+      this.close();
+    }
+  };
+
   open(event: MouseEvent): void {
     if (!this.items().length) {
       return;
@@ -66,20 +79,9 @@ export class ContextMenuDirective implements OnDestroy {
     ref.instance.itemClick.subscribe(() => this.close());
     ref.changeDetectorRef.detectChanges();
 
-    // Defer the outside-click listener to the next tick: otherwise the
-    // pointerup/mouseup from *releasing* the right button that just opened the
-    // menu is caught as an "outside" event and closes it immediately (making it
-    // seem like you must hold the button down).
-    const ownerRef = this.overlayRef;
-    setTimeout(() => {
-      if (this.overlayRef !== ownerRef) {
-        return;
-      }
-      ownerRef
-        .outsidePointerEvents()
-        .pipe(filter(e => e.type !== 'contextmenu'))
-        .subscribe(() => this.close());
-    });
+    // Capture-phase so it runs before component handlers; safe to add now — the
+    // opening press has already fired, so this only reacts to the next press.
+    document.addEventListener('pointerdown', this.onDocPointerDown, true);
     this.overlayRef.keydownEvents().subscribe(e => {
       if (e.key === 'Escape') {
         this.close();
@@ -88,6 +90,7 @@ export class ContextMenuDirective implements OnDestroy {
   }
 
   close(): void {
+    document.removeEventListener('pointerdown', this.onDocPointerDown, true);
     this.overlayRef?.dispose();
     this.overlayRef = undefined;
   }

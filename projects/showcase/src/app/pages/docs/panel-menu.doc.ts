@@ -36,7 +36,7 @@ export class PanelMenuDocComponent {
     { token: "--cw-focus-ring", description: "Keyboard focus outline." }
   ];
 
-  readonly last = signal('—');
+  readonly last = signal(', ');
 
   items: CwPanelMenuItem[] = [
     { label: 'Files', expanded: true, items: [

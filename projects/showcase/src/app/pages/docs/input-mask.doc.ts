@@ -12,7 +12,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
     <doc-page slug="input-mask"><doc-tab label="Features">
       <doc-section title="Phone" [code]="phoneCode">
         <cw-input-mask mask="(999) 999-9999" [(ngModel)]="phone" />
-        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Value: {{ phone || '—' }}</span>
+        <span style="color: var(--cw-text-muted); font-size: 0.875rem;">Value: {{ phone || ', ' }}</span>
       </doc-section>
 
       <doc-section title="Date & serial" [code]="moreCode">

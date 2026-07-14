@@ -32,7 +32,7 @@ export const GROUP_ORDER: ComponentGroup[] = ['Data', 'Form', 'Display', 'Naviga
 
 export const COMPONENTS: ComponentDoc[] = [
   // ---- Data ----
-  { slug: 'grid', name: 'Grid', group: 'Data', icon: '▦', summary: 'Virtualized data grid — sort, group, pin, edit, export', complex: true, virtualized: true, ready: true },
+  { slug: 'grid', name: 'Grid', group: 'Data', icon: '▦', summary: 'Virtualized data grid, sort, group, pin, edit, export', complex: true, virtualized: true, ready: true },
   { slug: 'table', name: 'Table', group: 'Data', icon: '☷', summary: 'Lightweight semantic table with sorting & templates', complex: true, ready: true },
   { slug: 'chart', name: 'Chart', group: 'Data', icon: '📈', summary: 'Pure-SVG area, donut & sparkline charts', complex: true, ready: true },
   { slug: 'calendar', name: 'Calendar', group: 'Data', icon: '📅', summary: 'Month-view event calendar with keyboard nav', complex: true, ready: true },
@@ -118,7 +118,7 @@ export const COMPONENTS: ComponentDoc[] = [
   { slug: 'focus-trap', name: 'FocusTrap', group: 'Utilities', icon: '⛶', summary: 'Cycle Tab focus within a region' , ready: true },
   { slug: 'ripple', name: 'Ripple', group: 'Utilities', icon: '💧', summary: 'Click ripple directive', ready: true },
   { slug: 'alert', name: 'Alert', group: 'Display', icon: '❗', summary: 'Inline feedback message', ready: true },
-  { slug: 'divider', name: 'Divider', group: 'Display', icon: '—', summary: 'Content separator line', ready: true },
+  { slug: 'divider', name: 'Divider', group: 'Display', icon: ', ', summary: 'Content separator line', ready: true },
   { slug: 'fieldset', name: 'Fieldset', group: 'Display', icon: '▢', summary: 'Collapsible legend group', ready: true },
   { slug: 'block-ui', name: 'BlockUI', group: 'Display', icon: '▨', summary: 'Region loading overlay', ready: true },
   { slug: 'scroll-panel', name: 'ScrollPanel', group: 'Display', icon: '▥', summary: 'Themed-scrollbar container', ready: true },

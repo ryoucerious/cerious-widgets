@@ -15,7 +15,7 @@ import { ApiTableComponent, DocPageComponent, DocSectionComponent, DocTabCompone
             An Angular component library built around a virtualized data grid.
           </cw-accordion-panel>
           <cw-accordion-panel header="How do themes work?">
-            Runtime CSS custom properties — switch with a data-cw-theme attribute.
+            Runtime CSS custom properties, switch with a data-cw-theme attribute.
           </cw-accordion-panel>
           <cw-accordion-panel header="Is it accessible?">
             Controls wrap real native inputs so keyboard and forms stay native.

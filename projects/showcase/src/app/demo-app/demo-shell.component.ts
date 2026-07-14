@@ -4,11 +4,12 @@ import {
   AvatarComponent, BadgeComponent, ButtonComponent, ConfirmDialogComponent, CwMenuItem,
   CwToastService, MenuComponent, PopoverDirective, TagComponent, ToastComponent, TooltipDirective
 } from 'ngx-cerious-widgets';
+import { IconComponent } from '../ui/icon.component';
 
 interface Notice { title: string; detail: string; time: string; severity: 'success' | 'info' | 'warn' | 'danger'; }
 
 /**
- * A realistic "Cerious Admin" application shell — sidebar nav, an in-app topbar
+ * A realistic "Cerious Admin" application shell: sidebar nav, an in-app topbar
  * with a notifications popover, a user menu, and the single Toast / ConfirmDialog
  * outlets the whole app shares. Composes the widgets the way a real product would.
  */
@@ -18,7 +19,8 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     RouterOutlet, RouterLink, RouterLinkActive, AvatarComponent, BadgeComponent, ButtonComponent,
-    TagComponent, MenuComponent, PopoverDirective, TooltipDirective, ToastComponent, ConfirmDialogComponent
+    TagComponent, MenuComponent, PopoverDirective, TooltipDirective, ToastComponent, ConfirmDialogComponent,
+    IconComponent
   ],
   template: `
     <div class="admin">
@@ -27,16 +29,16 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
 
         <nav class="admin__nav" aria-label="Admin sections">
           <a routerLink="dashboard" routerLinkActive="is-active" class="admin__nav-link">
-            <span class="admin__nav-icon" aria-hidden="true">▤</span> Dashboard
+            <span class="admin__nav-icon" aria-hidden="true"><app-icon name="dashboard" /></span> Dashboard
           </a>
           <a routerLink="products" routerLinkActive="is-active" class="admin__nav-link">
-            <span class="admin__nav-icon" aria-hidden="true">☷</span> Products
+            <span class="admin__nav-icon" aria-hidden="true"><app-icon name="grid" /></span> Products
           </a>
           <a routerLink="customers" routerLinkActive="is-active" class="admin__nav-link">
-            <span class="admin__nav-icon" aria-hidden="true">☺</span> Customers
+            <span class="admin__nav-icon" aria-hidden="true"><app-icon name="users" /></span> Customers
           </a>
           <a routerLink="calendar" routerLinkActive="is-active" class="admin__nav-link">
-            <span class="admin__nav-icon" aria-hidden="true">⊞</span> Calendar
+            <span class="admin__nav-icon" aria-hidden="true"><app-icon name="calendar" /></span> Calendar
           </a>
         </nav>
 
@@ -61,7 +63,7 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
           <div class="admin__topbar-spacer"></div>
           <button type="button" class="icon-btn" cwTooltip="Notifications" cwTooltipPosition="bottom"
                   [cwPopover]="notifPanel" cwPopoverPlacement="bottom-end" aria-label="Notifications">
-            <span aria-hidden="true">🔔</span>
+            <span class="icon-btn__glyph" aria-hidden="true"><app-icon name="bell" /></span>
             @if (unread()) { <cw-badge [value]="unread()" severity="danger" /> }
           </button>
           <ng-template #notifPanel>
@@ -80,7 +82,7 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
                   <span class="notif__time">{{ n.time }}</span>
                 </div>
               } @empty {
-                <div class="notif__empty">You're all caught up 🎉</div>
+                <div class="notif__empty">You're all caught up.</div>
               }
             </div>
           </ng-template>
@@ -112,7 +114,8 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
     .admin__nav-link { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.7rem; border-radius: var(--cw-radius); color: var(--cw-text-muted, var(--cw-text-secondary)); text-decoration: none; font-weight: 500; transition: background 0.12s, color 0.12s; }
     .admin__nav-link:hover { background: var(--cw-surface-hover, var(--cw-surface-sunken)); color: var(--cw-text); }
     .admin__nav-link.is-active { background: var(--cw-primary-soft, var(--cw-surface-sunken)); color: var(--cw-primary); }
-    .admin__nav-icon { width: 1.1rem; text-align: center; }
+    .admin__nav-icon { display: inline-flex; align-items: center; justify-content: center; width: 1.15rem; }
+    .admin__nav-icon app-icon { width: 18px; height: 18px; display: block; }
     .admin__spacer { flex: 1 1 auto; }
 
     .admin__user { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem; border: none; border-top: 1px solid var(--cw-border); background: transparent; width: 100%; cursor: pointer; text-align: left; border-radius: 0; }
@@ -128,6 +131,8 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
     .icon-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: 1px solid var(--cw-border); border-radius: var(--cw-radius); background: var(--cw-surface); cursor: pointer; font-size: 1.05rem; }
     .icon-btn:hover { background: var(--cw-surface-hover, var(--cw-surface-sunken)); }
     .icon-btn cw-badge { position: absolute; top: -6px; right: -6px; }
+    .icon-btn__glyph { display: inline-flex; color: var(--cw-text-secondary); }
+    .icon-btn__glyph app-icon { width: 20px; height: 20px; display: block; }
     .admin__content { padding: 1.75rem 2rem; min-width: 0; }
 
     .notif { width: 320px; max-width: 90vw; }
