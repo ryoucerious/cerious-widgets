@@ -32,12 +32,20 @@ No heavy dependencies. MIT licensed. Built for real-world, data-intensive apps.
 npm install ngx-cerious-widgets
 ```
 
-Add the stylesheet to `angular.json`:
+**No stylesheet import needed.** The library injects its structural styles and
+`--cw-*` tokens automatically at bootstrap, add `provideCeriousTheme()` once
+(standalone apps) or use `CeriousWidgetsModule.forRoot(...)` (module apps):
 
-```json
-"styles": [
-  "node_modules/ngx-cerious-widgets/styles/grid-styles-generated.scss"
-]
+```ts
+// app.config.ts (standalone)
+import { provideCeriousTheme } from 'ngx-cerious-widgets';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideCeriousTheme(),                       // default theme
+    // provideCeriousTheme({ preset: 'dark', primary: '#6c63ff' })
+  ]
+};
 ```
 
 The components are **standalone**, import just what you use:
@@ -53,7 +61,9 @@ import { SelectComponent, DialogComponent } from 'ngx-cerious-widgets';
 export class MyComponent {}
 ```
 
-Prefer a module? `CeriousWidgetsModule.forRoot({ /* config */ })` still works and is where you register plugins (see below).
+Prefer a module? `CeriousWidgetsModule.forRoot({ /* config */ })` still works, delivers the styles, and is where you register plugins (see below).
+
+> Prefer a plain global stylesheet instead? You can still add `node_modules/ngx-cerious-widgets/styles/grid-styles-generated.scss` to your `angular.json` `styles` array, it's identical to the injected sheet.
 
 ---
 

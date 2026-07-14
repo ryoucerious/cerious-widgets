@@ -44,7 +44,10 @@ All notable changes to this project will be documented in this file.
 - Moved `@angular/cdk` and `@ceriousdevtech/ngx-cerious-scroll` from `peerDependencies` to `dependencies` so consumers no longer have to install them manually. Added `allowedNonPeerDependencies` to `ng-package.json` to satisfy ng-packagr.
 - Removed direct `@ceriousdevtech/cerious-scroll` dependency; it is now pulled in transitively through `@ceriousdevtech/ngx-cerious-scroll`.
 
-## [1.1.1] - 2026-07-14
+## [1.2.0] - 2026-07-14
+### Added
+- **Zero-config styling, no stylesheet import required.** The library now injects its structural stylesheet (design tokens, CDK-overlay theming, virtual-scrollbar and directive-applied form-control styles, and the grid chrome) at bootstrap, so consumers no longer have to add `grid-styles-generated.scss` to their `angular.json` `styles` array. Module apps get it from `CeriousWidgetsModule.forRoot(...)`; standalone apps call `provideCeriousTheme()` once. A new `CwThemeService.ensureGlobalStyles()` performs the one-time injection via an internal `ViewEncapsulation.None` host, and the runtime theming engine layers `--cw-*` overrides on top. The manual stylesheet import still works and is deduped.
+
 ### Fixed
 - **Grid renders no rows under a production build.** Under zoneless change detection the grid populated its row model in `ngOnInit` before the body view existed, and prod (unlike dev) has no second verification pass to flush the deferred render, so the grid appeared empty. The grid now explicitly renders and runs change detection after the view initializes.
 - **Area chart axis text scaled up on wide cards.** The SVG used `preserveAspectRatio="none"` with a fixed viewBox, stretching the coordinate system (and its axis labels/strokes) with the container. The chart now tracks its real pixel width so it renders at 1:1, keeping text and strokes at their true size and the plot height constant.

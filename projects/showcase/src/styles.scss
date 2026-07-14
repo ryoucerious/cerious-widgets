@@ -1,5 +1,6 @@
-/* Global resets + showcase-level tweaks. Component tokens (--cw-*) come from the
-   library's grid-styles-generated.scss, added ahead of this file in the build. */
+/* Global resets + showcase-level tweaks. The library's structural stylesheet and
+   --cw-* tokens are injected at runtime by CeriousWidgetsModule.forRoot() /
+   provideCeriousTheme(), so no grid-styles-generated.scss import is needed here. */
 html, body {
   height: 100%;
   margin: 0;

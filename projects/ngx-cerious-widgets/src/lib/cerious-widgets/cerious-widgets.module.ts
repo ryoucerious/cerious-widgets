@@ -1,6 +1,7 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CwThemeService } from './theme/theme.service';
 import { TemplateRegistrarDirective } from './shared/directives/template-registrar.directive';
 import { resolveGridConfig, WidgetsConfig } from './shared/interfaces/widgets-config.interface';
 import { WIDGETS_CONFIG } from './shared/tokens/widgets-config.token';
@@ -50,7 +51,15 @@ export class CeriousWidgetsModule {
         { provide: GRID_SERVICE, useClass: GridService },
         { provide: GRID_COLUMN_SERVICE, useClass: GridColumnService },
         { provide: GRID_SCROLL_SERVICE, useClass: GridScrollService },
-        ZonelessCompatService
+        ZonelessCompatService,
+        // Inject the library's structural stylesheet at bootstrap so apps no
+        // longer have to add `grid-styles-generated.scss` to their build.
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          useFactory: (theme: CwThemeService) => () => theme.ensureGlobalStyles(),
+          deps: [CwThemeService]
+        }
       ]
     };
   }

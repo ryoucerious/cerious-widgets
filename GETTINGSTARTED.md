@@ -34,13 +34,32 @@ export class AppModule { }
 
 ## Add Styles
 
-Import the grid styles in your global `styles.scss` or add to `angular.json`:
+**No stylesheet import is required.** The library injects its structural
+styles (design tokens, CDK-overlay theming, virtual-scrollbar and form-control
+styling, and the grid chrome) automatically at bootstrap.
 
-```scss
-@import '~ngx-cerious-widgets/styles/grid-styles-generated.scss';
-```
+- **Module apps** get it from `CeriousWidgetsModule.forRoot(...)`.
+- **Standalone apps** call `provideCeriousTheme()` once in `app.config.ts`:
 
-Or, if you copy styles locally, ensure you import all required SCSS partials.
+  ```typescript
+  import { provideCeriousTheme } from 'ngx-cerious-widgets';
+
+  export const appConfig: ApplicationConfig = {
+    providers: [
+      provideCeriousTheme(),                     // default theme
+      // or pick a preset / brand colors:
+      // provideCeriousTheme({ preset: 'dark', primary: '#6c63ff' })
+    ]
+  };
+  ```
+
+`provideCeriousTheme()` also lets you set your own primary/secondary colors,
+radius and font, or choose from the curated presets, see the Theming guide.
+
+> Prefer a plain global stylesheet? You can still add
+> `ngx-cerious-widgets/styles/grid-styles-generated.scss` to your `angular.json`
+> `styles` array or `@import` it, the injected sheet is identical and the
+> browser simply dedupes it.
 
 ---
 

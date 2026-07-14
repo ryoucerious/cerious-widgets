@@ -1,7 +1,11 @@
-import { DOCUMENT } from '@angular/common';
-import { inject, Injectable, signal } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import {
+  ApplicationRef, ComponentRef, createComponent, EnvironmentInjector,
+  inject, Injectable, PLATFORM_ID, signal
+} from '@angular/core';
 import { buildTokens } from './build-tokens';
 import { CW_PRESETS, findPreset } from './presets';
+import { CwStyleHostComponent } from './style-host.component';
 import { CwPreset, CwThemeConfig } from './theme.types';
 
 const STORAGE_KEY = 'cw-theme';
@@ -22,7 +26,12 @@ const STORAGE_KEY = 'cw-theme';
 @Injectable({ providedIn: 'root' })
 export class CwThemeService {
   private readonly doc = inject(DOCUMENT);
+  private readonly appRef = inject(ApplicationRef);
+  private readonly envInjector = inject(EnvironmentInjector);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly custom = new Map<string, CwPreset>();
+
+  private styleHostRef?: ComponentRef<CwStyleHostComponent>;
 
   /** The name of the currently applied preset. */
   readonly theme = signal<string>('light');
@@ -48,6 +57,8 @@ export class CwThemeService {
    * `color-scheme` / `.cw-dark`) onto the scope element.
    */
   apply(config: CwThemeConfig = {}): void {
+    this.ensureGlobalStyles();
+
     const target = config.scope ?? this.doc.documentElement;
     if (!target) { return; }
 
@@ -71,6 +82,23 @@ export class CwThemeService {
     if (config.persist) {
       try { localStorage.setItem(STORAGE_KEY, preset.name); } catch { /* ignore */ }
     }
+  }
+
+  /**
+   * Inject the library's structural stylesheet once (design tokens, overlay and
+   * virtual-scrollbar theming, directive-applied form classes, grid chrome) by
+   * instantiating the {@link CwStyleHostComponent} (`ViewEncapsulation.None`).
+   * Idempotent and browser-only. This is what lets consumers skip adding
+   * `grid-styles-generated.scss` to their build, calling `provideCeriousTheme()`
+   * or `CeriousWidgetsModule.forRoot()` is enough. A pre-existing manual import
+   * still works, the injected sheet is identical and simply deduped by the browser.
+   */
+  ensureGlobalStyles(): void {
+    if (this.styleHostRef || !this.isBrowser) { return; }
+    const ref = createComponent(CwStyleHostComponent, { environmentInjector: this.envInjector });
+    this.appRef.attachView(ref.hostView);
+    this.doc.body?.appendChild(ref.location.nativeElement);
+    this.styleHostRef = ref;
   }
 
   /** The persisted preset name from a previous session, if any. */
