@@ -7,11 +7,21 @@
   display: flex;
   gap: 1.25rem;
   border-bottom: 1px solid var(--cw-divider);
+  // Scroll the strip when the tabs don't fit (narrow viewports) instead of
+  // overflowing the page. The scrollbar is hidden to keep the chrome clean; the
+  // strip is still swipeable/scrollable and every tab stays keyboard reachable.
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar { display: none; }
 }
 
 .cw-tabs__tab {
   all: unset;
   box-sizing: border-box;
+  flex: none;
+  white-space: nowrap;
   padding: 0.5rem 0.125rem;
   margin-bottom: -1px; // let the active underline sit on the baseline
   border-bottom: 2px solid transparent;

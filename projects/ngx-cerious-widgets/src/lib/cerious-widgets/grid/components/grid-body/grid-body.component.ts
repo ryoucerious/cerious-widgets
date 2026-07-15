@@ -486,6 +486,57 @@ export class GridBodyComponent extends ZonelessCompatibleComponent implements IG
     return this.rows.find(r => r.id === rowId);
   }
 
+  // --- Touch panning (non-virtual bodies) -----------------------------------
+  // The grid drives horizontal scrolling through <cw-grid-scroller>, not a native
+  // overflow container, so dragging the body sideways has to be implemented here.
+  // Virtual bodies get this from cerious-scroll (see `scrollOptions.touch`); this
+  // covers `enableVirtualScroll: false` grids, which otherwise can't be panned on
+  // touch devices at all.
+  private touchStartX = 0;
+  private touchStartY = 0;
+  private touchStartLeft = 0;
+  private touchAxis: 'horizontal' | 'vertical' | null = null;
+
+  /** The element whose native scroll position drives the grid's horizontal sync. */
+  private get horizontalScroller(): HTMLElement | null {
+    return this.gridService.gridScroller?.scroller?.nativeElement ?? null;
+  }
+
+  onTouchStart(e: TouchEvent): void {
+    if (this.useVirtualScroll) { return; }
+    const touch = e.touches[0];
+    if (!touch) { return; }
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+    this.touchStartLeft = this.horizontalScroller?.scrollLeft ?? 0;
+    this.touchAxis = null;
+  }
+
+  onTouchMove(e: TouchEvent): void {
+    if (this.useVirtualScroll) { return; }
+    const touch = e.touches[0];
+    const scroller = this.horizontalScroller;
+    if (!touch || !scroller) { return; }
+
+    const dx = touch.clientX - this.touchStartX;
+    const dy = touch.clientY - this.touchStartY;
+
+    // Lock the axis once the gesture clears a small threshold, so a mostly-vertical
+    // swipe keeps scrolling the rows instead of nudging the columns sideways.
+    if (this.touchAxis === null) {
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) { return; }
+      this.touchAxis = Math.abs(dx) > Math.abs(dy) ? 'horizontal' : 'vertical';
+    }
+    if (this.touchAxis !== 'horizontal') { return; }
+
+    // Scrolling this element fires the scroll sync that moves the header + body.
+    scroller.scrollLeft = this.touchStartLeft - dx;
+  }
+
+  onTouchEnd(): void {
+    this.touchAxis = null;
+  }
+
   /**
    * Total number of leaf (data) rows under a group, recursing through any
    * subgroups. Used for the group-header count so a parent group shows its full

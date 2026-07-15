@@ -68,6 +68,15 @@ import { Customer, planSeverity, seedCustomers } from './demo-data';
     .cust-row__handle { font-weight: 400; color: var(--cw-text-muted, var(--cw-text-secondary)); font-size: 0.85rem; }
     .cust-row__spent { font-weight: 600; color: var(--cw-text); }
     .cust-row__orders { color: var(--cw-text-muted, var(--cw-text-secondary)); font-size: 0.85rem; width: 5.5rem; text-align: right; }
+
+    @media (max-width: 640px) {
+      /* Stack the heading above the layout switcher rather than squeezing them
+         onto one line. */
+      .page-head { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+      .page-head__title { font-size: 1.35rem; }
+      .cust-row { gap: 0.6rem; padding: 0.75rem; }
+      .cust-row__orders { width: auto; }
+    }
   `]
 })
 export class DemoCustomersComponent {

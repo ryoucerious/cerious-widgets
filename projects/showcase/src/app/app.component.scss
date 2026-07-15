@@ -51,9 +51,36 @@
 
 .topbar__actions { display: flex; align-items: center; gap: 0.75rem; }
 
+// "Live Demo" shortens to "Demo" on phones so all three links fit without the
+// nav having to scroll (which clipped the label mid-word).
+.topnav__label--short { display: none; }
+
 .shell { display: block; }
 
 @media (max-width: 640px) {
-  .topbar { gap: 0.75rem; padding: 0 1rem; }
+  .topbar { gap: 0.5rem; padding: 0 0.75rem; }
+  .brand { flex: none; }
   .brand__name { display: none; }
+
+  // The nav takes the leftover space and scrolls internally instead of pushing
+  // the theme switcher past the right edge. That overflow used to make mobile
+  // browsers widen the layout viewport and zoom the whole page out.
+  .topnav {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-right: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .topnav::-webkit-scrollbar { display: none; }
+  .topnav__link {
+    padding: 0.4rem 0.45rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  .topnav__label--full { display: none; }
+  .topnav__label--short { display: inline; }
+
+  .topbar__actions { flex: none; min-width: 0; }
 }

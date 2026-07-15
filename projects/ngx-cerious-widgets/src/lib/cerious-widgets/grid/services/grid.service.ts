@@ -1500,11 +1500,30 @@ export class GridService implements IGridService {
    * @returns {void}
    */
   private setRowMinWidth(): void {
-    const visibleColumnDefs = this.gridOptions.columnDefs.filter((columnDef) => columnDef.visible !== false);
+    // Sum the LEAF columns, not the top-level defs. With grouped headers the
+    // top-level defs are header groups that carry no width of their own, so
+    // summing them counted one default width per *group* instead of the widths
+    // of its children. That under-counted min-width let the fixed-layout row
+    // shrink with the viewport, squeezing columns until they were cut off,
+    // instead of holding its width and overflowing into the horizontal scroller.
+    const leafColumns = this.gridColumnService
+      .flattenColumns(this.gridOptions.columnDefs)
+      .filter((columnDef) => this.isColumnVisible(columnDef));
     const defaultColumnWidth = this.gridOptions.columnWidth ? parseInt(this.gridOptions.columnWidth) : 150;
     const featureColumnWidth = parseInt(this.gridColumnService.getFeatureColumnWidth(this.getFeatureCount(), this.gridOptions));
-    const minWidth = visibleColumnDefs.reduce((acc, columnDef) => acc + (columnDef.width ? Number(columnDef.width.replace('px', '')) : defaultColumnWidth), 0) + featureColumnWidth;
+    const minWidth = leafColumns.reduce((acc, columnDef) => acc + (columnDef.width ? Number(columnDef.width.replace('px', '')) : defaultColumnWidth), 0) + featureColumnWidth;
     this.rowMinWidth = `${minWidth}px`;
+  }
+
+  /**
+   * Whether a column actually renders: it must be visible itself and not sit
+   * under a hidden header group (hiding a group hides its children).
+   */
+  private isColumnVisible(column: ColumnDef | undefined): boolean {
+    for (let col = column; col; col = col.parent) {
+      if (col.visible === false) { return false; }
+    }
+    return true;
   }
   
   /**

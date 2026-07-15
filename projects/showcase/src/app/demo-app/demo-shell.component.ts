@@ -99,7 +99,10 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
     <cw-confirm-dialog />
   `,
   styles: [`
-    .admin { display: grid; grid-template-columns: 232px 1fr; min-height: calc(100vh - 61px); background: var(--cw-surface-sunken, var(--cw-surface)); }
+    /* minmax(0, 1fr) (not 1fr) so the content column can shrink below its
+       min-content width, letting inner scrollers scroll instead of stretching
+       the whole shell wider than the viewport. */
+    .admin { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: calc(100vh - 61px); background: var(--cw-surface-sunken, var(--cw-surface)); }
     .admin__sidebar {
       display: flex; flex-direction: column; gap: 0.5rem; padding: 1.25rem 0.85rem;
       border-right: 1px solid var(--cw-border); background: var(--cw-surface);
@@ -146,12 +149,47 @@ interface Notice { title: string; detail: string; time: string; severity: 'succe
     .notif__empty { padding: 1.5rem; text-align: center; color: var(--cw-text-muted, var(--cw-text-secondary)); }
 
     @media (max-width: 720px) {
-      .admin { grid-template-columns: 1fr; }
+      .admin { grid-template-columns: minmax(0, 1fr); }
+
+      /* The sidebar becomes a compact nav strip under the topbar: the links
+         scroll horizontally and the account button stays pinned at the end,
+         instead of the whole panel wrapping and eating the screen.
+         min-width:0 overrides the grid item's automatic min-content minimum,
+         without it the nav's full width forces the whole shell wider than the
+         screen and .admin__nav never actually scrolls. */
       .admin__sidebar {
-        flex-direction: row; align-items: center; flex-wrap: wrap;
-        position: static; height: auto; overflow: visible;
+        position: sticky; top: 3.75rem; z-index: 20;
+        flex-direction: row; align-items: center; gap: 0.5rem;
+        height: auto; overflow: visible;
+        min-width: 0;
+        padding: 0.5rem 0.75rem;
+        border-right: none; border-bottom: 1px solid var(--cw-border);
+        /* Frosted like the topbar: this strip floats over scrolling content and
+           --cw-surface is translucent under Frost, so it needs the blur to stay
+           readable. */
+        background: color-mix(in srgb, var(--cw-surface) 92%, transparent);
+        backdrop-filter: blur(12px) saturate(1.4);
+        -webkit-backdrop-filter: blur(12px) saturate(1.4);
       }
+      .admin__brand { display: none; }
       .admin__spacer { display: none; }
+
+      .admin__nav {
+        flex: 1 1 auto; min-width: 0;
+        flex-direction: row; gap: 0.25rem;
+        overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      }
+      .admin__nav::-webkit-scrollbar { display: none; }
+      .admin__nav-link { padding: 0.45rem 0.6rem; font-size: 0.875rem; white-space: nowrap; }
+
+      .admin__user {
+        flex: none; width: auto; margin-left: 0;
+        padding: 0.25rem; border-top: none; border-radius: var(--cw-radius);
+      }
+      .admin__user-meta, .admin__user-caret { display: none; }
+
+      .admin__topbar { padding: 0.5rem 1rem; }
+      .admin__content { padding: 1.25rem 1rem; }
     }
   `]
 })

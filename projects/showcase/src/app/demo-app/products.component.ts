@@ -31,18 +31,19 @@ import { IconComponent } from '../ui/icon.component';
         <cw-grid [data]="filtered()" [gridOptions]="gridOptions" [pluginOptions]="pluginOptions"
                  (rowClick)="onRowClick($event)">
           <!-- Full toolbar in the grid's menu-bar (headerTemplate slot).
-               NOTE: content rendered inside the grid (encapsulation None) doesn't
-               receive this component's scoped styles, so lay it out with inline styles. -->
+               NOTE: the grid renders with encapsulation None, so this content is
+               styled with :host ::ng-deep below rather than scoped classes.
+               (Inline styles can't be made responsive, hence the classes.) -->
           <ng-template #menuTpl>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:nowrap; flex:1 1 auto;">
+            <div class="demo-toolbar">
               <button cwButton (click)="openCreate()">+ New</button>
               <input cwInput type="search" placeholder="Search…" aria-label="Search products"
-                     style="width:13rem; flex:none;"
+                     class="demo-toolbar__search"
                      [ngModel]="search()" (ngModelChange)="onFilter('search', $event)" />
-              <cw-select [options]="categoryOptions" [ngModel]="category()" (ngModelChange)="onFilter('category', $event)"
-                         aria-label="Filter by category" style="min-width: 10.5rem; flex:none;" />
+              <cw-select class="demo-toolbar__category" [options]="categoryOptions" [ngModel]="category()"
+                         (ngModelChange)="onFilter('category', $event)" aria-label="Filter by category" />
               <!-- spacer pushes the status filter + reset to the right, like the table's toolbar -->
-              <span style="flex:1 1 auto;"></span>
+              <span class="demo-toolbar__spacer"></span>
               <cw-select-button [options]="statusOptions" [ngModel]="statusFilter()" (ngModelChange)="onFilter('status', $event)" />
               <button cwButton severity="secondary" variant="outlined" (click)="reset()">Reset</button>
             </div>
@@ -115,10 +116,20 @@ import { IconComponent } from '../ui/icon.component';
     .page-head__title { margin: 0; font-size: 1.6rem; font-weight: 700; color: var(--cw-text); }
     .page-head__sub { margin: 0.25rem 0 0; color: var(--cw-text-muted, var(--cw-text-secondary)); }
     .grid-card { min-height: 200px; }
-    .grid-toolbar { display: flex; gap: 0.5rem; align-items: center; flex-wrap: nowrap; }
-    /* Override the global .cw-input width:100% so the search doesn't fill the row. */
-    .toolbar-search { width: 13rem; flex: none; min-width: 0; }
     .row-actions { display: flex; gap: 0.15rem; }
+
+    /* The menu-bar toolbar renders inside the grid (encapsulation None), so it is
+       reached with ::ng-deep. The child selectors are deliberately nested under
+       .demo-toolbar: the library's global rule for .cw-grid search inputs scores
+       (0,2,1) with its element+attribute, so a flat [_nghost] .demo-toolbar__search
+       (0,2,0) would lose and the search would stretch to fill the row. */
+    :host ::ng-deep .demo-toolbar {
+      display: flex; gap: 0.5rem; align-items: center; flex-wrap: nowrap;
+      flex: 1 1 auto; min-width: 0;
+    }
+    :host ::ng-deep .demo-toolbar .demo-toolbar__search { width: 13rem; flex: none; min-width: 0; }
+    :host ::ng-deep .demo-toolbar .demo-toolbar__category { min-width: 10.5rem; flex: none; }
+    :host ::ng-deep .demo-toolbar .demo-toolbar__spacer { flex: 1 1 auto; }
 
     .form { display: flex; flex-direction: column; gap: 1rem; padding: 0.25rem 0 0.5rem; }
     .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -131,6 +142,18 @@ import { IconComponent } from '../ui/icon.component';
     .details__row { display: flex; align-items: center; justify-content: space-between; color: var(--cw-text-muted, var(--cw-text-secondary)); }
     .details__row strong { color: var(--cw-text); }
     .details__actions { display: flex; gap: 0.5rem; }
+
+    @media (max-width: 640px) {
+      .page-head__title { font-size: 1.35rem; }
+      .form__row { grid-template-columns: 1fr; }
+
+      /* Let the menu-bar toolbar wrap onto multiple lines on a phone instead of
+         running off the side of the card. */
+      :host ::ng-deep .demo-toolbar { flex-wrap: wrap; }
+      :host ::ng-deep .demo-toolbar .demo-toolbar__search { width: auto; flex: 1 1 8rem; }
+      :host ::ng-deep .demo-toolbar .demo-toolbar__category { min-width: 0; flex: 1 1 8rem; }
+      :host ::ng-deep .demo-toolbar .demo-toolbar__spacer { display: none; }
+    }
   `]
 })
 export class DemoProductsComponent implements AfterViewInit {

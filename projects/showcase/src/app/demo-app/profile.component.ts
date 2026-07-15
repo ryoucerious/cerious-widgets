@@ -262,6 +262,18 @@ import { COUNTRIES, SKILLS } from './demo-data';
       .grid2, .form__row { grid-template-columns: 1fr; }
       .inline { flex-direction: column; }
     }
+
+    @media (max-width: 640px) {
+      /* Stack the avatar/name above the action buttons; side by side they ran
+         off the right edge on a phone. */
+      .profile-head__row {
+        flex-direction: column; align-items: flex-start; gap: 0.75rem;
+        padding: 0 1rem 1rem;
+      }
+      .profile-head__meta { padding-top: 0; }
+      .profile-head__actions { align-self: stretch; flex-wrap: wrap; }
+      .profile-head__name { font-size: 1.15rem; }
+    }
   `]
 })
 export class DemoProfileComponent {

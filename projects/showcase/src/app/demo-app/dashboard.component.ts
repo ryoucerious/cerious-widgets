@@ -153,6 +153,15 @@ interface Seller { name: string; sold: number; percent: number; color: string; }
       .kpis { grid-template-columns: repeat(2, 1fr); }
       .dash { grid-template-columns: 1fr; }
     }
+
+    @media (max-width: 640px) {
+      /* Stack the heading above its tools so the range picker + Export button
+         wrap onto their own line instead of running off the right edge. */
+      .page-head { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+      .page-head__tools { flex-wrap: wrap; }
+      .page-head__title { font-size: 1.35rem; }
+      .kpis { grid-template-columns: 1fr; }
+    }
   `]
 })
 export class DemoDashboardComponent {

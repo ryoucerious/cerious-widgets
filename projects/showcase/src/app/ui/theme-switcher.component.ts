@@ -22,6 +22,11 @@ import { ThemeService } from '../core/theme.service';
   `,
   styles: [`
     .theme-select { min-width: 11rem; }
+
+    /* Keep the picker compact on phones so the topbar fits without overflowing. */
+    @media (max-width: 640px) {
+      .theme-select { min-width: 0; width: 7rem; }
+    }
   `]
 })
 export class ThemeSwitcherComponent {

@@ -30,6 +30,13 @@
     &.cw-table-body--no-virtual {
         overflow-y: auto;
         overflow-x: hidden;
+        // The grid syncs horizontal scrolling through <cw-grid-scroller> rather
+        // than a native overflow container, so a horizontal drag has to be driven
+        // from JS (see GridBodyComponent.onTouchStart/onTouchMove). `pan-y` keeps
+        // vertical panning native while handing horizontal gestures to us, without
+        // this the browser swallows them and the body can't be dragged sideways.
+        // (Virtual bodies get the same behaviour from cerious-scroll's touch config.)
+        touch-action: pan-y;
 
         .cw-table-body__static-content {
             width: 100%;

@@ -6,7 +6,11 @@
      (dblclick)="onDoubleClick($event)"
      (keydown)="onKeydown($event)"
      (keyup)="onKeyup($event)"
-     (keypress)="onKeypress($event)">
+     (keypress)="onKeypress($event)"
+     (touchstart)="onTouchStart($event)"
+     (touchmove)="onTouchMove($event)"
+     (touchend)="onTouchEnd()"
+     (touchcancel)="onTouchEnd()">
 
     <ng-container *ngIf="useVirtualScroll; else nonVirtual">
         <div class="cw-table-body__virtual-host"
