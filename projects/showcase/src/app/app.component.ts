@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { trackSpaPageViews } from './core/google-analytics';
 import { ThemeSwitcherComponent } from './ui/theme-switcher.component';
 
 @Component({
@@ -10,4 +11,8 @@ import { ThemeSwitcherComponent } from './ui/theme-switcher.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor() {
+    trackSpaPageViews();
+  }
+}

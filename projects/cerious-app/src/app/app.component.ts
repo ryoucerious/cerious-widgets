@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { trackSpaPageViews } from './google-analytics';
 import { NAV_ITEMS, NavItem } from './showcase/nav';
 
 interface NavGroup {
@@ -17,6 +18,10 @@ type ThemeName = 'light' | 'frost' | 'dark';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  constructor() {
+    trackSpaPageViews();
+  }
+
   readonly groups = this.groupNav();
   readonly themes: { id: ThemeName; label: string }[] = [
     { id: 'light', label: 'Light' },
